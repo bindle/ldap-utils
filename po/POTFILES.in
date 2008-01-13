@@ -1,0 +1,6 @@
+# main source
+src/ldaputils_common.c
+src/ldaputils_test.c
+
+# files from gnulib
+lib/getopt.c
