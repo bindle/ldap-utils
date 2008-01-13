@@ -20,7 +20,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 /*
- *  src/ldap-utils.h - common includes and prototypes
+ *  include/ldap-utils.h - common includes and prototypes
  */
 #ifndef _LDAP_UTILS_H
 #define _LDAP_UTILS_H 1
