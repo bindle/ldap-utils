@@ -78,10 +78,10 @@
 //               //
 ///////////////////
 
-#define MY_BUFF_LEN             512
+#define MY_BUFF_LEN             4096
 #define MY_OPT_LEN              1024
 
-#define MY_COMMON_OPTIONS		"cCD:h:H:p:uv:Vw:Wxy:Z"
+#define MY_COMMON_OPTIONS		"cCD:h:H:p:P:uv:Vw:Wxy:Z"
 
 #define MY_COMMON_OPT_VERBOSE		0x0001
 #define MY_COMMON_OPT_QUITE		0x0002
@@ -121,6 +121,7 @@ struct my_common_config_struct
    const char  * ldapconf;
    const char  * ldaprc;
    const char  * home;
+   const char  * homepath;
    const char  * passfile;
 };
 
@@ -143,6 +144,10 @@ int my_common_config_name PARAMS((MyCommonConfig * cnf, char * str,
 
 /* parses LDAP config file */
 int my_common_config_parse PARAMS((MyCommonConfig * cnf, int fd));
+
+/* parses LDAP config file */
+int my_common_config_setopt PARAMS((MyCommonConfig * cnf, const char * opt,
+        const char * arg));
 
 /* parses LDAP command line arguments */
 int my_common_cmdargs PARAMS((MyCommonConfig * cnf, int c, char * arg));
