@@ -44,7 +44,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <sys/types.h>
-#include <sys/uio.h>
+//#include <sys/uio.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -110,9 +111,9 @@ struct my_common_config_struct
    unsigned      noinit;	// used to ignore config files
    unsigned      common_opts;
    unsigned      version;
-   unsigned      port;
-   unsigned      sizelimit;
-   unsigned      timelimit;
+   int      port;
+   int      sizelimit;
+   int      timelimit;
    char        * basedn;
    char        * binddn;
    char        * bindpw;
@@ -132,6 +133,9 @@ struct my_common_config_struct
 //              //
 //////////////////
 
+/* parses LDAP command line arguments */
+int my_common_cmdargs PARAMS((MyCommonConfig * cnf, int c, char * arg));
+
 /* parses LDAP config file */
 int my_common_config PARAMS((MyCommonConfig * cnf));
 
@@ -143,23 +147,19 @@ int my_common_config_name PARAMS((MyCommonConfig * cnf, char * str,
 	unsigned str_len, const char * fmt));
 
 /* parses LDAP config file */
-int my_common_config_parse PARAMS((MyCommonConfig * cnf, int fd));
+int my_common_config_parse PARAMS((MyCommonConfig * cnf, const char * name));
 
 /* parses LDAP config file */
 int my_common_config_setopt PARAMS((MyCommonConfig * cnf, const char * opt,
         const char * arg));
 
-/* parses LDAP command line arguments */
-int my_common_cmdargs PARAMS((MyCommonConfig * cnf, int c, char * arg));
+/* processes environment variables */
+int my_common_environment PARAMS((MyCommonConfig * cnf));
 
 /* displays common usage */
 void my_common_usage PARAMS((void));
 
-/* processes environment variables */
-int my_common_environment PARAMS((MyCommonConfig * cnf));
-
 /* displays usage */
 void my_common_version PARAMS((void));
-
 
 #endif /* end of header file */

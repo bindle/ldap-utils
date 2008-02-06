@@ -31,12 +31,81 @@
 //             //
 /////////////////
 
+/* parses LDAP command line arguments */
+int my_common_cmdargs(MyCommonConfig * cnf, int c, char * arg)
+{
+   /* checks argument */
+   switch(c)
+   {
+      case 'c':
+         cnf->common_opts |= MY_COMMON_OPT_CONTINUOUS;
+         return(0);
+      case 'C':
+         cnf->common_opts |= MY_COMMON_OPT_REFERRALS;
+         return(0);
+      case 'D':
+         if (my_common_config_setopt(cnf, "binddn", arg))
+            return(1);
+         return(0);
+      case 'h':
+         if (my_common_config_setopt(cnf, "host", arg))
+            return(1);
+         return(0);
+      case 'H':
+         if (my_common_config_setopt(cnf, "uri", arg))
+            return(1);
+         return(0);
+      case 'p':
+         if (my_common_config_setopt(cnf, "port", arg))
+            return(1);
+         return(0);
+      case 'P':
+         cnf->version = atol(arg);
+         return(0);
+      case 'u':
+         my_common_usage();
+         break;
+      case 'v':
+         cnf->common_opts |= MY_COMMON_OPT_VERBOSE;
+         return(0);
+      case 'V':
+         my_common_version();
+         return(1);
+      case 'w':
+         if (!(cnf->bindpw = strdup(arg)))
+         {
+            fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
+            return(1);
+         };
+         return(0);
+      case 'W':
+         return(0);
+      case 'x':
+         cnf->common_opts |= MY_COMMON_OPT_SIMPLEAUTH;
+         return(0);
+      case 'y':
+         return(0);
+      case 'Z':
+         return(0);
+      case '?':
+         fprintf(stderr, _("Try `%s -h' for more information.\n"), PROGRAM_NAME);
+         return(1);
+      default:
+         fprintf(stderr, _("%s: unrecognized option `--%c'\n"), PROGRAM_NAME, c);
+         fprintf(stderr, _("Try `%s -h' for more information.\n"), PROGRAM_NAME);
+         return(1);
+   };
+
+   /* ends function */
+   return(0);
+}
+
+
 /* parses LDAP config file */
 int my_common_config(MyCommonConfig * cnf)
 {
    /* declares local vars */
    int          i;
-   int          fd;
    char         buff[MY_BUFF_LEN];
    const char * conf[] =
    {
@@ -65,16 +134,36 @@ int my_common_config(MyCommonConfig * cnf)
    {
       if (my_common_config_name(cnf, buff, MY_BUFF_LEN, conf[i]))
          continue;
-      if ((fd = open(buff, O_RDONLY)) == -1)
-         continue;
-      if (cnf->common_opts & MY_COMMON_OPT_DEBUG)
-         fprintf(stderr, _("%s: processing config file: %s\n"), PROGRAM_NAME, buff);
-      my_common_config_parse(cnf, fd);
-      close(fd);
+      my_common_config_parse(cnf, buff);
    };
 
    /* ends function */
    return(0);
+}
+
+
+/* frees common config */
+void my_common_config_free(MyCommonConfig * cnf)
+{
+   if (!(cnf))
+      return;
+
+   if (cnf->basedn)
+      free(cnf->basedn);
+
+   if (cnf->binddn)
+      free(cnf->binddn);
+
+   if (cnf->bindpw)
+      free(cnf->bindpw);
+
+   if (cnf->host)
+      free(cnf->host);
+
+   if (cnf->uri)
+      free(cnf->uri);
+
+   return;
 }
 
 
@@ -93,6 +182,10 @@ int my_common_config_name(MyCommonConfig * cnf, char * str, unsigned str_len,
    str_pos = 0;
    fmt_pos = 0;
    fmt_len = strlen(fmt);
+
+   /* checks args */
+   if (!(cnf))
+      return(1);
 
    /* loops through format string */
    for(fmt_pos = 0; fmt_pos < fmt_len; fmt_pos++)
@@ -143,44 +236,35 @@ int my_common_config_name(MyCommonConfig * cnf, char * str, unsigned str_len,
 }
 
 
-/* frees common config */
-void my_common_config_free(MyCommonConfig * cnf)
-{
-   if (cnf->basedn)
-      free(cnf->basedn);
-
-   if (cnf->binddn)
-      free(cnf->binddn);
-
-   if (cnf->bindpw)
-      free(cnf->bindpw);
-
-   if (cnf->host)
-      free(cnf->host);
-
-   if (cnf->uri)
-      free(cnf->uri);
-
-   return;
-}
-
-
-/* parses LDAP config file */
-int my_common_config_parse(MyCommonConfig * cnf, int fd)
+/* break config file into lines and then options */
+int my_common_config_parse(MyCommonConfig * cnf, const char * name)
 {
    /* declares local vars */
+   int         fd;
    int         len;	// length of current buffer segment
    int         bsize;	// length of current buffer segment
    int         line;	// line number of configuration file
    int         pos;	// current position within buffer
    int         eol;	// position within buffer of current EOL
-   int         optend;
-   int         valend;
+   int         optend;  // points to end of option name
+   int         valend;  // points to end of value
    int         buffend;	// end of buffer
-   char        quotes;
+   char        quotes;	// set to quote type if processing quoted string
    char        buff[MY_BUFF_LEN];
    char * opt;
    char * val;
+
+   /* open file for reading */
+   if ((fd = open(name, O_RDONLY)) == -1)
+   {
+      fprintf(stderr, "file: %s\n", name);
+      perror(PROGRAM_NAME ": open()");
+      return(1);
+   };
+
+   /* prints debug statements */
+   if (cnf->common_opts & MY_COMMON_OPT_DEBUG)
+      fprintf(stderr, _("%s: processing config file: %s\n"), PROGRAM_NAME, name);
 
    /* initialize variables */
    pos    = 0;
@@ -262,6 +346,9 @@ int my_common_config_parse(MyCommonConfig * cnf, int fd)
       bsize = MY_BUFF_LEN - (buffend - eol) -1;
    } while (len > 0);
 
+   /* close file */
+   close(fd);
+
    /* ends function */
    return(0);
 }
@@ -328,76 +415,6 @@ int my_common_config_setopt(MyCommonConfig * cnf, const char * opt,
 }
 
 
-/* parses LDAP command line arguments */
-int my_common_cmdargs(MyCommonConfig * cnf, int c, char * arg)
-{
-   /* checks argument */
-   switch(c)
-   {
-      case 'c':
-         cnf->common_opts |= MY_COMMON_OPT_CONTINUOUS;
-         return(0);
-      case 'C':
-         cnf->common_opts |= MY_COMMON_OPT_REFERRALS;
-         return(0);
-      case 'D':
-         if (my_common_config_setopt(cnf, "binddn", arg))
-            return(1);
-         return(0);
-      case 'h':
-         if (my_common_config_setopt(cnf, "host", arg))
-            return(1);
-         return(0);
-      case 'H':
-         if (my_common_config_setopt(cnf, "uri", arg))
-            return(1);
-         return(0);
-      case 'p':
-         if (my_common_config_setopt(cnf, "port", arg))
-            return(1);
-         return(0);
-      case 'P':
-         cnf->version = atol(arg);
-         return(0);
-      case 'u':
-         my_common_usage();
-         break;
-      case 'v':
-         cnf->common_opts |= MY_COMMON_OPT_VERBOSE;
-         return(0);
-      case 'V':
-         my_common_version();
-         return(1);
-      case 'w':
-         if (!(cnf->bindpw = strdup(arg)))
-         {
-            fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
-            return(1);
-         };
-         return(0);
-      case 'W':
-         return(0);
-      case 'x':
-         cnf->common_opts |= MY_COMMON_OPT_SIMPLEAUTH;
-         return(0);
-      case 'y':
-         return(0);
-      case 'Z':
-         return(0);
-      case '?':
-         fprintf(stderr, _("Try `%s -h' for more information.\n"), PROGRAM_NAME);
-         return(1);
-      default:
-         fprintf(stderr, _("%s: unrecognized option `--%c'\n"), PROGRAM_NAME, c);
-         fprintf(stderr, _("Try `%s -h' for more information.\n"), PROGRAM_NAME);
-         return(1);
-   };
-
-   /* ends function */
-   return(0);
-}
-
-
 /* processes environment variables */
 int my_common_environment(MyCommonConfig * cnf)
 {
@@ -420,7 +437,7 @@ int my_common_environment(MyCommonConfig * cnf)
    if ((tmp = getenv("LDAPBASE")))
       if (!(cnf->basedn = strdup(tmp)))
       {
-         fprintf(stderr, _(PROGRAM_NAME ": out of virtual memory\n"));
+         fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
          return(1);
       };
 
@@ -428,7 +445,7 @@ int my_common_environment(MyCommonConfig * cnf)
    if ((tmp = getenv("LDAPBINDDN")))
       if (!(cnf->binddn = strdup(tmp)))
       {
-         fprintf(stderr, _(PROGRAM_NAME ": out of virtual memory\n"));
+         fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
          return(1);
       };
 
@@ -445,7 +462,7 @@ int my_common_environment(MyCommonConfig * cnf)
    if ((tmp = getenv("LDAPHOST")))
       if (!(cnf->host = strdup(tmp)))
       {
-         fprintf(stderr, _(PROGRAM_NAME ": out of virtual memory\n"));
+         fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
          return(1);
       };
 
@@ -470,7 +487,7 @@ int my_common_environment(MyCommonConfig * cnf)
    if ((tmp = getenv("LDAPURI")))
       if (!(cnf->uri = strdup(tmp)))
       {
-         fprintf(stderr, _(PROGRAM_NAME ": out of virtual memory\n"));
+         fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
          return(1);
       };
 
