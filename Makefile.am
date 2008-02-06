@@ -39,9 +39,10 @@ AM_CFLAGS				= @CFLAGS_WARNINGS@
 AM_CPPFLAGS				= -I$(top_srcdir)/include -I$(top_srcdir)/lib \
 					  -DLOCALEDIR=\"$(localedir)\" \
 					  -DSYSCONFDIR=\"$(sysconfdir)\"
+ACLOCAL_AMFLAGS				= -I m4
 
 # automake targets
-bin_PROGRAMS				= src/ldaputils_test
+bin_PROGRAMS				= src/ldaputils_test src/ldapsetup
 man_MANS				=
 
 
@@ -49,9 +50,22 @@ TESTS					=
 XFAIL_TESTS				=
 EXTRA_DIST				= build-aux/config.rpath include/gettext.h
 CLEANFILES				= a.out $(srcdir)/a.out \
+					  tests/a.out $(srcdir)/tests/a.out \
 					  config.h.in~ $(srcdir)/config.h.in~ \
 					  @PACKAGE_TARNAME@-*.tar.* \
 					  @PACKAGE_TARNAME@-*.zip
+
+
+# macros for ldaputils_test
+src_ldapsetup_DEPENDENCIES		= Makefile
+src_ldapsetup_CPPFLAGS			= -DPROGRAM_NAME="\"ldapsetup\"" $(AM_CPPFLAGS)
+src_ldapsetup_CFLAGS			= $(AM_CFLAGS)
+src_ldapsetup_LDFLAGS			= $(AM_LDFLAGS)
+src_ldapsetup_LDADD			= $(AM_LDADD)
+src_ldapsetup_SOURCES			= include/ldap-utils.h \
+					  src/ldaputils_common.c \
+					  src/ldaputils_common.h \
+					  src/ldapsetup.c
 
 
 # macros for ldaputils_test
@@ -92,5 +106,3 @@ distclean-local:
 	rm -fR $(srcdir)/autom4te.cache
 
 # end of automake file
-
-ACLOCAL_AMFLAGS = -I m4
