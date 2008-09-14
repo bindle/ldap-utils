@@ -36,13 +36,15 @@ AM_LIBS					=
 AM_LDADD				= @LTLIBINTL@
 AM_LDFLAGS				=
 AM_CFLAGS				= @CFLAGS_WARNINGS@
-AM_CPPFLAGS				= -I$(top_srcdir)/include -I$(top_srcdir)/lib \
+AM_CPPFLAGS				= -I$(top_srcdir)/include \
+					  -I$(top_srcdir)/lib \
 					  -DLOCALEDIR=\"$(localedir)\" \
 					  -DSYSCONFDIR=\"$(sysconfdir)\"
 ACLOCAL_AMFLAGS				= -I m4
 
 # automake targets
-bin_PROGRAMS				= src/ldaputils_test src/ldapsetup
+bin_PROGRAMS				= src/ldapsetup
+noinst_PROGRAMS				= src/ldaputils_test
 man_MANS				=
 
 
@@ -62,7 +64,7 @@ src_ldapsetup_CPPFLAGS			= -DPROGRAM_NAME="\"ldapsetup\"" $(AM_CPPFLAGS)
 src_ldapsetup_CFLAGS			= $(AM_CFLAGS)
 src_ldapsetup_LDFLAGS			= $(AM_LDFLAGS)
 src_ldapsetup_LDADD			= $(AM_LDADD)
-src_ldapsetup_SOURCES			= include/ldap-utils.h \
+src_ldapsetup_SOURCES			= \
 					  src/ldaputils_common.c \
 					  src/ldaputils_common.h \
 					  src/ldapsetup.c
@@ -74,7 +76,7 @@ src_ldaputils_test_CPPFLAGS		= -DPROGRAM_NAME="\"ldaputils_test\"" $(AM_CPPFLAGS
 src_ldaputils_test_CFLAGS		= $(AM_CFLAGS)
 src_ldaputils_test_LDFLAGS		= $(AM_LDFLAGS)
 src_ldaputils_test_LDADD		= $(AM_LDADD)
-src_ldaputils_test_SOURCES		= include/ldap-utils.h \
+src_ldaputils_test_SOURCES		= \
 					  src/ldaputils_common.c \
 					  src/ldaputils_common.h \
 					  src/ldaputils_test.c

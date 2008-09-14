@@ -31,7 +31,7 @@ AC_PREREQ(2.61)
 
 AC_COPYRIGHT([Copyright (c) 2008 David M. Syzdek <ldap-utils-project@syzdek.net>.])
 AC_REVISION($Revision$)
-AC_INIT([LDAP Utilities],[1.0.1],[syzdek@users.sourceforge.net],[ldap-utils])
+AC_INIT([LDAP Utilities],[0.1.0],[syzdek@users.sourceforge.net],[ldap-utils])
 AC_SUBST([RELEASE_MONTH],["January 2008"])
 
 # Version Info:
@@ -57,18 +57,18 @@ AC_CANONICAL_TARGET
 #AM_MAINTAINER_MODE # disabled per Automake Manual Section 27.2.2
 AM_INIT_AUTOMAKE(gnu std-options subdir-objects)
 
+
 # Compilers                                                       
 AC_PROG_CC 
 AM_PROG_CC_C_O
 AC_PROG_INSTALL
 
 # checks for Unix Variants
-AC_AIX
 AC_GNU_SOURCE
-AC_MINIX
+AC_USE_SYSTEM_EXTENSIONS
 AC_C_BIGENDIAN
 
-# enulib support
+# gnulib support
 gl_EARLY
 gl_INIT
 
