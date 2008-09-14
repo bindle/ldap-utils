@@ -49,6 +49,12 @@
 #include <config.h>
 #endif
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
+#include <inttypes.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -56,7 +62,6 @@
 #include <time.h>
 #include <getopt.h>
 
-#include <ldap-utils.h>
 #include "ldaputils_common.h"
 
 /////////////////
