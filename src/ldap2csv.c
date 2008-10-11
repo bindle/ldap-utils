@@ -1,7 +1,4 @@
 /*
- *  $Id$
- */
-/*
  *  LDAP Utilities
  *  Copyright (c) 2008 David M. Syzdek <ldap-utils-project@syzdek.net>.
  *
@@ -136,7 +133,7 @@ int main(int argc, char * argv[])
 
    /* prints message */
    //my_write_config(cnf);
-
+   
    /* frees memory */
    ldaputils_common_config_free((LdapUtilsConfig *)cnf);
    free(cnf);
@@ -155,16 +152,14 @@ MyConfig * my_config(int argc, char * argv[])
    int        option_index;
    //char     * ptr;
    MyConfig * cnf;
-if (!(argc))
-   printf("%s blah\n", argv[0]);
    
-   static char   short_options[] = MY_COMMON_OPTIONS "f:l";
+   static char   short_options[] = LDAPUTILS_COMMON_OPTIONS "f:l";
    static struct option long_options[] =
    {
-      {"help",          no_argument, 0, 'u'},
-      {"verbose",       no_argument, 0, 'v'},
-      {"version",       no_argument, 0, 'V'},
-      {NULL,            0,           0, 0  }
+      {_("help"),          no_argument, 0, '9'},
+      {_("verbose"),       no_argument, 0, 'v'},
+      {_("version"),       no_argument, 0, 'V'},
+      {NULL,               0,           0, 0  }
    };
    
    option_index = 0;
@@ -180,19 +175,18 @@ if (!(argc))
    // loops through args
    while((c = getopt_long(argc, argv, short_options, long_options, &option_index)) != -1)
    {
-      switch(c)
+      switch(ldaputils_common_cmdargs((LdapUtilsConfig *) cnf, c, optarg))
       {
          case -1:       /* no more arguments */
          case 0:        /* long options toggles */
             break;
+         case '?':
+            fprintf(stderr, _("Try `%s --help' for more information.\n"), PROGRAM_NAME);
+            return(NULL);
          default:
-            if (ldaputils_common_cmdargs((LdapUtilsConfig *)cnf, (int)c, optarg))
-            {
-               my_free_config(cnf);
-               free(cnf);
-               return(NULL);
-            };
-         break;
+            fprintf(stderr, _("%s: unrecognized option `--%c'\n"), PROGRAM_NAME, c);
+            fprintf(stderr, _("Try `%s --help' for more information.\n"), PROGRAM_NAME);
+            return(NULL);
       };
    };
 
@@ -204,6 +198,9 @@ if (!(argc))
 /// @param[in] cnf  reference to configuration struct
 void my_free_config(MyConfig * cnf)
 {
+   if (!(cnf))
+      return;
+   ldaputils_common_config_free((LdapUtilsConfig *)cnf);
    free(cnf);
    return;
 }

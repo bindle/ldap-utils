@@ -1,6 +1,16 @@
 # main source
+src/ldap2csv.c
 src/ldaputils_common.c
+src/ldaputils_misc.c
 src/ldaputils_test.c
 
 # files from gnulib
+lib/dummy.c
+lib/fseeko.c
+lib/getdelim.c
+lib/getline.c
 lib/getopt.c
+lib/getopt1.c
+lib/getpass.c
+lib/lseek.c
+lib/realloc.c

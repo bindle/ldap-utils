@@ -1,7 +1,4 @@
 /*
- *  $Id$
- */
-/*
  *  LDAP Utilities
  *  Copyright (c) 2008 David M. Syzdek <ldap-utils-project@syzdek.net>.
  *

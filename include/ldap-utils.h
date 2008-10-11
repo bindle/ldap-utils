@@ -1,7 +1,4 @@
 /*
- *  $Id$
- */
-/*
  *  LDAP Utilities
  *  Copyright (C) 2008 David M. Syzdek <ldap-utils-project@syzdek.net>.
  *
@@ -25,11 +22,29 @@
 #ifndef _LDAP_UTILS_H
 #define _LDAP_UTILS_H 1
 
-///////////////////
-//               //
-//  Definitions  //
-//               //
-///////////////////
+///////////////
+//           //
+//  Headers  //
+//           //
+///////////////
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#ifdef WIN32
+#include <windows.h>
+#endif
+
+#include <inttypes.h>
+#include <ldap.h>
+
+
+//////////////
+//          //
+//  Macros  //
+//          //
+//////////////
 
 /*
  * The macro "PARAMS" is taken verbatim from section 7.1 of the
@@ -48,13 +63,44 @@
 #endif
 
 
-///////////////
-//           //
-//  Headers  //
-//           //
-///////////////
+///////////////////
+//               //
+//  i18l Support //
+//               //
+///////////////////
 
-#include <inttypes.h>
+#ifdef HAVE_GETTEXT
+#   include <gettext.h> 
+#   define _(String) gettext (String) 
+#   define gettext_noop(String) String 
+#   define N_(String) gettext_noop (String) 
+#else
+#   define _(String) (String) 
+#   define N_(String) String 
+#   define textdomain(Domain) 
+#   define bindtextdomain(Package, Directory) 
+#endif
+
+
+
+///////////////////
+//               //
+//  Definitions  //
+//               //
+///////////////////
+
+#ifndef PACKAGE_COPYRIGHT
+#define PACKAGE_COPYRIGHT "Copyright (C) 2008 David M. Syzdek."
+#endif
+#ifndef PACKAGE_NAME
+#define PACKAGE_NAME "LDAP Utilities"
+#endif
+#ifndef PACKAGE_TARNAME
+#define PACKAGE_TARNAME "ldap-utils"
+#endif
+#ifndef PACKAGE_VERSION
+#define PACKAGE_VERSION ""
+#endif
 
 
 #endif /* end of header */

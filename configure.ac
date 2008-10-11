@@ -1,6 +1,4 @@
 #
-#   $Id$
-#
 #   LDAP Utilities
 #   Copyright (c) 2008 David M. Syzdek <ldap-utils-project@syzdek.net>.
 #
@@ -69,8 +67,8 @@ AC_USE_SYSTEM_EXTENSIONS
 AC_C_BIGENDIAN
 
 # gnulib support
-gl_EARLY
-gl_INIT
+#gl_EARLY
+#gl_INIT
 
 # binary locations
 AC_PATH_PROG([SHELL],   sh bash,        [AC_MSG_ERROR([missing "sh"])], [$PATH])
@@ -91,6 +89,9 @@ AM_GNU_GETTEXT([external])
 
 AC_LDAP_UTILS_ENABLE_WARNINGS
 
+# Defines macros
+AC_CHECK_HEADERS([termios.h])
+
 # checks host
 case "${host_os}" in
    *mingw32*) WINTEST=yes ;;
@@ -100,7 +101,7 @@ esac
 AM_CONDITIONAL([WIN32], [test "x${WINTEST}" = "xyes"])
 
 # Creates outputs
-AC_CONFIG_FILES([Makefile lib/Makefile po/Makefile.in])
+AC_CONFIG_FILES([Makefile po/Makefile.in])
 AC_OUTPUT
 
 # Show local config

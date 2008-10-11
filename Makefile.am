@@ -1,6 +1,4 @@
 #
-#   $Id$
-#
 #   LDAP Utilities
 #   Copyright (c) 2008 David M. Syzdek <ldap-utils-project@syzdek.net>.
 #
@@ -24,8 +22,8 @@
 #
 
 # Sub directories
-SUBDIRS                                 = po lib
-DIST_SUBDIRS                            = po lib
+SUBDIRS                                 = po
+DIST_SUBDIRS                            = po
 
 
 localedir				= $(datadir)/locale
@@ -43,8 +41,8 @@ AM_CPPFLAGS				= -I$(top_srcdir)/include \
 ACLOCAL_AMFLAGS				= -I m4
 
 # automake targets
-bin_PROGRAMS				= src/ldapsetup
-noinst_PROGRAMS				= src/ldaputils_test
+bin_PROGRAMS				= src/ldap2csv
+noinst_PROGRAMS				=
 man_MANS				=
 
 
@@ -58,28 +56,43 @@ CLEANFILES				= a.out $(srcdir)/a.out \
 					  @PACKAGE_TARNAME@-*.zip
 
 
-# macros for ldaputils_test
-src_ldapsetup_DEPENDENCIES		= Makefile
-src_ldapsetup_CPPFLAGS			= -DPROGRAM_NAME="\"ldapsetup\"" $(AM_CPPFLAGS)
-src_ldapsetup_CFLAGS			= $(AM_CFLAGS)
-src_ldapsetup_LDFLAGS			= $(AM_LDFLAGS)
-src_ldapsetup_LDADD			= $(AM_LDADD)
-src_ldapsetup_SOURCES			= \
+# macros for ldap2csv
+src_ldap2csv_DEPENDENCIES		= Makefile
+src_ldap2csv_CPPFLAGS			= -DPROGRAM_NAME="\"ldap2csv\"" $(AM_CPPFLAGS)
+src_ldap2csv_CFLAGS			= $(AM_CFLAGS)
+src_ldap2csv_LDFLAGS			= $(AM_LDFLAGS)
+src_ldap2csv_LDADD			= $(AM_LDADD) -lldap
+src_ldap2csv_SOURCES			= \
+					  include/ldap-utils.h \
+					  src/ldap2csv.c \
 					  src/ldaputils_common.c \
 					  src/ldaputils_common.h \
-					  src/ldapsetup.c
+					  src/ldaputils_misc.c \
+					  src/ldaputils_misc.h
 
 
 # macros for ldaputils_test
-src_ldaputils_test_DEPENDENCIES		= Makefile
-src_ldaputils_test_CPPFLAGS		= -DPROGRAM_NAME="\"ldaputils_test\"" $(AM_CPPFLAGS)
-src_ldaputils_test_CFLAGS		= $(AM_CFLAGS)
-src_ldaputils_test_LDFLAGS		= $(AM_LDFLAGS)
-src_ldaputils_test_LDADD		= $(AM_LDADD)
-src_ldaputils_test_SOURCES		= \
-					  src/ldaputils_common.c \
-					  src/ldaputils_common.h \
-					  src/ldaputils_test.c
+#src_ldapsetup_DEPENDENCIES		= Makefile
+#src_ldapsetup_CPPFLAGS			= -DPROGRAM_NAME="\"ldapsetup\"" $(AM_CPPFLAGS)
+#src_ldapsetup_CFLAGS			= $(AM_CFLAGS)
+#src_ldapsetup_LDFLAGS			= $(AM_LDFLAGS)
+#src_ldapsetup_LDADD			= $(AM_LDADD)
+#src_ldapsetup_SOURCES			= \
+#					  src/ldaputils_common.c \
+#					  src/ldaputils_common.h \
+#					  src/ldapsetup.c
+
+
+# macros for ldaputils_test
+#src_ldaputils_test_DEPENDENCIES		= Makefile
+#src_ldaputils_test_CPPFLAGS		= -DPROGRAM_NAME="\"ldaputils_test\"" $(AM_CPPFLAGS)
+#src_ldaputils_test_CFLAGS		= $(AM_CFLAGS)
+#src_ldaputils_test_LDFLAGS		= $(AM_LDFLAGS)
+#src_ldaputils_test_LDADD		= $(AM_LDADD)
+#src_ldaputils_test_SOURCES		= \
+#					  src/ldaputils_common.c \
+#					  src/ldaputils_common.h \
+#					  src/ldaputils_test.c
 
 
 # substitution routine

@@ -1,0 +1,15 @@
+
+Config precedence order:
+========================
+
+   1) Command Line Options
+   2) Environment Variables
+   3) Configuration File
+   4) Default Values
+
+
+# updating gettext
+	$ ./configure 
+	$ (cd po; make update-po) 
+	$ make distclean
+

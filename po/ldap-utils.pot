@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: syzdek@users.sourceforge.net\n"
-"POT-Creation-Date: 2008-01-11 07:07-0900\n"
+"POT-Creation-Date: 2008-10-11 02:47-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,55 +16,116 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/ldaputils_common.c:71 src/ldaputils_common.c:80
-#: src/ldaputils_common.c:89 src/ldaputils_common.c:111
-#: src/ldaputils_test.c:115
+#: src/ldap2csv.c:106
+#, c-format
+msgid "Usage: %s [options] [filter [attributes...]]\n"
+msgstr ""
+
+#: src/ldap2csv.c:109
+#, c-format
+msgid "Report bugs to <%s>.\n"
+msgstr ""
+
+#: src/ldap2csv.c:159
+msgid "help"
+msgstr ""
+
+#: src/ldap2csv.c:160
+msgid "verbose"
+msgstr ""
+
+#: src/ldap2csv.c:161
+msgid "version"
+msgstr ""
+
+#: src/ldap2csv.c:170 src/ldaputils_test.c:141
 #, c-format
 msgid "%s: out of virtual memory\n"
 msgstr ""
 
-#: src/ldaputils_common.c:125 src/ldaputils_common.c:129
+#: src/ldap2csv.c:184 src/ldap2csv.c:188 src/ldaputils_common.c:196
+#: src/ldaputils_common.c:229 src/ldaputils_common.c:266
 #, c-format
-msgid "Try `%s -h' for more information.\n"
+msgid "Try `%s --help' for more information.\n"
 msgstr ""
 
-#: src/ldaputils_common.c:128
+#: src/ldap2csv.c:187
 #, c-format
 msgid "%s: unrecognized option `--%c'\n"
+msgstr ""
+
+#. TRANSLATORS: The following string is used as a prompt when the program
+#. requests the user's LDAP bind password.
+#: src/ldaputils_common.c:152
+msgid "Enter LDAP Password: "
+msgstr ""
+
+#: src/ldaputils_common.c:195
+#, c-format
+msgid "%s: invalid TCP port\n"
+msgstr ""
+
+#. TRANSLATORS: The following strings provide an error message if the
+#. URI provided on the command line is an invalid LDAP URI.
+#: src/ldaputils_common.c:228
+#, c-format
+msgid "%s: invalid LDAP URI\n"
+msgstr ""
+
+#. TRANSLATORS: The following strings provide an error message if the
+#. LDAP protocol version specified on the command line is an invalid
+#. protocol version or unsupported protocol version.
+#: src/ldaputils_common.c:265
+#, c-format
+msgid "%s: protocol version should be 2 or 3\n"
 msgstr ""
 
 #. TRANSLATORS: The following strings provide usage for common command
 #. line arguments. Usage for program specific arguments is provided in
 #. anothoer section. These strings are displayed if the program is
 #. passed `--help' on the command line.
-#: src/ldaputils_common.c:145
+#: src/ldaputils_common.c:280
 #, c-format
 msgid ""
 "Common options:\n"
 "  -c                continuous operation mode (do not stop on errors)\n"
 "  -C                chase referrals (anonymously)\n"
+"  -d level          set LDAP debug level to `level'\n"
 "  -D binddn         bind DN\n"
 "  -h host           LDAP server\n"
 "  -H URI            LDAP Uniform Resource Identifier(s)\n"
 "  -p port           port on LDAP server\n"
 "  -P version        protocol version (default: 3)\n"
 "  -v, --verbose     run in verbose mode\n"
-"      --help        print this help and exit\n"
 "  -V, --version     print version number and exit\n"
 "  -w, passwd        bind password (for simple authentication)\n"
 "  -W                prompt for bind password\n"
-"  -x                Simple authentication\n"
-"  -y file           Read password from file\n"
-"  -Z                Start TLS request (-ZZ to require successful response)\n"
+"  -y file           read password from file\n"
+"  --help            print this help and exit\n"
 "\n"
-"Report bugs to <%s>.\n"
+msgstr ""
+
+#. TRANSLATORS: The following strings provide usage for search command
+#. line arguments. Usage for program specific arguments is provided in
+#. anothoer section. These strings are displayed if the program is
+#. passed `--help' on the command line.
+#: src/ldaputils_common.c:309
+#, c-format
+msgid ""
+"Search options:\n"
+"  -b basedn         base dn for search\n"
+"  -l limit          time limit (in seconds) for search\n"
+"  -s scope          one of base, one, or sub (search scope)\n"
+"  -S attr           sort results by attribute `attr'\n"
+"  -u                include User Friendly entry names in output\n"
+"  -z limit          size limit for search\n"
 msgstr ""
 
 #. TRANSLATORS: The following strings provide version and copyright
 #. information if the program is passed --version on the command line.
 #. The three strings referenced are: PROGRAM_NAME, PACKAGE_NAME,
 #. PACKAGE_VERSION.
-#: src/ldaputils_common.c:176
+#: src/ldaputils_common.c:329
 #, c-format
 msgid ""
 "%s (%s) %s\n"
