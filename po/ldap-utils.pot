@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: syzdek@users.sourceforge.net\n"
-"POT-Creation-Date: 2008-10-11 02:47-0800\n"
+"POT-Creation-Date: 2008-10-12 00:12-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,75 +16,67 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/ldap2csv.c:106
+#: src/ldap2csv.c:102
 #, c-format
-msgid "Usage: %s [options] [filter [attributes...]]\n"
+msgid "Usage: %s [options] filter attributes...\n"
 msgstr ""
 
-#: src/ldap2csv.c:109
+#: src/ldap2csv.c:103
 #, c-format
-msgid "Report bugs to <%s>.\n"
+msgid ""
+"CVS Options:\n"
+"  -o file           output file\n"
+"  -q character      CVS file delimitor\n"
 msgstr ""
 
-#: src/ldap2csv.c:159
+#: src/ldap2csv.c:110
+#, c-format
+msgid ""
+"\n"
+"Report bugs to <%s>.\n"
+msgstr ""
+
+#: src/ldap2csv.c:154
 msgid "help"
 msgstr ""
 
-#: src/ldap2csv.c:160
+#: src/ldap2csv.c:155
 msgid "verbose"
 msgstr ""
 
-#: src/ldap2csv.c:161
+#: src/ldap2csv.c:156
 msgid "version"
 msgstr ""
 
-#: src/ldap2csv.c:170 src/ldaputils_test.c:141
+#: src/ldap2csv.c:166
 #, c-format
 msgid "%s: out of virtual memory\n"
 msgstr ""
 
-#: src/ldap2csv.c:184 src/ldap2csv.c:188 src/ldaputils_common.c:196
-#: src/ldaputils_common.c:229 src/ldaputils_common.c:266
+#: src/ldap2csv.c:181 src/ldap2csv.c:185 src/ldaputils_config_opts.c:150
+#: src/ldaputils_config_opts.c:236 src/ldaputils_config_opts.c:275
 #, c-format
 msgid "Try `%s --help' for more information.\n"
 msgstr ""
 
-#: src/ldap2csv.c:187
+#: src/ldap2csv.c:184
 #, c-format
 msgid "%s: unrecognized option `--%c'\n"
 msgstr ""
 
-#. TRANSLATORS: The following string is used as a prompt when the program
-#. requests the user's LDAP bind password.
-#: src/ldaputils_common.c:152
-msgid "Enter LDAP Password: "
-msgstr ""
-
-#: src/ldaputils_common.c:195
+#. TRANSLATORS: The following string provides an error message if the
+#. file which contains the password has insecure file permissions. The
+#. string arguments are the name of the program and the name of the file.
+#: src/ldaputils_config.c:233
 #, c-format
-msgid "%s: invalid TCP port\n"
-msgstr ""
-
-#. TRANSLATORS: The following strings provide an error message if the
-#. URI provided on the command line is an invalid LDAP URI.
-#: src/ldaputils_common.c:228
-#, c-format
-msgid "%s: invalid LDAP URI\n"
-msgstr ""
-
-#. TRANSLATORS: The following strings provide an error message if the
-#. LDAP protocol version specified on the command line is an invalid
-#. protocol version or unsupported protocol version.
-#: src/ldaputils_common.c:265
-#, c-format
-msgid "%s: protocol version should be 2 or 3\n"
+msgid "%s: Password file %s is publicly readable/writeable\n"
 msgstr ""
 
 #. TRANSLATORS: The following strings provide usage for common command
 #. line arguments. Usage for program specific arguments is provided in
 #. anothoer section. These strings are displayed if the program is
 #. passed `--help' on the command line.
-#: src/ldaputils_common.c:280
+#: src/ldaputils_config.c:261
 #, c-format
 msgid ""
 "Common options:\n"
@@ -94,6 +86,7 @@ msgid ""
 "  -D binddn         bind DN\n"
 "  -h host           LDAP server\n"
 "  -H URI            LDAP Uniform Resource Identifier(s)\n"
+"  -n                show what would be done but don't actually do it\n"
 "  -p port           port on LDAP server\n"
 "  -P version        protocol version (default: 3)\n"
 "  -v, --verbose     run in verbose mode\n"
@@ -102,14 +95,13 @@ msgid ""
 "  -W                prompt for bind password\n"
 "  -y file           read password from file\n"
 "  --help            print this help and exit\n"
-"\n"
 msgstr ""
 
 #. TRANSLATORS: The following strings provide usage for search command
 #. line arguments. Usage for program specific arguments is provided in
 #. anothoer section. These strings are displayed if the program is
 #. passed `--help' on the command line.
-#: src/ldaputils_common.c:309
+#: src/ldaputils_config.c:290
 #, c-format
 msgid ""
 "Search options:\n"
@@ -117,7 +109,6 @@ msgid ""
 "  -l limit          time limit (in seconds) for search\n"
 "  -s scope          one of base, one, or sub (search scope)\n"
 "  -S attr           sort results by attribute `attr'\n"
-"  -u                include User Friendly entry names in output\n"
 "  -z limit          size limit for search\n"
 msgstr ""
 
@@ -125,7 +116,7 @@ msgstr ""
 #. information if the program is passed --version on the command line.
 #. The three strings referenced are: PROGRAM_NAME, PACKAGE_NAME,
 #. PACKAGE_VERSION.
-#: src/ldaputils_common.c:329
+#: src/ldaputils_config.c:309
 #, c-format
 msgid ""
 "%s (%s) %s\n"
@@ -136,57 +127,33 @@ msgid ""
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 msgstr ""
 
-#: lib/getopt.c:531 lib/getopt.c:547
-#, c-format
-msgid "%s: option `%s' is ambiguous\n"
+#. TRANSLATORS: The following string is used as a prompt when the program
+#. requests the user's LDAP bind password.
+#: src/ldaputils_config_opts.c:93
+msgid "Enter LDAP Password: "
 msgstr ""
 
-#: lib/getopt.c:580 lib/getopt.c:584
+#: src/ldaputils_config_opts.c:149
 #, c-format
-msgid "%s: option `--%s' doesn't allow an argument\n"
+msgid "%s: invalid TCP port\n"
 msgstr ""
 
-#: lib/getopt.c:593 lib/getopt.c:598
+#: src/ldaputils_config_opts.c:185
 #, c-format
-msgid "%s: option `%c%s' doesn't allow an argument\n"
+msgid "%s: scope should be base, one, or sub\n"
 msgstr ""
 
-#: lib/getopt.c:641 lib/getopt.c:660 lib/getopt.c:976 lib/getopt.c:995
+#. TRANSLATORS: The following strings provide an error message if the
+#. URI provided on the command line is an invalid LDAP URI.
+#: src/ldaputils_config_opts.c:235
 #, c-format
-msgid "%s: option `%s' requires an argument\n"
+msgid "%s: invalid LDAP URI\n"
 msgstr ""
 
-#: lib/getopt.c:698 lib/getopt.c:701
+#. TRANSLATORS: The following strings provide an error message if the
+#. LDAP protocol version specified on the command line is an invalid
+#. protocol version or unsupported protocol version.
+#: src/ldaputils_config_opts.c:274
 #, c-format
-msgid "%s: unrecognized option `--%s'\n"
-msgstr ""
-
-#: lib/getopt.c:709 lib/getopt.c:712
-#, c-format
-msgid "%s: unrecognized option `%c%s'\n"
-msgstr ""
-
-#: lib/getopt.c:764 lib/getopt.c:767
-#, c-format
-msgid "%s: illegal option -- %c\n"
-msgstr ""
-
-#: lib/getopt.c:773 lib/getopt.c:776
-#, c-format
-msgid "%s: invalid option -- %c\n"
-msgstr ""
-
-#: lib/getopt.c:828 lib/getopt.c:844 lib/getopt.c:1048 lib/getopt.c:1066
-#, c-format
-msgid "%s: option requires an argument -- %c\n"
-msgstr ""
-
-#: lib/getopt.c:897 lib/getopt.c:913
-#, c-format
-msgid "%s: option `-W %s' is ambiguous\n"
-msgstr ""
-
-#: lib/getopt.c:937 lib/getopt.c:955
-#, c-format
-msgid "%s: option `-W %s' doesn't allow an argument\n"
+msgid "%s: protocol version should be 2 or 3\n"
 msgstr ""

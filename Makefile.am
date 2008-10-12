@@ -42,7 +42,7 @@ ACLOCAL_AMFLAGS				= -I m4
 
 # automake targets
 bin_PROGRAMS				= src/ldap2csv
-noinst_PROGRAMS				=
+noinst_PROGRAMS				= src/ldapconftest
 man_MANS				=
 
 
@@ -52,6 +52,7 @@ EXTRA_DIST				= build-aux/config.rpath include/gettext.h
 CLEANFILES				= a.out $(srcdir)/a.out \
 					  tests/a.out $(srcdir)/tests/a.out \
 					  config.h.in~ $(srcdir)/config.h.in~ \
+					  po/stamp-po \
 					  @PACKAGE_TARNAME@-*.tar.* \
 					  @PACKAGE_TARNAME@-*.zip
 
@@ -65,34 +66,25 @@ src_ldap2csv_LDADD			= $(AM_LDADD) -lldap
 src_ldap2csv_SOURCES			= \
 					  include/ldap-utils.h \
 					  src/ldap2csv.c \
-					  src/ldaputils_common.c \
-					  src/ldaputils_common.h \
-					  src/ldaputils_misc.c \
-					  src/ldaputils_misc.h
+					  src/ldaputils_config.c \
+					  src/ldaputils_config.h \
+					  src/ldaputils_config_opts.c \
+					  src/ldaputils_config_opts.h
 
 
-# macros for ldaputils_test
-#src_ldapsetup_DEPENDENCIES		= Makefile
-#src_ldapsetup_CPPFLAGS			= -DPROGRAM_NAME="\"ldapsetup\"" $(AM_CPPFLAGS)
-#src_ldapsetup_CFLAGS			= $(AM_CFLAGS)
-#src_ldapsetup_LDFLAGS			= $(AM_LDFLAGS)
-#src_ldapsetup_LDADD			= $(AM_LDADD)
-#src_ldapsetup_SOURCES			= \
-#					  src/ldaputils_common.c \
-#					  src/ldaputils_common.h \
-#					  src/ldapsetup.c
-
-
-# macros for ldaputils_test
-#src_ldaputils_test_DEPENDENCIES		= Makefile
-#src_ldaputils_test_CPPFLAGS		= -DPROGRAM_NAME="\"ldaputils_test\"" $(AM_CPPFLAGS)
-#src_ldaputils_test_CFLAGS		= $(AM_CFLAGS)
-#src_ldaputils_test_LDFLAGS		= $(AM_LDFLAGS)
-#src_ldaputils_test_LDADD		= $(AM_LDADD)
-#src_ldaputils_test_SOURCES		= \
-#					  src/ldaputils_common.c \
-#					  src/ldaputils_common.h \
-#					  src/ldaputils_test.c
+# macros for ldapconftest
+src_ldapconftest_DEPENDENCIES		= Makefile
+src_ldapconftest_CPPFLAGS		= -DPROGRAM_NAME="\"ldapconftest\"" $(AM_CPPFLAGS)
+src_ldapconftest_CFLAGS			= $(AM_CFLAGS)
+src_ldapconftest_LDFLAGS		= $(AM_LDFLAGS)
+src_ldapconftest_LDADD			= $(AM_LDADD) -lldap
+src_ldapconftest_SOURCES		= \
+					  include/ldap-utils.h \
+					  src/ldapconftest.c \
+					  src/ldaputils_config.c \
+					  src/ldaputils_config.h \
+					  src/ldaputils_config_opts.c \
+					  src/ldaputils_config_opts.h
 
 
 # substitution routine
