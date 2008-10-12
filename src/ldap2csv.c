@@ -113,8 +113,11 @@ void ldaputils_usage(void)
 /// @param[in] argv   array of arguments
 int main(int argc, char * argv[])
 {
-   LDAP     * ld;
-   MyConfig * cnf;
+   int           rc;
+   LDAP        * ld;
+   MyConfig    * cnf;
+   LDAPMessage * res;
+   LDAPMessage * entry;
 
 #ifdef HAVE_GETTEXT
    setlocale (LC_ALL, ""); 
@@ -132,6 +135,19 @@ int main(int argc, char * argv[])
       ldaputils_config_free((LdapUtilsConfig *)cnf);
       free(cnf);
       return(1);
+   };
+
+   if ((ldaputils_search(ld, (LdapUtilsConfig *)cnf)))
+   {
+      ldaputils_config_free((LdapUtilsConfig *)cnf);
+      free(cnf);
+      return(1);
+   };
+   
+   while((rc = ldap_result(ld, LDAP_RES_ANY, LDAP_MSG_ONE, NULL, &res)) > 0)
+   {
+      entry = ldap_first_entry(ld, res);
+      printf("dn: %s\n", ldap_get_dn(ld, entry));
    };
    
    ldap_unbind_ext_s(ld, NULL, NULL);
@@ -197,7 +213,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    };
    
    cnf->filter = argv[optind];
-   
+
    // configures LDAP attributes to return in results
    if (!(cnf->common.attrs = (char **) malloc(sizeof(char *) * (argc-optind))))
    {

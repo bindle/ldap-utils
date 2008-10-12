@@ -49,4 +49,7 @@
 // connects and binds to LDAP server
 LDAP * ldaputils_initialize PARAMS((LdapUtilsConfig * cnf));
 
+// connects and binds to LDAP server
+int ldaputils_search PARAMS((LDAP * ld, LdapUtilsConfig * cnf));
+
 #endif /* end of header file */

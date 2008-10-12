@@ -267,7 +267,6 @@ void ldaputils_usage_common(void)
          "  -H URI            LDAP Uniform Resource Identifier(s)\n"
          "  -n                show what would be done but don't actually do it\n"
          "  -p port           port on LDAP server\n"
-         "  -P version        protocol version (default: 3)\n"
          "  -v, --verbose     run in verbose mode\n"
          "  -V, --version     print version number and exit\n"
          "  -w, passwd        bind password (for simple authentication)\n"

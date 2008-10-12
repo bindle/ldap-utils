@@ -31,7 +31,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
-
+#include <ldap.h>
 
 #include "ldaputils_config.h"
 
@@ -63,6 +63,7 @@ LDAP * ldaputils_initialize(LdapUtilsConfig * cnf)
       return(NULL);
    };
 
+   cnf->version = 3;
    if (cnf->version)
       if ((LDAP_OPT_SUCCESS != ldap_set_option(ld, LDAP_OPT_PROTOCOL_VERSION, &cnf->version)))
          fprintf(stderr, _("%s: could not set LDAP_OPT_PROTOCOL_VERSION\n"), PROGRAM_NAME);
@@ -76,6 +77,7 @@ LDAP * ldaputils_initialize(LdapUtilsConfig * cnf)
       if ((LDAP_OPT_SUCCESS != ldap_set_option(ld, LDAP_OPT_TIMELIMIT, &cnf->timelimit)))
          fprintf(stderr, _("%s: could not set LDAP_OPT_TIMELIMIT\n"), PROGRAM_NAME);
    
+   //mechanism   = (const char *)LDAP_AUTH_SIMPLE;
    mechanism   = (const char *)LDAP_SASL_SIMPLE;
    cred.bv_val = cnf->bindpw;
    cred.bv_len = (size_t) strlen(cnf->bindpw);
@@ -89,6 +91,25 @@ LDAP * ldaputils_initialize(LdapUtilsConfig * cnf)
    };
 
    return(ld);
+}
+
+
+/// connects and binds to LDAP server
+/// @param[in] ld    refernce to LDAP socket data
+/// @param[in] cnf   reference to common configuration struct
+int ldaputils_search(LDAP * ld, LdapUtilsConfig * cnf)
+{
+   int err;
+   int msgid;
+   
+   if ((err = ldap_search_ext(ld, cnf->basedn, cnf->scope, cnf->filter, cnf->attrs, 0, NULL, NULL, NULL, -1, &msgid)))
+   {
+      fprintf(stderr, "%s: ldap_search_ext_s(): %s\n", PROGRAM_NAME, ldap_err2string(err));
+      ldap_unbind_ext_s(ld, NULL, NULL);
+      return(-1);
+   };
+   
+   return(0);
 }
 
 /* end of source file */
