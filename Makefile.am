@@ -1,6 +1,6 @@
 #
 #   LDAP Utilities
-#   Copyright (c) 2008 David M. Syzdek <ldap-utils-project@syzdek.net>.
+#   Copyright (C) 2008 David M. Syzdek <david@syzdek.net>.
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ SUBDIRS                                 = po
 DIST_SUBDIRS                            = po
 
 
+# custom directories
 localedir				= $(datadir)/locale
 
 
@@ -33,28 +34,19 @@ localedir				= $(datadir)/locale
 AM_LIBS					=
 AM_LDADD				= @LTLIBINTL@
 AM_LDFLAGS				=
-AM_CFLAGS				= @CFLAGS_WARNINGS@
-AM_CPPFLAGS				= -I$(top_srcdir)/include \
+AM_CFLAGS				= $(CFLAGS_WARNINGS)
+AM_CPPFLAGS				= $(CFLAGS_WARNINGS) \
+					  -I$(top_srcdir)/include \
 					  -I$(top_srcdir)/lib \
 					  -DLOCALEDIR=\"$(localedir)\" \
 					  -DSYSCONFDIR=\"$(sysconfdir)\"
-ACLOCAL_AMFLAGS				= -I m4
+ACLOCAL_AMFLAGS				= -W syntax -W unsupported -W error -I m4
+
 
 # automake targets
 bin_PROGRAMS				= src/ldap2csv
 noinst_PROGRAMS				= src/ldapconftest
 man_MANS				=
-
-
-TESTS					=
-XFAIL_TESTS				=
-EXTRA_DIST				= build-aux/config.rpath include/gettext.h
-CLEANFILES				= a.out $(srcdir)/a.out \
-					  tests/a.out $(srcdir)/tests/a.out \
-					  config.h.in~ $(srcdir)/config.h.in~ \
-					  po/stamp-po \
-					  @PACKAGE_TARNAME@-*.tar.* \
-					  @PACKAGE_TARNAME@-*.zip
 
 
 # macros for ldap2csv
@@ -87,16 +79,41 @@ src_ldapconftest_SOURCES		= \
 					  src/ldaputils_config_opts.h
 
 
+# miscellaneous lists
+CLEANFILES				= $(builddir)/a.out        $(srcdir)/a.out \
+                                          $(builddir)/*/a.out      $(srcdir)/*/a.out \
+					  $(builddir)/config.h.in~ $(srcdir)/config.h.in~ \
+					  $(builddir)/po/stamp-po  $(srcdir)/po/stamp-po\
+					  $(builddir)/stamp-vti    $(srcdir)/stamp-vti \
+					  @PACKAGE_TARNAME@-*.tar.* \
+					  @PACKAGE_TARNAME@-*.zip
+EXTRA_DIST				=
+EXTRA_PROGRAMS				=
+EXTRA_TEXINFOS				=
+TESTS					=
+XFAIL_TESTS				=
+
+
 # substitution routine
 do_subst = sed \
-	-e 's,[@]configure_input[@],${@}. Generated from ${@}.in by make.,g' \
-	-e 's,[@]SHELL[@],@SHELL@,g' \
-	-e 's,[@]PACKAGE_VERSION[@],@PACKAGE_VERSION@,g' \
-	-e 's![@]PACKAGE_NAME[@]!@PACKAGE_NAME@!g' \
-	-e 's,[@]PACKAGE_TARNAME[@],@PACKAGE_TARNAME@,g' \
-	-e 's,[@]PACKAGE_BUGREPORT[@],@PACKAGE_BUGREPORT@,g' \
-	-e 's,[@]PACKAGE_COPYRIGHT[@],@PACKAGE_COPYRIGHT@,g' \
-	-e 's,[@]RELEASE_MONTH[@],@RELEASE_MONTH@,g'
+		-e 's,[@]configure_input[@],${@}. Generated from ${@}.in by make.,g' \
+		-e 's,[@]SHELL[@],@SHELL@,g' \
+		-e 's,[@]PACKAGE_VERSION[@],@PACKAGE_VERSION@,g' \
+		-e 's![@]PACKAGE_NAME[@]!@PACKAGE_NAME@!g' \
+		-e 's,[@]PACKAGE_TARNAME[@],@PACKAGE_TARNAME@,g' \
+		-e 's,[@]PACKAGE_BUGREPORT[@],@PACKAGE_BUGREPORT@,g' \
+		-e 's,[@]PACKAGE_COPYRIGHT[@],@PACKAGE_COPYRIGHT@,g' \
+		-e 's,[@]RELEASE_MONTH[@],@RELEASE_MONTH@,g'
+do_subst_fn = \
+		echo "do_subst < ${@}.in > ${@}"; \
+		mkdir -p `dirname ${@}` || exit 1; \
+		${do_subst} < $(srcdir)/${@}.in > ${@} || exit 1; \
+		chmod 0644 ${@}
+do_subst_dt = \
+		echo "do_subst < ${@}.in > ${@}"; \
+		mkdir -p `dirname ${@}` || exit 1; \
+		${do_subst} < $(srcdir)/${@}.in > ${@} || exit 1; \
+		chmod 0644 ${@}
 
 
 # custom targets
@@ -105,7 +122,11 @@ do_subst = sed \
 # local targets
 install-exec-local:
 
-install-data-local: 
+install-data-local:
+
+install-exec-hook:
+
+install-data-hook:
 
 uninstall-local:
 
