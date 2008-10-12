@@ -43,7 +43,6 @@ AC_SUBST(LIB_RELEASE_INFO, 0) # used by Win32 DLLs
 
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_SRCDIR([.])
-#AC_CONFIG_LIBOBJ_DIR(lib)
 AC_CONFIG_HEADERS([config.h])
 
 # determines host type
@@ -52,9 +51,7 @@ AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
 
 # configures for automake
-#AM_MAINTAINER_MODE # disabled per Automake Manual Section 27.2.2
 AM_INIT_AUTOMAKE(gnu std-options subdir-objects)
-
 
 # Compilers                                                       
 AC_PROG_CC 
@@ -62,8 +59,10 @@ AM_PROG_CC_C_O
 AC_PROG_INSTALL
 
 # checks for Unix Variants
-AC_GNU_SOURCE
-AC_USE_SYSTEM_EXTENSIONS
+AC_USE_SYSTEM_EXTENSIONS # replaces AC_AIX AC_GNU_SOURCE AC_MINIX
+#AC_AIX
+#AC_GNU_SOURCE
+#AC_MINIX
 AC_C_BIGENDIAN
 
 # gnulib support
@@ -77,6 +76,13 @@ AC_CHECK_TOOLS(LD,      ld gld,         [AC_MSG_ERROR([missing binutil "ld"])])
 AC_CHECK_TOOLS(NM,      nm gnm,         [AC_MSG_ERROR([missing binutil "nm"])])
 AC_CHECK_TOOLS(RANLIB,  ranlib granlib, [AC_MSG_ERROR([missing binutil "ranlib"])])
 AC_CHECK_TOOLS(STRIP,   strip gstrip,   [AC_MSG_ERROR([missing binutil "strip"])])
+
+# shell programs
+AC_PROG_AWK
+AC_PROG_EGREP
+AC_PROG_FGREP
+AM_PROG_LEX
+AC_PROG_LN_S
 
 # GNU Libtool Support
 AC_LIBTOOL_DLOPEN
