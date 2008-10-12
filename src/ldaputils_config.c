@@ -17,9 +17,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 /**
- *  @file src/ldaputils_misc.c contains shared functions and variables
+ *  @file src/ldaputils_config.c contains shared functions and variables
  */
-#define _LDAP_UTILS_SRC_LDAPUTILS_MISC_C 1
+#define _LDAP_UTILS_SRC_LDAPUTILS_CONFIG_C 1
 #include "ldaputils_config.h"
 
 ///////////////

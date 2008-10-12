@@ -49,6 +49,7 @@
 #include <getopt.h>
 
 #include "ldaputils_config.h"
+#include "ldaputils_ldap.h"
 
 ///////////////////
 //               //
@@ -117,6 +118,7 @@ void ldaputils_usage(void)
 /// @param[in] argv   array of arguments
 int main(int argc, char * argv[])
 {
+   LDAP     * ld;
    MyConfig * cnf;
 
 #ifdef HAVE_GETTEXT
@@ -130,11 +132,17 @@ int main(int argc, char * argv[])
    if (!(cnf))
       return(0);
    
-   /* frees memory */
+   if (!(ld = ldaputils_initialize((LdapUtilsConfig *)cnf)))
+   {
+      ldaputils_config_free((LdapUtilsConfig *)cnf);
+      free(cnf);
+      return(1);
+   };
+   
+   ldap_unbind_ext_s(ld, NULL, NULL);
    ldaputils_config_free((LdapUtilsConfig *)cnf);
    free(cnf);
 
-   /* ends function */
    return(0);
 }
 
@@ -142,6 +150,7 @@ int main(int argc, char * argv[])
 /// parses configuration
 /// @param[in] argc   number of arguments
 /// @param[in] argv   array of arguments
+/// @param[in] cnfp   reference to configuration pointer
 int my_config(int argc, char * argv[], MyConfig ** cnfp)
 {
    int        c;
@@ -160,7 +169,6 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    option_index = 0;
    *cnfp        = NULL;
    
-   // allocates memory for configuration
    if (!(cnf = (MyConfig *) malloc(sizeof(MyConfig))))
    {
       fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
@@ -168,7 +176,6 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    };
    memset(cnf, 0, sizeof(MyConfig));
    
-   // loops through args
    while((c = getopt_long(argc, argv, short_options, long_options, &option_index)) != -1)
    {
       switch(ldaputils_cmdargs((LdapUtilsConfig *) cnf, c, optarg))

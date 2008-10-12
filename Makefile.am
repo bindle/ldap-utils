@@ -61,7 +61,9 @@ src_ldap2csv_SOURCES			= \
 					  src/ldaputils_config.c \
 					  src/ldaputils_config.h \
 					  src/ldaputils_config_opts.c \
-					  src/ldaputils_config_opts.h
+					  src/ldaputils_config_opts.h \
+					  src/ldaputils_ldap.c \
+					  src/ldaputils_ldap.h
 
 
 # macros for ldapconftest

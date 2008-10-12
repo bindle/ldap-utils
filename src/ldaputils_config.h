@@ -1,6 +1,6 @@
 /*
  *  LDAP Utilities
- *  Copyright (c) 2008 David M. Syzdek <ldap-utils-project@syzdek.net>.
+ *  Copyright (c) 2008 David M. Syzdek <david@syzdek.net>.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,10 +17,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 /**
- *  @file src/ldaputils_common.c  contains shared functions and variables
+ *  @file src/ldaputils_config.c  contains shared functions and variables
  */
-#ifndef _LDAP_UTILS_SRC_LDAPUTILS_MISC_H
-#define _LDAP_UTILS_SRC_LDAPUTILS_MISC_H 1
+#ifndef _LDAP_UTILS_SRC_LDAPUTILS_CONFIG_H
+#define _LDAP_UTILS_SRC_LDAPUTILS_CONFIG_H 1
 
 
 ///////////////
