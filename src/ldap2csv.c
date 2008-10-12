@@ -1,6 +1,6 @@
 /*
  *  LDAP Utilities
- *  Copyright (c) 2008 David M. Syzdek <ldap-utils-project@syzdek.net>.
+ *  Copyright (c) 2008 David M. Syzdek <david@syzdek.net>.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

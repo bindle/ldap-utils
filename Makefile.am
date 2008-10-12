@@ -40,7 +40,7 @@ AM_CPPFLAGS				= $(CFLAGS_WARNINGS) \
 					  -I$(top_srcdir)/lib \
 					  -DLOCALEDIR=\"$(localedir)\" \
 					  -DSYSCONFDIR=\"$(sysconfdir)\"
-ACLOCAL_AMFLAGS				= -W syntax -W unsupported -W error -I m4
+ACLOCAL_AMFLAGS				= -W syntax -W unsupported -W error
 
 
 # automake targets
