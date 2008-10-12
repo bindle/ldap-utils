@@ -101,11 +101,6 @@ int my_config PARAMS((int argc, char * argv[], MyConfig ** cnfp));
 void ldaputils_usage(void)
 {
    printf(_("Usage: %s [options] filter attributes...\n"), PROGRAM_NAME);
-   printf(_("CVS Options:\n"
-         "  -o file           output file\n"
-         "  -q character      CVS file delimitor\n"
-      )
-   );
    ldaputils_usage_search();
    ldaputils_usage_common();
    printf(_("\nReport bugs to <%s>.\n"), PACKAGE_BUGREPORT);
@@ -193,6 +188,25 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
             return(1);
       };
    };
+   
+   if (argc < (optind+2))
+   {
+      fprintf(stderr, _("%s: missing required arguments\n"), PROGRAM_NAME);
+      fprintf(stderr, _("Try `%s --help' for more information.\n"), PROGRAM_NAME);
+      return(1);
+   };
+   
+   cnf->filter = argv[optind];
+   
+   // configures LDAP attributes to return in results
+   if (!(cnf->common.attrs = (char **) malloc(sizeof(char *) * (argc-optind))))
+   {
+      fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
+      return(1);
+   };
+   for(c = 0; c < (argc-optind-1); c++)
+      cnf->common.attrs[c] = argv[optind+1+c];
+   cnf->common.attrs[c] = '\0';
    
    *cnfp = cnf;
 

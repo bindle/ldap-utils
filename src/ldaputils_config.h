@@ -55,24 +55,26 @@ typedef struct ldaputils_config_struct   LdapUtilsConfig;
 typedef struct ldaputils_config_struct * LdapUtilsConfigRef;
 struct ldaputils_config_struct
 {
-   int           continuous;                  // -c continuous operation mode
-   int           debug;                       // -d debug level
-   int           dryrun;                      // -n dry run mode
-   int           port;                        // -p LDAP server port
-   int           referrals;                   // -C chase referrals
-   int           scope;                       // -s LDAP search scope
-   int           sizelimit;                   // -z size limit
-   int           timelimit;                   // -l time limit
-   int           verbose;                     // -v verbose mode
-   unsigned      version;                     // -P LDAP protocol version
-   char          bindpw[LDAPUTILS_OPT_LEN];   // -W, -w bind password
-   char          uri[LDAPUTILS_OPT_LEN];      // -H LDAP URI
-   const char  * basedn;                      // -b base DN
-   const char  * binddn;                      // -D bind DN
-   const char  * host;                        // -h LDAP host
-   const char  * passfile;	                   // -y password file
-   const char  * sortattr;	                   // -S sort by attribute
-   LDAPURLDesc * ludp;                        // pointer to LDAP URL
+   int            continuous;                  // -c continuous operation mode
+   int            debug;                       // -d debug level
+   int            dryrun;                      // -n dry run mode
+   int            port;                        // -p LDAP server port
+   int            referrals;                   // -C chase referrals
+   int            scope;                       // -s LDAP search scope
+   int            sizelimit;                   // -z size limit
+   int            timelimit;                   // -l time limit
+   int            verbose;                     // -v verbose mode
+   unsigned       version;                     // -P LDAP protocol version
+   char           bindpw[LDAPUTILS_OPT_LEN];   // -W, -w bind password
+   char           uri[LDAPUTILS_OPT_LEN];      // -H LDAP URI
+   char        ** attrs;                       //    result attributes
+   const char   * basedn;                      // -b base DN
+   const char   * binddn;                      // -D bind DN
+   const char   * filter;                      //    search filter
+   const char   * host;                        // -h LDAP host
+   const char   * passfile;	                 // -y password file
+   const char   * sortattr;	                 // -S sort by attribute
+   LDAPURLDesc  * ludp;                        // pointer to LDAP URL
 };
 
 

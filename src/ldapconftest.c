@@ -86,7 +86,7 @@ const char * my_print_str PARAMS((const char * str));
 /// prints program usage and exits
 void ldaputils_usage(void)
 {
-   printf(_("Usage: %s [options]\n"), PROGRAM_NAME);
+   printf(_("Usage: %s [options] filter attributes...\n"), PROGRAM_NAME);
    ldaputils_usage_search();
    ldaputils_usage_common();
    printf(_("\nReport bugs to <%s>.\n"), PACKAGE_BUGREPORT);
@@ -99,6 +99,7 @@ void ldaputils_usage(void)
 /// @param[in] argv   array of arguments
 int main(int argc, char * argv[])
 {
+   int               i;
    LdapUtilsConfig * cnf;
 
 #ifdef HAVE_GETTEXT
@@ -111,13 +112,7 @@ int main(int argc, char * argv[])
       return(1);
    if (!(cnf))
       return(0);
-      
-   printf("Search Options:\n");
-   printf("   -b: basedn:       %s\n", my_print_str(cnf->basedn));
-   printf("   -l: time limit:   %i\n", cnf->timelimit);
-   printf("   -s: scope:        %i\n", cnf->scope);
-   printf("   -S: sort by:      %s\n", my_print_str(cnf->sortattr));
-   printf("   -z: size limit:   %i\n", cnf->sizelimit);
+
    printf("Common Options:\n");
    printf("   -c: continuous:   %i\n", cnf->continuous);
    printf("   -C: referrals:    %i\n", cnf->referrals);
@@ -130,7 +125,16 @@ int main(int argc, char * argv[])
    printf("   -P: LDAP version: %i\n", cnf->version);
    printf("   -v: verbose mode: %i\n", cnf->verbose);
    printf("   -w: bind pass:    %s\n", my_print_str(cnf->bindpw));
-
+   printf("Search Options:\n");
+   printf("   -b: basedn:       %s\n", my_print_str(cnf->basedn));
+   printf("   -l: time limit:   %i\n", cnf->timelimit);
+   printf("   -s: scope:        %i\n", cnf->scope);
+   printf("   -S: sort by:      %s\n", my_print_str(cnf->sortattr));
+   printf("   -z: size limit:   %i\n", cnf->sizelimit);
+   printf("       filter:       %s\n", cnf->filter);
+   printf("       attributes:\n");
+   for(i = 0; cnf->attrs[i]; i++)
+      printf("                     %s\n", cnf->attrs[i]);
    
    ldaputils_config_free((LdapUtilsConfig *)cnf);
 
@@ -185,6 +189,25 @@ int my_config(int argc, char * argv[], LdapUtilsConfig ** cnfp)
             return(1);
       };
    };
+
+   if (argc < (optind+2))
+   {
+      fprintf(stderr, _("%s: missing required arguments\n"), PROGRAM_NAME);
+      fprintf(stderr, _("Try `%s --help' for more information.\n"), PROGRAM_NAME);
+      return(1);
+   };
+   
+   cnf->filter = argv[optind];
+   
+   // configures LDAP attributes to return in results
+   if (!(cnf->attrs = (char **) malloc(sizeof(char *) * (argc-optind))))
+   {
+      fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
+      return(1);
+   };
+   for(c = 0; c < (argc-optind-1); c++)
+      cnf->attrs[c] = argv[optind+1+c];
+   cnf->attrs[c] = NULL;   
    
    *cnfp = cnf;
 
