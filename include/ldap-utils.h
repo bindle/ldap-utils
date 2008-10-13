@@ -89,6 +89,9 @@
 //               //
 ///////////////////
 
+#ifndef PACKAGE_BUGREPORT
+#define PACKAGE_BUGREPORT ""
+#endif
 #ifndef PACKAGE_COPYRIGHT
 #define PACKAGE_COPYRIGHT "Copyright (C) 2008 David M. Syzdek."
 #endif

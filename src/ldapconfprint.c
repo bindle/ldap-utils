@@ -17,22 +17,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 /**
- *  @file src/ldap2csv.c export LDAP data to CSV file
+ *  @file src/ldapconfprint.c export LDAP data to CSV file
  */
 /*
  *  Simple Build:
- *     gcc -Wall -c ldap2csv.c
- *     gcc -Wall -o ldap2csv ldap2csv.o
+ *     export CFLAGS='-DPROGRAM_NAME="ldapconfprint" -Wall -I../include'
+ *     gcc ${CFLAGS} -c ldapconfprint.c
+ *     gcc ${CFLAGS} -c ldaputils_config.c
+ *     gcc ${CFLAGS} -c ldaputils_config_opts.c
+ *     gcc ${CFLAGS} -o ldapconfprint ldapconfprint.o ldaputils_config.o \
+ *             ldaputils_config_opts.o -lldap
  *
  *  Libtool Build:
- *     libtool --mode=compile gcc -Wall -g -O2 -I../include -c ldap2csv.c
- *     libtool --mode=link    gcc -Wall -g -O2 -L../lib -o ldap2csv \
- *             ldap2csv.o
+ *     export CFLAGS='-DPROGRAM_NAME="ldapconfprint" -Wall -I../include'
+ *     libtool --mode=compile --tag=CC gcc ${CFLAGS} -c ldapconfprint.c
+ *     libtool --mode=compile --tag=CC gcc ${CFLAGS} -c ldaputils_config.c
+ *     libtool --mode=compile --tag=CC gcc ${CFLAGS} -c ldaputils_config_opts.c
+ *     libtool --mode=link    --tag=CC gcc ${CFLAGS} -o ldapconfprint \
+ *             ldapconfprint.o ldaputils_config.o ldaputils_config_opts.o \
+ *             -lldap
  *
  *  Libtool Clean:
- *     libtool --mode=clean rm -f ldap2csv.lo ldap2csv
+ *     libtool --mode=clean rm -f ldapconfprint.lo ldaputils_config.lo \
+ *             ldaputils_config_opts.lo ldapconfprint
  */
-#define _LDAP_UTILS_SRC_LDAPTEST 1
+#define _LDAP_UTILS_SRC_LDAPCONFPRINT 1
 
 
 ///////////////
@@ -57,7 +66,7 @@
 ///////////////////
 
 #ifndef PROGRAM_NAME
-#define PROGRAM_NAME "ldaptest"
+#define PROGRAM_NAME "ldapconfprint"
 #endif
 
 

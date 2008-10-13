@@ -21,16 +21,27 @@
  */
 /*
  *  Simple Build:
- *     gcc -Wall -c ldap2csv.c
- *     gcc -Wall -o ldap2csv ldap2csv.o
+ *     export CFLAGS='-DPROGRAM_NAME="ldap2csv" -Wall -I../include'
+ *     gcc ${CFLAGS} -c ldap2csv.c
+ *     gcc ${CFLAGS} -c ldaputils_config.c
+ *     gcc ${CFLAGS} -c ldaputils_config_opts.c
+ *     gcc ${CFLAGS} -c ldaputils_ldap.c
+ *     gcc ${CFLAGS} -lldap -o ldap2csv ldap2csv.o ldaputils_config.o \
+ *             ldaputils_config_opts.o ldaputils_ldap.o
  *
  *  Libtool Build:
- *     libtool --mode=compile gcc -Wall -g -O2 -I../include -c ldap2csv.c
- *     libtool --mode=link    gcc -Wall -g -O2 -L../lib -o ldap2csv \
- *             ldap2csv.o
+ *     export CFLAGS='-DPROGRAM_NAME="ldap2csv" -Wall -I../include'
+ *     libtool --mode=compile --tag=CC gcc ${CFLAGS} -c ldap2csv.c
+ *     libtool --mode=compile --tag=CC gcc ${CFLAGS} -c ldaputils_config.c
+ *     libtool --mode=compile --tag=CC gcc ${CFLAGS} -c ldaputils_config_opts.c
+ *     libtool --mode=compile --tag=CC gcc ${CFLAGS} -c ldaputils_ldap.c
+ *     libtool --mode=link    --tag=CC gcc ${CFLAGS} -lldap -o ldap2csv \
+ *             ldap2csv.lo ldaputils_config.lo ldaputils_config_opts.lo \
+ *             ldaputils_ldap.lo
  *
  *  Libtool Clean:
- *     libtool --mode=clean rm -f ldap2csv.lo ldap2csv
+ *     libtool --mode=clean rm -f ldap2csv.lo ldaputils_config.lo \
+ *             ldaputils_config_opts.lo ldaputils_ldap.lo ldap2csv
  */
 #define _LDAP_UTILS_SRC_LDAP2CSV 1
 

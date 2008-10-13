@@ -45,7 +45,7 @@ ACLOCAL_AMFLAGS				= -W syntax -W unsupported -W error
 
 # automake targets
 bin_PROGRAMS				= src/ldap2csv
-noinst_PROGRAMS				= src/ldapconftest
+noinst_PROGRAMS				= src/ldapconfprint
 man_MANS				=
 
 
@@ -66,15 +66,15 @@ src_ldap2csv_SOURCES			= \
 					  src/ldaputils_ldap.h
 
 
-# macros for ldapconftest
-src_ldapconftest_DEPENDENCIES		= Makefile
-src_ldapconftest_CPPFLAGS		= -DPROGRAM_NAME="\"ldapconftest\"" $(AM_CPPFLAGS)
-src_ldapconftest_CFLAGS			= $(AM_CFLAGS)
-src_ldapconftest_LDFLAGS		= $(AM_LDFLAGS)
-src_ldapconftest_LDADD			= $(AM_LDADD) -lldap
-src_ldapconftest_SOURCES		= \
+# macros for ldapconfprint
+src_ldapconfprint_DEPENDENCIES		= Makefile
+src_ldapconfprint_CPPFLAGS		= -DPROGRAM_NAME="\"ldapconfprint\"" $(AM_CPPFLAGS)
+src_ldapconfprint_CFLAGS			= $(AM_CFLAGS)
+src_ldapconfprint_LDFLAGS		= $(AM_LDFLAGS)
+src_ldapconfprint_LDADD			= $(AM_LDADD) -lldap
+src_ldapconfprint_SOURCES		= \
 					  include/ldap-utils.h \
-					  src/ldapconftest.c \
+					  src/ldapconfprint.c \
 					  src/ldaputils_config.c \
 					  src/ldaputils_config.h \
 					  src/ldaputils_config_opts.c \
