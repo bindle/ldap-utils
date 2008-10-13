@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: syzdek@users.sourceforge.net\n"
-"POT-Creation-Date: 2008-10-12 00:12-0800\n"
+"POT-Creation-Date: 2008-10-12 23:25-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,58 +16,56 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/ldap2csv.c:102
+#: src/ldap2csv.c:113
 #, c-format
 msgid "Usage: %s [options] filter attributes...\n"
 msgstr ""
 
-#: src/ldap2csv.c:103
-#, c-format
-msgid ""
-"CVS Options:\n"
-"  -o file           output file\n"
-"  -q character      CVS file delimitor\n"
-msgstr ""
-
-#: src/ldap2csv.c:110
+#: src/ldap2csv.c:116
 #, c-format
 msgid ""
 "\n"
 "Report bugs to <%s>.\n"
 msgstr ""
 
-#: src/ldap2csv.c:154
+#: src/ldap2csv.c:254
 msgid "help"
 msgstr ""
 
-#: src/ldap2csv.c:155
+#: src/ldap2csv.c:255
 msgid "verbose"
 msgstr ""
 
-#: src/ldap2csv.c:156
+#: src/ldap2csv.c:256
 msgid "version"
 msgstr ""
 
-#: src/ldap2csv.c:166
+#: src/ldap2csv.c:266 src/ldap2csv.c:302
 #, c-format
 msgid "%s: out of virtual memory\n"
 msgstr ""
 
-#: src/ldap2csv.c:181 src/ldap2csv.c:185 src/ldaputils_config_opts.c:150
-#: src/ldaputils_config_opts.c:236 src/ldaputils_config_opts.c:275
+#: src/ldap2csv.c:281 src/ldap2csv.c:285 src/ldap2csv.c:293
+#: src/ldaputils_config_opts.c:150 src/ldaputils_config_opts.c:236
+#: src/ldaputils_config_opts.c:275
 #, c-format
 msgid "Try `%s --help' for more information.\n"
 msgstr ""
 
-#: src/ldap2csv.c:184
+#: src/ldap2csv.c:284
 #, c-format
 msgid "%s: unrecognized option `--%c'\n"
+msgstr ""
+
+#: src/ldap2csv.c:292
+#, c-format
+msgid "%s: missing required arguments\n"
 msgstr ""
 
 #. TRANSLATORS: The following string provides an error message if the
 #. file which contains the password has insecure file permissions. The
 #. string arguments are the name of the program and the name of the file.
-#: src/ldaputils_config.c:233
+#: src/ldaputils_config.c:274
 #, c-format
 msgid "%s: Password file %s is publicly readable/writeable\n"
 msgstr ""
@@ -76,7 +74,7 @@ msgstr ""
 #. line arguments. Usage for program specific arguments is provided in
 #. anothoer section. These strings are displayed if the program is
 #. passed `--help' on the command line.
-#: src/ldaputils_config.c:261
+#: src/ldaputils_config.c:302
 #, c-format
 msgid ""
 "Common options:\n"
@@ -88,7 +86,6 @@ msgid ""
 "  -H URI            LDAP Uniform Resource Identifier(s)\n"
 "  -n                show what would be done but don't actually do it\n"
 "  -p port           port on LDAP server\n"
-"  -P version        protocol version (default: 3)\n"
 "  -v, --verbose     run in verbose mode\n"
 "  -V, --version     print version number and exit\n"
 "  -w, passwd        bind password (for simple authentication)\n"
@@ -101,7 +98,7 @@ msgstr ""
 #. line arguments. Usage for program specific arguments is provided in
 #. anothoer section. These strings are displayed if the program is
 #. passed `--help' on the command line.
-#: src/ldaputils_config.c:290
+#: src/ldaputils_config.c:330
 #, c-format
 msgid ""
 "Search options:\n"
@@ -116,7 +113,7 @@ msgstr ""
 #. information if the program is passed --version on the command line.
 #. The three strings referenced are: PROGRAM_NAME, PACKAGE_NAME,
 #. PACKAGE_VERSION.
-#: src/ldaputils_config.c:309
+#: src/ldaputils_config.c:349
 #, c-format
 msgid ""
 "%s (%s) %s\n"
