@@ -1,0 +1,191 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXFileReference section */
+		A0290B930E7C8478004FC622 /* ldap2csv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ldap2csv.c; sourceTree = "<group>"; };
+		A0290B950E7C8478004FC622 /* ldaputils_config_opts.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ldaputils_config_opts.c; sourceTree = "<group>"; };
+		A0290B960E7C8478004FC622 /* ldaputils_config_opts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ldaputils_config_opts.h; sourceTree = "<group>"; };
+		A0290B970E7C8478004FC622 /* ldapconfprint.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ldapconfprint.c; sourceTree = "<group>"; };
+		A0290B9C0E7C84C0004FC622 /* acinclude.m4 */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 8; lastKnownFileType = text; path = acinclude.m4; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
+		A0290B9D0E7C84C0004FC622 /* ChangeLog */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 8; lastKnownFileType = text; path = ChangeLog; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
+		A0290B9E0E7C84C0004FC622 /* configure.ac */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 8; lastKnownFileType = text; path = configure.ac; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
+		A0290B9F0E7C84C0004FC622 /* Makefile.am */ = {isa = PBXFileReference; explicitFileType = text.script; fileEncoding = 4; indentWidth = 8; path = Makefile.am; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
+		A0290BA00E7C852F004FC622 /* AUTHORS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
+		A0290BA10E7C852F004FC622 /* NEWS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
+		A0290BA20E7C852F004FC622 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		A0290BC20E7C862A004FC622 /* Makefile-xcode */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 8; lastKnownFileType = text; path = "Makefile-xcode"; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
+		A03C08B50EA1F70700A30895 /* ldaputils_ldap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ldaputils_ldap.h; sourceTree = "<group>"; };
+		A03C08B60EA1F70700A30895 /* ldaputils_ldap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ldaputils_ldap.c; sourceTree = "<group>"; };
+		A0B3A4B00E80CAE000E4FC93 /* ldaputils_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ldaputils_config.h; sourceTree = "<group>"; };
+		A0B3A4B10E80CAE000E4FC93 /* ldaputils_config.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ldaputils_config.c; sourceTree = "<group>"; };
+		A0B3A4C10E80E5C800E4FC93 /* ldap-utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ldap-utils.h"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* ldap-utils */ = {
+			isa = PBXGroup;
+			children = (
+				A0290B9C0E7C84C0004FC622 /* acinclude.m4 */,
+				A0290BA00E7C852F004FC622 /* AUTHORS */,
+				A0290BC10E7C85EB004FC622 /* build-aux */,
+				A0290B9D0E7C84C0004FC622 /* ChangeLog */,
+				A0290B9E0E7C84C0004FC622 /* configure.ac */,
+				C6A0FF2B0290797F04C91782 /* include */,
+				A0290B9F0E7C84C0004FC622 /* Makefile.am */,
+				A0290BA10E7C852F004FC622 /* NEWS */,
+				A0290BA20E7C852F004FC622 /* README */,
+				08FB7795FE84155DC02AAC07 /* src */,
+			);
+			name = "ldap-utils";
+			sourceTree = "<group>";
+		};
+		08FB7795FE84155DC02AAC07 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				A0290B930E7C8478004FC622 /* ldap2csv.c */,
+				A0290B970E7C8478004FC622 /* ldapconfprint.c */,
+				A0290B950E7C8478004FC622 /* ldaputils_config_opts.c */,
+				A0290B960E7C8478004FC622 /* ldaputils_config_opts.h */,
+				A0B3A4B10E80CAE000E4FC93 /* ldaputils_config.c */,
+				A0B3A4B00E80CAE000E4FC93 /* ldaputils_config.h */,
+				A03C08B60EA1F70700A30895 /* ldaputils_ldap.c */,
+				A03C08B50EA1F70700A30895 /* ldaputils_ldap.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		A0290BC10E7C85EB004FC622 /* build-aux */ = {
+			isa = PBXGroup;
+			children = (
+				A0290BC20E7C862A004FC622 /* Makefile-xcode */,
+			);
+			path = "build-aux";
+			sourceTree = "<group>";
+		};
+		C6A0FF2B0290797F04C91782 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				A0B3A4C10E80E5C800E4FC93 /* ldap-utils.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXLegacyTarget section */
+		A0290BC30E7C8646004FC622 /* Makefile */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "-f $(MAKEFILE)  $(ACTION)";
+			buildConfigurationList = A0290BCB0E7C8650004FC622 /* Build configuration list for PBXLegacyTarget "Makefile" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			dependencies = (
+			);
+			name = Makefile;
+			passBuildSettingsInEnvironment = 1;
+			productName = Makefile;
+		};
+/* End PBXLegacyTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB928908733DD80010E9CD /* Build configuration list for PBXProject "ldap-utils" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 08FB7794FE84155DC02AAC07 /* ldap-utils */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A0290BC30E7C8646004FC622 /* Makefile */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB928A08733DD80010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+			};
+			name = Debug;
+		};
+		1DEB928B08733DD80010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+			};
+			name = Release;
+		};
+		A0290BC40E7C8646004FC622 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CONFIGURE_FLAGS = "";
+				COPY_PHASE_STRIP = NO;
+				DISTCLEAN = NO;
+				DISTFILES = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				MAKEFILE = "build-aux/Makefile-xcode";
+				PRODUCT_NAME = Makefile;
+			};
+			name = Debug;
+		};
+		A0290BC50E7C8646004FC622 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CONFIGURE_FLAGS = "";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DISTCLEAN = YES;
+				DISTFILES = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				MAKEFILE = "build-aux/Makefile-xcode";
+				PRODUCT_NAME = Makefile;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB928908733DD80010E9CD /* Build configuration list for PBXProject "ldap-utils" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB928A08733DD80010E9CD /* Debug */,
+				1DEB928B08733DD80010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A0290BCB0E7C8650004FC622 /* Build configuration list for PBXLegacyTarget "Makefile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A0290BC40E7C8646004FC622 /* Debug */,
+				A0290BC50E7C8646004FC622 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}
