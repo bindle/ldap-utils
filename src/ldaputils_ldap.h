@@ -50,6 +50,6 @@
 LDAP * ldaputils_initialize PARAMS((LdapUtilsConfig * cnf));
 
 // connects and binds to LDAP server
-int ldaputils_search PARAMS((LDAP * ld, LdapUtilsConfig * cnf));
+int ldaputils_search PARAMS((LDAP * ld, LdapUtilsConfig * cnf, int * msgidp));
 
 #endif /* end of header file */

@@ -96,6 +96,12 @@ void ldaputils_config_free PARAMS((LdapUtilsConfig * cnf));
 // initializes the common config
 void ldaputils_config_init PARAMS((LdapUtilsConfig * cnf));
 
+// prints configuration to stdout
+void ldaputils_config_print PARAMS((LdapUtilsConfig * cnf));
+
+// prints string to stdout
+const char * ldaputils_config_print_str PARAMS((const char * str));
+
 // getpass() replacement -- SUSV 2 deprecated getpass()
 int ldaputils_getpass PARAMS((const char * prompt, char * buff, size_t size));
 

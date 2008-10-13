@@ -74,7 +74,6 @@ struct my_config
 {
    LdapUtilsConfig   common;
    char              output[LDAPUTILS_OPT_LEN];
-   const char      * filter;
 };
 
 
@@ -113,11 +112,17 @@ void ldaputils_usage(void)
 /// @param[in] argv   array of arguments
 int main(int argc, char * argv[])
 {
-   int           rc;
-   LDAP        * ld;
-   MyConfig    * cnf;
-   LDAPMessage * res;
-   LDAPMessage * entry;
+   int              x;
+   int              y;
+   int              rc;
+   int              err;
+   int              msgid;
+   char           * dn;
+   LDAP           * ld;
+   MyConfig       * cnf;
+   LDAPMessage    * res;
+   LDAPMessage    * entry;
+   struct berval ** vals;
 
 #ifdef HAVE_GETTEXT
    setlocale (LC_ALL, ""); 
@@ -130,26 +135,90 @@ int main(int argc, char * argv[])
    if (!(cnf))
       return(0);
    
-   if (!(ld = ldaputils_initialize((LdapUtilsConfig *)cnf)))
+   if (!(ld = ldaputils_initialize(&cnf->common)))
    {
       ldaputils_config_free((LdapUtilsConfig *)cnf);
       free(cnf);
       return(1);
    };
 
-   if ((ldaputils_search(ld, (LdapUtilsConfig *)cnf)))
+   if ((ldaputils_search(ld, (LdapUtilsConfig *)cnf, &msgid)))
    {
       ldaputils_config_free((LdapUtilsConfig *)cnf);
       free(cnf);
       return(1);
    };
-   
-   while((rc = ldap_result(ld, LDAP_RES_ANY, LDAP_MSG_ONE, NULL, &res)) > 0)
+
+   switch((rc = ldap_result(ld, msgid, LDAP_MSG_ALL, NULL, &res)))
    {
-      entry = ldap_first_entry(ld, res);
-      printf("dn: %s\n", ldap_get_dn(ld, entry));
+      case 0:
+         break;
+      case -1:
+         fprintf(stderr, "%s: ldap_result(): %s\n", PROGRAM_NAME, ldap_err2string(rc));
+         ldap_unbind_ext_s(ld, NULL, NULL);
+         ldaputils_config_free((LdapUtilsConfig *)cnf);
+         free(cnf);
+         return(-1);
+      default:
+         break;
+   };
+
+   rc = ldap_parse_result(ld, res, &err, NULL, NULL, NULL, NULL, 0);
+   if (rc != LDAP_SUCCESS)
+   {
+      fprintf(stderr, "%s: ldap_parse_result(): %s\n", PROGRAM_NAME, ldap_err2string(rc));
+      ldap_unbind_ext_s(ld, NULL, NULL);
+      ldaputils_config_free((LdapUtilsConfig *)cnf);
+      free(cnf);
+      return(-1);
+   };
+   if (err != LDAP_SUCCESS)
+   {
+      fprintf(stderr, "%s: ldap_parse_result(): %s\n", PROGRAM_NAME, ldap_err2string(err));
+      ldap_unbind_ext_s(ld, NULL, NULL);
+      ldaputils_config_free((LdapUtilsConfig *)cnf);
+      free(cnf);
+      return(-1);
    };
    
+   printf("\"%s\"", cnf->common.attrs[0]);
+   for(x = 1; cnf->common.attrs[x]; x++)
+      printf(",\"%s\"", cnf->common.attrs[x]);
+   printf("\n");
+
+   entry = ldap_first_entry(ld, res);
+   while(entry)
+   {
+      for(x = 0; cnf->common.attrs[x]; x++)
+      {
+         if ((x))
+            printf(",");
+         if (!(strcasecmp("dn", cnf->common.attrs[x])))
+         {
+            dn = ldap_get_dn(ld, entry);
+            printf("\"%s\"", dn);
+            ldap_memfree(dn);
+         }
+         else if ((vals = ldap_get_values_len(ld, entry, cnf->common.attrs[x])))
+         {
+            printf("\"");
+            for(y = 0; vals[y]; y++)
+            {
+               if ((y))
+                  printf(",");
+               printf("%s", vals[y]->bv_val);
+            };
+            ldap_value_free_len(vals);
+            printf("\"");
+         }
+         else
+            printf("\"\"");
+      };
+      printf("\n");
+      entry = ldap_next_entry(ld, entry);
+   };
+
+   ldap_msgfree(res);
    ldap_unbind_ext_s(ld, NULL, NULL);
    ldaputils_config_free((LdapUtilsConfig *)cnf);
    free(cnf);
@@ -179,14 +248,16 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    
    option_index = 0;
    *cnfp        = NULL;
-   
+
+   // allocates memory for configuration
    if (!(cnf = (MyConfig *) malloc(sizeof(MyConfig))))
    {
       fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
       return(1);
    };
    memset(cnf, 0, sizeof(MyConfig));
-   
+
+   // loops through args
    while((c = getopt_long(argc, argv, short_options, long_options, &option_index)) != -1)
    {
       switch(ldaputils_cmdargs((LdapUtilsConfig *) cnf, c, optarg))
@@ -212,7 +283,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
       return(1);
    };
    
-   cnf->filter = argv[optind];
+   cnf->common.filter = argv[optind];
 
    // configures LDAP attributes to return in results
    if (!(cnf->common.attrs = (char **) malloc(sizeof(char *) * (argc-optind))))

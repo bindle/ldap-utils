@@ -97,12 +97,11 @@ LDAP * ldaputils_initialize(LdapUtilsConfig * cnf)
 /// connects and binds to LDAP server
 /// @param[in] ld    refernce to LDAP socket data
 /// @param[in] cnf   reference to common configuration struct
-int ldaputils_search(LDAP * ld, LdapUtilsConfig * cnf)
+int ldaputils_search(LDAP * ld, LdapUtilsConfig * cnf, int * msgidp)
 {
    int err;
-   int msgid;
-   
-   if ((err = ldap_search_ext(ld, cnf->basedn, cnf->scope, cnf->filter, cnf->attrs, 0, NULL, NULL, NULL, -1, &msgid)))
+
+   if ((err = ldap_search_ext(ld, cnf->basedn, cnf->scope, cnf->filter, cnf->attrs, 0, NULL, NULL, NULL, -1, msgidp)))
    {
       fprintf(stderr, "%s: ldap_search_ext_s(): %s\n", PROGRAM_NAME, ldap_err2string(err));
       ldap_unbind_ext_s(ld, NULL, NULL);

@@ -73,9 +73,6 @@ int main PARAMS((int argc, char * argv[]));
 // parses configuration
 int my_config PARAMS((int argc, char * argv[], LdapUtilsConfig ** cnfp));
 
-// prints string
-const char * my_print_str PARAMS((const char * str));
-
 
 /////////////////
 //             //
@@ -99,7 +96,6 @@ void ldaputils_usage(void)
 /// @param[in] argv   array of arguments
 int main(int argc, char * argv[])
 {
-   int               i;
    LdapUtilsConfig * cnf;
 
 #ifdef HAVE_GETTEXT
@@ -113,29 +109,8 @@ int main(int argc, char * argv[])
    if (!(cnf))
       return(0);
 
-   printf("Common Options:\n");
-   printf("   -c: continuous:   %i\n", cnf->continuous);
-   printf("   -C: referrals:    %i\n", cnf->referrals);
-   printf("   -d: debug level:  %i\n", cnf->debug);
-   printf("   -D: bind DN:      %s\n", my_print_str(cnf->binddn));
-   printf("   -h: LDAP host:    %s\n", my_print_str(cnf->host));
-   printf("   -H: LDAP URI:     %s\n", my_print_str(cnf->uri));
-   printf("   -n: dry run:      %i\n", cnf->dryrun);
-   printf("   -P: LDAP port:    %i\n", cnf->port);
-   printf("   -P: LDAP version: %i\n", cnf->version);
-   printf("   -v: verbose mode: %i\n", cnf->verbose);
-   printf("   -w: bind pass:    %s\n", my_print_str(cnf->bindpw));
-   printf("Search Options:\n");
-   printf("   -b: basedn:       %s\n", my_print_str(cnf->basedn));
-   printf("   -l: time limit:   %i\n", cnf->timelimit);
-   printf("   -s: scope:        %i\n", cnf->scope);
-   printf("   -S: sort by:      %s\n", my_print_str(cnf->sortattr));
-   printf("   -z: size limit:   %i\n", cnf->sizelimit);
-   printf("       filter:       %s\n", cnf->filter);
-   printf("       attributes:\n");
-   for(i = 0; cnf->attrs[i]; i++)
-      printf("                     %s\n", cnf->attrs[i]);
-   
+   ldaputils_config_print(cnf);
+
    ldaputils_config_free((LdapUtilsConfig *)cnf);
 
    return(0);
@@ -213,16 +188,5 @@ int my_config(int argc, char * argv[], LdapUtilsConfig ** cnfp)
 
    return(0);
 }
-
-
-/// prints string
-/// @param[in] str   prints string
-const char * my_print_str(const char * str)
-{
-   if (str)
-      return(str);
-   return("(null)");
-}
-
 
 /* end of source file */

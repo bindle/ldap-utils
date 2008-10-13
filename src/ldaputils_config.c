@@ -161,6 +161,46 @@ void ldaputils_config_init(LdapUtilsConfig * cnf)
 }
 
 
+/// prints configuration to stdout
+/// @param[in] cnf  reference to common configuration struct
+void ldaputils_config_print(LdapUtilsConfig * cnf)
+{
+   int i;
+   printf("Common Options:\n");
+   printf("   -c: continuous:   %i\n", cnf->continuous);
+   printf("   -C: referrals:    %i\n", cnf->referrals);
+   printf("   -d: debug level:  %i\n", cnf->debug);
+   printf("   -D: bind DN:      %s\n", ldaputils_config_print_str(cnf->binddn));
+   printf("   -h: LDAP host:    %s\n", ldaputils_config_print_str(cnf->host));
+   printf("   -H: LDAP URI:     %s\n", ldaputils_config_print_str(cnf->uri));
+   printf("   -n: dry run:      %i\n", cnf->dryrun);
+   printf("   -P: LDAP port:    %i\n", cnf->port);
+   printf("   -P: LDAP version: %i\n", cnf->version);
+   printf("   -v: verbose mode: %i\n", cnf->verbose);
+   printf("   -w: bind pass:    %s\n", ldaputils_config_print_str(cnf->bindpw));
+   printf("Search Options:\n");
+   printf("   -b: basedn:       %s\n", ldaputils_config_print_str(cnf->basedn));
+   printf("   -l: time limit:   %i\n", cnf->timelimit);
+   printf("   -s: scope:        %i\n", cnf->scope);
+   printf("   -S: sort by:      %s\n", ldaputils_config_print_str(cnf->sortattr));
+   printf("   -z: size limit:   %i\n", cnf->sizelimit);
+   printf("       filter:       %s\n", cnf->filter);
+   printf("       attributes:\n");
+   for(i = 0; cnf->attrs[i]; i++)
+      printf("                     %s\n", cnf->attrs[i]);
+   return;
+}
+
+
+/// prints string to stdout
+const char * ldaputils_config_print_str(const char * str)
+{
+   if (str)
+      return(str);
+   return("(null)");
+}
+
+
 /// getpass() replacement -- SUSV 2 deprecated getpass()
 /// @param[in] prompt
 /// @param[in] buff
