@@ -25,12 +25,12 @@
 # |                 |
 # +-=-=-=-=-=-=-=-=-+
 
-AC_PREREQ(2.61)
+AC_PREREQ(2.62)
 
 AC_COPYRIGHT([Copyright (c) 2008 David M. Syzdek <ldap-utils-project@syzdek.net>.])
 AC_REVISION($Revision$)
-AC_INIT([LDAP Utilities],[0.1.0],[syzdek@users.sourceforge.net],[ldap-utils])
-AC_SUBST([RELEASE_MONTH],["January 2008"])
+AC_INIT([LDAP Utilities],[1.0.0],[syzdek@users.sourceforge.net],[ldap-utils])
+AC_SUBST([RELEASE_MONTH],["October 2008"])
 
 # Version Info:
 #    Current    -- the current version number of this API

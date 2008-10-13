@@ -1,15 +1,92 @@
+Contents
+========
+   I. Introduction
+  II. Reporting Problems
+ III. Obtaining the Source
+  IV. Compiling and Installing
+   V. Notes for Maintainers
 
-Config precedence order:
-========================
-
-   1) Command Line Options
-   2) Environment Variables
-   3) Configuration File
-   4) Default Values
+I. Introduction
+---------------
 
 
-# updating gettext
-	$ ./configure 
-	$ (cd po; make update-po) 
-	$ make distclean
+This package was developed to provide a set of tools to assist in fullfilling
+requests for data and in performing maintenance on LDAP servers.  When applicable,
+the command line switches for the OpenLDAP tools were used in this package.
 
+
+II. Reporting Problems
+----------------------
+
+Please report problems regarding this package using the SourceForge Tracker.
+The Tracker page for this project is available here:
+
+	<a href=http://sourceforge.net/tracker/?group_id=214270>
+	http://sourceforge.net/tracker/?group_id=214270
+	</a>
+
+If the Tracker is too confusing, time consuming, detailed, arbitrary, ridiculous,
+chaotic, organized, purlple, "I don't speak your crazy moon-language."; send the
+request to:
+
+	<a href=mailto:syzdek@users.sourceforge.net>
+	syzdek@users.sourceforge.net
+	</a>
+
+
+III. Obtaining the Source
+-------------------------
+
+This project is hosted on SourceForge.  The source code can be downloaded from the
+following web page:
+
+	<a href=https://sourceforge.net/projects/ldap-utils/>
+	https://sourceforge.net/projects/ldap-utils/
+	</a>
+
+The latest source code can be retieved from Git using the following commands:
+
+	git clone git://git.scm.syzdek.net/pub/scm/devel/ldap-utils.git
+
+The package should be copied to a directory called `ldap-utils' which contains
+the latest development source.
+
+
+IV. Compiling and Installing
+----------------------------
+
+This project uses GNU Autoconf, GNU Automake, and GNU Libtool in order to ease
+porting source across multiple platforms.  As of this writing the source was 
+known to compile for the following platforms:
+
+        Apple OS X 10.5.1
+        Slackware Linux 11.0
+	FreeBSD 4.9 (With GNU Getopt)
+
+The easist way to compile the source on a Unix platform is to run the following:
+
+        gzip -cd ldap-utils-x.x.x.tar.gz | tar -xvf -
+        cd ldap-utils-x.x.x
+        ./configure
+        make
+        make install
+
+For more information on building and installing using configure, please read the
+INSTALL file.
+
+
+V. Notes for Maintainers
+------------------------
+
+Updating gettext:
+   $ ./configure 
+   $ (cd po; make update-po) 
+   $ make distclean
+
+
+=============================================================================
+
+Please enjoy this project.
+
+Sincerely,
+David M. Syzdek
