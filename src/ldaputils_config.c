@@ -168,7 +168,7 @@ void ldaputils_config_init(LdapUtilsConfig * cnf)
 int ldaputils_getpass(const char * prompt, char * buff, size_t size)
 {
    /* declares local vars */
-   int    len;
+   ssize_t        len;
 #ifdef HAVE_TERMIOS_H
    struct termios old;
    struct termios new;
@@ -216,9 +216,10 @@ int ldaputils_getpass(const char * prompt, char * buff, size_t size)
 /// @param[in] file  file containing the password
 /// @param[in] buff  pointer to buffer for password
 /// @param[in] len   length of the buffer
-int ldaputils_passfile(const char * file, char * buff, ssize_t len)
+int ldaputils_passfile(const char * file, char * buff, size_t size)
 {
    int         fd;
+   ssize_t     len;
    struct stat sb;
    
    if ((stat(file, &sb)) == -1)
@@ -238,7 +239,7 @@ int ldaputils_passfile(const char * file, char * buff, ssize_t len)
       return(1);
    };
    
-   if ((len = read(fd, buff,len-1)) == -1)
+   if ((len = read(fd, buff,size-1)) == -1)
    {
       fprintf(stderr, "%s: %s: %s\n", PROGRAM_NAME, file, strerror(errno));
       return(1);

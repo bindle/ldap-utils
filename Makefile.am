@@ -32,10 +32,10 @@ localedir				= $(datadir)/locale
 
 # Global flags
 AM_LIBS					=
-AM_LDADD				= @LTLIBINTL@
+AM_LDADD				= $(LTLIBINTL)
 AM_LDFLAGS				=
-AM_CFLAGS				= $(CFLAGS_WARNINGS)
-AM_CPPFLAGS				= $(CFLAGS_WARNINGS) \
+AM_CFLAGS				=
+AM_CPPFLAGS				= \
 					  -I$(top_srcdir)/include \
 					  -I$(top_srcdir)/lib \
 					  -DLOCALEDIR=\"$(localedir)\" \

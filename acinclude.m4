@@ -89,7 +89,7 @@ AC_DEFUN([AC_LDAP_UTILS_ENABLE_WARNINGS],[dnl
       ac_ldap_utils_warnings_list="${ac_ldap_utils_warnings_list} -Wparentheses"
       ac_ldap_utils_warnings_list="${ac_ldap_utils_warnings_list} -Wreturn-type"
       ac_ldap_utils_warnings_list="${ac_ldap_utils_warnings_list} -Wswitch"
-      ac_ldap_utils_warnings_list="${ac_ldap_utils_warnings_list} -Wswitch-default"   # for some reason any call to memset() fails with this flag
+      ac_ldap_utils_warnings_list="${ac_ldap_utils_warnings_list} -Wswitch-default"
       ac_ldap_utils_warnings_list="${ac_ldap_utils_warnings_list} -Wtrigraphs"
       ac_ldap_utils_warnings_list="${ac_ldap_utils_warnings_list} -Wunused"
       ac_ldap_utils_warnings_list="${ac_ldap_utils_warnings_list} -Wunknown-pragmas"
@@ -132,20 +132,16 @@ AC_DEFUN([AC_LDAP_UTILS_ENABLE_WARNINGS],[dnl
       )])
 
    # loops throough options
-   CFLAGS_WARNINGS=""
    for ac_ldap_utils_warning in ${ac_ldap_utils_warnings_list};do
       AC_MSG_CHECKING(for gcc flag ${ac_ldap_utils_warning})
-      ${ac_ldap_utils_cc} ${CFLAGS_WARNINGS} ${ac_ldap_utils_warning} conftest.c -o conftest.o > /dev/null 2>&1
+      ${ac_ldap_utils_cc} ${CFLAGS} ${ac_ldap_utils_warning} conftest.c -o conftest.o > /dev/null 2>&1
       if test "x$?" == "x0";then
-         CFLAGS_WARNINGS="${CFLAGS_WARNINGS} ${ac_ldap_utils_warning}"
+         CFLAGS="${CFLAGS} ${ac_ldap_utils_warning}"
          AC_MSG_RESULT(yes)
       else
          AC_MSG_RESULT(no)
       fi
    done
-
-   # export variables
-   AC_SUBST(CFLAGS_WARNINGS, "$CFLAGS_WARNINGS")
 ])dnl
 
 # end of M4 file

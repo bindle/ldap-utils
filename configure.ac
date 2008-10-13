@@ -93,10 +93,24 @@ AC_PROG_LIBTOOL
 # GNU gettext support
 AM_GNU_GETTEXT([external])
 
-AC_LDAP_UTILS_ENABLE_WARNINGS
-
 # Defines macros
 AC_CHECK_HEADERS([termios.h])
+AC_CHECK_HEADERS([ldap.h],,            [AC_MSG_ERROR([missing required header])])
+AC_CHECK_HEADERS([getopt.h],,          [AC_MSG_ERROR([missing required header])])
+AC_SEARCH_LIBS([getopt_long],          c gnugetopt,,AC_MSG_ERROR([missing required function]))
+AC_SEARCH_LIBS([ldap_first_entry],     ldap lber socket,,AC_MSG_ERROR([missing required function]))
+AC_SEARCH_LIBS([ldap_free_urldesc],    ldap lber socket,,AC_MSG_ERROR([missing required function]))
+AC_SEARCH_LIBS([ldap_get_dn],          ldap lber socket,,AC_MSG_ERROR([missing required function]))
+AC_SEARCH_LIBS([ldap_initialize],      ldap lber socket,,AC_MSG_ERROR([missing required function]))
+AC_SEARCH_LIBS([ldap_result],          ldap lber socket,,AC_MSG_ERROR([missing required function]))
+AC_SEARCH_LIBS([ldap_sasl_bind_s],     ldap lber socket,,AC_MSG_ERROR([missing required function]))
+AC_SEARCH_LIBS([ldap_search_ext],      ldap lber socket,,AC_MSG_ERROR([missing required function]))
+AC_SEARCH_LIBS([ldap_set_option],      ldap lber socket,,AC_MSG_ERROR([missing required function]))
+AC_SEARCH_LIBS([ldap_unbind_ext_s],    ldap lber socket,,AC_MSG_ERROR([missing required function]))
+AC_SEARCH_LIBS([ldap_url_parse],       ldap lber socket,,AC_MSG_ERROR([missing required function]))
+AC_CHECK_TYPES([LDAPURLDesc],,         [AC_MSG_ERROR([missing required datatype])],[#include <ldap.h>])
+
+AC_LDAP_UTILS_ENABLE_WARNINGS
 
 # checks host
 case "${host_os}" in

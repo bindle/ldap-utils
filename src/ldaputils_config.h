@@ -97,10 +97,10 @@ void ldaputils_config_free PARAMS((LdapUtilsConfig * cnf));
 void ldaputils_config_init PARAMS((LdapUtilsConfig * cnf));
 
 // getpass() replacement -- SUSV 2 deprecated getpass()
-int ldaputils_getpass PARAMS((const char * prompt, char * buff, size_t len));
+int ldaputils_getpass PARAMS((const char * prompt, char * buff, size_t size));
 
 // retrieves password from file
-int ldaputils_passfile PARAMS((const char * file, char * buff, ssize_t len));
+int ldaputils_passfile PARAMS((const char * file, char * buff, size_t size));
 
 // prints program usage and exits
 void ldaputils_usage PARAMS((void));
