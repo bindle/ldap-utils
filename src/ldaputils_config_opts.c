@@ -128,9 +128,8 @@ int ldaputils_config_set_dryrun(LdapUtilsConfig * cnf)
 /// @param[in] arg   value of the command line argument
 int ldaputils_config_set_host(LdapUtilsConfig * cnf, const char * arg)
 {
-   char uri[LDAPUTILS_OPT_LEN];
-   snprintf(uri, LDAPUTILS_OPT_LEN, "ldap://%s:%i/", arg, cnf->port);
-   ldaputils_config_set_uri(cnf, uri);
+   snprintf(cnf->uribuff, LDAPUTILS_OPT_LEN, "ldap://%s:%i/", arg, cnf->port);
+   ldaputils_config_set_uri(cnf, cnf->uribuff);
    return(0);
 }
 
@@ -141,7 +140,6 @@ int ldaputils_config_set_host(LdapUtilsConfig * cnf, const char * arg)
 int ldaputils_config_set_port(LdapUtilsConfig * cnf, const char * arg)
 {
    int          port;
-   char         uri[LDAPUTILS_OPT_LEN];
    const char * host;
    port = atol(arg);
    if ( (port < 1) || (port > 0xffff) )
@@ -154,8 +152,8 @@ int ldaputils_config_set_port(LdapUtilsConfig * cnf, const char * arg)
       host = cnf->host;
    else
       host = "";
-   snprintf(uri, LDAPUTILS_OPT_LEN, "ldap://%s:%i/", host, port);
-   ldaputils_config_set_uri(cnf, uri);
+   snprintf(cnf->uribuff, LDAPUTILS_OPT_LEN, "ldap://%s:%i/", host, port);
+   ldaputils_config_set_uri(cnf, cnf->uribuff);
    return(0);
 }
 
@@ -225,8 +223,15 @@ int ldaputils_config_set_timelimit(LdapUtilsConfig * cnf, const char * arg)
 int ldaputils_config_set_uri(LdapUtilsConfig * cnf, const char * arg)
 {
    if ((cnf->ludp))
+   {
+      if (cnf->host == cnf->ludp->lud_host)
+         cnf->host = NULL;
       ldap_free_urldesc(cnf->ludp);
+   };
    cnf->ludp = NULL;
+   
+   if (!(cnf->uri = arg))
+      return(0);
    
    if ((ldap_url_parse(arg, &cnf->ludp)))
    {
@@ -239,7 +244,6 @@ int ldaputils_config_set_uri(LdapUtilsConfig * cnf, const char * arg)
    
    cnf->host  = cnf->ludp->lud_host;
    cnf->port  = cnf->ludp->lud_port;
-   strncpy(cnf->uri, arg, LDAPUTILS_OPT_LEN);
    
    return(0);
 }

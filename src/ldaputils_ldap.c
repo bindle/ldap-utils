@@ -48,16 +48,28 @@ LDAP * ldaputils_initialize(LdapUtilsConfig * cnf)
 {
    int          err;
    LDAP       * ld;
+   char         uribuff[256];
    BerValue     cred;
    BerValue   * servercredp;
    const char * mechanism;
+   const char * uri;
 
    if (cnf->debug)
       if ((LDAP_OPT_SUCCESS != ldap_set_option(NULL, LDAP_OPT_DEBUG_LEVEL, (void *)&cnf->debug)))
          fprintf(stderr, _("%s: could not set LDAP_OPT_DEBUG_LEVEL\n"), PROGRAM_NAME);
    
+   uri = cnf->uri;
+   if ( (!(uri)) && ((cnf->host)) )
+   {
+      if (cnf->port)
+         snprintf(uribuff, 256, "ldap://%s:%i", cnf->host, cnf->port);
+      else
+         snprintf(uribuff, 256, "ldap://%s", cnf->host);
+      uri = uribuff;
+   };
+   
    ld = NULL;
-   if (ldap_initialize(&ld, cnf->uri))
+   if (ldap_initialize(&ld, uri))
    {
       fprintf(stderr, "%s: ldaputils_initialize(): %s\n", PROGRAM_NAME, strerror(errno));
       return(NULL);

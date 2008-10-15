@@ -66,7 +66,7 @@ struct ldaputils_config_struct
    int            verbose;                     // -v verbose mode
    unsigned       version;                     // -P LDAP protocol version
    char           bindpw[LDAPUTILS_OPT_LEN];   // -W, -w bind password
-   char           uri[LDAPUTILS_OPT_LEN];      // -H LDAP URI
+   char           uribuff[LDAPUTILS_OPT_LEN];
    char        ** attrs;                       //    result attributes
    const char   * basedn;                      // -b base DN
    const char   * binddn;                      // -D bind DN
@@ -74,6 +74,7 @@ struct ldaputils_config_struct
    const char   * host;                        // -h LDAP host
    const char   * passfile;	                 // -y password file
    const char   * sortattr;	                 // -S sort by attribute
+   const char   * uri;                         // -H LDAP URI
    LDAPURLDesc  * ludp;                        // pointer to LDAP URL
 };
 
