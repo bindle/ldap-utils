@@ -2,5 +2,8 @@
 LDAP Utilities
 Copyright (C) 2008 David M. Syzdek <david@syzdek.net>
 
+1.0.1
+	* Changing default search scope to SUBTREE. (syzdek)
+
 1.0.0   2008/10/12
-	- initial release of package (syzdek)
+	* initial release of package (syzdek)

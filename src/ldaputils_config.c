@@ -157,6 +157,7 @@ void ldaputils_config_init(LdapUtilsConfig * cnf)
 {
    memset(cnf, 0, sizeof(LdapUtilsConfig));
    cnf->referrals  = 0;
+   cnf->scope      = LDAP_SCOPE_SUBTREE;
    return;
 }
 

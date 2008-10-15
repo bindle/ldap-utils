@@ -267,6 +267,8 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
       return(1);
    };
    memset(cnf, 0, sizeof(MyConfig));
+   
+   ldaputils_config_init((LdapUtilsConfig *) cnf);
 
    // loops through args
    while((c = getopt_long(argc, argv, short_options, long_options, &option_index)) != -1)
