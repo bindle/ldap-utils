@@ -2,11 +2,12 @@
 LDAP Utilities
 Copyright (C) 2008 David M. Syzdek <david@syzdek.net>
 
-1.0.1
+0.1.1
 	* Changing how LDAP host/port/URI values are stored so that values
 	  from ldap.conf and ldaprc files will be used if they are not
 	  specified on the command line. (syzdek)
 	* Changing default search scope to SUBTREE. (syzdek)
+ 	* Changing version major version from 1.0.0. to 0.1.0 (syzdek)
 
-1.0.0   2008/10/12
+0.1.0   2008/10/12
 	* initial release of package (syzdek)
