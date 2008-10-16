@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: syzdek@users.sourceforge.net\n"
-"POT-Creation-Date: 2008-10-12 23:25-0800\n"
+"POT-Creation-Date: 2008-10-15 23:45-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,36 +28,24 @@ msgid ""
 "Report bugs to <%s>.\n"
 msgstr ""
 
-#: src/ldap2csv.c:254
-msgid "help"
-msgstr ""
-
-#: src/ldap2csv.c:255
-msgid "verbose"
-msgstr ""
-
-#: src/ldap2csv.c:256
-msgid "version"
-msgstr ""
-
-#: src/ldap2csv.c:266 src/ldap2csv.c:302
+#: src/ldap2csv.c:266 src/ldap2csv.c:304
 #, c-format
 msgid "%s: out of virtual memory\n"
 msgstr ""
 
-#: src/ldap2csv.c:281 src/ldap2csv.c:285 src/ldap2csv.c:293
-#: src/ldaputils_config_opts.c:150 src/ldaputils_config_opts.c:236
-#: src/ldaputils_config_opts.c:275
+#: src/ldap2csv.c:283 src/ldap2csv.c:287 src/ldap2csv.c:295
+#: src/ldaputils_config_opts.c:148 src/ldaputils_config_opts.c:241
+#: src/ldaputils_config_opts.c:279
 #, c-format
 msgid "Try `%s --help' for more information.\n"
 msgstr ""
 
-#: src/ldap2csv.c:284
+#: src/ldap2csv.c:286
 #, c-format
 msgid "%s: unrecognized option `--%c'\n"
 msgstr ""
 
-#: src/ldap2csv.c:292
+#: src/ldap2csv.c:294
 #, c-format
 msgid "%s: missing required arguments\n"
 msgstr ""
@@ -65,7 +53,7 @@ msgstr ""
 #. TRANSLATORS: The following string provides an error message if the
 #. file which contains the password has insecure file permissions. The
 #. string arguments are the name of the program and the name of the file.
-#: src/ldaputils_config.c:274
+#: src/ldaputils_config.c:275
 #, c-format
 msgid "%s: Password file %s is publicly readable/writeable\n"
 msgstr ""
@@ -74,7 +62,7 @@ msgstr ""
 #. line arguments. Usage for program specific arguments is provided in
 #. anothoer section. These strings are displayed if the program is
 #. passed `--help' on the command line.
-#: src/ldaputils_config.c:302
+#: src/ldaputils_config.c:303
 #, c-format
 msgid ""
 "Common options:\n"
@@ -98,7 +86,7 @@ msgstr ""
 #. line arguments. Usage for program specific arguments is provided in
 #. anothoer section. These strings are displayed if the program is
 #. passed `--help' on the command line.
-#: src/ldaputils_config.c:330
+#: src/ldaputils_config.c:331
 #, c-format
 msgid ""
 "Search options:\n"
@@ -113,7 +101,7 @@ msgstr ""
 #. information if the program is passed --version on the command line.
 #. The three strings referenced are: PROGRAM_NAME, PACKAGE_NAME,
 #. PACKAGE_VERSION.
-#: src/ldaputils_config.c:349
+#: src/ldaputils_config.c:350
 #, c-format
 msgid ""
 "%s (%s) %s\n"
@@ -130,19 +118,19 @@ msgstr ""
 msgid "Enter LDAP Password: "
 msgstr ""
 
-#: src/ldaputils_config_opts.c:149
+#: src/ldaputils_config_opts.c:147
 #, c-format
 msgid "%s: invalid TCP port\n"
 msgstr ""
 
-#: src/ldaputils_config_opts.c:185
+#: src/ldaputils_config_opts.c:183
 #, c-format
 msgid "%s: scope should be base, one, or sub\n"
 msgstr ""
 
 #. TRANSLATORS: The following strings provide an error message if the
 #. URI provided on the command line is an invalid LDAP URI.
-#: src/ldaputils_config_opts.c:235
+#: src/ldaputils_config_opts.c:240
 #, c-format
 msgid "%s: invalid LDAP URI\n"
 msgstr ""
@@ -150,7 +138,32 @@ msgstr ""
 #. TRANSLATORS: The following strings provide an error message if the
 #. LDAP protocol version specified on the command line is an invalid
 #. protocol version or unsupported protocol version.
-#: src/ldaputils_config_opts.c:274
+#: src/ldaputils_config_opts.c:278
 #, c-format
 msgid "%s: protocol version should be 2 or 3\n"
+msgstr ""
+
+#: src/ldaputils_ldap.c:59
+#, c-format
+msgid "%s: could not set LDAP_OPT_DEBUG_LEVEL\n"
+msgstr ""
+
+#: src/ldaputils_ldap.c:81
+#, c-format
+msgid "%s: could not set LDAP_OPT_PROTOCOL_VERSION\n"
+msgstr ""
+
+#: src/ldaputils_ldap.c:84
+#, c-format
+msgid "%s: could not set LDAP_OPT_REFERRALS\n"
+msgstr ""
+
+#: src/ldaputils_ldap.c:87
+#, c-format
+msgid "%s: could not set LDAP_OPT_SIZELIMIT\n"
+msgstr ""
+
+#: src/ldaputils_ldap.c:90
+#, c-format
+msgid "%s: could not set LDAP_OPT_TIMELIMIT\n"
 msgstr ""

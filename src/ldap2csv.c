@@ -251,10 +251,10 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    static char   short_options[] = LDAPUTILS_OPTIONS_COMMON LDAPUTILS_OPTIONS_SEARCH "o:";
    static struct option long_options[] =
    {
-      {_("help"),          no_argument, 0, '9'},
-      {_("verbose"),       no_argument, 0, 'v'},
-      {_("version"),       no_argument, 0, 'V'},
-      {NULL,               0,           0, 0  }
+      {"help",          no_argument, 0, '9'},
+      {"verbose",       no_argument, 0, 'v'},
+      {"version",       no_argument, 0, 'V'},
+      {NULL,            0,           0, 0  }
    };
    
    option_index = 0;
