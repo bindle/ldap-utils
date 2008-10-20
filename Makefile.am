@@ -46,6 +46,7 @@ ACLOCAL_AMFLAGS				= -W syntax -W unsupported -W error
 # automake targets
 bin_PROGRAMS				= src/ldap2csv
 noinst_PROGRAMS				= src/ldapconfprint
+noinst_HEADERS				= include/gettext.h
 man_MANS				=
 
 
