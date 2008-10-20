@@ -17,13 +17,17 @@
 		A0290B9F0E7C84C0004FC622 /* Makefile.am */ = {isa = PBXFileReference; explicitFileType = text.script; fileEncoding = 4; indentWidth = 8; path = Makefile.am; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
 		A0290BA00E7C852F004FC622 /* AUTHORS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
 		A0290BA10E7C852F004FC622 /* NEWS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
-		A0290BA20E7C852F004FC622 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		A0290BA20E7C852F004FC622 /* README */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 8; lastKnownFileType = text; path = README; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
 		A0290BC20E7C862A004FC622 /* Makefile-xcode */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 8; lastKnownFileType = text; path = "Makefile-xcode"; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
 		A03C08B50EA1F70700A30895 /* ldaputils_ldap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ldaputils_ldap.h; sourceTree = "<group>"; };
 		A03C08B60EA1F70700A30895 /* ldaputils_ldap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ldaputils_ldap.c; sourceTree = "<group>"; };
+		A06890F80EAC1C3100653748 /* ldap2script.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ldap2script.c; sourceTree = "<group>"; };
 		A0B3A4B00E80CAE000E4FC93 /* ldaputils_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ldaputils_config.h; sourceTree = "<group>"; };
 		A0B3A4B10E80CAE000E4FC93 /* ldaputils_config.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ldaputils_config.c; sourceTree = "<group>"; };
 		A0B3A4C10E80E5C800E4FC93 /* ldap-utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ldap-utils.h"; sourceTree = "<group>"; };
+		A0FA56000EA7256B001B5D02 /* LINGUAS */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 8; lastKnownFileType = text; path = LINGUAS; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
+		A0FA56010EA7257C001B5D02 /* POTFILES.in */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 8; lastKnownFileType = text; path = POTFILES.in; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
+		A0FA56020EA725DD001B5D02 /* en_US.po */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 8; lastKnownFileType = text; path = en_US.po; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -35,10 +39,12 @@
 				A0290BC10E7C85EB004FC622 /* build-aux */,
 				A0290B9D0E7C84C0004FC622 /* ChangeLog */,
 				A0290B9E0E7C84C0004FC622 /* configure.ac */,
+				A0FA55F70EA71C74001B5D02 /* doc */,
 				C6A0FF2B0290797F04C91782 /* include */,
 				A0290B9F0E7C84C0004FC622 /* Makefile.am */,
 				A0290BA10E7C852F004FC622 /* NEWS */,
 				A0290BA20E7C852F004FC622 /* README */,
+				A0FA55FF0EA72547001B5D02 /* po */,
 				08FB7795FE84155DC02AAC07 /* src */,
 			);
 			name = "ldap-utils";
@@ -48,6 +54,7 @@
 			isa = PBXGroup;
 			children = (
 				A0290B930E7C8478004FC622 /* ldap2csv.c */,
+				A06890F80EAC1C3100653748 /* ldap2script.c */,
 				A0290B970E7C8478004FC622 /* ldapconfprint.c */,
 				A0290B950E7C8478004FC622 /* ldaputils_config_opts.c */,
 				A0290B960E7C8478004FC622 /* ldaputils_config_opts.h */,
@@ -65,6 +72,23 @@
 				A0290BC20E7C862A004FC622 /* Makefile-xcode */,
 			);
 			path = "build-aux";
+			sourceTree = "<group>";
+		};
+		A0FA55F70EA71C74001B5D02 /* doc */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = doc;
+			sourceTree = "<group>";
+		};
+		A0FA55FF0EA72547001B5D02 /* po */ = {
+			isa = PBXGroup;
+			children = (
+				A0FA56020EA725DD001B5D02 /* en_US.po */,
+				A0FA56000EA7256B001B5D02 /* LINGUAS */,
+				A0FA56010EA7257C001B5D02 /* POTFILES.in */,
+			);
+			path = po;
 			sourceTree = "<group>";
 		};
 		C6A0FF2B0290797F04C91782 /* include */ = {
@@ -138,7 +162,7 @@
 		A0290BC40E7C8646004FC622 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CONFIGURE_FLAGS = "";
+				CONFIGURE_FLAGS = "--enable-strictwarnings";
 				COPY_PHASE_STRIP = NO;
 				DISTCLEAN = NO;
 				DISTFILES = NO;

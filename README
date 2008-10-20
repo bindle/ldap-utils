@@ -1,14 +1,16 @@
+
+
 Contents
 ========
    I. Introduction
   II. Reporting Problems
  III. Obtaining the Source
   IV. Compiling and Installing
-   V. Notes for Maintainers
+   V. Example Usage
+  VI. Notes for Maintainers
 
 I. Introduction
 ---------------
-
 
 This package was developed to provide a set of tools to assist in fullfilling
 requests for data and in performing maintenance on LDAP servers.  When applicable,
@@ -25,9 +27,9 @@ The Tracker page for this project is available here:
 	http://sourceforge.net/tracker/?group_id=214270
 	</a>
 
-If the Tracker is too confusing, time consuming, detailed, arbitrary, ridiculous,
-chaotic, organized, purlple, "I don't speak your crazy moon-language."; send the
-request to:
+If the Tracker is too confusing, time consuming, detailed, arbitrary,
+ridiculous, chaotic, organized, purlple, "I don't speak your crazy
+moon-language."; send the request to:
 
 	<a href=mailto:syzdek@users.sourceforge.net>
 	syzdek@users.sourceforge.net
@@ -37,15 +39,18 @@ request to:
 III. Obtaining the Source
 -------------------------
 
-This project is hosted on SourceForge.  The source code can be downloaded from the
-following web page:
+This project is hosted on SourceForge.  The source code can be downloaded from
+the following web page:
 
 	<a href=https://sourceforge.net/projects/ldap-utils/>
 	https://sourceforge.net/projects/ldap-utils/
 	</a>
 
-The latest source code can be retieved from Git using the following commands:
+The latest source code can be retieved from Git using one of the the
+following commands:
 
+	git clone git://github.com/syzdek/ldap-utilities.git
+	
 	git clone git://git.scm.syzdek.net/pub/scm/devel/ldap-utils.git
 
 The package should be copied to a directory called `ldap-utils' which contains
@@ -59,34 +64,64 @@ This project uses GNU Autoconf, GNU Automake, and GNU Libtool in order to ease
 porting source across multiple platforms.  As of this writing the source was 
 known to compile for the following platforms:
 
-        Apple OS X 10.5.1
-        Slackware Linux 11.0
+	Apple OS X 10.5.1
+	Slackware Linux 11.0
 	FreeBSD 4.9 (With GNU Getopt)
+	Windows XP SP2
 
-The easist way to compile the source on a Unix platform is to run the following:
+The easist way to compile the source on a Unix platform is to run the
+following:
 
-        gzip -cd ldap-utils-x.x.x.tar.gz | tar -xvf -
-        cd ldap-utils-x.x.x
-        ./configure
-        make
-        make install
+	gzip -cd ldap-utils-x.x.x.tar.gz | tar -xvf -
+	cd ldap-utils-x.x.x
+	./configure
+	make
+	make install
 
-For more information on building and installing using configure, please read the
-INSTALL file.
+For more information on building and installing using configure, please read
+the INSTALL file.
 
 
-V. Notes for Maintainers
-------------------------
+V. Example Usage
+----------------
+
+Anonymous query that sorts using the "sn" attribute:
+   $ ldap2csv -H ldap://ldap.foo.org:983/ -b ou=People,o=foo.org,o=internet \
+      -S sn '(mail=*)' sn givenname mail workPhone
+
+Authenticated query:
+   $ ldap2csv -H ldap://ldap.foo.org:983/ -b ou=People,o=foo.org,o=internet \
+      -D 'uid=admin,ou=People,o=internet' -w password \
+      '(mail=*)' sn givenname mail workPhone
+
+
+VI. Notes for Maintainers
+-------------------------
 
 Updating gettext:
    $ ./configure 
    $ (cd po; make update-po) 
    $ make distclean
 
+Updating Github:
+   $ git remote
+   github
+   origin
+   $ git push github master
+
+Creating MinGW toolchain:
+   http://wiki.syzdek.net/wiki/Cross_Compiler
+
+Creating Windows Binaries from OS X:
+   $ export PATH=/usr/local/i386-mingw32/bin:${PATH}
+   $ ./configure --host=i386-mingw32 --prefix=/tmp/ldap-utils \
+      --enable-strictwarnings --enable-dependency-tracking
+   $ make
+   $ rm -fR /tmp/ldap-utils
+   $ make install-strip
+   $ cd /tmp/ldap-utils/bin
+   $ ls -l
+
 
 =============================================================================
-
-Please enjoy this project.
-
-Sincerely,
-David M. Syzdek
+End of Document

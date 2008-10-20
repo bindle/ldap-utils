@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: syzdek@users.sourceforge.net\n"
-"POT-Creation-Date: 2008-10-15 23:45-0800\n"
+"POT-Creation-Date: 2008-10-20 13:32-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,24 +28,26 @@ msgid ""
 "Report bugs to <%s>.\n"
 msgstr ""
 
-#: src/ldap2csv.c:266 src/ldap2csv.c:304
+#: src/ldap2csv.c:237 src/ldap2csv.c:275 src/ldaputils_ldap.c:207
+#: src/ldaputils_ldap.c:215 src/ldaputils_ldap.c:230 src/ldaputils_ldap.c:238
+#: src/ldaputils_ldap.c:286 src/ldaputils_ldap.c:295 src/ldaputils_ldap.c:320
 #, c-format
 msgid "%s: out of virtual memory\n"
 msgstr ""
 
-#: src/ldap2csv.c:283 src/ldap2csv.c:287 src/ldap2csv.c:295
+#: src/ldap2csv.c:254 src/ldap2csv.c:258 src/ldap2csv.c:266
 #: src/ldaputils_config_opts.c:148 src/ldaputils_config_opts.c:241
-#: src/ldaputils_config_opts.c:279
+#: src/ldaputils_config_opts.c:280
 #, c-format
 msgid "Try `%s --help' for more information.\n"
 msgstr ""
 
-#: src/ldap2csv.c:286
+#: src/ldap2csv.c:257
 #, c-format
 msgid "%s: unrecognized option `--%c'\n"
 msgstr ""
 
-#: src/ldap2csv.c:294
+#: src/ldap2csv.c:265
 #, c-format
 msgid "%s: missing required arguments\n"
 msgstr ""
@@ -53,7 +55,7 @@ msgstr ""
 #. TRANSLATORS: The following string provides an error message if the
 #. file which contains the password has insecure file permissions. The
 #. string arguments are the name of the program and the name of the file.
-#: src/ldaputils_config.c:275
+#: src/ldaputils_config.c:274
 #, c-format
 msgid "%s: Password file %s is publicly readable/writeable\n"
 msgstr ""
@@ -62,7 +64,7 @@ msgstr ""
 #. line arguments. Usage for program specific arguments is provided in
 #. anothoer section. These strings are displayed if the program is
 #. passed `--help' on the command line.
-#: src/ldaputils_config.c:303
+#: src/ldaputils_config.c:302
 #, c-format
 msgid ""
 "Common options:\n"
@@ -86,7 +88,7 @@ msgstr ""
 #. line arguments. Usage for program specific arguments is provided in
 #. anothoer section. These strings are displayed if the program is
 #. passed `--help' on the command line.
-#: src/ldaputils_config.c:331
+#: src/ldaputils_config.c:330
 #, c-format
 msgid ""
 "Search options:\n"
@@ -101,12 +103,10 @@ msgstr ""
 #. information if the program is passed --version on the command line.
 #. The three strings referenced are: PROGRAM_NAME, PACKAGE_NAME,
 #. PACKAGE_VERSION.
-#: src/ldaputils_config.c:350
+#: src/ldaputils_config.c:354
 #, c-format
 msgid ""
 "%s (%s) %s\n"
-"Written by David M. Syzdek.\n"
-"\n"
 "Copyright (C) 2008 David M. Syzdek.\n"
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -138,32 +138,32 @@ msgstr ""
 #. TRANSLATORS: The following strings provide an error message if the
 #. LDAP protocol version specified on the command line is an invalid
 #. protocol version or unsupported protocol version.
-#: src/ldaputils_config_opts.c:278
+#: src/ldaputils_config_opts.c:279
 #, c-format
 msgid "%s: protocol version should be 2 or 3\n"
 msgstr ""
 
-#: src/ldaputils_ldap.c:59
+#: src/ldaputils_ldap.c:351
 #, c-format
 msgid "%s: could not set LDAP_OPT_DEBUG_LEVEL\n"
 msgstr ""
 
-#: src/ldaputils_ldap.c:81
+#: src/ldaputils_ldap.c:373
 #, c-format
 msgid "%s: could not set LDAP_OPT_PROTOCOL_VERSION\n"
 msgstr ""
 
-#: src/ldaputils_ldap.c:84
+#: src/ldaputils_ldap.c:376
 #, c-format
 msgid "%s: could not set LDAP_OPT_REFERRALS\n"
 msgstr ""
 
-#: src/ldaputils_ldap.c:87
+#: src/ldaputils_ldap.c:379
 #, c-format
 msgid "%s: could not set LDAP_OPT_SIZELIMIT\n"
 msgstr ""
 
-#: src/ldaputils_ldap.c:90
+#: src/ldaputils_ldap.c:382
 #, c-format
 msgid "%s: could not set LDAP_OPT_TIMELIMIT\n"
 msgstr ""
