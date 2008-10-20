@@ -124,11 +124,14 @@ void ldaputils_usage(void)
 int main(int argc, char * argv[])
 {
    int              x;
+   int              y;
+   //int              z;
    char           * val;
    LDAP           * ld;
    MyConfig       * cnf;
    LDAPMessage    * res;
-   LDAPMessage    * entry;
+//   LDAPMessage    * entry;
+   LDAPUtilsEntry ** entries;
 
 #ifdef HAVE_GETTEXT
    setlocale (LC_ALL, ""); 
@@ -150,22 +153,35 @@ int main(int argc, char * argv[])
 
    if ((ldaputils_search(ld, (LdapUtilsConfig *)cnf, &res)))
    {
+      ldap_unbind_ext_s(ld, NULL, NULL);
       ldaputils_config_free((LdapUtilsConfig *)cnf);
       free(cnf);
       return(1);
    };
 
+   // prints attribute names
    printf("\"%s\"", cnf->common.attrs[0]);
    for(x = 1; cnf->common.attrs[x]; x++)
       printf(",\"%s\"", cnf->common.attrs[x]);
    printf("\n");
 
-   entry = ldap_first_entry(ld, res);
-   while(entry)
+   if (!(entries = ldaputils_get_entries(ld, res, ((LdapUtilsConfig *)cnf)->sortattr)))
    {
-      for(x = 0; cnf->common.attrs[x]; x++)
+      ldap_msgfree(res);
+      ldap_unbind_ext_s(ld, NULL, NULL);
+      ldaputils_config_free((LdapUtilsConfig *)cnf);
+      free(cnf);
+      return(1);
+   };
+   
+   if ( ((LdapUtilsConfig *)cnf)->sortattr )
+      ldaputils_sort_entries(entries);
+   
+   for(x = 0; entries[x]; x++)
+   {
+      for(y = 0; cnf->common.attrs[y]; y++)
       {
-         if (!(val = ldaputils_get_vals(ld, entry, cnf->common.attrs[x])))
+         if (!(val = ldaputils_get_vals(entries[x], cnf->common.attrs[y])))
          {
                ldap_msgfree(res);
                ldap_unbind_ext_s(ld, NULL, NULL);
@@ -173,16 +189,17 @@ int main(int argc, char * argv[])
                free(cnf);
                return(1);
          };
-         if ((x))
+         if ((y))
             printf(",\"%s\"", val);
          else
             printf("\"%s\"", val);
          free(val);
       };
       printf("\n");
-      entry = ldap_next_entry(ld, entry);
    };
 
+   ldaputils_free_entries(entries);
+   
    ldap_msgfree(res);
    ldap_unbind_ext_s(ld, NULL, NULL);
    ldaputils_config_free((LdapUtilsConfig *)cnf);

@@ -43,14 +43,234 @@
 //             //
 /////////////////
 
+/// compares two LDAP values for sorting
+/// @param[in] ptr1   pointer to first data item to compare
+/// @param[in] ptr2   pointer to second data item to compare
+int ldaputils_cmp_berval(const struct berval ** ptr1, const struct berval ** ptr2)
+{
+   int rc;
+   
+   // quick check of the arguments
+   if ( (!(ptr1)) && (!(ptr2)) )
+      return(0);
+   if (!(ptr1))
+      return(-1);
+   if (!(ptr2))
+      return(1);
+   
+   // quick check of the pointers
+   if ( (!(*ptr1)) && (!(*ptr2)) )
+      return(0);
+   if (!(*ptr1))
+      return(-1);
+   if (!(*ptr2))
+      return(1);
+   
+   // case insensitive compare
+   if ((rc = strcasecmp((*ptr1)->bv_val, (*ptr2)->bv_val)))
+      return(rc);
+   
+   // case sensitive compare
+   if ((rc = strcmp((*ptr1)->bv_val, (*ptr2)->bv_val)))
+      return(rc);
+   
+   // fall back to comparing memory location
+   if ( *ptr1 < *ptr2 )
+      return(-1);
+   if ( *ptr1 > *ptr2 )
+      return(1);
+   
+   // pointers must point to the same object
+   return(0);
+}
+
+
+/// compares two LDAP values for sorting
+/// @param[in] ptr1   pointer to first data item to compare
+/// @param[in] ptr2   pointer to second data item to compare
+int ldaputils_cmp_entry(const LDAPUtilsEntry ** ptr1, const LDAPUtilsEntry ** ptr2)
+{
+   int rc;
+   
+   // quick check of the arguments
+   if ( (!(ptr1)) && (!(ptr2)) )
+      return(0);
+   if (!(ptr1))
+      return(-1);
+   if (!(ptr2))
+      return(1);
+   
+   // quick check of the pointers
+   if ( (!(*ptr1)) && (!(*ptr2)) )
+      return(0);
+   if (!(*ptr1))
+      return(-1);
+   if (!(*ptr2))
+      return(1);
+
+   // quick check of the pointers
+   if ( (!(*ptr1)->sortval) && (!(*ptr2)->sortval) )
+   {
+      // compare of DN
+      if ((rc = strcasecmp((*ptr1)->dn, (*ptr2)->dn)))
+         return(rc);
+      if ((rc = strcmp((*ptr1)->dn, (*ptr2)->dn)))
+         return(rc);
+      return(0);
+   };
+   if (!(*ptr1)->sortval)
+      return(-1);
+   if (!(*ptr2)->sortval)
+      return(1);
+   
+   // compare of sort value
+   if ((rc = strcasecmp((*ptr1)->sortval, (*ptr2)->sortval)))
+      return(rc);
+   if ((rc = strcmp((*ptr1)->sortval, (*ptr2)->sortval)))
+      return(rc);
+
+   // compare of DN
+   if ((rc = strcasecmp((*ptr1)->dn, (*ptr2)->dn)))
+      return(rc);
+   if ((rc = strcmp((*ptr1)->dn, (*ptr2)->dn)))
+      return(rc);
+   
+   // fall back to comparing memory location
+   if ( *ptr1 < *ptr2 )
+      return(-1);
+   if ( *ptr1 > *ptr2 )
+      return(1);
+   
+   // pointers must point to the same object
+   return(0);
+}
+
+
+/// frees list of entries
+/// @param[in] entries   list of entries to free
+void ldaputils_free_entries(LDAPUtilsEntry ** entries)
+{
+   int  x;
+   int  y;
+   
+   if (!(entries))
+      return;
+   
+   for(x = 0; entries[x]; x++)
+   {
+      if (entries[x]->dn)
+         ldap_memfree(entries[x]->dn);
+      if (entries[x]->sortval)
+         free(entries[x]->sortval);
+      if (entries[x]->attributes)
+      {
+         for(y = 0; entries[x]->attributes[y]; y++)
+         {
+            if (entries[x]->attributes[y]->name)
+               ldap_memfree(entries[x]->attributes[y]->name);
+            if (entries[x]->attributes[y]->vals)
+               ldap_value_free_len(entries[x]->attributes[y]->vals);
+            free(entries[x]->attributes[y]);
+         };
+         free(entries[x]->attributes);
+      };
+      free(entries[x]);
+   };
+   free(entries);
+   
+   return;
+}
+
+
+/// retrieves LDAP entries from result
+/// @param[in] ld      refernce to LDAP socket data
+/// @param[in] res     refernce to LDAP result message
+LDAPUtilsEntry ** ldaputils_get_entries(LDAP * ld, LDAPMessage * res, const char * sortattr)
+{
+   char                * attr;
+   void                * ptr;
+   size_t                entry_count;
+   BerElement          * ber;
+   LDAPMessage         * entry;
+   LDAPUtilsEntry      * e;
+   LDAPUtilsEntry     ** entries;
+   LDAPUtilsAttribute  * a;
+   
+   entries     = NULL;
+   entry_count = 0;
+   
+   entry = ldap_first_entry(ld, res);
+   while(entry)
+   {
+      if (!(e = malloc(sizeof(LDAPUtilsEntry))))
+      {
+         fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
+         return(NULL);
+      };
+      memset(e, 0, sizeof(LDAPUtilsEntry));
+      
+      entry_count++;
+      if (!(ptr = realloc(entries, sizeof(LDAPUtilsEntry *) * (entry_count+1))))
+      {
+         fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
+         free(e);
+         return(NULL);
+      };
+      entries = ptr;
+      entries[entry_count-1] = e;
+      entries[entry_count-0] = NULL;
+      
+      e->dn = ldap_get_dn(ld, entry);
+
+      attr = ldap_first_attribute(ld, entry, &ber);
+      while(attr)
+      {
+         if (!(a = malloc(sizeof(LDAPUtilsAttribute))))
+         {
+            fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
+            return(NULL);
+         };
+         memset(a, 0, sizeof(LDAPUtilsAttribute));
+         
+         e->count++;
+         if (!(ptr = realloc(e->attributes, sizeof(LDAPUtilsAttribute *) * (e->count+1))))
+         {
+            fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
+            free(a);
+            return(NULL);
+         };
+         e->attributes = ptr;
+         e->attributes[e->count-1] = a;
+         e->attributes[e->count-0] = NULL;
+                  
+         a->name = attr;
+         a->vals = ldap_get_values_len(ld, entry, attr);
+         ldaputils_sort_values(a->vals);
+         
+         if (sortattr)
+            if (!(strcasecmp(attr, sortattr)))
+               if (a->vals)
+                  if (a->vals[0])
+                     e->sortval = strdup(a->vals[0]->bv_val);
+                  
+         attr = ldap_next_attribute(ld, entry, ber);
+      };
+      ber_free(ber, 0);
+      
+      entry = ldap_next_entry(ld, entry);
+   };
+   
+   return(entries);
+}
+
+
 /// retrieves values of an LDAP attribute
 /// @param[in] ld      refernce to LDAP socket data
 /// @param[in] entry   pointer to LDAP entry
 /// @param[in] attr    attribute to retrieve
-char * ldaputils_get_vals(LDAP * ld, LDAPMessage * entry, const char * attr)
+char * ldaputils_get_vals(LDAPUtilsEntry * entry, const char * attr)
 {
    int              x;
-   char           * dn;
    char           * ptr;
    char           * val;
    size_t           val_len;
@@ -60,7 +280,7 @@ char * ldaputils_get_vals(LDAP * ld, LDAPMessage * entry, const char * attr)
    
    val     = NULL;
    val_len = 256;
-   
+
    if (!(val = (char *) malloc(sizeof(char) * val_len)))
    {
       fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
@@ -70,47 +290,44 @@ char * ldaputils_get_vals(LDAP * ld, LDAPMessage * entry, const char * attr)
 
    if (!(strcasecmp("dn", attr)))
    {
-      dn = ldap_get_dn(ld, entry);
-      if (val_len < strlen(dn))
+      if (!(ptr = realloc(val, sizeof(char)*(strlen(entry->dn)+1))))
       {
-         if (!(ptr = realloc(val, sizeof(char)*(strlen(dn)+1))))
+         fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
+         free(val);
+         return(NULL);
+      };
+      val = ptr;
+      strcpy(val, entry->dn);
+      return(val);
+   };
+   
+   vals = NULL;
+   for(x = 0; entry->attributes[x]; x++)
+      if (!(strcasecmp(entry->attributes[x]->name, attr)))
+         vals = entry->attributes[x]->vals;
+   
+   if (!(vals))
+      return(val);
+
+   for(x = 0; vals[x]; x++)
+   {
+      att_len = vals[x]->bv_len;
+      if (val_len < att_len)
+      {
+         new_len = val_len + att_len + 256;
+         if (!(ptr = (char * ) realloc(val, (sizeof(char) * new_len))))
          {
             fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
             free(val);
-            ldap_memfree(dn);
             return(NULL);
          };
          val = ptr;
+         memset(&val[val_len], 0, new_len-val_len);
+         val_len = new_len;
       };
-      strcpy(val, dn);
-      ldap_memfree(dn);
-      return(val);
-   };
-
-   if ((vals = ldap_get_values_len(ld, entry, attr)))
-   {
-      for(x = 0; vals[x]; x++)
-      {
-         att_len = vals[x]->bv_len;
-         if (val_len < att_len)
-         {
-            new_len = val_len + att_len + 256;
-            if (!(ptr = (char * ) realloc(val, (sizeof(char) * new_len))))
-            {
-               fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
-               free(val);
-               ldap_value_free_len(vals);
-               return(NULL);
-            };
-            val = ptr;
-            memset(&val[val_len], 0, new_len-val_len);
-            val_len = new_len;
-         };
-         if ((x))
-            strcat(val, ",");
-         memcpy(&val[strlen(val)], vals[x]->bv_val, vals[x]->bv_len);
-      };
-      ldap_value_free_len(vals);
+      if ((x))
+         strcat(val, ",");
+      memcpy(&val[strlen(val)], vals[x]->bv_val, vals[x]->bv_len);
    };
          
    return(val);
@@ -223,6 +440,32 @@ int ldaputils_search(LDAP * ld, LdapUtilsConfig * cnf, LDAPMessage ** resp)
       return(-1);
    };
    
+   return(0);
+}
+
+
+/// sorts values
+/// @param[in] entries   list of attribute values to sort
+int ldaputils_sort_entries(LDAPUtilsEntry ** entries)
+{
+   size_t  len;
+   if (!(entries))
+      return(1);
+   for(len = 0; entries[len]; len++);
+   qsort(entries, len, sizeof(LDAPUtilsEntry *), (int (*)(const void *, const void *))ldaputils_cmp_entry);
+   return(0);
+}
+
+
+/// sorts values
+/// @param[in] vals   list of attribute values to sort
+int ldaputils_sort_values(struct berval ** vals)
+{
+   size_t  len;
+   if (!(vals))
+      return(1);
+   for(len = 0; vals[len]; len++);
+   qsort(vals, len, sizeof(char *), (int (*)(const void *, const void *))ldaputils_cmp_berval);
    return(0);
 }
 

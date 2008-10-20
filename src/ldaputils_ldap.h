@@ -46,13 +46,31 @@
 //              //
 //////////////////
 
+// compares two LDAP values for sorting
+int ldaputils_cmp_berval PARAMS((const struct berval ** ptr1, const struct berval ** ptr2));
+
+// compares two LDAP values for sorting
+int ldaputils_cmp_entry PARAMS((const LDAPUtilsEntry ** ptr1, const LDAPUtilsEntry ** ptr2));
+
+// frees list of entries
+void ldaputils_free_entries PARAMS((LDAPUtilsEntry ** entries));
+
+// retrieves LDAP entries from result
+LDAPUtilsEntry ** ldaputils_get_entries PARAMS((LDAP * ld, LDAPMessage * res, const char * sortattr));
+
 // retrieves values of an LDAP attribute
-char * ldaputils_get_vals PARAMS((LDAP * ld, LDAPMessage * entry, const char * attr));
+char * ldaputils_get_vals PARAMS((LDAPUtilsEntry * entry, const char * attr));
 
 // connects and binds to LDAP server
 LDAP * ldaputils_initialize PARAMS((LdapUtilsConfig * cnf));
 
 // connects and binds to LDAP server
 int ldaputils_search PARAMS((LDAP * ld, LdapUtilsConfig * cnf, LDAPMessage ** resp));
+
+// sorts values
+int ldaputils_sort_entries PARAMS((LDAPUtilsEntry ** entries));
+
+// sorts values
+int ldaputils_sort_values PARAMS((struct berval ** vals));
 
 #endif /* end of header file */

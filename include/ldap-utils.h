@@ -107,4 +107,27 @@
 #endif
 
 
+/////////////////
+//             //
+//  Datatypes  //
+//             //
+/////////////////
+
+typedef struct ldap_utils_entry LDAPUtilsEntry;
+struct ldap_utils_entry
+{
+   char   * dn;
+   char   * sortval;
+   size_t   count;
+   struct ldap_utils_attribute ** attributes;
+};
+
+
+typedef struct ldap_utils_attribute LDAPUtilsAttribute;
+struct ldap_utils_attribute
+{
+   char           * name;
+   struct berval ** vals;
+};
+
 #endif /* end of header */
