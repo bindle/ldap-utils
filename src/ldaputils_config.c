@@ -342,13 +342,16 @@ void ldaputils_usage_search(void)
 /// displays usage
 void ldaputils_version(void)
 {
+   int maj = (LDAP_VENDOR_VERSION/10000);
+   int min = (LDAP_VENDOR_VERSION%10000)/100;
+   int pat = (LDAP_VENDOR_VERSION%100);
+   printf("LDAP Library: %s %i.%i.%i\n", LDAP_VENDOR_NAME, maj, min, pat);
+   printf("\n");
    // TRANSLATORS: The following strings provide version and copyright
    // information if the program is passed --version on the command line.
    // The three strings referenced are: PROGRAM_NAME, PACKAGE_NAME,
    // PACKAGE_VERSION.
    printf(_( "%s (%s) %s\n"
-         "Written by David M. Syzdek.\n"
-         "\n"
          "Copyright (C) 2008 David M. Syzdek.\n"
          "This is free software; see the source for copying conditions.  There is NO\n"
          "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"

@@ -106,6 +106,16 @@
 #define PACKAGE_VERSION ""
 #endif
 
+#undef LDAP_VENDOR_NAME
+#undef LDAP_VENDOR_VERSION
+
+#ifndef LDAP_VENDOR_NAME
+#define LDAP_VENDOR_NAME "Unknown"
+#endif
+#ifndef LDAP_VENDOR_VERSION
+#define LDAP_VENDOR_VERSION 0
+#endif
+
 
 /////////////////
 //             //
