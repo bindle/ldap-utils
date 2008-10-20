@@ -254,6 +254,7 @@ int ldaputils_config_set_uri(LdapUtilsConfig * cnf, const char * arg)
 int ldaputils_config_set_verbose(LdapUtilsConfig * cnf)
 {
    cnf->verbose = 1;
+   cnf->debug |= 0x01;
    return(0);
 }
 
