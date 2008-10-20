@@ -124,16 +124,11 @@ void ldaputils_usage(void)
 int main(int argc, char * argv[])
 {
    int              x;
-   int              y;
-   int              rc;
-   int              err;
-   int              msgid;
-   char           * dn;
+   char           * val;
    LDAP           * ld;
    MyConfig       * cnf;
    LDAPMessage    * res;
    LDAPMessage    * entry;
-   struct berval ** vals;
 
 #ifdef HAVE_GETTEXT
    setlocale (LC_ALL, ""); 
@@ -153,45 +148,13 @@ int main(int argc, char * argv[])
       return(1);
    };
 
-   if ((ldaputils_search(ld, (LdapUtilsConfig *)cnf, &msgid)))
+   if ((ldaputils_search(ld, (LdapUtilsConfig *)cnf, &res)))
    {
       ldaputils_config_free((LdapUtilsConfig *)cnf);
       free(cnf);
       return(1);
    };
 
-   switch((rc = ldap_result(ld, msgid, LDAP_MSG_ALL, NULL, &res)))
-   {
-      case 0:
-         break;
-      case -1:
-         fprintf(stderr, "%s: ldap_result(): %s\n", PROGRAM_NAME, ldap_err2string(rc));
-         ldap_unbind_ext_s(ld, NULL, NULL);
-         ldaputils_config_free((LdapUtilsConfig *)cnf);
-         free(cnf);
-         return(-1);
-      default:
-         break;
-   };
-
-   rc = ldap_parse_result(ld, res, &err, NULL, NULL, NULL, NULL, 0);
-   if (rc != LDAP_SUCCESS)
-   {
-      fprintf(stderr, "%s: ldap_parse_result(): %s\n", PROGRAM_NAME, ldap_err2string(rc));
-      ldap_unbind_ext_s(ld, NULL, NULL);
-      ldaputils_config_free((LdapUtilsConfig *)cnf);
-      free(cnf);
-      return(-1);
-   };
-   if (err != LDAP_SUCCESS)
-   {
-      fprintf(stderr, "%s: ldap_parse_result(): %s\n", PROGRAM_NAME, ldap_err2string(err));
-      ldap_unbind_ext_s(ld, NULL, NULL);
-      ldaputils_config_free((LdapUtilsConfig *)cnf);
-      free(cnf);
-      return(-1);
-   };
-   
    printf("\"%s\"", cnf->common.attrs[0]);
    for(x = 1; cnf->common.attrs[x]; x++)
       printf(",\"%s\"", cnf->common.attrs[x]);
@@ -202,28 +165,19 @@ int main(int argc, char * argv[])
    {
       for(x = 0; cnf->common.attrs[x]; x++)
       {
+         if (!(val = ldaputils_get_vals(ld, entry, cnf->common.attrs[x])))
+         {
+               ldap_msgfree(res);
+               ldap_unbind_ext_s(ld, NULL, NULL);
+               ldaputils_config_free((LdapUtilsConfig *)cnf);
+               free(cnf);
+               return(1);
+         };
          if ((x))
-            printf(",");
-         if (!(strcasecmp("dn", cnf->common.attrs[x])))
-         {
-            dn = ldap_get_dn(ld, entry);
-            printf("\"%s\"", dn);
-            ldap_memfree(dn);
-         }
-         else if ((vals = ldap_get_values_len(ld, entry, cnf->common.attrs[x])))
-         {
-            printf("\"");
-            for(y = 0; vals[y]; y++)
-            {
-               if ((y))
-                  printf(",");
-               printf("%s", vals[y]->bv_val);
-            };
-            ldap_value_free_len(vals);
-            printf("\"");
-         }
+            printf(",\"%s\"", val);
          else
-            printf("\"\"");
+            printf("\"%s\"", val);
+         free(val);
       };
       printf("\n");
       entry = ldap_next_entry(ld, entry);

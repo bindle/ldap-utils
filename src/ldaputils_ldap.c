@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ldap.h>
+#include <stdlib.h>
 
 #include "ldaputils_config.h"
 
@@ -41,6 +42,80 @@
 //  Functions  //
 //             //
 /////////////////
+
+/// retrieves values of an LDAP attribute
+/// @param[in] ld      refernce to LDAP socket data
+/// @param[in] entry   pointer to LDAP entry
+/// @param[in] attr    attribute to retrieve
+char * ldaputils_get_vals(LDAP * ld, LDAPMessage * entry, const char * attr)
+{
+   int              x;
+   char           * dn;
+   char           * ptr;
+   char           * val;
+   size_t           val_len;
+   size_t           att_len;
+   size_t           new_len;
+   struct berval ** vals;
+   
+   val     = NULL;
+   val_len = 256;
+   
+   if (!(val = (char *) malloc(sizeof(char) * val_len)))
+   {
+      fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
+      return(NULL);
+   };
+   memset(val, 0, val_len);
+
+   if (!(strcasecmp("dn", attr)))
+   {
+      dn = ldap_get_dn(ld, entry);
+      if (val_len < strlen(dn))
+      {
+         if (!(ptr = realloc(val, sizeof(char)*(strlen(dn)+1))))
+         {
+            fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
+            free(val);
+            ldap_memfree(dn);
+            return(NULL);
+         };
+         val = ptr;
+      };
+      strcpy(val, dn);
+      ldap_memfree(dn);
+      return(val);
+   };
+
+   if ((vals = ldap_get_values_len(ld, entry, attr)))
+   {
+      for(x = 0; vals[x]; x++)
+      {
+         att_len = vals[x]->bv_len;
+         if (val_len < att_len)
+         {
+            new_len = val_len + att_len + 256;
+            if (!(ptr = (char * ) realloc(val, (sizeof(char) * new_len))))
+            {
+               fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
+               free(val);
+               ldap_value_free_len(vals);
+               return(NULL);
+            };
+            val = ptr;
+            memset(&val[val_len], 0, new_len-val_len);
+            val_len = new_len;
+         };
+         if ((x))
+            strcat(val, ",");
+         memcpy(&val[strlen(val)], vals[x]->bv_val, vals[x]->bv_len);
+      };
+      ldap_value_free_len(vals);
+   };
+         
+   return(val);
+}
+
 
 /// connects and binds to LDAP server
 /// @param[in] cnf   reference to common configuration struct
@@ -109,13 +184,41 @@ LDAP * ldaputils_initialize(LdapUtilsConfig * cnf)
 /// connects and binds to LDAP server
 /// @param[in] ld    refernce to LDAP socket data
 /// @param[in] cnf   reference to common configuration struct
-int ldaputils_search(LDAP * ld, LdapUtilsConfig * cnf, int * msgidp)
+int ldaputils_search(LDAP * ld, LdapUtilsConfig * cnf, LDAPMessage ** resp)
 {
+   int rc;
    int err;
+   int msgid;
 
-   if ((err = ldap_search_ext(ld, cnf->basedn, cnf->scope, cnf->filter, cnf->attrs, 0, NULL, NULL, NULL, -1, msgidp)))
+   if ((err = ldap_search_ext(ld, cnf->basedn, cnf->scope, cnf->filter, cnf->attrs, 0, NULL, NULL, NULL, -1, &msgid)))
    {
       fprintf(stderr, "%s: ldap_search_ext_s(): %s\n", PROGRAM_NAME, ldap_err2string(err));
+      ldap_unbind_ext_s(ld, NULL, NULL);
+      return(-1);
+   };
+
+   switch((err = ldap_result(ld, msgid, LDAP_MSG_ALL, NULL, resp)))
+   {
+      case 0:
+         break;
+      case -1:
+         fprintf(stderr, "%s: ldap_result(): %s\n", PROGRAM_NAME, ldap_err2string(err));
+         ldap_unbind_ext_s(ld, NULL, NULL);
+         return(-1);
+      default:
+         break;
+   };
+
+   rc = ldap_parse_result(ld, *resp, &err, NULL, NULL, NULL, NULL, 0);
+   if (rc != LDAP_SUCCESS)
+   {
+      fprintf(stderr, "%s: ldap_parse_result(): %s\n", PROGRAM_NAME, ldap_err2string(rc));
+      ldap_unbind_ext_s(ld, NULL, NULL);
+      return(-1);
+   };
+   if (err != LDAP_SUCCESS)
+   {
+      fprintf(stderr, "%s: ldap_parse_result(): %s\n", PROGRAM_NAME, ldap_err2string(err));
       ldap_unbind_ext_s(ld, NULL, NULL);
       return(-1);
    };

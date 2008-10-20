@@ -46,10 +46,13 @@
 //              //
 //////////////////
 
+// retrieves values of an LDAP attribute
+char * ldaputils_get_vals PARAMS((LDAP * ld, LDAPMessage * entry, const char * attr));
+
 // connects and binds to LDAP server
 LDAP * ldaputils_initialize PARAMS((LdapUtilsConfig * cnf));
 
 // connects and binds to LDAP server
-int ldaputils_search PARAMS((LDAP * ld, LdapUtilsConfig * cnf, int * msgidp));
+int ldaputils_search PARAMS((LDAP * ld, LdapUtilsConfig * cnf, LDAPMessage ** resp));
 
 #endif /* end of header file */
