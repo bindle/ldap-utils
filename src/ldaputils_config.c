@@ -219,7 +219,7 @@ int ldaputils_getpass(const char * prompt, char * buff, size_t size)
 
    /* prompts for password */
    if (prompt)
-      printf("%s", prompt);
+      fprintf(stderr, "%s", prompt);
    fflush(stdout);
 
    /* disables ECHO */
