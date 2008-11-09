@@ -113,10 +113,10 @@ int ldaputils_passfile PARAMS((const char * file, char * buff, size_t size));
 void ldaputils_usage PARAMS((void));
 
 // displays usage for common options
-void ldaputils_usage_common PARAMS((void));
+void ldaputils_usage_common PARAMS((const char * short_options));
 
 // displays search usage for search options
-void ldaputils_usage_search PARAMS((void));
+void ldaputils_usage_search PARAMS((const char * short_options));
 
 // displays usage
 void ldaputils_version PARAMS((void));

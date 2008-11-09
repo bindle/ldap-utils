@@ -293,48 +293,62 @@ int ldaputils_passfile(const char * file, char * buff, size_t size)
 
 
 /// displays usage for common options
-void ldaputils_usage_common(void)
+/// @param[in] short_options  list of usage options
+void ldaputils_usage_common(const char * short_options)
 {
+   unsigned pos;
    // TRANSLATORS: The following strings provide usage for common command
    // line arguments. Usage for program specific arguments is provided in
    // anothoer section. These strings are displayed if the program is
    // passed `--help' on the command line.
-   printf(_("Common options:\n"
-         "  -c                continuous operation mode (do not stop on errors)\n"
-         "  -C                chase referrals (anonymously)\n"
-         "  -d level          set LDAP debug level to `level'\n"
-         "  -D binddn         bind DN\n"
-         "  -h host           LDAP server\n"
-         "  -H URI            LDAP Uniform Resource Identifier(s)\n"
-         "  -n                show what would be done but don't actually do it\n"
-         "  -p port           port on LDAP server\n"
-         "  -v, --verbose     run in verbose mode\n"
-         "  -V, --version     print version number and exit\n"
-         "  -w, passwd        bind password (for simple authentication)\n"
-         "  -W                prompt for bind password\n"
-         "  -y file           read password from file\n"
-         "  --help            print this help and exit\n"
-      )
-   );
+   printf(_("Common options:\n"));
+   for(pos = 0; pos < strlen(short_options); pos++)
+   {
+      switch(short_options[pos])
+      {
+         case 'c': printf(_("  -c                continuous operation mode (do not stop on errors)\n")); break;
+         case 'C': printf(_("  -C                chase referrals (anonymously)\n")); break;
+         case 'd': printf(_("  -d level          set LDAP debug level to `level'\n")); break;
+         case 'D': printf(_("  -D binddn         bind DN\n")); break;
+         case 'h': printf(_("  -h host           LDAP server\n")); break;
+         case 'H': printf(_("  -H URI            LDAP Uniform Resource Identifier(s)\n")); break;
+         case 'n': printf(_("  -n                show what would be done but don't actually do it\n")); break;
+         case 'p': printf(_("  -p port           port on LDAP server\n")); break;
+         case 'v': printf(_("  -v, --verbose     run in verbose mode\n")); break;
+         case 'V': printf(_("  -V, --version     print version number and exit\n")); break;
+         case 'w': printf(_("  -w, passwd        bind password (for simple authentication)\n")); break;
+         case 'W': printf(_("  -W                prompt for bind password\n")); break;
+         case 'y': printf(_("  -y file           read password from file\n")); break;
+         case '9': printf(_("  --help            print this help and exit\n")); break;
+         default: break;
+      };
+   };
    return;
 }
 
 
 /// displays search usage for search options
-void ldaputils_usage_search(void)
+/// @param[in] short_options  list of usage options
+void ldaputils_usage_search(const char * short_options)
 {
+   unsigned pos;
    // TRANSLATORS: The following strings provide usage for search command
    // line arguments. Usage for program specific arguments is provided in
    // anothoer section. These strings are displayed if the program is
    // passed `--help' on the command line.
-   printf(_("Search options:\n"
-         "  -b basedn         base dn for search\n"
-         "  -l limit          time limit (in seconds) for search\n"
-         "  -s scope          one of base, one, or sub (search scope)\n"
-         "  -S attr           sort results by attribute `attr'\n"
-         "  -z limit          size limit for search\n"
-      )
-   );
+   printf(_("Search options:\n"));
+   for(pos = 0; pos < strlen(short_options); pos++)
+   {
+      switch(short_options[pos])
+      {
+         case 'b': printf(_("  -b basedn         base dn for search\n")); break;
+         case 'l': printf(_("  -l limit          time limit (in seconds) for search\n")); break;
+         case 's': printf(_("  -s scope          one of base, one, or sub (search scope)\n")); break;
+         case 'S': printf(_("  -S attr           sort results by attribute `attr'\n")); break;
+         case 'z': printf(_("  -z limit          size limit for search\n")); break;
+         default: break;
+      };
+   };
    return;
 }
 

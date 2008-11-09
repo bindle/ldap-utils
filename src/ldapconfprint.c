@@ -69,6 +69,8 @@
 #define PROGRAM_NAME "ldapconfprint"
 #endif
 
+#define MY_SHORT_OPTIONS LDAPUTILS_OPTIONS_COMMON LDAPUTILS_OPTIONS_SEARCH "o:"
+
 
 //////////////////
 //              //
@@ -93,8 +95,8 @@ int my_config PARAMS((int argc, char * argv[], LdapUtilsConfig ** cnfp));
 void ldaputils_usage(void)
 {
    printf(_("Usage: %s [options] filter attributes...\n"), PROGRAM_NAME);
-   ldaputils_usage_search();
-   ldaputils_usage_common();
+   ldaputils_usage_search(MY_SHORT_OPTIONS);
+   ldaputils_usage_common(MY_SHORT_OPTIONS);
    printf(_("\nReport bugs to <%s>.\n"), PACKAGE_BUGREPORT);
    return;
 }
@@ -135,7 +137,7 @@ int my_config(int argc, char * argv[], LdapUtilsConfig ** cnfp)
    int               option_index;
    LdapUtilsConfig * cnf;
    
-   static char   short_options[] = LDAPUTILS_OPTIONS_COMMON LDAPUTILS_OPTIONS_SEARCH;
+   static char   short_options[] = MY_SHORT_OPTIONS;
    static struct option long_options[] =
    {
       {"help",          no_argument, 0, '9'},
