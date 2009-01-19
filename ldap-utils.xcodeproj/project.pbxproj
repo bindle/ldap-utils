@@ -21,7 +21,7 @@
 		A0290BC20E7C862A004FC622 /* Makefile-xcode */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 8; lastKnownFileType = text; path = "Makefile-xcode"; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
 		A03C08B50EA1F70700A30895 /* ldaputils_ldap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ldaputils_ldap.h; sourceTree = "<group>"; };
 		A03C08B60EA1F70700A30895 /* ldaputils_ldap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ldaputils_ldap.c; sourceTree = "<group>"; };
-		A06890F80EAC1C3100653748 /* ldap2script.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ldap2script.c; sourceTree = "<group>"; };
+		A0A5D6F00EC72F9200101D11 /* csv2ldif.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = csv2ldif.c; sourceTree = "<group>"; };
 		A0B3A4B00E80CAE000E4FC93 /* ldaputils_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ldaputils_config.h; sourceTree = "<group>"; };
 		A0B3A4B10E80CAE000E4FC93 /* ldaputils_config.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ldaputils_config.c; sourceTree = "<group>"; };
 		A0B3A4C10E80E5C800E4FC93 /* ldap-utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ldap-utils.h"; sourceTree = "<group>"; };
@@ -53,8 +53,8 @@
 		08FB7795FE84155DC02AAC07 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				A0A5D6F00EC72F9200101D11 /* csv2ldif.c */,
 				A0290B930E7C8478004FC622 /* ldap2csv.c */,
-				A06890F80EAC1C3100653748 /* ldap2script.c */,
 				A0290B970E7C8478004FC622 /* ldapconfprint.c */,
 				A0290B950E7C8478004FC622 /* ldaputils_config_opts.c */,
 				A0290B960E7C8478004FC622 /* ldaputils_config_opts.h */,

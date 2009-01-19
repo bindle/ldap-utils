@@ -44,13 +44,27 @@ ACLOCAL_AMFLAGS				= -W syntax -W unsupported -W error
 
 
 # automake targets
-bin_PROGRAMS				= src/ldap2csv
+bin_PROGRAMS				= src/ldap2csv src/csv2ldif
 noinst_PROGRAMS				= src/ldapconfprint
 noinst_HEADERS				= include/gettext.h
 man_MANS				=
 
 
-# macros for ldap2csv
+# macros for csv2ldif
+src_csv2ldif_DEPENDENCIES		= Makefile
+src_csv2ldif_CPPFLAGS			= -DPROGRAM_NAME="\"csv2ldif\"" $(AM_CPPFLAGS)
+src_csv2ldif_CFLAGS			= $(AM_CFLAGS)
+src_csv2ldif_LDFLAGS			= $(AM_LDFLAGS)
+src_csv2ldif_LDADD			= $(AM_LDADD)
+src_csv2ldif_SOURCES			= \
+					  include/ldap-utils.h \
+					  src/csv2ldif.c \
+					  src/ldaputils_config.c \
+					  src/ldaputils_config.h \
+					  src/ldaputils_config_opts.c \
+					  src/ldaputils_config_opts.h
+
+
 src_ldap2csv_DEPENDENCIES		= Makefile
 src_ldap2csv_CPPFLAGS			= -DPROGRAM_NAME="\"ldap2csv\"" $(AM_CPPFLAGS)
 src_ldap2csv_CFLAGS			= $(AM_CFLAGS)
