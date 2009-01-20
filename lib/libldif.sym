@@ -1,0 +1,40 @@
+#
+#   LDAP Utilities
+#   Copyright (c) 2009 David M. Syzdek <david@syzdek.net>.
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+#
+#   lib/libldif.sym - list of symbols to export in libldif.la
+#
+#   Build:
+#      CFLAGS="-g -O2 -W -Wall -Werror -I../include"
+#      LDFLAGS="-g -O2 -export-symbols libldif.sym -rpath /usr/local/lib"
+#      export CFLAGS LDFLAGS
+#
+#      libtool --mode=compile gcc ${CFLAGS}  -c otadm_config.c
+#      libtool --mode=link    gcc ${LDFLAGS} -o libldif.la otadm_config.lo
+#
+#   Install:
+#      libtool --mode=install install -c libldif.la /usr/local/lib/libacs-utils.la
+#
+#   Uninstall:
+#      libtool --mode=uninstall rm -f /usr/local/lib/libldif.la
+#
+#   Clean:
+#      libtool --mode=clean rm -f libldif.la otadm_config.lo
+#
+#
+ldif_package_version
+# end of symbol export file

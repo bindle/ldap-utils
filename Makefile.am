@@ -38,16 +38,30 @@ AM_CFLAGS				=
 AM_CPPFLAGS				= \
 					  -I$(top_srcdir)/include \
 					  -I$(top_srcdir)/lib \
-					  -DLOCALEDIR=\"$(localedir)\" \
-					  -DSYSCONFDIR=\"$(sysconfdir)\"
+					  -DLOCALEDIR="\"$(localedir)\"" \
+					  -DSYSCONFDIR="\"$(sysconfdir)\""
 ACLOCAL_AMFLAGS				= -W syntax -W unsupported -W error
 
 
 # automake targets
 bin_PROGRAMS				= src/ldap2csv src/csv2ldif
+lib_LTLIBRARIES				= lib/libldif.la
 noinst_PROGRAMS				= src/ldapconfprint
 noinst_HEADERS				= include/gettext.h
 man_MANS				=
+
+
+# macros for lib/libldif.la
+lib_libldif_la_DEPENDENCIES		= Makefile lib/libldif.sym
+lib_libldif_la_CFLAGS			= $(AM_CFLAGS)
+lib_libldif_la_LIBADD			= $(AM_LIBS)
+lib_libldif_la_LDFLAGS			= -rpath '$(libdir)' \
+					  -version-info $(LIB_VERSION_INFO) \
+					  $(AM_LDFLAGS) \
+					  -export-symbols $(srcdir)/lib/libldif.sym
+lib_libldif_la_SOURCES			= include/ldif.h \
+					  lib/ldif_api.c \
+					  lib/ldif_api.h
 
 
 # macros for csv2ldif
