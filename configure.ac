@@ -122,6 +122,8 @@ case "${host_os}" in
 esac
 AM_CONDITIONAL([WIN32], [test "x${WINTEST}" = "xyes"])
 
+AC_SYZDEK_GIT_PACKAGE_VERSION
+
 # Creates outputs
 AC_CONFIG_FILES([Makefile po/Makefile.in])
 AC_OUTPUT
