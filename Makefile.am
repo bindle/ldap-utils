@@ -1,6 +1,6 @@
 #
 #   LDAP Utilities
-#   Copyright (C) 2008 David M. Syzdek <david@syzdek.net>.
+#   Copyright (C) 2012 Bindle Binaries <syzdek@bindlebinaries.com>.
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -22,33 +22,33 @@
 #
 
 # Sub directories
-SUBDIRS                                 = po
-DIST_SUBDIRS                            = po
-
-
-# custom directories
-localedir				= $(datadir)/locale
+SUBDIRS					=
+DIST_SUBDIRS				=
 
 
 # Global flags
+# Global flags
 AM_LIBS					=
-AM_LDADD				= $(LTLIBINTL)
 AM_LDFLAGS				=
-AM_CFLAGS				=
-AM_CPPFLAGS				= \
-					  -I$(top_srcdir)/include \
-					  -I$(top_srcdir)/lib \
-					  -DLOCALEDIR="\"$(localedir)\"" \
-					  -DSYSCONFDIR="\"$(sysconfdir)\""
-ACLOCAL_AMFLAGS				= -W syntax -W unsupported -W error
+AM_CFLAGS				= -O2 $(CFLAGS_WARNINGS)
+AM_CXXFLAGS				= -O2 @AM_CXXFLAGS@
+AM_OBJCFLAGS				= -O2 @AM_OBJCFLAGS@
+AM_CPPFLAGS				= -O2 -DHAVE_CONFIG_H=1 -I$(top_builddir)/include -I$(top_srcdir)/include -DSYSCONFDIR=\"$(sysconfdir)\"
+ACLOCAL_AMFLAGS				= -I m4 -W all -W error
+AM_MAKEINFOFLAGS                        = --no-split
+DEFS					=
 
 
 # automake targets
 bin_PROGRAMS				= src/ldap2csv src/csv2ldif
+check_PROGRAMS				=
+doc_DATA				=
+include_HEADERS				=
+info_TEXINFOS				=
 lib_LTLIBRARIES				= lib/libldif.la
-noinst_PROGRAMS				= src/ldapconfprint
-noinst_HEADERS				= include/gettext.h
 man_MANS				=
+noinst_HEADERS				= include/gettext.h
+noinst_PROGRAMS				= src/ldapconfprint
 
 
 # macros for lib/libldif.la
@@ -110,36 +110,33 @@ src_ldapconfprint_SOURCES		= \
 					  src/ldaputils_config_opts.h
 
 
-# miscellaneous lists
-CLEANFILES				= $(builddir)/a.out        $(srcdir)/a.out \
-                                          $(builddir)/*/a.out      $(srcdir)/*/a.out \
-					  $(builddir)/config.h.in~ $(srcdir)/config.h.in~ \
-					  $(builddir)/po/stamp-po  $(srcdir)/po/stamp-po\
-					  $(builddir)/stamp-vti    $(srcdir)/stamp-vti \
-					  @PACKAGE_TARNAME@-*.tar.* \
-					  @PACKAGE_TARNAME@-*.zip
-EXTRA_DIST				=
-EXTRA_PROGRAMS				=
-EXTRA_TEXINFOS				=
-TESTS					=
-XFAIL_TESTS				=
-
-
 # substitution routine
 do_subst = sed \
-		-e 's,[@]configure_input[@],${@}. Generated from ${@}.in by make.,g' \
-		-e 's,[@]SHELL[@],@SHELL@,g' \
-		-e 's,[@]PACKAGE_VERSION[@],@PACKAGE_VERSION@,g' \
-		-e 's![@]PACKAGE_NAME[@]!@PACKAGE_NAME@!g' \
-		-e 's,[@]PACKAGE_TARNAME[@],@PACKAGE_TARNAME@,g' \
-		-e 's,[@]PACKAGE_BUGREPORT[@],@PACKAGE_BUGREPORT@,g' \
-		-e 's,[@]PACKAGE_COPYRIGHT[@],@PACKAGE_COPYRIGHT@,g' \
-		-e 's,[@]RELEASE_MONTH[@],@RELEASE_MONTH@,g'
+	-e 's,[@]SHELL[@],@SHELL@,g' \
+	-e 's,[@]PACKAGE_VERSION[@],@PACKAGE_VERSION@,g' \
+	-e 's![@]PACKAGE_NAME[@]!@PACKAGE_NAME@!g' \
+	-e 's,[@]PACKAGE_TARNAME[@],@PACKAGE_TARNAME@,g' \
+	-e 's,[@]PACKAGE_BUGREPORT[@],@PACKAGE_BUGREPORT@,g' \
+	-e 's,[@]RELEASE_MONTH[@],@RELEASE_MONTH@,g' \
+	-e 's,[@]INSTALL[@],$(INSTALL),g' \
+	-e 's,[@]INSTALL_PROGRAM[@],$(INSTALL_PROGRAM),g' \
+	-e 's,[@]INSTALL_SCRIPT[@],$(INSTALL_SCRIPT),g' \
+	-e 's,[@]INSTALL_DATA[@],$(INSTALL_DATA),g' \
+	-e 's,[@]LIB_VERSION_CURRENT[@],@LIB_VERSION_CURRENT@,g' \
+	-e 's,[@]LIB_VERSION_REVISION[@],@LIB_VERSION_REVISION@,g' \
+	-e 's,[@]LIB_VERSION_AGE[@],@LIB_VERSION_AGE@,g' \
+	-e 's,[@]LIB_VERSION_INFO[@],@LIB_VERSION_INFO@,g' \
+	-e 's,[@]LIB_RELEASE_INFO[@],@LIB_RELEASE_INFO@,g' \
+	-e 's,[@]prefix[@],$(prefix),g' \
+	-e 's,[@]datadir[@],$(datadir),g' \
+	-e 's,[@]sbindir[@],$(sbindir),g' \
+	-e 's,[@]sysconfdir[@],$(sysconfdir),g' \
+	-e 's,[@]localstatedir[@],$(localstatedir),g'
 do_subst_fn = \
 		echo "do_subst < ${@}.in > ${@}"; \
 		mkdir -p `dirname ${@}` || exit 1; \
 		${do_subst} < $(srcdir)/${@}.in > ${@} || exit 1; \
-		chmod 0644 ${@}
+		chmod 0755 ${@}
 do_subst_dt = \
 		echo "do_subst < ${@}.in > ${@}"; \
 		mkdir -p `dirname ${@}` || exit 1; \
@@ -147,7 +144,49 @@ do_subst_dt = \
 		chmod 0644 ${@}
 
 
+# lists
+BUILT_SOURCES				=
+TESTS					=
+XFAIL_TESTS				=
+EXTRA_MANS				=
+EXTRA_DIST				= build-aux/autogen.sh \
+					  build-aux/git-package-version \
+					  build-aux/git-package-version.sh
+CLEANFILES				= \
+					  $(builddir)/a.out   $(srcdir)/a.out \
+					  $(builddir)/*/a.out $(srcdir)/*/a.out \
+					  config.h.in~ $(srcdir)/config.h.in~ \
+					  @PACKAGE_TARNAME@-*.tar.* \
+					  @PACKAGE_TARNAME@-*.zip
+DISTCHECK_CONFIGURE_FLAGS		= --enable-strictwarnings
+
+
 # custom targets
+.PHONY: autogen update gitclean build-aux/git-package-version
+
+build-aux/git-package-version:
+	$(top_srcdir)/build-aux/git-package-version.sh $(top_srcdir)
+
+autogen:
+	$(top_srcdir)/build-aux/autogen.sh
+	test -x ./config.status && { ./config.status --recheck || exit $?; } || exit 0
+
+update:
+	git --git-dir=$(top_srcdir)/.git pull 2> /dev/null || exit 0
+	$(MAKE) -f Makefile autogen
+
+gitclean:
+	$(MAKE) -f Makefile distclean
+	rm -f  $(top_srcdir)/INSTALL
+	rm -f  $(top_srcdir)/Makefile.in
+	rm -f  $(top_srcdir)/aclocal.m4
+	rm -f  $(top_srcdir)/config.h.in
+	rm -f  $(top_srcdir)/configure
+	rm -f  $(top_srcdir)/m4/*
+	rm -f  $(top_srcdir)/build-aux/c* $(top_srcdir)/build-aux/d*
+	rm -f  $(top_srcdir)/build-aux/i* $(top_srcdir)/build-aux/l*
+	rm -f  $(top_srcdir)/build-aux/m*
+	rm -f  $(top_srcdir)/build-aux/git-package-version
 
 
 # local targets
@@ -161,7 +200,10 @@ install-data-hook:
 
 uninstall-local:
 
+clean-local:
+
 distclean-local:
 	rm -fR $(srcdir)/autom4te.cache
+	rm -f  $(srcdir)/GTAGS $(srcdir)/GRTAGS $(srcdir)/GPATH
 
 # end of automake file

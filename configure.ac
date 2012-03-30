@@ -1,6 +1,6 @@
 #
 #   LDAP Utilities
-#   Copyright (c) 2008 David M. Syzdek <david@syzdek.net>.
+#   Copyright (C) 2012 Bindle Binaries <syzdek@bindlebinaries.com>.
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -27,9 +27,9 @@
 
 AC_PREREQ(2.62)
 
-AC_COPYRIGHT([Copyright (c) 2008 David M. Syzdek <ldap-utils-project@syzdek.net>.])
-AC_REVISION($Revision$)
-AC_INIT([LDAP Utilities],[0.1.2],[syzdek@users.sourceforge.net],[ldap-utils])
+AC_COPYRIGHT([Copyright (C) 2012 Bindle Binaries <syzdek@bindlebinaries.com>.])
+AC_REVISION(0.1)
+AC_INIT([LDAP Utilities],[0.1.2],[syzdek@bindlebinaries.com],[ldap-utils])
 AC_SUBST([RELEASE_MONTH],["October 2008"])
 
 # Version Info:
@@ -38,12 +38,17 @@ AC_SUBST([RELEASE_MONTH],["October 2008"])
 #    Age        -- How many seqential past API versions is supported by
 #                  this implementation
 # Format => Current:Revision:Age
-AC_SUBST(LIB_VERSION_INFO, 0:0:0)
-AC_SUBST(LIB_RELEASE_INFO, 0) # used by Win32 DLLs
+AC_SUBST([LIB_VERSION_CURRENT],  [0])
+AC_SUBST([LIB_VERSION_REVISION], [0])
+AC_SUBST([LIB_VERSION_AGE],      [0])
+AC_SUBST([LIB_VERSION_INFO],     [${LIB_VERSION_CURRENT}:${LIB_VERSION_REVISION}:${LIB_VERSION_AGE}])
+AC_SUBST([LIB_RELEASE_INFO],     [${LIB_VERSION_CURRENT}]) # used by Win32 DLLs
 
 AC_CONFIG_AUX_DIR([build-aux])
-AC_CONFIG_SRCDIR([.])
+AC_CONFIG_SRCDIR([configure.ac])
+#AC_CONFIG_LIBOBJ_DIR(compat)
 AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_MACRO_DIR([m4])
 
 # determines host type
 AC_CANONICAL_BUILD
@@ -54,22 +59,16 @@ AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(gnu std-options subdir-objects)
 
 # Compilers                                                       
-AC_PROG_CC 
+AC_PROG_CC
+#AC_PROG_OBJC
+#AC_PROG_CXX
 AM_PROG_CC_C_O
 AC_PROG_INSTALL
-
-# checks for Unix Variants
 AC_USE_SYSTEM_EXTENSIONS # replaces AC_AIX AC_GNU_SOURCE AC_MINIX
-#AC_AIX
-#AC_GNU_SOURCE
-#AC_MINIX
 AC_C_BIGENDIAN
 
-# gnulib support
-#gl_EARLY
-#gl_INIT
-
 # binary locations
+AC_PROG_INSTALL
 AC_PATH_PROG([SHELL],   sh bash,        [AC_MSG_ERROR([missing "sh"])], [$PATH])
 AC_CHECK_TOOLS(AR,      ar gar,         [AC_MSG_ERROR([missing binutil "ar"])])
 AC_CHECK_TOOLS(LD,      ld gld,         [AC_MSG_ERROR([missing binutil "ld"])])
@@ -85,13 +84,7 @@ AM_PROG_LEX
 AC_PROG_LN_S
 
 # GNU Libtool Support
-AC_LIBTOOL_DLOPEN
-AC_DISABLE_FAST_INSTALL
-AC_LIBTOOL_WIN32_DLL
-AC_PROG_LIBTOOL
-
-# GNU gettext support
-AM_GNU_GETTEXT([external])
+LT_INIT(dlopen disable-fast-install win32-dll)
 
 # Defines macros
 AC_CHECK_LIB(ws2_32, write)
@@ -122,10 +115,10 @@ case "${host_os}" in
 esac
 AM_CONDITIONAL([WIN32], [test "x${WINTEST}" = "xyes"])
 
-AC_SYZDEK_GIT_PACKAGE_VERSION
+AC_DMS_GIT_PACKAGE_VERSION
 
 # Creates outputs
-AC_CONFIG_FILES([Makefile po/Makefile.in])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
 
 # Show local config
@@ -137,7 +130,7 @@ AC_MSG_NOTICE([   Use Strict Warnings           $USE_STRICTWARNINGS])
 AC_MSG_NOTICE([ ])
 AC_MSG_NOTICE([   Please send suggestions to:   $PACKAGE_BUGREPORT])
 AC_MSG_NOTICE([ ])
-AC_MSG_NOTICE([   run `make all'])
+AC_MSG_NOTICE([   run 'make all'])
 AC_MSG_NOTICE([ ])
 
-# end of autoconf script
+# end of configure.ac
