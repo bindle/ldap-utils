@@ -1,7 +1,7 @@
 #!/bin/sh
 #
-#   ODBC Shell
-#   Copyright (C) 2011 Bindle Binaries <syzdek@bindlebinaries.com>.
+#   Bindle Binaries Objective-C Kit
+#   Copyright (c) 2012, Bindle Binaries
 #
 #   @BINDLE_BINARIES_BSD_LICENSE_START@
 #
@@ -32,28 +32,90 @@
 #
 #   @BINDLE_BINARIES_BSD_LICENSE_END@
 #
-#   @configure_input@
-#
 #   build-aux/git-package-version.sh - determines Git version if available
 #
 
+# saves srcdir from command line arguments
 if test "x${1}" == "x";then
-   echo "Usage: ${0} srcdir version" 1>&2;
+   echo "Usage: ${0} srcdir [ savedir ]" 1>&2;
    exit 1;
 fi;
-
 SRCDIR=$1;
-PACKAGE_VERSION=$2;
+
+# saves savedir from command line arguments
+OUTDIR="${SRCDIR}/build-aux"
+if test "x${2}" != "x";then
+   OUTDIR="${2}"
+   if test ! -d "${OUTDIR}";then
+      echo "${0}: ${OUTDIR}: directory does not exist" 1>&2;
+      exit 1;
+   fi
+fi;
+
+GPV="" # git project version (XXX.YYY.ZZZ.gCCC)
+GBV="" # git build version (gCCC)
+GAV="" # git application version (XXX.YYY.ZZZ)
+
+# set default file names
+if test "x${GIT_VERSION_FILE}" == "x";then
+   GIT_VERSION_FILE="${OUTDIR}/git-package-version.txt"
+fi
+if test "x${GIT_VERSION_HEADER}" == "x";then
+   GIT_VERSION_HEADER="${OUTDIR}/git-package-version.h"
+fi
+if test "x${GIT_VERSION_PREFIX_HEADER}" == "x";then
+   GIT_VERSION_PREFIX_HEADER="${OUTDIR}/git-package-version-prefix.h"
+fi
+
+# sets default directories
+GIT_VERSION_FILE_DIR=`dirname ${GIT_VERSION_FILE}`
+GIT_VERSION_HEADER_DIR=`dirname ${GIT_VERSION_HEADER}`
+GIT_VERSION_PREFIX_HEADER_DIR=`dirname ${GIT_VERSION_PREFIX_HEADER}`
 
 if test -f ${SRCDIR}/.git/config;then
-   GPV=`git --git-dir=${SRCDIR}/.git describe --abbrev=7 HEAD 2> /dev/null`;
-   GPV=`echo ${GPV} |sed -e 's/-/./g'`;
-   GPV=`echo ${GPV} |sed -e 's/^v//g'`;
+   # retrieve raw output of git describe
+   RAW=`git --git-dir=${SRCDIR}/.git describe --long --abbrev=7 HEAD 2> /dev/null`;
+
+   # calculate GBV from raw output of git describe
+   GBV=`echo ${RAW} |cut -d- -f3`;
+
+   # calculate GPV from raw output of git describe
+   GPV=`echo ${RAW} |sed -e 's/-/./g' -e 's/^v//g'`;
+
+   # calculate GAV from GPV
+   GAV=`echo ${GPV} |sed -e 's/\.g[[:xdigit:]]\{0,\}$//g' -e 's/\.0$//g'`;
+
+   # write data to file and display results
    if test "x${GPV}" != "x";then
-      if test -d ${SRCDIR}/build-aux;then
-         echo "${GPV}" > ${SRCDIR}/build-aux/git-package-version 2> /dev/null;
+      rm -f ${GIT_VERSION_FILE} ${GIT_VERSION_HEADER} ${GIT_VERSION_PREFIX_HEADER}
+
+      # writes git version file
+      if test -d ${GIT_VERSION_FILE_DIR};then
+         echo "${GPV}" > ${GIT_VERSION_FILE};   2>&1
       fi
-      echo "${GPV}";
+
+      # writes git version C header
+      if test -d ${GIT_VERSION_HEADER_DIR};then
+         echo "#define GIT_PACKAGE_VERSION     \"${GPV}\""  > ${GIT_VERSION_HEADER}; 2>&1
+         echo "#define GIT_APPLICATION_VERSION \"${GAV}\"" >> ${GIT_VERSION_HEADER}; 2>&1
+         echo "#define GIT_BUILD_VERSION       \"${GBV}\"" >> ${GIT_VERSION_HEADER}; 2>&1
+      fi
+
+      # writes git version Info.plist preprocessor prefix file
+      if test -d ${GIT_VERSION_PREFIX_HEADER_DIR};then
+         echo "#define GIT_PACKAGE_VERSION     ${GPV}"  > ${GIT_VERSION_PREFIX_HEADER}; 2>&1
+         echo "#define GIT_APPLICATION_VERSION ${GAV}" >> ${GIT_VERSION_PREFIX_HEADER}; 2>&1
+         echo "#define GIT_BUILD_VERSION       ${GBV}" >> ${GIT_VERSION_PREFIX_HEADER}; 2>&1
+      fi
+
+      # displays summary
+      if test "x${GIT_PACKAGE_VERSION_VERBOSE}" == "xYES";then
+         echo "Git Package Version:     ${GPV}";
+         echo "Git Application Version: ${GAV}";
+         echo "Git Build Version:       ${GBV}";
+      else
+         echo "${GPV}"
+      fi
    fi;
 fi
 
