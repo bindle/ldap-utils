@@ -29,9 +29,6 @@
 		A0EF768D0F255B6900458047 /* ldif_api.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ldif_api.c; sourceTree = "<group>"; };
 		A0EF76940F255CED00458047 /* libldif.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libldif.h; sourceTree = "<group>"; };
 		A0EF769E0F255EC300458047 /* libldif.sym */ = {isa = PBXFileReference; explicitFileType = text.script; fileEncoding = 4; indentWidth = 8; path = libldif.sym; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
-		A0FA56000EA7256B001B5D02 /* LINGUAS */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 8; lastKnownFileType = text; path = LINGUAS; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
-		A0FA56010EA7257C001B5D02 /* POTFILES.in */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 8; lastKnownFileType = text; path = POTFILES.in; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
-		A0FA56020EA725DD001B5D02 /* en_US.po */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 8; lastKnownFileType = text; path = en_US.po; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -49,7 +46,6 @@
 				A0290B9F0E7C84C0004FC622 /* Makefile.am */,
 				A0290BA10E7C852F004FC622 /* NEWS */,
 				A0290BA20E7C852F004FC622 /* README */,
-				A0FA55FF0EA72547001B5D02 /* po */,
 				08FB7795FE84155DC02AAC07 /* src */,
 			);
 			name = "ldap-utils";
@@ -94,16 +90,6 @@
 			children = (
 			);
 			path = doc;
-			sourceTree = "<group>";
-		};
-		A0FA55FF0EA72547001B5D02 /* po */ = {
-			isa = PBXGroup;
-			children = (
-				A0FA56020EA725DD001B5D02 /* en_US.po */,
-				A0FA56000EA7256B001B5D02 /* LINGUAS */,
-				A0FA56010EA7257C001B5D02 /* POTFILES.in */,
-			);
-			path = po;
 			sourceTree = "<group>";
 		};
 		C6A0FF2B0290797F04C91782 /* include */ = {
