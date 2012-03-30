@@ -40,14 +40,15 @@ DEFS					=
 
 
 # automake targets
-bin_PROGRAMS				= src/ldap2csv src/csv2ldif
+bin_PROGRAMS				= src/ldap2csv
 check_PROGRAMS				=
 doc_DATA				=
+EXTRA_PROGRAMS				= src/csv2ldif
 include_HEADERS				=
 info_TEXINFOS				=
 lib_LTLIBRARIES				= lib/libldif.la
 man_MANS				=
-noinst_HEADERS				= include/gettext.h
+noinst_HEADERS				=
 noinst_PROGRAMS				= src/ldapconfprint
 
 
