@@ -1,5 +1,0 @@
-# main source
-src/ldap2csv.c
-src/ldaputils_config.c
-src/ldaputils_config_opts.c
-src/ldaputils_ldap.c

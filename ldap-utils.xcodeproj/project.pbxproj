@@ -11,10 +11,10 @@
 		A0290B950E7C8478004FC622 /* ldaputils_config_opts.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ldaputils_config_opts.c; sourceTree = "<group>"; };
 		A0290B960E7C8478004FC622 /* ldaputils_config_opts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ldaputils_config_opts.h; sourceTree = "<group>"; };
 		A0290B970E7C8478004FC622 /* ldapconfprint.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ldapconfprint.c; sourceTree = "<group>"; };
-		A0290B9C0E7C84C0004FC622 /* acinclude.m4 */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 8; lastKnownFileType = text; path = acinclude.m4; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
+		A0290B9C0E7C84C0004FC622 /* acinclude.m4 */ = {isa = PBXFileReference; explicitFileType = text.script; fileEncoding = 4; indentWidth = 8; path = acinclude.m4; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
 		A0290B9D0E7C84C0004FC622 /* ChangeLog */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 8; lastKnownFileType = text; path = ChangeLog; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
-		A0290B9E0E7C84C0004FC622 /* configure.ac */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 8; lastKnownFileType = text; path = configure.ac; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
-		A0290B9F0E7C84C0004FC622 /* Makefile.am */ = {isa = PBXFileReference; explicitFileType = text.script; fileEncoding = 4; indentWidth = 8; path = Makefile.am; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
+		A0290B9E0E7C84C0004FC622 /* configure.ac */ = {isa = PBXFileReference; explicitFileType = text.script; fileEncoding = 4; indentWidth = 8; path = configure.ac; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
+		A0290B9F0E7C84C0004FC622 /* Makefile.am */ = {isa = PBXFileReference; explicitFileType = sourcecode.make; fileEncoding = 4; indentWidth = 8; path = Makefile.am; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
 		A0290BA00E7C852F004FC622 /* AUTHORS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
 		A0290BA10E7C852F004FC622 /* NEWS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
 		A0290BA20E7C852F004FC622 /* README */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 8; lastKnownFileType = text; path = README; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
