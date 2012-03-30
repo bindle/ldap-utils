@@ -18,7 +18,6 @@
 		A0290BA00E7C852F004FC622 /* AUTHORS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
 		A0290BA10E7C852F004FC622 /* NEWS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
 		A0290BA20E7C852F004FC622 /* README */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 8; lastKnownFileType = text; path = README; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
-		A0290BC20E7C862A004FC622 /* Makefile-xcode */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 8; lastKnownFileType = text; path = "Makefile-xcode"; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
 		A03C08B50EA1F70700A30895 /* ldaputils_ldap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ldaputils_ldap.h; sourceTree = "<group>"; };
 		A03C08B60EA1F70700A30895 /* ldaputils_ldap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ldaputils_ldap.c; sourceTree = "<group>"; };
 		A0A5D6F00EC72F9200101D11 /* csv2ldif.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = csv2ldif.c; sourceTree = "<group>"; };
@@ -75,7 +74,6 @@
 		A0290BC10E7C85EB004FC622 /* build-aux */ = {
 			isa = PBXGroup;
 			children = (
-				A0290BC20E7C862A004FC622 /* Makefile-xcode */,
 			);
 			path = "build-aux";
 			sourceTree = "<group>";
@@ -119,22 +117,6 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXLegacyTarget section */
-		A0290BC30E7C8646004FC622 /* Makefile */ = {
-			isa = PBXLegacyTarget;
-			buildArgumentsString = "-f $(MAKEFILE)  $(ACTION)";
-			buildConfigurationList = A0290BCB0E7C8650004FC622 /* Build configuration list for PBXLegacyTarget "Makefile" */;
-			buildPhases = (
-			);
-			buildToolPath = /usr/bin/make;
-			dependencies = (
-			);
-			name = Makefile;
-			passBuildSettingsInEnvironment = 1;
-			productName = Makefile;
-		};
-/* End PBXLegacyTarget section */
-
 /* Begin PBXProject section */
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
@@ -152,7 +134,6 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A0290BC30E7C8646004FC622 /* Makefile */,
 			);
 		};
 /* End PBXProject section */
@@ -182,34 +163,6 @@
 			};
 			name = Release;
 		};
-		A0290BC40E7C8646004FC622 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CONFIGURE_FLAGS = "--enable-strictwarnings";
-				COPY_PHASE_STRIP = NO;
-				DISTCLEAN = NO;
-				DISTFILES = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				MAKEFILE = "build-aux/Makefile-xcode";
-				PRODUCT_NAME = Makefile;
-			};
-			name = Debug;
-		};
-		A0290BC50E7C8646004FC622 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CONFIGURE_FLAGS = "";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DISTCLEAN = YES;
-				DISTFILES = YES;
-				MAKEFILE = "build-aux/Makefile-xcode";
-				PRODUCT_NAME = Makefile;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -218,15 +171,6 @@
 			buildConfigurations = (
 				1DEB928A08733DD80010E9CD /* Debug */,
 				1DEB928B08733DD80010E9CD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A0290BCB0E7C8650004FC622 /* Build configuration list for PBXLegacyTarget "Makefile" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A0290BC40E7C8646004FC622 /* Debug */,
-				A0290BC50E7C8646004FC622 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
