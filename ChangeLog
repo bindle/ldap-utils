@@ -1,6 +1,6 @@
 
 LDAP Utilities
-Copyright (C) 2008 David M. Syzdek <david@syzdek.net>
+Copyright (C) 2012 Bindle Binaries <syzdek@bindlebinaries.com>.
 
 0.1.1
 	* Updating ldaputils_getpass() to use stderr.
