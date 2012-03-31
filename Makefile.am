@@ -183,7 +183,7 @@ gitclean:
 	rm -f  $(top_srcdir)/aclocal.m4
 	rm -f  $(top_srcdir)/config.h.in
 	rm -f  $(top_srcdir)/configure
-	rm -f  $(top_srcdir)/m4/*
+	rm -f  $(top_srcdir)/m4/l*.m4
 	rm -f  $(top_srcdir)/build-aux/c* $(top_srcdir)/build-aux/d*
 	rm -f  $(top_srcdir)/build-aux/i* $(top_srcdir)/build-aux/l*
 	rm -f  $(top_srcdir)/build-aux/m*
