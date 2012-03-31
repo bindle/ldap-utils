@@ -55,6 +55,7 @@ fi;
 GPV="" # git project version (XXX.YYY.ZZZ.gCCC)
 GBV="" # git build version (gCCC)
 GAV="" # git application version (XXX.YYY.ZZZ)
+CPV="" # current git project version
 
 # set default file names
 if test "x${GIT_VERSION_FILE}" == "x";then
@@ -72,6 +73,11 @@ GIT_VERSION_FILE_DIR=`dirname ${GIT_VERSION_FILE}`
 GIT_VERSION_HEADER_DIR=`dirname ${GIT_VERSION_HEADER}`
 GIT_VERSION_PREFIX_HEADER_DIR=`dirname ${GIT_VERSION_PREFIX_HEADER}`
 
+# sets current version number
+if test -f ${GIT_VERSION_FILE};then
+   CPV=`cat ${GIT_VERSION_FILE}`
+fi
+
 if test -f ${SRCDIR}/.git/config;then
    # retrieve raw output of git describe
    RAW=`git --git-dir=${SRCDIR}/.git describe --long --abbrev=7 HEAD 2> /dev/null`;
@@ -86,7 +92,7 @@ if test -f ${SRCDIR}/.git/config;then
    GAV=`echo ${GPV} |sed -e 's/\.g[[:xdigit:]]\{0,\}$//g' -e 's/\.0$//g'`;
 
    # write data to file and display results
-   if test "x${GPV}" != "x";then
+   if test "x${GPV}" != "x" && test "x${GPV}" != "x${CPV}";then
       rm -f ${GIT_VERSION_FILE} ${GIT_VERSION_HEADER} ${GIT_VERSION_PREFIX_HEADER}
 
       # writes git version file
@@ -108,15 +114,12 @@ if test -f ${SRCDIR}/.git/config;then
          echo "#define GIT_BUILD_VERSION       ${GBV}" >> ${GIT_VERSION_PREFIX_HEADER}; 2>&1
       fi
 
-      # displays summary
-      if test "x${GIT_PACKAGE_VERSION_VERBOSE}" == "xYES";then
-         echo "Git Package Version:     ${GPV}";
-         echo "Git Application Version: ${GAV}";
-         echo "Git Build Version:       ${GBV}";
-      else
-         echo "${GPV}"
-      fi
+      # saves current version
+      CPV=${GPV}
    fi;
 fi
+
+# displays current version
+echo "${CPV}"
 
 # end of script
