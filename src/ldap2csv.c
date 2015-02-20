@@ -294,7 +294,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    };
    for(c = 0; c < (argc-optind-1); c++)
       cnf->common.attrs[c] = argv[optind+1+c];
-   cnf->common.attrs[c] = '\0';
+   cnf->common.attrs[c] = 0;
    
    *cnfp = cnf;
 
