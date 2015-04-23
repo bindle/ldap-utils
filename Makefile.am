@@ -84,7 +84,7 @@ src_ldap2csv_DEPENDENCIES		= Makefile
 src_ldap2csv_CPPFLAGS			= -DPROGRAM_NAME="\"ldap2csv\"" $(AM_CPPFLAGS)
 src_ldap2csv_CFLAGS			= $(AM_CFLAGS)
 src_ldap2csv_LDFLAGS			= $(AM_LDFLAGS)
-src_ldap2csv_LDADD			= $(AM_LDADD) -lldap
+src_ldap2csv_LDADD			= $(AM_LDADD) -lldap -llber
 src_ldap2csv_SOURCES			= \
 					  include/ldap-utils.h \
 					  src/ldap2csv.c \
@@ -101,7 +101,7 @@ src_ldapconfprint_DEPENDENCIES		= Makefile
 src_ldapconfprint_CPPFLAGS		= -DPROGRAM_NAME="\"ldapconfprint\"" $(AM_CPPFLAGS)
 src_ldapconfprint_CFLAGS			= $(AM_CFLAGS)
 src_ldapconfprint_LDFLAGS		= $(AM_LDFLAGS)
-src_ldapconfprint_LDADD			= $(AM_LDADD) -lldap
+src_ldapconfprint_LDADD			= $(AM_LDADD) -lldap -llber
 src_ldapconfprint_SOURCES		= \
 					  include/ldap-utils.h \
 					  src/ldapconfprint.c \
