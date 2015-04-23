@@ -50,10 +50,15 @@ AM_LDFLAGS				=
 AM_CFLAGS				= -O2 $(CFLAGS_WARNINGS)
 AM_CXXFLAGS				= -O2 @AM_CXXFLAGS@
 AM_OBJCFLAGS				= -O2 @AM_OBJCFLAGS@
-AM_CPPFLAGS				= -O2 -DHAVE_CONFIG_H=1 -I$(top_builddir)/include -I$(top_srcdir)/include -DSYSCONFDIR=\"$(sysconfdir)\"
+AM_CPPFLAGS				= -O2 -UPMARK -DHAVE_CONFIG_H=1 \
+					  -I$(top_builddir)/include \
+					  -I$(top_srcdir)/include \
+					  -DSYSCONFDIR=\"$(sysconfdir)\"
 ACLOCAL_AMFLAGS				= -I m4 -W all -W error
 AM_MAKEINFOFLAGS                        = --no-split
 DEFS					=
+LDADD					= $(lib_LTLIBRARIES) \
+					  $(noinst_LTLIBRARIES)
 
 
 # automake targets
@@ -70,18 +75,22 @@ noinst_PROGRAMS				= src/ldapconfprint
 
 
 # lists
+AM_INSTALLCHECK_STD_OPTIONS_EXEMPT	=
 BUILT_SOURCES				=
 TESTS					=
 XFAIL_TESTS				=
 EXTRA_MANS				=
-EXTRA_DIST				= build-aux/autogen.sh \
-					  build-aux/git-package-version \
-					  build-aux/git-package-version.sh
+EXTRA_DIST				=
 CLEANFILES				= \
 					  $(builddir)/a.out   $(srcdir)/a.out \
 					  $(builddir)/*/a.out $(srcdir)/*/a.out \
 					  config.h.in~ $(srcdir)/config.h.in~ \
+					  $(man_MANS) \
+					  $(pkgdata_DATA) \
+					  $(bin_SCRIPTS) \
+					  $(sbin_SCRIPTS) \
 					  @PACKAGE_TARNAME@-*.tar.* \
+					  @PACKAGE_TARNAME@-*.txz \
 					  @PACKAGE_TARNAME@-*.zip
 DISTCHECK_CONFIGURE_FLAGS		= --enable-strictwarnings
 
