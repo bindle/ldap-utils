@@ -41,9 +41,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A04B49CB1AE9544800E43529 /* autogen.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = autogen.sh; sourceTree = "<group>"; };
 		A094019A15266907003B9698 /* acinclude.m4 */ = {isa = PBXFileReference; explicitFileType = text.script; path = acinclude.m4; sourceTree = "<group>"; };
 		A094019B15266907003B9698 /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
-		A094019E15266907003B9698 /* autogen.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = autogen.sh; sourceTree = "<group>"; };
 		A09401A415266907003B9698 /* git-package-version.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "git-package-version.sh"; sourceTree = "<group>"; };
 		A09401A915266907003B9698 /* ChangeLog */ = {isa = PBXFileReference; lastKnownFileType = text; path = ChangeLog; sourceTree = "<group>"; };
 		A09401AA15266907003B9698 /* configure.ac */ = {isa = PBXFileReference; explicitFileType = text.script; path = configure.ac; sourceTree = "<group>"; };
@@ -99,7 +99,6 @@
 		A094019C15266907003B9698 /* build-aux */ = {
 			isa = PBXGroup;
 			children = (
-				A094019E15266907003B9698 /* autogen.sh */,
 				A09401A415266907003B9698 /* git-package-version.sh */,
 			);
 			path = "build-aux";
@@ -172,6 +171,7 @@
 			children = (
 				A094019A15266907003B9698 /* acinclude.m4 */,
 				A094019B15266907003B9698 /* AUTHORS */,
+				A04B49CB1AE9544800E43529 /* autogen.sh */,
 				A094019C15266907003B9698 /* build-aux */,
 				A09401A915266907003B9698 /* ChangeLog */,
 				A09401AA15266907003B9698 /* configure.ac */,
@@ -405,6 +405,7 @@
 				A09401DA15266AAB003B9698 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A09401F615266D9B003B9698 /* Build configuration list for PBXNativeTarget "cvs2ldif" */ = {
 			isa = XCConfigurationList;
@@ -413,6 +414,7 @@
 				A09401F815266D9B003B9698 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A0F8DF081526685100AC5FD3 /* Build configuration list for PBXProject "ldap-utils" */ = {
 			isa = XCConfigurationList;

@@ -1,6 +1,6 @@
 #
 #   LDAP Utilities
-#   Copyright (C) 2012 Bindle Binaries <syzdek@bindlebinaries.com>.
+#   Copyright (C) 2015 Bindle Binaries <syzdek@bindlebinaries.com>.
 #
 #   @BINDLE_BINARIES_BSD_LICENSE_START@
 #
@@ -40,27 +40,18 @@
 # |                 |
 # +-=-=-=-=-=-=-=-=-+
 
-AC_PREREQ(2.62)
+AC_PREREQ(2.65)
 
-AC_COPYRIGHT([Copyright (C) 2012 Bindle Binaries <syzdek@bindlebinaries.com>.])
+AC_COPYRIGHT([Copyright (C) 2015 Bindle Binaries <syzdek@bindlebinaries.com>.])
 AC_REVISION(0.1)
 AC_INIT([LDAP Utilities],[0.1.2],[syzdek@bindlebinaries.com],[ldap-utils])
-AC_SUBST([RELEASE_MONTH],["October 2008"])
 
-# Version Info:
-#    Current    -- the current version number of this API
-#    Revision   -- the revision of the implementation of the API version
-#    Age        -- How many seqential past API versions is supported by
-#                  this implementation
-# Format => Current:Revision:Age
-AC_SUBST([LIB_VERSION_CURRENT],  [0])
-AC_SUBST([LIB_VERSION_REVISION], [0])
-AC_SUBST([LIB_VERSION_AGE],      [0])
-AC_SUBST([LIB_VERSION_INFO],     [${LIB_VERSION_CURRENT}:${LIB_VERSION_REVISION}:${LIB_VERSION_AGE}])
-AC_SUBST([LIB_RELEASE_INFO],     [${LIB_VERSION_CURRENT}]) # used by Win32 DLLs
+AC_SUBST([RELEASE_MONTH],["April 2015"])
 
+
+# directory locations
 AC_CONFIG_AUX_DIR([build-aux])
-AC_CONFIG_SRCDIR([configure.ac])
+AC_CONFIG_SRCDIR([build-aux/git-tar-name.txt])
 #AC_CONFIG_LIBOBJ_DIR(compat)
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
@@ -76,14 +67,24 @@ AM_INIT_AUTOMAKE(gnu std-options subdir-objects)
 # Compilers                                                       
 AC_PROG_CC
 #AC_PROG_OBJC
-#AC_PROG_CXX
+AC_PROG_CXX
 AM_PROG_CC_C_O
 AC_PROG_INSTALL
+AC_PROG_MAKE_SET
 AC_USE_SYSTEM_EXTENSIONS # replaces AC_AIX AC_GNU_SOURCE AC_MINIX
 AC_C_BIGENDIAN
 
+# Version Info:
+#    Current    -- the current version number of this API
+#    Revision   -- the revision of the implementation of the API version
+#    Age        -- How many seqential past API versions is supported by
+#                  this implementation
+# Format => Current:Revision:Age
+# Convenience macro:
+#    AC_BINDLE_LIBTOOL_VERSION_INFO(current, revision, age)
+AC_BINDLE_LIBTOOL_VERSION_INFO(0, 0, 0)
+
 # binary locations
-AC_PROG_INSTALL
 AC_PATH_PROG([SHELL],   sh bash,        [AC_MSG_ERROR([missing "sh"])], [$PATH])
 AC_CHECK_TOOLS(AR,      ar gar,         [AC_MSG_ERROR([missing binutil "ar"])])
 AC_CHECK_TOOLS(LD,      ld gld,         [AC_MSG_ERROR([missing binutil "ld"])])
@@ -101,12 +102,42 @@ AC_PROG_LN_S
 # GNU Libtool Support
 LT_INIT(dlopen disable-fast-install win32-dll)
 
-# Defines macros
-AC_CHECK_LIB(ws2_32, write)
-AC_CHECK_LIB(socket, socket,,resolv)
-AC_CHECK_HEADERS([termios.h])
-AC_CHECK_HEADERS([ldap.h],,            [AC_MSG_ERROR([missing required header])])
-AC_CHECK_HEADERS([getopt.h],,          [AC_MSG_ERROR([missing required header])])
+# check for common functions
+AC_FUNC_FORK
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+AC_FUNC_STRERROR_R
+
+# Type checks
+AC_TYPE_INT8_T
+AC_TYPE_INT16_T
+AC_TYPE_INT32_T
+AC_TYPE_INT64_T
+AC_TYPE_SIZE_T
+AC_TYPE_SSIZE_T
+AC_TYPE_UID_T
+AC_TYPE_UINT8_T
+AC_TYPE_UINT16_T
+AC_TYPE_UINT32_T
+AC_TYPE_UINT64_T
+#AC_CHECK_TYPES([LDAPURLDesc],,         [AC_MSG_ERROR([missing required datatype])],[#include <ldap.h>])
+
+# check for required functions
+AC_CHECK_FUNCS([bzero],          [], [AC_MSG_ERROR([missing required functions])])
+AC_CHECK_FUNCS([getpass],        [], [AC_MSG_ERROR([missing required functions])])
+AC_CHECK_FUNCS([gettimeofday],   [], [AC_MSG_ERROR([missing required functions])])
+AC_CHECK_FUNCS([memset],         [], [AC_MSG_ERROR([missing required functions])])
+AC_CHECK_FUNCS([regcomp],        [], [AC_MSG_ERROR([missing required functions])])
+AC_CHECK_FUNCS([setlocale],      [], [AC_MSG_ERROR([missing required functions])])
+AC_CHECK_FUNCS([socket],         [], [AC_MSG_ERROR([missing required functions])])
+AC_CHECK_FUNCS([strcasecmp],     [], [AC_MSG_ERROR([missing required functions])])
+AC_CHECK_FUNCS([strchr],         [], [AC_MSG_ERROR([missing required functions])])
+AC_CHECK_FUNCS([strdup],         [], [AC_MSG_ERROR([missing required functions])])
+AC_CHECK_FUNCS([strerror],       [], [AC_MSG_ERROR([missing required functions])])
+AC_CHECK_FUNCS([strncasecmp],    [], [AC_MSG_ERROR([missing required functions])])
+AC_CHECK_FUNCS([strtol],         [], [AC_MSG_ERROR([missing required functions])])
+
+# check for required libraries
 AC_SEARCH_LIBS([getopt_long],          c gnugetopt,,AC_MSG_ERROR([missing required function]))
 AC_SEARCH_LIBS([ldap_first_entry],     ldap,,AC_MSG_ERROR([missing required function]), [-llber])
 AC_SEARCH_LIBS([ldap_free_urldesc],    ldap,,AC_MSG_ERROR([missing required function]), [-llber])
@@ -118,21 +149,26 @@ AC_SEARCH_LIBS([ldap_search_ext],      ldap,,AC_MSG_ERROR([missing required func
 AC_SEARCH_LIBS([ldap_set_option],      ldap,,AC_MSG_ERROR([missing required function]), [-llber])
 AC_SEARCH_LIBS([ldap_unbind_ext_s],    ldap,,AC_MSG_ERROR([missing required function]), [-llber])
 AC_SEARCH_LIBS([ldap_url_parse],       ldap,,AC_MSG_ERROR([missing required function]), [-llber])
-#AC_CHECK_TYPES([LDAPURLDesc],,         [AC_MSG_ERROR([missing required datatype])],[#include <ldap.h>])
+AC_SEARCH_LIBS([socket],               socket,,AC_MSG_ERROR([missing required function]), [-lresolv])
 
-AC_LDAP_UTILS_ENABLE_WARNINGS
+# check for headers
+AC_CHECK_HEADERS([fcntl.h],,           [AC_MSG_ERROR([missing required header])])
+AC_CHECK_HEADERS([termios.h],,         [AC_MSG_ERROR([missing required header])])
+AC_CHECK_HEADERS([ldap.h],,            [AC_MSG_ERROR([missing required header])])
+AC_CHECK_HEADERS([libintl.h],,         [AC_MSG_ERROR([missing required header])])
+AC_CHECK_HEADERS([getopt.h],,          [AC_MSG_ERROR([missing required header])])
 
-# checks host
-case "${host_os}" in
-   *mingw32*) WINTEST=yes ;;
-   *win32*)   WINTEST=yes ;;
-   *cygwin*)  WINTEST=yes ;;
-esac
-AM_CONDITIONAL([WIN32], [test "x${WINTEST}" = "xyes"])
+# initiates bindle tools macros
+AC_BINDLE(contrib/bindletools)
 
-AC_DMS_GIT_PACKAGE_VERSION
+# determine PACKAGE_VERSION via Git
+AC_BINDLE_GIT_PACKAGE_VERSION([contrib/bindletools/build-aux/git-package-version.sh])
+
+# custom configure options
+AC_BINDLE_ENABLE_WARNINGS
 
 # Creates outputs
+AC_CONFIG_SUBDIRS([contrib/bindletools])
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
 

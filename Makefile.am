@@ -52,6 +52,23 @@ noinst_HEADERS				=
 noinst_PROGRAMS				= src/ldapconfprint
 
 
+# lists
+BUILT_SOURCES				=
+TESTS					=
+XFAIL_TESTS				=
+EXTRA_MANS				=
+EXTRA_DIST				= build-aux/autogen.sh \
+					  build-aux/git-package-version \
+					  build-aux/git-package-version.sh
+CLEANFILES				= \
+					  $(builddir)/a.out   $(srcdir)/a.out \
+					  $(builddir)/*/a.out $(srcdir)/*/a.out \
+					  config.h.in~ $(srcdir)/config.h.in~ \
+					  @PACKAGE_TARNAME@-*.tar.* \
+					  @PACKAGE_TARNAME@-*.zip
+DISTCHECK_CONFIGURE_FLAGS		= --enable-strictwarnings
+
+
 # macros for lib/libldif.la
 lib_libldif_la_DEPENDENCIES		= Makefile lib/libldif.sym
 lib_libldif_la_CFLAGS			= $(AM_CFLAGS)
@@ -111,83 +128,17 @@ src_ldapconfprint_SOURCES		= \
 					  src/ldaputils_config_opts.h
 
 
-# substitution routine
-do_subst = sed \
-	-e 's,[@]SHELL[@],@SHELL@,g' \
-	-e 's,[@]PACKAGE_VERSION[@],@PACKAGE_VERSION@,g' \
-	-e 's![@]PACKAGE_NAME[@]!@PACKAGE_NAME@!g' \
-	-e 's,[@]PACKAGE_TARNAME[@],@PACKAGE_TARNAME@,g' \
-	-e 's,[@]PACKAGE_BUGREPORT[@],@PACKAGE_BUGREPORT@,g' \
-	-e 's,[@]RELEASE_MONTH[@],@RELEASE_MONTH@,g' \
-	-e 's,[@]INSTALL[@],$(INSTALL),g' \
-	-e 's,[@]INSTALL_PROGRAM[@],$(INSTALL_PROGRAM),g' \
-	-e 's,[@]INSTALL_SCRIPT[@],$(INSTALL_SCRIPT),g' \
-	-e 's,[@]INSTALL_DATA[@],$(INSTALL_DATA),g' \
-	-e 's,[@]LIB_VERSION_CURRENT[@],@LIB_VERSION_CURRENT@,g' \
-	-e 's,[@]LIB_VERSION_REVISION[@],@LIB_VERSION_REVISION@,g' \
-	-e 's,[@]LIB_VERSION_AGE[@],@LIB_VERSION_AGE@,g' \
-	-e 's,[@]LIB_VERSION_INFO[@],@LIB_VERSION_INFO@,g' \
-	-e 's,[@]LIB_RELEASE_INFO[@],@LIB_RELEASE_INFO@,g' \
-	-e 's,[@]prefix[@],$(prefix),g' \
-	-e 's,[@]datadir[@],$(datadir),g' \
-	-e 's,[@]sbindir[@],$(sbindir),g' \
-	-e 's,[@]sysconfdir[@],$(sysconfdir),g' \
-	-e 's,[@]localstatedir[@],$(localstatedir),g'
-do_subst_fn = \
-		echo "do_subst < ${@}.in > ${@}"; \
-		mkdir -p `dirname ${@}` || exit 1; \
-		${do_subst} < $(srcdir)/${@}.in > ${@} || exit 1; \
-		chmod 0755 ${@}
-do_subst_dt = \
-		echo "do_subst < ${@}.in > ${@}"; \
-		mkdir -p `dirname ${@}` || exit 1; \
-		${do_subst} < $(srcdir)/${@}.in > ${@} || exit 1; \
-		chmod 0644 ${@}
-
-
-# lists
-BUILT_SOURCES				=
-TESTS					=
-XFAIL_TESTS				=
-EXTRA_MANS				=
-EXTRA_DIST				= build-aux/autogen.sh \
-					  build-aux/git-package-version \
-					  build-aux/git-package-version.sh
-CLEANFILES				= \
-					  $(builddir)/a.out   $(srcdir)/a.out \
-					  $(builddir)/*/a.out $(srcdir)/*/a.out \
-					  config.h.in~ $(srcdir)/config.h.in~ \
-					  @PACKAGE_TARNAME@-*.tar.* \
-					  @PACKAGE_TARNAME@-*.zip
-DISTCHECK_CONFIGURE_FLAGS		= --enable-strictwarnings
+# Makefile includes
+GIT_PACKAGE_VERSION_DIR=include
+SUBST_EXPRESSIONS =
+include $(srcdir)/contrib/bindletools/build-aux/makefile-bindle.am
+include $(srcdir)/contrib/bindletools/build-aux/makefile-autotools.am
+include $(srcdir)/contrib/bindletools/build-aux/makefile-subst.am
+include $(srcdir)/contrib/bindletools/build-aux/makefile-version.am
 
 
 # custom targets
-.PHONY: autogen update gitclean build-aux/git-package-version
-
-build-aux/git-package-version:
-	$(top_srcdir)/build-aux/git-package-version.sh $(top_srcdir)
-
-autogen:
-	$(top_srcdir)/build-aux/autogen.sh
-	test -x ./config.status && { ./config.status --recheck || exit $?; } || exit 0
-
-update:
-	git --git-dir=$(top_srcdir)/.git pull 2> /dev/null || exit 0
-	$(MAKE) -f Makefile autogen
-
-gitclean:
-	$(MAKE) -f Makefile distclean
-	rm -f  $(top_srcdir)/INSTALL
-	rm -f  $(top_srcdir)/Makefile.in
-	rm -f  $(top_srcdir)/aclocal.m4
-	rm -f  $(top_srcdir)/config.h.in
-	rm -f  $(top_srcdir)/configure
-	rm -f  $(top_srcdir)/m4/l*.m4
-	rm -f  $(top_srcdir)/build-aux/c* $(top_srcdir)/build-aux/d*
-	rm -f  $(top_srcdir)/build-aux/i* $(top_srcdir)/build-aux/l*
-	rm -f  $(top_srcdir)/build-aux/m*
-	rm -f  $(top_srcdir)/build-aux/git-package-version
+.PHONY:
 
 
 # local targets
@@ -205,6 +156,5 @@ clean-local:
 
 distclean-local:
 	rm -fR $(srcdir)/autom4te.cache
-	rm -f  $(srcdir)/GTAGS $(srcdir)/GRTAGS $(srcdir)/GPATH
 
 # end of automake file
