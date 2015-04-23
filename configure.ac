@@ -155,7 +155,6 @@ AC_SEARCH_LIBS([socket],               socket,,AC_MSG_ERROR([missing required fu
 AC_CHECK_HEADERS([fcntl.h],,           [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([termios.h],,         [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([ldap.h],,            [AC_MSG_ERROR([missing required header])])
-AC_CHECK_HEADERS([libintl.h],,         [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([getopt.h],,          [AC_MSG_ERROR([missing required header])])
 
 # initiates bindle tools macros
@@ -168,13 +167,12 @@ AC_BINDLE_GIT_PACKAGE_VERSION([contrib/bindletools/build-aux/git-package-version
 AC_BINDLE_ENABLE_WARNINGS
 
 # Creates outputs
-AC_CONFIG_SUBDIRS([contrib/bindletools])
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
 
 # Show local config
 AC_MSG_NOTICE([ ])
-AC_MSG_NOTICE([   LDAP Utilities])
+AC_MSG_NOTICE([   LDAP Utilities ($PACKAGE_VERSION)])
 AC_MSG_NOTICE([ ])
 AC_MSG_NOTICE([   Use Warnings                  $USE_WARNINGS])
 AC_MSG_NOTICE([   Use Strict Warnings           $USE_STRICTWARNINGS])
