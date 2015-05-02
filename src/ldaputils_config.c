@@ -95,56 +95,74 @@ int ldaputils_cmdargs(LdapUtilsConfig * cnf, int c, const char * arg)
    {
       case -1:       /* no more arguments */
       case 0:        /* long options toggles */
-         return(c);
+      return(c);
          
       // Common Options
       case '9':
-         ldaputils_usage();
-         return(-2);
+      ldaputils_usage();
+      return(-2);
+
       case 'c':
-         return(ldaputils_config_set_continuous(cnf));
+      return(ldaputils_config_set_continuous(cnf));
+
       case 'C':
-         return(ldaputils_config_set_referrals(cnf));
+      return(ldaputils_config_set_referrals(cnf));
+
       case 'd':
-         return(ldaputils_config_set_debug(cnf, arg));
+      return(ldaputils_config_set_debug(cnf, arg));
+
       case 'D':
-         return(ldaputils_config_set_binddn(cnf, arg));
+      return(ldaputils_config_set_binddn(cnf, arg));
+
       case 'h':
-         return(ldaputils_config_set_host(cnf, arg));
+      return(ldaputils_config_set_host(cnf, arg));
+
       case 'H':
-         return(ldaputils_config_set_uri(cnf, arg));
+      return(ldaputils_config_set_uri(cnf, arg));
+
       case 'n':
-         return(ldaputils_config_set_dryrun(cnf));
+      return(ldaputils_config_set_dryrun(cnf));
+
       case 'p':
-         return(ldaputils_config_set_port(cnf, arg));
+      return(ldaputils_config_set_port(cnf, arg));
+
       case 'P':
-         return(ldaputils_config_set_version(cnf, arg));
+      return(ldaputils_config_set_version(cnf, arg));
+
       case 'v':
-         return(ldaputils_config_set_verbose(cnf));
+      return(ldaputils_config_set_verbose(cnf));
+
       case 'V':
-         ldaputils_version();
-         return(-2);
+      ldaputils_version();
+      return(-2);
+
       case 'w':
-         return(ldaputils_config_set_bindpw(cnf, arg));
+      return(ldaputils_config_set_bindpw(cnf, arg));
+
       case 'W':
-         return(ldaputils_config_set_bindpw_prompt(cnf));
+      return(ldaputils_config_set_bindpw_prompt(cnf));
+
       case 'y':
-         return(ldaputils_config_set_bindpw_file(cnf, arg));
+      return(ldaputils_config_set_bindpw_file(cnf, arg));
 
       // search options
       case 'b':
-         return(ldaputils_config_set_basedn(cnf, arg));
+      return(ldaputils_config_set_basedn(cnf, arg));
+
       case 'l':
-         return(ldaputils_config_set_timelimit(cnf, arg));
+      return(ldaputils_config_set_timelimit(cnf, arg));
+
       case 's':
-         return(ldaputils_config_set_scope(cnf, arg));
+      return(ldaputils_config_set_scope(cnf, arg));
+
       case 'S':
-         return(ldaputils_config_set_sortattr(cnf, arg));
+      return(ldaputils_config_set_sortattr(cnf, arg));
+
       case 'z':
-         return(ldaputils_config_set_sizelimit(cnf, arg));
+      return(ldaputils_config_set_sizelimit(cnf, arg));
 
       default:
-         return(c);
+      return(c);
    };
 
    /* ends function */
