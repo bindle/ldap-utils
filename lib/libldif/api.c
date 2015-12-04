@@ -37,7 +37,7 @@
  *  @file lib/ldif_api.c provides methods for accessing library functionality
  */
 #define _LDAP_UTILS_LIB_LDIF_API_C 1
-#include "ldif_api.h"
+#include "api.h"
 
 ///////////////
 //           //

@@ -104,8 +104,8 @@ lib_libldif_la_LDFLAGS			= -rpath '$(libdir)' \
 					  $(AM_LDFLAGS) \
 					  -export-symbols $(srcdir)/lib/libldif/libldif.sym
 lib_libldif_la_SOURCES			= include/ldif.h \
-					  lib/libldif/ldif_api.c \
-					  lib/libldif/ldif_api.h
+					  lib/libldif/api.c \
+					  lib/libldif/api.h
 
 
 # macros for csv2ldif
