@@ -96,6 +96,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A08458031C1243F800F2B609 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				A09401B115266907003B9698 /* libldif */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
 		A094019C15266907003B9698 /* build-aux */ = {
 			isa = PBXGroup;
 			children = (
@@ -120,7 +128,7 @@
 			path = include;
 			sourceTree = "<group>";
 		};
-		A09401B115266907003B9698 /* lib */ = {
+		A09401B115266907003B9698 /* libldif */ = {
 			isa = PBXGroup;
 			children = (
 				A09401B215266907003B9698 /* ldif_api.c */,
@@ -128,7 +136,7 @@
 				A09401B415266907003B9698 /* libldif.h */,
 				A09401B515266907003B9698 /* libldif.sym */,
 			);
-			path = lib;
+			path = libldif;
 			sourceTree = "<group>";
 		};
 		A09401B615266907003B9698 /* m4 */ = {
@@ -182,7 +190,7 @@
 				A094019C15266907003B9698 /* build-aux */,
 				A09401AC15266907003B9698 /* doc */,
 				A09401AD15266907003B9698 /* include */,
-				A09401B115266907003B9698 /* lib */,
+				A08458031C1243F800F2B609 /* lib */,
 				A09401B615266907003B9698 /* m4 */,
 				A09401C015266907003B9698 /* src */,
 				A09401E315266B03003B9698 /* Frameworks */,

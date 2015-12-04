@@ -96,16 +96,16 @@ DISTCHECK_CONFIGURE_FLAGS		= --enable-strictwarnings
 
 
 # macros for lib/libldif.la
-lib_libldif_la_DEPENDENCIES		= Makefile lib/libldif.sym
+lib_libldif_la_DEPENDENCIES		= Makefile lib/libldif/libldif.sym
 lib_libldif_la_CFLAGS			= $(AM_CFLAGS)
 lib_libldif_la_LIBADD			= $(AM_LIBS)
 lib_libldif_la_LDFLAGS			= -rpath '$(libdir)' \
 					  -version-info $(LIB_VERSION_INFO) \
 					  $(AM_LDFLAGS) \
-					  -export-symbols $(srcdir)/lib/libldif.sym
+					  -export-symbols $(srcdir)/lib/libldif/libldif.sym
 lib_libldif_la_SOURCES			= include/ldif.h \
-					  lib/ldif_api.c \
-					  lib/ldif_api.h
+					  lib/libldif/ldif_api.c \
+					  lib/libldif/ldif_api.h
 
 
 # macros for csv2ldif
