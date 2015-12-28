@@ -73,10 +73,12 @@ int ldaputils_cmp_entry PARAMS((const LDAPUtilsEntry ** ptr1, const LDAPUtilsEnt
 void ldaputils_free_entries PARAMS((LDAPUtilsEntry ** entries));
 
 // retrieves LDAP entries from result
-LDAPUtilsEntry ** ldaputils_get_entries PARAMS((LDAP * ld, LDAPMessage * res, const char * sortattr));
+LDAPUtilsEntry ** ldaputils_get_entries PARAMS((lutils_config * cnf, LDAP * ld,
+   LDAPMessage * res, const char * sortattr));
 
 // retrieves values of an LDAP attribute
-char * ldaputils_get_vals PARAMS((LDAPUtilsEntry * entry, const char * attr));
+char * ldaputils_get_vals PARAMS((lutils_config * cnf, LDAPUtilsEntry * entry,
+   const char * attr));
 
 // connects and binds to LDAP server
 LDAP * ldaputils_initialize PARAMS((lutils_config * cnf));

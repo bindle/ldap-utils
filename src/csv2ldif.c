@@ -313,7 +313,7 @@ int my_config(int argc, char * argv[], MyConfig * cnf, int * codep)
             break;
 
          case 'V':
-            ldaputils_version();
+            ldaputils_version(PROGRAM_NAME);
             return(1);
 
          case '?':           // argument error

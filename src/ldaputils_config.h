@@ -91,6 +91,7 @@ struct ldaputils_config_struct
    const char   * passfile;	                 // -y password file
    const char   * sortattr;	                 // -S sort by attribute
    const char   * uri;                         // -H LDAP URI
+   const char   * prog_name;                   // name of calling program
    LDAPURLDesc  * ludp;                        // pointer to LDAP URL
 };
 
@@ -111,7 +112,7 @@ int ldaputils_cmdargs PARAMS((lutils_config * cnf, int c, const char * arg));
 void ldaputils_config_free PARAMS((lutils_config * cnf));
 
 // initializes the common config
-void ldaputils_config_init PARAMS((lutils_config * cnf));
+void ldaputils_config_init PARAMS((lutils_config * cnf, const char * prog_name));
 
 // prints configuration to stdout
 void ldaputils_config_print PARAMS((lutils_config * cnf));
@@ -123,7 +124,8 @@ const char * ldaputils_config_print_str PARAMS((const char * str));
 int ldaputils_getpass PARAMS((const char * prompt, char * buff, size_t size));
 
 // retrieves password from file
-int ldaputils_passfile PARAMS((const char * file, char * buff, size_t size));
+int ldaputils_passfile PARAMS((lutils_config * cnf, const char * file,
+   char * buff, size_t size));
 
 // prints program usage and exits
 void ldaputils_usage PARAMS((void));
@@ -135,6 +137,6 @@ void ldaputils_usage_common PARAMS((const char * short_options));
 void ldaputils_usage_search PARAMS((const char * short_options));
 
 // displays usage
-void ldaputils_version PARAMS((void));
+void ldaputils_version PARAMS((const char * prog_name));
 
 #endif /* end of header file */

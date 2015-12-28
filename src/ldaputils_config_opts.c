@@ -96,7 +96,7 @@ int ldaputils_config_set_bindpw(lutils_config * cnf, const char * arg)
 /// @param[in] arg   value of the command line argument
 int ldaputils_config_set_bindpw_file(lutils_config * cnf, const char * arg)
 {
-   return(ldaputils_passfile(arg, cnf->bindpw, LDAPUTILS_OPT_LEN));
+   return(ldaputils_passfile(cnf, arg, cnf->bindpw, LDAPUTILS_OPT_LEN));
 }
 
 
@@ -161,8 +161,8 @@ int ldaputils_config_set_port(lutils_config * cnf, const char * arg)
    port = (int)atol(arg);
    if ( (port < 1) || (port > 0xffff) )
    {
-      fprintf(stderr, "%s: invalid TCP port\n", PROGRAM_NAME);
-      fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
+      fprintf(stderr, "%s: invalid TCP port\n", cnf->prog_name);
+      fprintf(stderr, "Try `%s --help' for more information.\n", cnf->prog_name);
       return(1);
    };
    if ((cnf->host))
@@ -197,7 +197,7 @@ int ldaputils_config_set_scope(lutils_config * cnf, const char * arg)
       cnf->scope = LDAP_SCOPE_BASE;
    else
    {
-      fprintf(stderr, "%s: scope should be base, one, or sub\n", PROGRAM_NAME);
+      fprintf(stderr, "%s: scope should be base, one, or sub\n", cnf->prog_name);
       return(1);
    };
    return(0);
@@ -254,8 +254,8 @@ int ldaputils_config_set_uri(lutils_config * cnf, const char * arg)
    {
       // TRANSLATORS: The following strings provide an error message if the
       // URI provided on the command line is an invalid LDAP URI.
-      fprintf(stderr, "%s: invalid LDAP URI\n", PROGRAM_NAME);
-      fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
+      fprintf(stderr, "%s: invalid LDAP URI\n", cnf->prog_name);
+      fprintf(stderr, "Try `%s --help' for more information.\n", cnf->prog_name);
       return(1);
    };
    
@@ -293,8 +293,8 @@ int ldaputils_config_set_version(lutils_config * cnf, const char * arg)
          // TRANSLATORS: The following strings provide an error message if the
          // LDAP protocol version specified on the command line is an invalid
          // protocol version or unsupported protocol version.
-         fprintf(stderr, "%s: protocol version should be 2 or 3\n", PROGRAM_NAME);
-         fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
+         fprintf(stderr, "%s: protocol version should be 2 or 3\n", cnf->prog_name);
+         fprintf(stderr, "Try `%s --help' for more information.\n", cnf->prog_name);
          return(1);
    };
    return(0);

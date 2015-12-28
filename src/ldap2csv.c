@@ -178,7 +178,7 @@ int main(int argc, char * argv[])
       printf(",\"%s\"", cnf->common.attrs[x]);
    printf("\n");
 
-   if (!(entries = ldaputils_get_entries(ld, res, ((lutils_config *)cnf)->sortattr)))
+   if (!(entries = ldaputils_get_entries(&cnf->common, ld, res, ((lutils_config *)cnf)->sortattr)))
    {
       ldap_msgfree(res);
       ldap_unbind_ext_s(ld, NULL, NULL);
@@ -194,7 +194,7 @@ int main(int argc, char * argv[])
    {
       for(y = 0; cnf->common.attrs[y]; y++)
       {
-         if (!(val = ldaputils_get_vals(entries[x], cnf->common.attrs[y])))
+         if (!(val = ldaputils_get_vals(&cnf->common, entries[x], cnf->common.attrs[y])))
          {
                ldap_msgfree(res);
                ldap_unbind_ext_s(ld, NULL, NULL);
@@ -252,7 +252,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    };
    memset(cnf, 0, sizeof(MyConfig));
    
-   ldaputils_config_init((lutils_config *) cnf);
+   ldaputils_config_init((lutils_config *) cnf, PROGRAM_NAME);
 
    // loops through args
    while((c = getopt_long(argc, argv, short_options, long_options, &option_index)) != -1)

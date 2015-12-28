@@ -133,7 +133,7 @@ int ldaputils_cmdargs(lutils_config * cnf, int c, const char * arg)
       return(ldaputils_config_set_verbose(cnf));
 
       case 'V':
-      ldaputils_version();
+      ldaputils_version(cnf->prog_name);
       return(-2);
 
       case 'w':
@@ -187,11 +187,12 @@ void ldaputils_config_free(lutils_config * cnf)
 
 /// initializes the common config
 /// @param[in] cnf  reference to common configuration struct
-void ldaputils_config_init(lutils_config * cnf)
+void ldaputils_config_init(lutils_config * cnf, const char * prog_name)
 {
    memset(cnf, 0, sizeof(lutils_config));
    cnf->referrals  = 0;
    cnf->scope      = LDAP_SCOPE_SUBTREE;
+   cnf->prog_name  = prog_name;
    return;
 }
 
@@ -291,7 +292,8 @@ int ldaputils_getpass(const char * prompt, char * buff, size_t size)
 /// @param[in] file  file containing the password
 /// @param[in] buff  pointer to buffer for password
 /// @param[in] len   length of the buffer
-int ldaputils_passfile(const char * file, char * buff, size_t size)
+int ldaputils_passfile(lutils_config * cnf, const char * file, char * buff,
+   size_t size)
 {
    int         fd;
    ssize_t     len;
@@ -299,24 +301,24 @@ int ldaputils_passfile(const char * file, char * buff, size_t size)
    
    if ((stat(file, &sb)) == -1)
    {
-      fprintf(stderr, "%s: %s: %s\n", PROGRAM_NAME, file, strerror(errno));
+      fprintf(stderr, "%s: %s: %s\n", cnf->prog_name, file, strerror(errno));
       return(1);
    };
    if (sb.st_mode & 0066)
       // TRANSLATORS: The following string provides an error message if the
       // file which contains the password has insecure file permissions. The
       // string arguments are the name of the program and the name of the file.
-      fprintf(stderr, "%s: Password file %s is publicly readable/writeable\n", PROGRAM_NAME, file);
+      fprintf(stderr, "%s: Password file %s is publicly readable/writeable\n", cnf->prog_name, file);
    
    if ((fd = open(file, O_RDONLY)) == -1)
    {
-      fprintf(stderr, "%s: %s: %s\n", PROGRAM_NAME, file, strerror(errno));
+      fprintf(stderr, "%s: %s: %s\n", cnf->prog_name, file, strerror(errno));
       return(1);
    };
    
    if ((len = read(fd, buff,size-1)) == -1)
    {
-      fprintf(stderr, "%s: %s: %s\n", PROGRAM_NAME, file, strerror(errno));
+      fprintf(stderr, "%s: %s: %s\n", cnf->prog_name, file, strerror(errno));
       return(1);
    };
    buff[len] = '\0';
@@ -389,7 +391,7 @@ void ldaputils_usage_search(const char * short_options)
 
 
 /// displays usage
-void ldaputils_version(void)
+void ldaputils_version(const char * prog_name)
 {
    // TRANSLATORS: The following strings provide version and copyright
    // information if the program is passed --version on the command line.
@@ -399,7 +401,7 @@ void ldaputils_version(void)
          "Copyright (C) 2008 David M. Syzdek.\n"
          "This is free software; see the source for copying conditions.  There is NO\n"
          "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
-      , PROGRAM_NAME, PACKAGE_NAME, PACKAGE_VERSION
+      , prog_name, PACKAGE_NAME, PACKAGE_VERSION
    );
    return;
 }
