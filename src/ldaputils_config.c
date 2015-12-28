@@ -88,7 +88,7 @@ char * ldaputils_chomp(char * str)
 /// @param[in] cnf
 /// @param[in] c
 /// @param[in] arg
-int ldaputils_cmdargs(LdapUtilsConfig * cnf, int c, const char * arg)
+int ldaputils_cmdargs(lutils_config * cnf, int c, const char * arg)
 {
    /* checks argument */
    switch(c)
@@ -172,7 +172,7 @@ int ldaputils_cmdargs(LdapUtilsConfig * cnf, int c, const char * arg)
 
 /// frees common config
 /// @param[in] cnf
-void ldaputils_config_free(LdapUtilsConfig * cnf)
+void ldaputils_config_free(lutils_config * cnf)
 {
    if (!(cnf))
       return;
@@ -187,9 +187,9 @@ void ldaputils_config_free(LdapUtilsConfig * cnf)
 
 /// initializes the common config
 /// @param[in] cnf  reference to common configuration struct
-void ldaputils_config_init(LdapUtilsConfig * cnf)
+void ldaputils_config_init(lutils_config * cnf)
 {
-   memset(cnf, 0, sizeof(LdapUtilsConfig));
+   memset(cnf, 0, sizeof(lutils_config));
    cnf->referrals  = 0;
    cnf->scope      = LDAP_SCOPE_SUBTREE;
    return;
@@ -198,7 +198,7 @@ void ldaputils_config_init(LdapUtilsConfig * cnf)
 
 /// prints configuration to stdout
 /// @param[in] cnf  reference to common configuration struct
-void ldaputils_config_print(LdapUtilsConfig * cnf)
+void ldaputils_config_print(lutils_config * cnf)
 {
    int i;
    printf("Common Options:\n");

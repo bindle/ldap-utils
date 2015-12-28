@@ -102,7 +102,7 @@
 typedef struct my_config MyConfig;
 struct my_config
 {
-   LdapUtilsConfig   common;
+   lutils_config   common;
    char              output[LDAPUTILS_OPT_LEN];
 };
 
@@ -159,15 +159,15 @@ int main(int argc, char * argv[])
    
    if (!(ld = ldaputils_initialize(&cnf->common)))
    {
-      ldaputils_config_free((LdapUtilsConfig *)cnf);
+      ldaputils_config_free((lutils_config *)cnf);
       free(cnf);
       return(1);
    };
 
-   if ((ldaputils_search(ld, (LdapUtilsConfig *)cnf, &res)))
+   if ((ldaputils_search(ld, (lutils_config *)cnf, &res)))
    {
       ldap_unbind_ext_s(ld, NULL, NULL);
-      ldaputils_config_free((LdapUtilsConfig *)cnf);
+      ldaputils_config_free((lutils_config *)cnf);
       free(cnf);
       return(1);
    };
@@ -178,16 +178,16 @@ int main(int argc, char * argv[])
       printf(",\"%s\"", cnf->common.attrs[x]);
    printf("\n");
 
-   if (!(entries = ldaputils_get_entries(ld, res, ((LdapUtilsConfig *)cnf)->sortattr)))
+   if (!(entries = ldaputils_get_entries(ld, res, ((lutils_config *)cnf)->sortattr)))
    {
       ldap_msgfree(res);
       ldap_unbind_ext_s(ld, NULL, NULL);
-      ldaputils_config_free((LdapUtilsConfig *)cnf);
+      ldaputils_config_free((lutils_config *)cnf);
       free(cnf);
       return(1);
    };
    
-   if ( ((LdapUtilsConfig *)cnf)->sortattr )
+   if ( ((lutils_config *)cnf)->sortattr )
       ldaputils_sort_entries(entries);
    
    for(x = 0; entries[x]; x++)
@@ -198,7 +198,7 @@ int main(int argc, char * argv[])
          {
                ldap_msgfree(res);
                ldap_unbind_ext_s(ld, NULL, NULL);
-               ldaputils_config_free((LdapUtilsConfig *)cnf);
+               ldaputils_config_free((lutils_config *)cnf);
                free(cnf);
                return(1);
          };
@@ -215,7 +215,7 @@ int main(int argc, char * argv[])
    
    ldap_msgfree(res);
    ldap_unbind_ext_s(ld, NULL, NULL);
-   ldaputils_config_free((LdapUtilsConfig *)cnf);
+   ldaputils_config_free((lutils_config *)cnf);
    free(cnf);
 
    return(0);
@@ -252,12 +252,12 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    };
    memset(cnf, 0, sizeof(MyConfig));
    
-   ldaputils_config_init((LdapUtilsConfig *) cnf);
+   ldaputils_config_init((lutils_config *) cnf);
 
    // loops through args
    while((c = getopt_long(argc, argv, short_options, long_options, &option_index)) != -1)
    {
-      switch(ldaputils_cmdargs((LdapUtilsConfig *) cnf, c, optarg))
+      switch(ldaputils_cmdargs((lutils_config *) cnf, c, optarg))
       {
          case -2: return(0); // shared option exit without error
          case -1: break;     // no more arguments 

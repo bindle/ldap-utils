@@ -68,8 +68,7 @@
 /////////////////
 
 /* store common structs */
-typedef struct ldaputils_config_struct   LdapUtilsConfig;
-typedef struct ldaputils_config_struct * LdapUtilsConfigRef;
+typedef struct ldaputils_config_struct   lutils_config;
 struct ldaputils_config_struct
 {
    int            continuous;                  // -c continuous operation mode
@@ -106,16 +105,16 @@ struct ldaputils_config_struct
 char * ldaputils_chomp PARAMS((char * str));
 
 // parses LDAP command line arguments
-int ldaputils_cmdargs PARAMS((LdapUtilsConfig * cnf, int c, const char * arg));
+int ldaputils_cmdargs PARAMS((lutils_config * cnf, int c, const char * arg));
 
 // frees common config
-void ldaputils_config_free PARAMS((LdapUtilsConfig * cnf));
+void ldaputils_config_free PARAMS((lutils_config * cnf));
 
 // initializes the common config
-void ldaputils_config_init PARAMS((LdapUtilsConfig * cnf));
+void ldaputils_config_init PARAMS((lutils_config * cnf));
 
 // prints configuration to stdout
-void ldaputils_config_print PARAMS((LdapUtilsConfig * cnf));
+void ldaputils_config_print PARAMS((lutils_config * cnf));
 
 // prints string to stdout
 const char * ldaputils_config_print_str PARAMS((const char * str));

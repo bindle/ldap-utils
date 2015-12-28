@@ -56,61 +56,61 @@
 //////////////////
 
 // parses LDAP command line arguments
-int ldaputils_common_cmdargs PARAMS((LdapUtilsConfig * cnf, int c, const char * arg));
+int ldaputils_common_cmdargs PARAMS((lutils_config * cnf, int c, const char * arg));
 
 // sets LDAP server's base DN
-int ldaputils_config_set_basedn PARAMS((LdapUtilsConfig * cnf, const char * arg));
+int ldaputils_config_set_basedn PARAMS((lutils_config * cnf, const char * arg));
 
 // sets LDAP server's bind DN
-int ldaputils_config_set_binddn PARAMS((LdapUtilsConfig * cnf, const char * arg));
+int ldaputils_config_set_binddn PARAMS((lutils_config * cnf, const char * arg));
 
 // sets LDAP server's bind password
-int ldaputils_config_set_bindpw PARAMS((LdapUtilsConfig * cnf, const char * arg));
+int ldaputils_config_set_bindpw PARAMS((lutils_config * cnf, const char * arg));
 
 // reads LDAP server's bind password from file
-int ldaputils_config_set_bindpw_file PARAMS((LdapUtilsConfig * cnf, const char * arg));
+int ldaputils_config_set_bindpw_file PARAMS((lutils_config * cnf, const char * arg));
 
 // sets LDAP server's bind password
-int ldaputils_config_set_bindpw_prompt PARAMS((LdapUtilsConfig * cnf));
+int ldaputils_config_set_bindpw_prompt PARAMS((lutils_config * cnf));
 
 // toggles continuous mode
-int ldaputils_config_set_continuous PARAMS((LdapUtilsConfig * cnf));
+int ldaputils_config_set_continuous PARAMS((lutils_config * cnf));
 
 // sets LDAP debug level
-int ldaputils_config_set_debug PARAMS((LdapUtilsConfig * cnf, const char * arg));
+int ldaputils_config_set_debug PARAMS((lutils_config * cnf, const char * arg));
 
 // toggles dry run
-int ldaputils_config_set_dryrun PARAMS((LdapUtilsConfig * cnf));
+int ldaputils_config_set_dryrun PARAMS((lutils_config * cnf));
 
 // sets LDAP server's host name
-int ldaputils_config_set_host PARAMS((LdapUtilsConfig * cnf, const char * arg));
+int ldaputils_config_set_host PARAMS((lutils_config * cnf, const char * arg));
 
 // sets LDAP TCP port
-int ldaputils_config_set_port PARAMS((LdapUtilsConfig * cnf, const char * arg));
+int ldaputils_config_set_port PARAMS((lutils_config * cnf, const char * arg));
 
 // toggles following referrals
-int ldaputils_config_set_referrals PARAMS((LdapUtilsConfig * cnf));
+int ldaputils_config_set_referrals PARAMS((lutils_config * cnf));
 
 // sets LDAP search scope
-int ldaputils_config_set_scope PARAMS((LdapUtilsConfig * cnf, const char * arg));
+int ldaputils_config_set_scope PARAMS((lutils_config * cnf, const char * arg));
 
 // sets LDAP size limit
-int ldaputils_config_set_sizelimit PARAMS((LdapUtilsConfig * cnf, const char * arg));
+int ldaputils_config_set_sizelimit PARAMS((lutils_config * cnf, const char * arg));
 
 // sets sort attribute
-int ldaputils_config_set_sortattr PARAMS((LdapUtilsConfig * cnf, const char * arg));
+int ldaputils_config_set_sortattr PARAMS((lutils_config * cnf, const char * arg));
 
 // sets LDAP time limit
-int ldaputils_config_set_timelimit PARAMS((LdapUtilsConfig * cnf, const char * arg));
+int ldaputils_config_set_timelimit PARAMS((lutils_config * cnf, const char * arg));
 
 // sets LDAP server's URI
-int ldaputils_config_set_uri PARAMS((LdapUtilsConfig * cnf, const char * arg));
+int ldaputils_config_set_uri PARAMS((lutils_config * cnf, const char * arg));
 
 // toggles verbose mode
-int ldaputils_config_set_verbose PARAMS((LdapUtilsConfig * cnf));
+int ldaputils_config_set_verbose PARAMS((lutils_config * cnf));
 
 // sets LDAP protocol version
-int ldaputils_config_set_version PARAMS((LdapUtilsConfig * cnf, const char * arg));
+int ldaputils_config_set_version PARAMS((lutils_config * cnf, const char * arg));
 
 
 #endif /* end of header file */

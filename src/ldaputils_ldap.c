@@ -353,7 +353,7 @@ char * ldaputils_get_vals(LDAPUtilsEntry * entry, const char * attr)
 
 /// connects and binds to LDAP server
 /// @param[in] cnf   reference to common configuration struct
-LDAP * ldaputils_initialize(LdapUtilsConfig * cnf)
+LDAP * ldaputils_initialize(lutils_config * cnf)
 {
    int          err;
    LDAP       * ld;
@@ -418,7 +418,7 @@ LDAP * ldaputils_initialize(LdapUtilsConfig * cnf)
 /// connects and binds to LDAP server
 /// @param[in] ld    refernce to LDAP socket data
 /// @param[in] cnf   reference to common configuration struct
-int ldaputils_search(LDAP * ld, LdapUtilsConfig * cnf, LDAPMessage ** resp)
+int ldaputils_search(LDAP * ld, lutils_config * cnf, LDAPMessage ** resp)
 {
    int rc;
    int err;

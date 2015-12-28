@@ -79,10 +79,10 @@ LDAPUtilsEntry ** ldaputils_get_entries PARAMS((LDAP * ld, LDAPMessage * res, co
 char * ldaputils_get_vals PARAMS((LDAPUtilsEntry * entry, const char * attr));
 
 // connects and binds to LDAP server
-LDAP * ldaputils_initialize PARAMS((LdapUtilsConfig * cnf));
+LDAP * ldaputils_initialize PARAMS((lutils_config * cnf));
 
 // connects and binds to LDAP server
-int ldaputils_search PARAMS((LDAP * ld, LdapUtilsConfig * cnf, LDAPMessage ** resp));
+int ldaputils_search PARAMS((LDAP * ld, lutils_config * cnf, LDAPMessage ** resp));
 
 // sorts values
 int ldaputils_sort_entries PARAMS((LDAPUtilsEntry ** entries));
