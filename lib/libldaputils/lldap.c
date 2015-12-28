@@ -36,8 +36,8 @@
 /**
  *  @file src/ldaputils_misc.c contains shared functions and variables
  */
-#define _LDAP_UTILS_SRC_LDAPUTILS_LDAP_C 1
-#include "ldaputils_ldap.h"
+#define _LIB_LIBLDAPUTILS_LLDAP_C 1
+#include "lldap.h"
 
 ///////////////
 //           //
@@ -51,7 +51,7 @@
 #include <ldap.h>
 #include <stdlib.h>
 
-#include "ldaputils_config.h"
+#include "lconfig.h"
 
 
 /////////////////

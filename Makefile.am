@@ -56,6 +56,7 @@ AM_CPPFLAGS				= -O2 -UPMARK -DHAVE_CONFIG_H=1 \
 					  -DSYSCONFDIR=\"$(sysconfdir)\"
 ACLOCAL_AMFLAGS				= -I m4 -W all -W error
 AM_MAKEINFOFLAGS                        = --no-split
+AM_DISTCHECK_CONFIGURE_FLAGS		= CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)"
 DEFS					=
 LDADD					= $(lib_LTLIBRARIES) \
 					  $(noinst_LTLIBRARIES)
@@ -70,8 +71,10 @@ include_HEADERS				=
 info_TEXINFOS				=
 EXTRA_LTLIBRARIES			= lib/libldif.la
 man_MANS				=
-noinst_HEADERS				=
+noinst_HEADERS				= include/ldaputils.h \
+					  include/ldaputils_cdefs.h
 noinst_PROGRAMS				= src/ldapconfprint
+noinst_LIBRARIES			= lib/libldaputils.a
 
 
 # lists
@@ -80,7 +83,8 @@ BUILT_SOURCES				=
 TESTS					=
 XFAIL_TESTS				=
 EXTRA_MANS				=
-EXTRA_DIST				=
+EXTRA_DIST				= $(noinst_HEADERS) \
+					  lib/libldaputils/libldaputils.sym
 CLEANFILES				= \
 					  $(builddir)/a.out   $(srcdir)/a.out \
 					  $(builddir)/*/a.out $(srcdir)/*/a.out \
@@ -108,50 +112,46 @@ lib_libldif_la_SOURCES			= include/ldif.h \
 					  lib/libldif/api.h
 
 
+# macros for lib/libutil.la
+lib_libldaputils_a_DEPENDENCIES		= Makefile lib/libldaputils/libldaputils.sym
+lib_libldaputils_a_CFLAGS		= $(AM_CFLAGS)
+lib_libldaputils_a_LIBADD		= $(AM_LIBS)
+lib_libldaputils_a_SOURCES		= $(noinst_HEADERS) \
+					  lib/libldaputils/lconfig.c \
+					  lib/libldaputils/lconfig.h \
+					  lib/libldaputils/lconfig_opts.c \
+					  lib/libldaputils/lconfig_opts.h \
+					  lib/libldaputils/lldap.c \
+					  lib/libldaputils/lldap.h
+
+
 # macros for csv2ldif
-src_csv2ldif_DEPENDENCIES		= Makefile
+src_csv2ldif_DEPENDENCIES		= Makefile lib/libldaputils.a
 src_csv2ldif_CPPFLAGS			= -DPROGRAM_NAME="\"csv2ldif\"" $(AM_CPPFLAGS)
 src_csv2ldif_CFLAGS			= $(AM_CFLAGS)
 src_csv2ldif_LDFLAGS			= $(AM_LDFLAGS)
-src_csv2ldif_LDADD			= $(AM_LDADD)
+src_csv2ldif_LDADD			= $(AM_LDADD) lib/libldaputils.a
 src_csv2ldif_SOURCES			= \
-					  include/ldap-utils.h \
-					  src/csv2ldif.c \
-					  src/ldaputils_config.c \
-					  src/ldaputils_config.h \
-					  src/ldaputils_config_opts.c \
-					  src/ldaputils_config_opts.h
+					  src/csv2ldif.c
 
 
-src_ldap2csv_DEPENDENCIES		= Makefile
+src_ldap2csv_DEPENDENCIES		= Makefile lib/libldaputils.a
 src_ldap2csv_CPPFLAGS			= -DPROGRAM_NAME="\"ldap2csv\"" $(AM_CPPFLAGS)
 src_ldap2csv_CFLAGS			= $(AM_CFLAGS)
 src_ldap2csv_LDFLAGS			= $(AM_LDFLAGS)
-src_ldap2csv_LDADD			= $(AM_LDADD) -lldap -llber
+src_ldap2csv_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
 src_ldap2csv_SOURCES			= \
-					  include/ldap-utils.h \
-					  src/ldap2csv.c \
-					  src/ldaputils_config.c \
-					  src/ldaputils_config.h \
-					  src/ldaputils_config_opts.c \
-					  src/ldaputils_config_opts.h \
-					  src/ldaputils_ldap.c \
-					  src/ldaputils_ldap.h
+					  src/ldap2csv.c
 
 
 # macros for ldapconfprint
-src_ldapconfprint_DEPENDENCIES		= Makefile
+src_ldapconfprint_DEPENDENCIES		= Makefile lib/libldaputils.a
 src_ldapconfprint_CPPFLAGS		= -DPROGRAM_NAME="\"ldapconfprint\"" $(AM_CPPFLAGS)
 src_ldapconfprint_CFLAGS			= $(AM_CFLAGS)
 src_ldapconfprint_LDFLAGS		= $(AM_LDFLAGS)
-src_ldapconfprint_LDADD			= $(AM_LDADD) -lldap -llber
+src_ldapconfprint_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
 src_ldapconfprint_SOURCES		= \
-					  include/ldap-utils.h \
-					  src/ldapconfprint.c \
-					  src/ldaputils_config.c \
-					  src/ldaputils_config.h \
-					  src/ldaputils_config_opts.c \
-					  src/ldaputils_config_opts.h
+					  src/ldapconfprint.c
 
 
 # Makefile includes

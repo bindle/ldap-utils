@@ -36,8 +36,8 @@
 /**
  *  @file src/ldaputils_config.c contains shared functions and variables
  */
-#define _LDAP_UTILS_SRC_LDAPUTILS_CONFIG_C 1
-#include "ldaputils_config.h"
+#define _LIB_LIBLDAPUTILS_LCONFIG_C 1
+#include "lconfig.h"
 
 ///////////////
 //           //
@@ -57,7 +57,7 @@
 #include <termios.h>
 #endif
 
-#include "ldaputils_config_opts.h"
+#include "lconfig_opts.h"
 
 
 /////////////////

@@ -36,8 +36,12 @@
 /*
  *  include/ldap-utils.h - common includes and prototypes
  */
-#ifndef _LDAP_UTILS_H
-#define _LDAP_UTILS_H 1
+#ifndef __LDAPUTILS_CDEFS_H
+#define __LDAPUTILS_CDEFS_H 1
+#undef  __LDAPUTILS_PMARK
+#ifndef __LDAPUTILS_H
+#error "do not include ldaputils_cdefs.h directly, include libreotp.h."
+#endif
 
 ///////////////
 //           //
@@ -53,8 +57,12 @@
 #include <windows.h>
 #endif
 
-#include <inttypes.h>
-#include <ldap.h>
+#ifdef __APPLE__
+#  include "TargetConditionals.h"
+#  ifdef TARGET_OS_MAC
+#     include <libkern/OSAtomic.h>
+#  endif
+#endif
 
 
 //////////////
@@ -63,76 +71,41 @@
 //          //
 //////////////
 
-/*
- * The macro "PARAMS" is taken verbatim from section 7.1 of the
- * Libtool 1.5.14 manual.
- */
-/* PARAMS is a macro used to wrap function prototypes, so that
-   compilers that don't understand ANSI C prototypes still work,
-   and ANSI C compilers can issue warnings about type mismatches. */
-#undef PARAMS
-#if defined (__STDC__) || defined (_AIX) \
-        || (defined (__mips) && defined (_SYSTYPE_SVR4)) \
-        || defined(WIN32) || defined (__cplusplus)
-# define PARAMS(protos) protos
+// Exports function type
+#undef LDAPUTILS_C_DECLS
+#undef LDAPUTILS_BEGIN_C_DECLS
+#undef LDAPUTILS_END_C_DECLS
+#undef _LDAPUTILS_I
+#undef _LDAPUTILS_F
+#undef _LDAPUTILS_V
+#if defined(__cplusplus) || defined(c_plusplus)
+#   define _LDAPUTILS_I             extern "C" inline
+#   define LDAPUTILS_C_DECLS        "C"             ///< exports as C functions
+#   define LDAPUTILS_BEGIN_C_DECLS  extern "C" {    ///< exports as C functions
+#   define LDAPUTILS_END_C_DECLS    }               ///< exports as C functions
 #else
-# define PARAMS(protos) ()
+#   define _LDAPUTILS_I             inline
+#   define LDAPUTILS_C_DECLS        /* empty */     ///< exports as C functions
+#   define LDAPUTILS_BEGIN_C_DECLS  /* empty */     ///< exports as C functions
+#   define LDAPUTILS_END_C_DECLS    /* empty */     ///< exports as C functions
+#endif
+#ifdef WIN32
+#   ifdef _LIB_LIBLDAPUTILS_H
+#      define _LDAPUTILS_F   extern LDAPUTILS_C_DECLS __declspec(dllexport)   ///< used for library calls
+#      define _LDAPUTILS_V   extern LDAPUTILS_C_DECLS __declspec(dllexport)   ///< used for library calls
+#   else
+#      define _LDAPUTILS_F   extern LDAPUTILS_C_DECLS __declspec(dllimport)   ///< used for library calls
+#      define _LDAPUTILS_V   extern LDAPUTILS_C_DECLS __declspec(dllimport)   ///< used for library calls
+#   endif
+#else
+#   ifdef _LIB_LIBLDAPUTILS_H
+#      define _LDAPUTILS_F   /* empty */                                      ///< used for library calls
+#      define _LDAPUTILS_V   extern LDAPUTILS_C_DECLS                         ///< used for library calls
+#   else
+#      define _LDAPUTILS_F   extern LDAPUTILS_C_DECLS                         ///< used for library calls
+#      define _LDAPUTILS_V   extern LDAPUTILS_C_DECLS                         ///< used for library calls
+#   endif
 #endif
 
-
-
-///////////////////
-//               //
-//  Definitions  //
-//               //
-///////////////////
-
-#ifndef PACKAGE_BUGREPORT
-#define PACKAGE_BUGREPORT ""
-#endif
-#ifndef PACKAGE_COPYRIGHT
-#define PACKAGE_COPYRIGHT "Copyright (C) 2008 David M. Syzdek."
-#endif
-#ifndef PACKAGE_NAME
-#define PACKAGE_NAME "LDAP Utilities"
-#endif
-#ifndef PACKAGE_TARNAME
-#define PACKAGE_TARNAME "ldap-utils"
-#endif
-#ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION ""
-#endif
-
-
-#ifndef LDAP_VENDOR_NAME
-#define LDAP_VENDOR_NAME "Unknown"
-#endif
-#ifndef LDAP_VENDOR_VERSION
-#define LDAP_VENDOR_VERSION 0
-#endif
-
-
-/////////////////
-//             //
-//  Datatypes  //
-//             //
-/////////////////
-
-typedef struct ldap_utils_entry LDAPUtilsEntry;
-struct ldap_utils_entry
-{
-   char   * dn;
-   char   * sortval;
-   size_t   count;
-   struct ldap_utils_attribute ** attributes;
-};
-
-
-typedef struct ldap_utils_attribute LDAPUtilsAttribute;
-struct ldap_utils_attribute
-{
-   char           * name;
-   struct berval ** vals;
-};
 
 #endif /* end of header */

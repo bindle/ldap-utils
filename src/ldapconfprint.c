@@ -74,7 +74,8 @@
 #include <time.h>
 #include <getopt.h>
 
-#include "ldaputils_config.h"
+#include <ldaputils.h>
+
 
 ///////////////////
 //               //
@@ -96,10 +97,10 @@
 //////////////////
 
 // main statement
-int main PARAMS((int argc, char * argv[]));
+int main(int argc, char * argv[]);
 
 // parses configuration
-int my_config PARAMS((int argc, char * argv[], LdapUtilsConfig ** cnfp));
+int my_config(int argc, char * argv[], lutils_config ** cnfp);
 
 
 /////////////////
@@ -111,10 +112,10 @@ int my_config PARAMS((int argc, char * argv[], LdapUtilsConfig ** cnfp));
 /// prints program usage and exits
 void ldaputils_usage(void)
 {
-   printf(_("Usage: %s [options] filter attributes...\n"), PROGRAM_NAME);
+   printf("Usage: %s [options] filter attributes...\n", PROGRAM_NAME);
    ldaputils_usage_search(MY_SHORT_OPTIONS);
    ldaputils_usage_common(MY_SHORT_OPTIONS);
-   printf(_("\nReport bugs to <%s>.\n"), PACKAGE_BUGREPORT);
+   printf("\nReport bugs to <%s>.\n", PACKAGE_BUGREPORT);
    return;
 }
 
@@ -124,7 +125,7 @@ void ldaputils_usage(void)
 /// @param[in] argv   array of arguments
 int main(int argc, char * argv[])
 {
-   LdapUtilsConfig * cnf;
+   lutils_config * cnf;
 
    if ((my_config(argc, argv, &cnf)))
       return(1);
@@ -133,7 +134,7 @@ int main(int argc, char * argv[])
 
    ldaputils_config_print(cnf);
 
-   ldaputils_config_free((LdapUtilsConfig *)cnf);
+   ldaputils_config_free((lutils_config *)cnf);
 
    return(0);
 }
@@ -142,11 +143,11 @@ int main(int argc, char * argv[])
 /// parses configuration
 /// @param[in] argc   number of arguments
 /// @param[in] argv   array of arguments
-int my_config(int argc, char * argv[], LdapUtilsConfig ** cnfp)
+int my_config(int argc, char * argv[], lutils_config ** cnfp)
 { 
    int               c;
    int               option_index;
-   LdapUtilsConfig * cnf;
+   lutils_config * cnf;
    
    static char   short_options[] = MY_SHORT_OPTIONS;
    static struct option long_options[] =
@@ -161,38 +162,38 @@ int my_config(int argc, char * argv[], LdapUtilsConfig ** cnfp)
    *cnfp        = NULL;
    
    // allocates memory for configuration
-   if (!(cnf = (LdapUtilsConfig *) malloc(sizeof(LdapUtilsConfig))))
+   if (!(cnf = (lutils_config *) malloc(sizeof(lutils_config))))
    {
-      fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
+      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
       return(1);
    };
-   memset(cnf, 0, sizeof(LdapUtilsConfig));
+   memset(cnf, 0, sizeof(lutils_config));
    
-   ldaputils_config_init((LdapUtilsConfig *) cnf);
+   ldaputils_config_init((lutils_config *) cnf, PROGRAM_NAME);
    
    // loops through args
    while((c = getopt_long(argc, argv, short_options, long_options, &option_index)) != -1)
    {
-      switch(ldaputils_cmdargs((LdapUtilsConfig *) cnf, c, optarg))
+      switch(ldaputils_cmdargs((lutils_config *) cnf, c, optarg))
       {
          case -2: return(0); // shared option exit without error
          case -1: break;     // no more arguments 
          case 0:  break;     // long options toggles
          case 1:  return(1); // shared option error
          case '?':           // argument error
-            fprintf(stderr, _("Try `%s --help' for more information.\n"), PROGRAM_NAME);
+            fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
             return(1);
          default:
-            fprintf(stderr, _("%s: unrecognized option `--%c'\n"), PROGRAM_NAME, c);
-            fprintf(stderr, _("Try `%s --help' for more information.\n"), PROGRAM_NAME);
+            fprintf(stderr, "%s: unrecognized option `--%c'\n", PROGRAM_NAME, c);
+            fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
             return(1);
       };
    };
 
    if (argc < (optind+2))
    {
-      fprintf(stderr, _("%s: missing required arguments\n"), PROGRAM_NAME);
-      fprintf(stderr, _("Try `%s --help' for more information.\n"), PROGRAM_NAME);
+      fprintf(stderr, "%s: missing required arguments\n", PROGRAM_NAME);
+      fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
       return(1);
    };
    
@@ -201,7 +202,7 @@ int my_config(int argc, char * argv[], LdapUtilsConfig ** cnfp)
    // configures LDAP attributes to return in results
    if (!(cnf->attrs = (char **) malloc(sizeof(char *) * (argc-optind))))
    {
-      fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
+      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
       return(1);
    };
    for(c = 0; c < (argc-optind-1); c++)

@@ -76,8 +76,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "ldaputils_config.h"
-#include "ldaputils_ldap.h"
+#include <ldaputils.h>
+
 
 ///////////////////
 //               //
@@ -115,19 +115,19 @@ struct my_config
 //////////////////
 
 // main statement
-int main PARAMS((int argc, char * argv[]));
+int main(int argc, char * argv[]);
 
 // converts buffer into an array of lines
-char ** my_buff2lines PARAMS((char * buff, int * countp));
+char ** my_buff2lines(char * buff, int * countp);
 
 // parses configuration
-int my_config PARAMS((int argc, char * argv[], MyConfig * cnf, int * codep));
+int my_config(int argc, char * argv[], MyConfig * cnf, int * codep);
 
 // reads file into buffer
-char * my_file2buff PARAMS((MyConfig * cnf));
+char * my_file2buff(MyConfig * cnf);
 
 // splits line into fields
-char ** my_linesfields PARAMS((char * line, int * countp));
+char ** my_linesfields(char * line, int * countp);
 
 
 /////////////////

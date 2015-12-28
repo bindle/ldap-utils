@@ -36,8 +36,8 @@
 /**
  *  @file src/ldaputils_ldap.c  contains shared functions and variables
  */
-#ifndef _LDAP_UTILS_SRC_LDAPUTILS_LDAP_H
-#define _LDAP_UTILS_SRC_LDAPUTILS_LDAP_H 1
+#ifndef _LIB_LIBLDAPUTILS_LLDAP_H
+#define _LIB_LIBLDAPUTILS_LLDAP_H 1
 
 
 ///////////////
@@ -46,8 +46,8 @@
 //           //
 ///////////////
 
-#include <ldap-utils.h>
-#include "ldaputils_config.h"
+#include <ldaputils.h>
+#include "lconfig.h"
 
 
 ///////////////////
@@ -63,33 +63,5 @@
 //              //
 //////////////////
 
-// compares two LDAP values for sorting
-int ldaputils_cmp_berval PARAMS((const struct berval ** ptr1, const struct berval ** ptr2));
-
-// compares two LDAP values for sorting
-int ldaputils_cmp_entry PARAMS((const LDAPUtilsEntry ** ptr1, const LDAPUtilsEntry ** ptr2));
-
-// frees list of entries
-void ldaputils_free_entries PARAMS((LDAPUtilsEntry ** entries));
-
-// retrieves LDAP entries from result
-LDAPUtilsEntry ** ldaputils_get_entries PARAMS((lutils_config * cnf, LDAP * ld,
-   LDAPMessage * res, const char * sortattr));
-
-// retrieves values of an LDAP attribute
-char * ldaputils_get_vals PARAMS((lutils_config * cnf, LDAPUtilsEntry * entry,
-   const char * attr));
-
-// connects and binds to LDAP server
-LDAP * ldaputils_initialize PARAMS((lutils_config * cnf));
-
-// connects and binds to LDAP server
-int ldaputils_search PARAMS((LDAP * ld, lutils_config * cnf, LDAPMessage ** resp));
-
-// sorts values
-int ldaputils_sort_entries PARAMS((LDAPUtilsEntry ** entries));
-
-// sorts values
-int ldaputils_sort_values PARAMS((struct berval ** vals));
 
 #endif /* end of header file */

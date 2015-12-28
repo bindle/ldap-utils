@@ -76,8 +76,8 @@
 #include <time.h>
 #include <getopt.h>
 
-#include "ldaputils_config.h"
-#include "ldaputils_ldap.h"
+#include <ldaputils.h>
+
 
 ///////////////////
 //               //
@@ -114,10 +114,10 @@ struct my_config
 //////////////////
 
 // main statement
-int main PARAMS((int argc, char * argv[]));
+int main(int argc, char * argv[]);
 
 // parses configuration
-int my_config PARAMS((int argc, char * argv[], MyConfig ** cnfp));
+int my_config(int argc, char * argv[], MyConfig ** cnfp);
 
 
 /////////////////
