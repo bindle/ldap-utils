@@ -158,7 +158,7 @@ int ldaputils_config_set_port(LdapUtilsConfig * cnf, const char * arg)
 {
    int          port;
    const char * host;
-   port = atol(arg);
+   port = (int)atol(arg);
    if ( (port < 1) || (port > 0xffff) )
    {
       fprintf(stderr, _("%s: invalid TCP port\n"), PROGRAM_NAME);
@@ -209,7 +209,7 @@ int ldaputils_config_set_scope(LdapUtilsConfig * cnf, const char * arg)
 /// @param[in] arg   value of the command line argument
 int ldaputils_config_set_sizelimit(LdapUtilsConfig * cnf, const char * arg)
 {
-   cnf->sizelimit = atol(arg);
+   cnf->sizelimit = (int)atol(arg);
    return(0);
 }
 
@@ -229,7 +229,7 @@ int ldaputils_config_set_sortattr(LdapUtilsConfig * cnf, const char * arg)
 /// @param[in] arg   value of the command line argument
 int ldaputils_config_set_timelimit(LdapUtilsConfig * cnf, const char * arg)
 {
-   cnf->timelimit = atol(arg);
+   cnf->timelimit = (int)atol(arg);
    return(0);
 }
 
@@ -282,7 +282,7 @@ int ldaputils_config_set_verbose(LdapUtilsConfig * cnf)
 int ldaputils_config_set_version(LdapUtilsConfig * cnf, const char * arg)
 {
    int i;
-   i = atol(arg);
+   i = (int)atol(arg);
    switch(i)
    {
       case 2:

@@ -204,7 +204,7 @@ void ldaputils_config_print(LdapUtilsConfig * cnf)
    printf("Common Options:\n");
    printf("   -c: continuous:   %i\n", cnf->continuous);
    printf("   -C: referrals:    %i\n", cnf->referrals);
-   printf("   -d: debug level:  %i\n", cnf->debug);
+   printf("   -d: debug level:  %li\n", cnf->debug);
    printf("   -D: bind DN:      %s\n", ldaputils_config_print_str(cnf->binddn));
    printf("   -h: LDAP host:    %s\n", ldaputils_config_print_str(cnf->host));
    printf("   -H: LDAP URI:     %s\n", ldaputils_config_print_str(cnf->uri));

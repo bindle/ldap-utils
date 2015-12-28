@@ -73,7 +73,7 @@ typedef struct ldaputils_config_struct * LdapUtilsConfigRef;
 struct ldaputils_config_struct
 {
    int            continuous;                  // -c continuous operation mode
-   int            debug;                       // -d debug level
+   long           debug;                       // -d debug level
    int            dryrun;                      // -n dry run mode
    int            port;                        // -p LDAP server port
    int            referrals;                   // -C chase referrals
