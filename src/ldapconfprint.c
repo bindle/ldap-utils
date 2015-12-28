@@ -126,12 +126,6 @@ int main(int argc, char * argv[])
 {
    LdapUtilsConfig * cnf;
 
-#ifdef HAVE_GETTEXT
-   setlocale (LC_ALL, ""); 
-   bindtextdomain (PACKAGE, LOCALEDIR); 
-   textdomain (PACKAGE);
-#endif
-
    if ((my_config(argc, argv, &cnf)))
       return(1);
    if (!(cnf))

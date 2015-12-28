@@ -129,10 +129,10 @@ int my_config PARAMS((int argc, char * argv[], MyConfig ** cnfp));
 /// prints program usage and exits
 void ldaputils_usage(void)
 {
-   printf(_("Usage: %s [options] filter attributes...\n"), PROGRAM_NAME);
+   printf("Usage: %s [options] filter attributes...\n", PROGRAM_NAME);
    ldaputils_usage_search(MY_SHORT_OPTIONS);
    ldaputils_usage_common(MY_SHORT_OPTIONS);
-   printf(_("\nReport bugs to <%s>.\n"), PACKAGE_BUGREPORT);
+   printf("\nReport bugs to <%s>.\n", PACKAGE_BUGREPORT);
    return;
 }
 
@@ -151,12 +151,6 @@ int main(int argc, char * argv[])
    LDAPMessage    * res;
 //   LDAPMessage    * entry;
    LDAPUtilsEntry ** entries;
-
-#ifdef HAVE_GETTEXT
-   setlocale (LC_ALL, ""); 
-   bindtextdomain (PACKAGE, LOCALEDIR); 
-   textdomain (PACKAGE);
-#endif
 
    if ((my_config(argc, argv, &cnf)))
       return(1);
@@ -253,7 +247,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    // allocates memory for configuration
    if (!(cnf = (MyConfig *) malloc(sizeof(MyConfig))))
    {
-      fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
+      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
       return(1);
    };
    memset(cnf, 0, sizeof(MyConfig));
@@ -270,19 +264,19 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
          case 0:  break;     // long options toggles
          case 1:  return(1); // shared option error
          case '?':           // argument error
-            fprintf(stderr, _("Try `%s --help' for more information.\n"), PROGRAM_NAME);
+            fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
             return(1);
          default:
-            fprintf(stderr, _("%s: unrecognized option `--%c'\n"), PROGRAM_NAME, c);
-            fprintf(stderr, _("Try `%s --help' for more information.\n"), PROGRAM_NAME);
+            fprintf(stderr, "%s: unrecognized option `--%c'\n", PROGRAM_NAME, c);
+            fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
             return(1);
       };
    };
    
    if (argc < (optind+2))
    {
-      fprintf(stderr, _("%s: missing required arguments\n"), PROGRAM_NAME);
-      fprintf(stderr, _("Try `%s --help' for more information.\n"), PROGRAM_NAME);
+      fprintf(stderr, "%s: missing required arguments\n", PROGRAM_NAME);
+      fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
       return(1);
    };
    
@@ -291,7 +285,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    // configures LDAP attributes to return in results
    if (!(cnf->common.attrs = (char **) malloc(sizeof(char *) * (argc-optind))))
    {
-      fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
+      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
       return(1);
    };
    for(c = 0; c < (argc-optind-1); c++)

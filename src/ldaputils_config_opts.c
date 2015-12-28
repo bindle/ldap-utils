@@ -107,7 +107,7 @@ int ldaputils_config_set_bindpw_prompt(LdapUtilsConfig * cnf)
 {
    // TRANSLATORS: The following string is used as a prompt when the program
    // requests the user's LDAP bind password.
-   ldaputils_getpass(_("Enter LDAP Password: "), cnf->bindpw, LDAPUTILS_OPT_LEN);
+   ldaputils_getpass("Enter LDAP Password: ", cnf->bindpw, LDAPUTILS_OPT_LEN);
    return(0);
 }
 
@@ -161,8 +161,8 @@ int ldaputils_config_set_port(LdapUtilsConfig * cnf, const char * arg)
    port = (int)atol(arg);
    if ( (port < 1) || (port > 0xffff) )
    {
-      fprintf(stderr, _("%s: invalid TCP port\n"), PROGRAM_NAME);
-      fprintf(stderr, _("Try `%s --help' for more information.\n"), PROGRAM_NAME);
+      fprintf(stderr, "%s: invalid TCP port\n", PROGRAM_NAME);
+      fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
       return(1);
    };
    if ((cnf->host))
@@ -197,7 +197,7 @@ int ldaputils_config_set_scope(LdapUtilsConfig * cnf, const char * arg)
       cnf->scope = LDAP_SCOPE_BASE;
    else
    {
-      fprintf(stderr, _("%s: scope should be base, one, or sub\n"), PROGRAM_NAME);
+      fprintf(stderr, "%s: scope should be base, one, or sub\n", PROGRAM_NAME);
       return(1);
    };
    return(0);
@@ -254,8 +254,8 @@ int ldaputils_config_set_uri(LdapUtilsConfig * cnf, const char * arg)
    {
       // TRANSLATORS: The following strings provide an error message if the
       // URI provided on the command line is an invalid LDAP URI.
-      fprintf(stderr, _("%s: invalid LDAP URI\n"), PROGRAM_NAME);
-      fprintf(stderr, _("Try `%s --help' for more information.\n"), PROGRAM_NAME);
+      fprintf(stderr, "%s: invalid LDAP URI\n", PROGRAM_NAME);
+      fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
       return(1);
    };
    
@@ -293,8 +293,8 @@ int ldaputils_config_set_version(LdapUtilsConfig * cnf, const char * arg)
          // TRANSLATORS: The following strings provide an error message if the
          // LDAP protocol version specified on the command line is an invalid
          // protocol version or unsupported protocol version.
-         fprintf(stderr, _("%s: protocol version should be 2 or 3\n"), PROGRAM_NAME);
-         fprintf(stderr, _("Try `%s --help' for more information.\n"), PROGRAM_NAME);
+         fprintf(stderr, "%s: protocol version should be 2 or 3\n", PROGRAM_NAME);
+         fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
          return(1);
    };
    return(0);

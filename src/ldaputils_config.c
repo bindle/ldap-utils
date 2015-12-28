@@ -306,7 +306,7 @@ int ldaputils_passfile(const char * file, char * buff, size_t size)
       // TRANSLATORS: The following string provides an error message if the
       // file which contains the password has insecure file permissions. The
       // string arguments are the name of the program and the name of the file.
-      fprintf(stderr, _("%s: Password file %s is publicly readable/writeable\n"), PROGRAM_NAME, file);
+      fprintf(stderr, "%s: Password file %s is publicly readable/writeable\n", PROGRAM_NAME, file);
    
    if ((fd = open(file, O_RDONLY)) == -1)
    {
@@ -336,25 +336,25 @@ void ldaputils_usage_common(const char * short_options)
    // line arguments. Usage for program specific arguments is provided in
    // anothoer section. These strings are displayed if the program is
    // passed `--help' on the command line.
-   printf(_("Common options:\n"));
+   printf("Common options:\n");
    for(pos = 0; pos < strlen(short_options); pos++)
    {
       switch(short_options[pos])
       {
-         case 'c': printf(_("  -c                continuous operation mode (do not stop on errors)\n")); break;
-         case 'C': printf(_("  -C                chase referrals (anonymously)\n")); break;
-         case 'd': printf(_("  -d level          set LDAP debug level to `level'\n")); break;
-         case 'D': printf(_("  -D binddn         bind DN\n")); break;
-         case 'h': printf(_("  -h host           LDAP server\n")); break;
-         case 'H': printf(_("  -H URI            LDAP Uniform Resource Identifier(s)\n")); break;
-         case 'n': printf(_("  -n                show what would be done but don't actually do it\n")); break;
-         case 'p': printf(_("  -p port           port on LDAP server\n")); break;
-         case 'v': printf(_("  -v, --verbose     run in verbose mode\n")); break;
-         case 'V': printf(_("  -V, --version     print version number and exit\n")); break;
-         case 'w': printf(_("  -w, passwd        bind password (for simple authentication)\n")); break;
-         case 'W': printf(_("  -W                prompt for bind password\n")); break;
-         case 'y': printf(_("  -y file           read password from file\n")); break;
-         case '9': printf(_("  --help            print this help and exit\n")); break;
+         case 'c': printf("  -c                continuous operation mode (do not stop on errors)\n"); break;
+         case 'C': printf("  -C                chase referrals (anonymously)\n"); break;
+         case 'd': printf("  -d level          set LDAP debug level to `level'\n"); break;
+         case 'D': printf("  -D binddn         bind DN\n"); break;
+         case 'h': printf("  -h host           LDAP server\n"); break;
+         case 'H': printf("  -H URI            LDAP Uniform Resource Identifier(s)\n"); break;
+         case 'n': printf("  -n                show what would be done but don't actually do it\n"); break;
+         case 'p': printf("  -p port           port on LDAP server\n"); break;
+         case 'v': printf("  -v, --verbose     run in verbose mode\n"); break;
+         case 'V': printf("  -V, --version     print version number and exit\n"); break;
+         case 'w': printf("  -w, passwd        bind password (for simple authentication)\n"); break;
+         case 'W': printf("  -W                prompt for bind password\n"); break;
+         case 'y': printf("  -y file           read password from file\n"); break;
+         case '9': printf("  --help            print this help and exit\n"); break;
          default: break;
       };
    };
@@ -371,16 +371,16 @@ void ldaputils_usage_search(const char * short_options)
    // line arguments. Usage for program specific arguments is provided in
    // anothoer section. These strings are displayed if the program is
    // passed `--help' on the command line.
-   printf(_("Search options:\n"));
+   printf("Search options:\n");
    for(pos = 0; pos < strlen(short_options); pos++)
    {
       switch(short_options[pos])
       {
-         case 'b': printf(_("  -b basedn         base dn for search\n")); break;
-         case 'l': printf(_("  -l limit          time limit (in seconds) for search\n")); break;
-         case 's': printf(_("  -s scope          one of base, one, or sub (search scope)\n")); break;
-         case 'S': printf(_("  -S attr           sort results by attribute `attr'\n")); break;
-         case 'z': printf(_("  -z limit          size limit for search\n")); break;
+         case 'b': printf("  -b basedn         base dn for search\n"); break;
+         case 'l': printf("  -l limit          time limit (in seconds) for search\n"); break;
+         case 's': printf("  -s scope          one of base, one, or sub (search scope)\n"); break;
+         case 'S': printf("  -S attr           sort results by attribute `attr'\n"); break;
+         case 'z': printf("  -z limit          size limit for search\n"); break;
          default: break;
       };
    };
@@ -395,11 +395,11 @@ void ldaputils_version(void)
    // information if the program is passed --version on the command line.
    // The three strings referenced are: PROGRAM_NAME, PACKAGE_NAME,
    // PACKAGE_VERSION.
-   printf(_( "%s (%s) %s\n"
+   printf("%s (%s) %s\n"
          "Copyright (C) 2008 David M. Syzdek.\n"
          "This is free software; see the source for copying conditions.  There is NO\n"
          "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
-      ), PROGRAM_NAME, PACKAGE_NAME, PACKAGE_VERSION
+      , PROGRAM_NAME, PACKAGE_NAME, PACKAGE_VERSION
    );
    return;
 }

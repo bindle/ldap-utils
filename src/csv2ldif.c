@@ -143,7 +143,7 @@ void ldaputils_usage(void)
    // line arguments. Usage for program specific arguments is provided in
    // anothoer section. These strings are displayed if the program is
    // passed `--help' on the command line.
-   printf(_("Usage: %s [options] filter attributes...\n"
+   printf("Usage: %s [options] filter attributes...\n"
          "  -a name:value     additional attribute name/value pair to include\n"
          "  -b fmt            DN format for LDAP records\n"
          "  -f file           CSV file to convert\n"
@@ -151,7 +151,7 @@ void ldaputils_usage(void)
          "  -v, --verbose     run in verbose mode\n"
          "  -V, --version     print version number and exit\n"
          "\nReport bugs to <%s>.\n"
-      ), PROGRAM_NAME, PACKAGE_BUGREPORT
+      , PROGRAM_NAME, PACKAGE_BUGREPORT
    );
    return;
 }
@@ -168,12 +168,6 @@ int main(int argc, char * argv[])
    char      * buff;
    char     ** lines;
    MyConfig    cnf;
-
-#ifdef HAVE_GETTEXT
-   setlocale (LC_ALL, ""); 
-   bindtextdomain (PACKAGE, LOCALEDIR); 
-   textdomain (PACKAGE);
-#endif
 
    if ((my_config(argc, argv, &cnf, &code)))
       return(code);
@@ -216,7 +210,7 @@ char ** my_buff2lines(char * buff, int * countp)
    size = sizeof(char *) * (max_count + 1);
    if (!(lines = malloc(size)))
    {
-      fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
+      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
       return(NULL);
    };
    memset(lines, 0, size);
@@ -237,7 +231,7 @@ char ** my_buff2lines(char * buff, int * countp)
                size = sizeof(char *) * (max_count + 1);
                if (!(ptr = realloc(lines, size)))
                {
-                  fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
+                  fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
                   return(NULL);
                };
                lines = ptr;
@@ -294,7 +288,7 @@ int my_config(int argc, char * argv[], MyConfig * cnf, int * codep)
             cnf->extra_count++;
             if (!(ptr = realloc(cnf->extra, sizeof(char *) * cnf->extra_count)))
             {
-               fprintf(stderr, _("%s: out of virtual memory\n"), PROGRAM_NAME);
+               fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
                *codep = 1;
                return(1);
             };
@@ -323,13 +317,13 @@ int my_config(int argc, char * argv[], MyConfig * cnf, int * codep)
             return(1);
 
          case '?':           // argument error
-            fprintf(stderr, _("Try `%s --help' for more information.\n"), PROGRAM_NAME);
+            fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
             *codep = 1;
             return(1);
 
          default:
-            fprintf(stderr, _("%s: unrecognized option `--%c'\n"), PROGRAM_NAME, c);
-            fprintf(stderr, _("Try `%s --help' for more information.\n"), PROGRAM_NAME);
+            fprintf(stderr, "%s: unrecognized option `--%c'\n", PROGRAM_NAME, c);
+            fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
             *codep = 1;
             return(1);
       };
@@ -337,8 +331,8 @@ int my_config(int argc, char * argv[], MyConfig * cnf, int * codep)
    
    if (!(cnf->file))
    {
-      fprintf(stderr, _("%s: missing required arguments\n"), PROGRAM_NAME);
-      fprintf(stderr, _("Try `%s --help' for more information.\n"), PROGRAM_NAME);
+      fprintf(stderr, "%s: missing required arguments\n", PROGRAM_NAME);
+      fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
       return(1);
    };
    
@@ -388,6 +382,7 @@ char * my_file2buff(MyConfig * cnf)
 }
 
 
+/*
 /// splits line into fields
 /// @param[in]  line    line to parse into array of fields
 /// @param[out] countp  saves number of lines found
@@ -395,5 +390,6 @@ char ** my_linesfields(char * line, int * countp)
 {
    
 }
+*/
 
 /* end of source file */
