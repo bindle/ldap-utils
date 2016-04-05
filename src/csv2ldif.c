@@ -207,7 +207,7 @@ char ** my_buff2lines(char * buff, int * countp)
    *countp   = 0;
    max_count = 100;
 
-   size = sizeof(char *) * (max_count + 1);
+   size = sizeof(char *) * (size_t)(max_count + 1);
    if (!(lines = malloc(size)))
    {
       fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
@@ -228,7 +228,7 @@ char ** my_buff2lines(char * buff, int * countp)
             if (max_count <= *countp)
             {
                max_count += 100;
-               size = sizeof(char *) * (max_count + 1);
+               size = sizeof(char *) * (size_t)(max_count + 1);
                if (!(ptr = realloc(lines, size)))
                {
                   fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
@@ -286,7 +286,7 @@ int my_config(int argc, char * argv[], MyConfig * cnf, int * codep)
          
          case 'a':
             cnf->extra_count++;
-            if (!(ptr = realloc(cnf->extra, sizeof(char *) * cnf->extra_count)))
+            if (!(ptr = realloc(cnf->extra, sizeof(char *) * (size_t)cnf->extra_count)))
             {
                fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
                *codep = 1;

@@ -157,7 +157,7 @@ int main(int argc, char * argv[])
    if (!(cnf))
       return(0);
    
-   if (!(ld = ldaputils_initialize(&cnf->common)))
+   if (!(ld = ldaputils_initialize_conn(&cnf->common)))
    {
       ldaputils_config_free((lutils_config *)cnf);
       free(cnf);
@@ -283,7 +283,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    cnf->common.filter = argv[optind];
 
    // configures LDAP attributes to return in results
-   if (!(cnf->common.attrs = (char **) malloc(sizeof(char *) * (argc-optind))))
+   if (!(cnf->common.attrs = (char **) malloc(sizeof(char *) * (size_t)(argc-optind))))
    {
       fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
       return(1);

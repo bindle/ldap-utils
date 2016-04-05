@@ -355,7 +355,7 @@ char * ldaputils_get_vals(lutils_config * cnf, LDAPUtilsEntry * entry,
 
 /// connects and binds to LDAP server
 /// @param[in] cnf   reference to common configuration struct
-LDAP * ldaputils_initialize(lutils_config * cnf)
+LDAP * ldaputils_initialize_conn(lutils_config * cnf)
 {
    int          err;
    LDAP       * ld;

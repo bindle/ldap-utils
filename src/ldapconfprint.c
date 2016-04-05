@@ -200,7 +200,7 @@ int my_config(int argc, char * argv[], lutils_config ** cnfp)
    cnf->filter = argv[optind];
    
    // configures LDAP attributes to return in results
-   if (!(cnf->attrs = (char **) malloc(sizeof(char *) * (argc-optind))))
+   if (!(cnf->attrs = (char **) malloc(sizeof(char *) * (size_t)(argc-optind))))
    {
       fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
       return(1);

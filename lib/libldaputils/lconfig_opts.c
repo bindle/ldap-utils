@@ -287,7 +287,7 @@ int ldaputils_config_set_version(lutils_config * cnf, const char * arg)
    {
       case 2:
       case 3:
-         cnf->version = i;
+         cnf->version = (unsigned)i;
          return(0);
       default:
          // TRANSLATORS: The following strings provide an error message if the

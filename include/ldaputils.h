@@ -117,6 +117,8 @@ struct ldap_utils_attribute
 typedef struct ldaputils_config_struct   lutils_config;
 struct ldaputils_config_struct
 {
+   LDAP         * ld;                          ///< LDAP descriptor
+   LDAPURLDesc  * ludp;                        ///< LDAP URL descriptor
    int            continuous;                  // -c continuous operation mode
    long           debug;                       // -d debug level
    int            dryrun;                      // -n dry run mode
@@ -138,7 +140,6 @@ struct ldaputils_config_struct
    const char   * sortattr;	                 // -S sort by attribute
    const char   * uri;                         // -H LDAP URI
    const char   * prog_name;                   // name of calling program
-   LDAPURLDesc  * ludp;                        // pointer to LDAP URL
 };
 
 
@@ -261,7 +262,7 @@ char * ldaputils_get_vals(lutils_config * cnf, LDAPUtilsEntry * entry,
    const char * attr);
 
 // connects and binds to LDAP server
-LDAP * ldaputils_initialize(lutils_config * cnf);
+LDAP * ldaputils_initialize_conn(lutils_config * cnf);
 
 // connects and binds to LDAP server
 int ldaputils_search(LDAP * ld, lutils_config * cnf, LDAPMessage ** resp);
