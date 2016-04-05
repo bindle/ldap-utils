@@ -117,12 +117,15 @@ lib_libldaputils_a_DEPENDENCIES		= Makefile lib/libldaputils/libldaputils.sym
 lib_libldaputils_a_CFLAGS		= $(AM_CFLAGS)
 lib_libldaputils_a_LIBADD		= $(AM_LIBS)
 lib_libldaputils_a_SOURCES		= $(noinst_HEADERS) \
+					  lib/libldaputils/libldaputils.h \
 					  lib/libldaputils/lconfig.c \
 					  lib/libldaputils/lconfig.h \
 					  lib/libldaputils/lconfig_opts.c \
 					  lib/libldaputils/lconfig_opts.h \
 					  lib/libldaputils/lldap.c \
-					  lib/libldaputils/lldap.h
+					  lib/libldaputils/lldap.h \
+					  lib/libldaputils/lmemory.c \
+					  lib/libldaputils/lmemory.h
 
 
 # macros for csv2ldif

@@ -25,6 +25,9 @@
 
 /* Begin PBXBuildFile section */
 		A01EB9AD1CB3584A005606AC /* libldaputils.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A027AA591C31C94900EA81CB /* libldaputils.a */; };
+		A01EB9B21CB40F9E005606AC /* lmemory.c in Sources */ = {isa = PBXBuildFile; fileRef = A01EB9B01CB40F9E005606AC /* lmemory.c */; };
+		A01EB9B31CB40F9E005606AC /* lmemory.h in Headers */ = {isa = PBXBuildFile; fileRef = A01EB9B11CB40F9E005606AC /* lmemory.h */; };
+		A01EB9B51CB4108D005606AC /* libldaputils.h in Headers */ = {isa = PBXBuildFile; fileRef = A01EB9B41CB4108D005606AC /* libldaputils.h */; };
 		A027AA641C31C96A00EA81CB /* libldaputils.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A027AA591C31C94900EA81CB /* libldaputils.a */; };
 		A027AA6E1C31C98A00EA81CB /* lconfig_opts.c in Sources */ = {isa = PBXBuildFile; fileRef = A027AA651C31C97B00EA81CB /* lconfig_opts.c */; };
 		A027AA6F1C31C98A00EA81CB /* lconfig_opts.h in Headers */ = {isa = PBXBuildFile; fileRef = A027AA661C31C97B00EA81CB /* lconfig_opts.h */; };
@@ -124,6 +127,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A01EB9B01CB40F9E005606AC /* lmemory.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lmemory.c; sourceTree = "<group>"; };
+		A01EB9B11CB40F9E005606AC /* lmemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lmemory.h; sourceTree = "<group>"; };
+		A01EB9B41CB4108D005606AC /* libldaputils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libldaputils.h; sourceTree = "<group>"; };
 		A027AA1C1C31AA5300EA81CB /* libldaputils.sym */ = {isa = PBXFileReference; explicitFileType = text.script; fileEncoding = 4; path = libldaputils.sym; sourceTree = "<group>"; };
 		A027AA501C31C29100EA81CB /* liblber-2.4.2.10.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "liblber-2.4.2.10.3.dylib"; path = "../../../../../opt/local/lib/liblber-2.4.2.10.3.dylib"; sourceTree = "<group>"; };
 		A027AA511C31C29100EA81CB /* libldap-2.4.2.10.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libldap-2.4.2.10.3.dylib"; path = "../../../../../opt/local/lib/libldap-2.4.2.10.3.dylib"; sourceTree = "<group>"; };
@@ -219,12 +225,15 @@
 			isa = PBXGroup;
 			children = (
 				A027AA1C1C31AA5300EA81CB /* libldaputils.sym */,
+				A01EB9B41CB4108D005606AC /* libldaputils.h */,
 				A027AA651C31C97B00EA81CB /* lconfig_opts.c */,
 				A027AA661C31C97B00EA81CB /* lconfig_opts.h */,
 				A027AA671C31C97B00EA81CB /* lconfig.c */,
 				A027AA681C31C97B00EA81CB /* lconfig.h */,
 				A027AA691C31C97B00EA81CB /* lldap.c */,
 				A027AA6A1C31C97B00EA81CB /* lldap.h */,
+				A01EB9B01CB40F9E005606AC /* lmemory.c */,
+				A01EB9B11CB40F9E005606AC /* lmemory.h */,
 			);
 			path = libldaputils;
 			sourceTree = "<group>";
@@ -341,6 +350,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A01EB9B51CB4108D005606AC /* libldaputils.h in Headers */,
+				A01EB9B31CB40F9E005606AC /* lmemory.h in Headers */,
 				A027AA731C31C98A00EA81CB /* lldap.h in Headers */,
 				A027AA6F1C31C98A00EA81CB /* lconfig_opts.h in Headers */,
 				A027AA711C31C98A00EA81CB /* lconfig.h in Headers */,
@@ -469,6 +480,7 @@
 				A027AA721C31C98A00EA81CB /* lldap.c in Sources */,
 				A027AA701C31C98A00EA81CB /* lconfig.c in Sources */,
 				A027AA6E1C31C98A00EA81CB /* lconfig_opts.c in Sources */,
+				A01EB9B21CB40F9E005606AC /* lmemory.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
