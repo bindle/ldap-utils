@@ -100,7 +100,7 @@
 int main(int argc, char * argv[]);
 
 // parses configuration
-int my_config(int argc, char * argv[], lutils_config ** cnfp);
+int my_config(int argc, char * argv[], LDAPUtils ** cnfp);
 
 
 /////////////////
@@ -125,7 +125,7 @@ void ldaputils_usage(void)
 /// @param[in] argv   array of arguments
 int main(int argc, char * argv[])
 {
-   lutils_config * cnf;
+   LDAPUtils * cnf;
 
    if ((my_config(argc, argv, &cnf)))
       return(1);
@@ -134,7 +134,7 @@ int main(int argc, char * argv[])
 
    ldaputils_config_print(cnf);
 
-   ldaputils_config_free((lutils_config *)cnf);
+   ldaputils_config_free((LDAPUtils *)cnf);
 
    return(0);
 }
@@ -143,11 +143,11 @@ int main(int argc, char * argv[])
 /// parses configuration
 /// @param[in] argc   number of arguments
 /// @param[in] argv   array of arguments
-int my_config(int argc, char * argv[], lutils_config ** cnfp)
+int my_config(int argc, char * argv[], LDAPUtils ** cnfp)
 { 
    int               c;
    int               option_index;
-   lutils_config * cnf;
+   LDAPUtils * cnf;
    
    static char   short_options[] = MY_SHORT_OPTIONS;
    static struct option long_options[] =
@@ -162,19 +162,19 @@ int my_config(int argc, char * argv[], lutils_config ** cnfp)
    *cnfp        = NULL;
    
    // allocates memory for configuration
-   if (!(cnf = (lutils_config *) malloc(sizeof(lutils_config))))
+   if (!(cnf = (LDAPUtils *) malloc(sizeof(LDAPUtils))))
    {
       fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
       return(1);
    };
-   memset(cnf, 0, sizeof(lutils_config));
+   memset(cnf, 0, sizeof(LDAPUtils));
    
-   ldaputils_config_init((lutils_config *) cnf, PROGRAM_NAME);
+   ldaputils_config_init((LDAPUtils *) cnf, PROGRAM_NAME);
    
    // loops through args
    while((c = getopt_long(argc, argv, short_options, long_options, &option_index)) != -1)
    {
-      switch(ldaputils_cmdargs((lutils_config *) cnf, c, optarg))
+      switch(ldaputils_cmdargs((LDAPUtils *) cnf, c, optarg))
       {
          case -2: return(0); // shared option exit without error
          case -1: break;     // no more arguments 

@@ -114,7 +114,7 @@ struct ldap_utils_attribute
 
 
 /* store common structs */
-typedef struct ldaputils_config_struct   lutils_config;
+typedef struct ldaputils_config_struct   LDAPUtils;
 struct ldaputils_config_struct
 {
    LDAP         * ld;                          ///< LDAP descriptor
@@ -154,16 +154,16 @@ LDAPUTILS_BEGIN_C_DECLS
 char * ldaputils_chomp(char * str);
 
 // parses LDAP command line arguments
-int ldaputils_cmdargs(lutils_config * cnf, int c, const char * arg);
+int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg);
 
 // frees common config
-void ldaputils_config_free(lutils_config * cnf);
+void ldaputils_config_free(LDAPUtils * cnf);
 
 // initializes the common config
-void ldaputils_config_init(lutils_config * cnf, const char * prog_name);
+void ldaputils_config_init(LDAPUtils * cnf, const char * prog_name);
 
 // prints configuration to stdout
-void ldaputils_config_print(lutils_config * cnf);
+void ldaputils_config_print(LDAPUtils * cnf);
 
 // prints string to stdout
 const char * ldaputils_config_print_str(const char * str);
@@ -172,7 +172,7 @@ const char * ldaputils_config_print_str(const char * str);
 int ldaputils_getpass(const char * prompt, char * buff, size_t size);
 
 // retrieves password from file
-int ldaputils_passfile(lutils_config * cnf, const char * file,
+int ldaputils_passfile(LDAPUtils * cnf, const char * file,
    char * buff, size_t size);
 
 // prints program usage and exits
@@ -188,61 +188,61 @@ void ldaputils_usage_search(const char * short_options);
 void ldaputils_version(const char * prog_name);
 
 // parses LDAP command line arguments
-int ldaputils_common_cmdargs(lutils_config * cnf, int c, const char * arg);
+int ldaputils_common_cmdargs(LDAPUtils * cnf, int c, const char * arg);
 
 // sets LDAP server's base DN
-int ldaputils_config_set_basedn(lutils_config * cnf, const char * arg);
+int ldaputils_config_set_basedn(LDAPUtils * cnf, const char * arg);
 
 // sets LDAP server's bind DN
-int ldaputils_config_set_binddn(lutils_config * cnf, const char * arg);
+int ldaputils_config_set_binddn(LDAPUtils * cnf, const char * arg);
 
 // sets LDAP server's bind password
-int ldaputils_config_set_bindpw(lutils_config * cnf, const char * arg);
+int ldaputils_config_set_bindpw(LDAPUtils * cnf, const char * arg);
 
 // reads LDAP server's bind password from file
-int ldaputils_config_set_bindpw_file(lutils_config * cnf, const char * arg);
+int ldaputils_config_set_bindpw_file(LDAPUtils * cnf, const char * arg);
 
 // sets LDAP server's bind password
-int ldaputils_config_set_bindpw_prompt(lutils_config * cnf);
+int ldaputils_config_set_bindpw_prompt(LDAPUtils * cnf);
 
 // toggles continuous mode
-int ldaputils_config_set_continuous(lutils_config * cnf);
+int ldaputils_config_set_continuous(LDAPUtils * cnf);
 
 // sets LDAP debug level
-int ldaputils_config_set_debug(lutils_config * cnf, const char * arg);
+int ldaputils_config_set_debug(LDAPUtils * cnf, const char * arg);
 
 // toggles dry run
-int ldaputils_config_set_dryrun(lutils_config * cnf);
+int ldaputils_config_set_dryrun(LDAPUtils * cnf);
 
 // sets LDAP server's host name
-int ldaputils_config_set_host(lutils_config * cnf, const char * arg);
+int ldaputils_config_set_host(LDAPUtils * cnf, const char * arg);
 
 // sets LDAP TCP port
-int ldaputils_config_set_port(lutils_config * cnf, const char * arg);
+int ldaputils_config_set_port(LDAPUtils * cnf, const char * arg);
 
 // toggles following referrals
-int ldaputils_config_set_referrals(lutils_config * cnf);
+int ldaputils_config_set_referrals(LDAPUtils * cnf);
 
 // sets LDAP search scope
-int ldaputils_config_set_scope(lutils_config * cnf, const char * arg);
+int ldaputils_config_set_scope(LDAPUtils * cnf, const char * arg);
 
 // sets LDAP size limit
-int ldaputils_config_set_sizelimit(lutils_config * cnf, const char * arg);
+int ldaputils_config_set_sizelimit(LDAPUtils * cnf, const char * arg);
 
 // sets sort attribute
-int ldaputils_config_set_sortattr(lutils_config * cnf, const char * arg);
+int ldaputils_config_set_sortattr(LDAPUtils * cnf, const char * arg);
 
 // sets LDAP time limit
-int ldaputils_config_set_timelimit(lutils_config * cnf, const char * arg);
+int ldaputils_config_set_timelimit(LDAPUtils * cnf, const char * arg);
 
 // sets LDAP server's URI
-int ldaputils_config_set_uri(lutils_config * cnf, const char * arg);
+int ldaputils_config_set_uri(LDAPUtils * cnf, const char * arg);
 
 // toggles verbose mode
-int ldaputils_config_set_verbose(lutils_config * cnf);
+int ldaputils_config_set_verbose(LDAPUtils * cnf);
 
 // sets LDAP protocol version
-int ldaputils_config_set_version(lutils_config * cnf, const char * arg);
+int ldaputils_config_set_version(LDAPUtils * cnf, const char * arg);
 
 // compares two LDAP values for sorting
 int ldaputils_cmp_berval(const struct berval ** ptr1, const struct berval ** ptr2);
@@ -254,18 +254,18 @@ int ldaputils_cmp_entry(const LDAPUtilsEntry ** ptr1, const LDAPUtilsEntry ** pt
 void ldaputils_free_entries(LDAPUtilsEntry ** entries);
 
 // retrieves LDAP entries from result
-LDAPUtilsEntry ** ldaputils_get_entries(lutils_config * cnf, LDAP * ld,
+LDAPUtilsEntry ** ldaputils_get_entries(LDAPUtils * cnf, LDAP * ld,
    LDAPMessage * res, const char * sortattr);
 
 // retrieves values of an LDAP attribute
-char * ldaputils_get_vals(lutils_config * cnf, LDAPUtilsEntry * entry,
+char * ldaputils_get_vals(LDAPUtils * cnf, LDAPUtilsEntry * entry,
    const char * attr);
 
 // connects and binds to LDAP server
-LDAP * ldaputils_initialize_conn(lutils_config * cnf);
+LDAP * ldaputils_initialize_conn(LDAPUtils * cnf);
 
 // connects and binds to LDAP server
-int ldaputils_search(LDAP * ld, lutils_config * cnf, LDAPMessage ** resp);
+int ldaputils_search(LDAP * ld, LDAPUtils * cnf, LDAPMessage ** resp);
 
 // sorts values
 int ldaputils_sort_entries(LDAPUtilsEntry ** entries);

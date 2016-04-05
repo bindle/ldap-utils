@@ -202,7 +202,7 @@ void ldaputils_free_entries(LDAPUtilsEntry ** entries)
 /// retrieves LDAP entries from result
 /// @param[in] ld      refernce to LDAP socket data
 /// @param[in] res     refernce to LDAP result message
-LDAPUtilsEntry ** ldaputils_get_entries(lutils_config * cnf, LDAP * ld,
+LDAPUtilsEntry ** ldaputils_get_entries(LDAPUtils * cnf, LDAP * ld,
    LDAPMessage * res, const char * sortattr)
 {
    char                * attr;
@@ -286,7 +286,7 @@ LDAPUtilsEntry ** ldaputils_get_entries(lutils_config * cnf, LDAP * ld,
 /// @param[in] ld      refernce to LDAP socket data
 /// @param[in] entry   pointer to LDAP entry
 /// @param[in] attr    attribute to retrieve
-char * ldaputils_get_vals(lutils_config * cnf, LDAPUtilsEntry * entry,
+char * ldaputils_get_vals(LDAPUtils * cnf, LDAPUtilsEntry * entry,
    const char * attr)
 {
    int              x;
@@ -355,7 +355,7 @@ char * ldaputils_get_vals(lutils_config * cnf, LDAPUtilsEntry * entry,
 
 /// connects and binds to LDAP server
 /// @param[in] cnf   reference to common configuration struct
-LDAP * ldaputils_initialize_conn(lutils_config * cnf)
+LDAP * ldaputils_initialize_conn(LDAPUtils * cnf)
 {
    int          err;
    LDAP       * ld;
@@ -420,7 +420,7 @@ LDAP * ldaputils_initialize_conn(lutils_config * cnf)
 /// connects and binds to LDAP server
 /// @param[in] ld    refernce to LDAP socket data
 /// @param[in] cnf   reference to common configuration struct
-int ldaputils_search(LDAP * ld, lutils_config * cnf, LDAPMessage ** resp)
+int ldaputils_search(LDAP * ld, LDAPUtils * cnf, LDAPMessage ** resp)
 {
    int rc;
    int err;

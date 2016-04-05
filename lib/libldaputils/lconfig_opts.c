@@ -64,7 +64,7 @@
 /// sets LDAP server's base DN
 /// @param[in] cnf   reference to common configuration struct
 /// @param[in] arg   value of the command line argument
-int ldaputils_config_set_basedn(lutils_config * cnf, const char * arg)
+int ldaputils_config_set_basedn(LDAPUtils * cnf, const char * arg)
 {
    cnf->basedn = arg;
    return(0);
@@ -74,7 +74,7 @@ int ldaputils_config_set_basedn(lutils_config * cnf, const char * arg)
 /// sets LDAP server's bind DN
 /// @param[in] cnf   reference to common configuration struct
 /// @param[in] arg   value of the command line argument
-int ldaputils_config_set_binddn(lutils_config * cnf, const char * arg)
+int ldaputils_config_set_binddn(LDAPUtils * cnf, const char * arg)
 {
    cnf->binddn = arg;
    return(0);
@@ -84,7 +84,7 @@ int ldaputils_config_set_binddn(lutils_config * cnf, const char * arg)
 /// sets LDAP server's bind password
 /// @param[in] cnf   reference to common configuration struct
 /// @param[in] arg   value of the command line argument
-int ldaputils_config_set_bindpw(lutils_config * cnf, const char * arg)
+int ldaputils_config_set_bindpw(LDAPUtils * cnf, const char * arg)
 {
    strncpy(cnf->bindpw, arg, LDAPUTILS_OPT_LEN);
    return(0);
@@ -94,7 +94,7 @@ int ldaputils_config_set_bindpw(lutils_config * cnf, const char * arg)
 /// reads LDAP server's bind password from file
 /// @param[in] cnf   reference to common configuration struct
 /// @param[in] arg   value of the command line argument
-int ldaputils_config_set_bindpw_file(lutils_config * cnf, const char * arg)
+int ldaputils_config_set_bindpw_file(LDAPUtils * cnf, const char * arg)
 {
    return(ldaputils_passfile(cnf, arg, cnf->bindpw, LDAPUTILS_OPT_LEN));
 }
@@ -103,7 +103,7 @@ int ldaputils_config_set_bindpw_file(lutils_config * cnf, const char * arg)
 /// prompts for LDAP server's bind password
 /// @param[in] cnf   reference to common configuration struct
 /// @param[in] arg   value of the command line argument
-int ldaputils_config_set_bindpw_prompt(lutils_config * cnf)
+int ldaputils_config_set_bindpw_prompt(LDAPUtils * cnf)
 {
    // TRANSLATORS: The following string is used as a prompt when the program
    // requests the user's LDAP bind password.
@@ -114,7 +114,7 @@ int ldaputils_config_set_bindpw_prompt(lutils_config * cnf)
 
 /// toggles continuous mode
 /// @param[in] cnf   reference to common configuration struct
-int ldaputils_config_set_continuous(lutils_config * cnf)
+int ldaputils_config_set_continuous(LDAPUtils * cnf)
 {
    cnf->continuous++;
    return(0);
@@ -124,7 +124,7 @@ int ldaputils_config_set_continuous(lutils_config * cnf)
 /// sets LDAP debug level
 /// @param[in] cnf   reference to common configuration struct
 /// @param[in] arg   value of the command line argument
-int ldaputils_config_set_debug(lutils_config * cnf, const char * arg)
+int ldaputils_config_set_debug(LDAPUtils * cnf, const char * arg)
 {
    cnf->debug = atol(arg);
    return(0);
@@ -133,7 +133,7 @@ int ldaputils_config_set_debug(lutils_config * cnf, const char * arg)
 
 /// toggles dry run
 /// @param[in] cnf   reference to common configuration struct
-int ldaputils_config_set_dryrun(lutils_config * cnf)
+int ldaputils_config_set_dryrun(LDAPUtils * cnf)
 {
    cnf->dryrun++;
    return(0);
@@ -143,7 +143,7 @@ int ldaputils_config_set_dryrun(lutils_config * cnf)
 /// sets LDAP server's host name
 /// @param[in] cnf   reference to common configuration struct
 /// @param[in] arg   value of the command line argument
-int ldaputils_config_set_host(lutils_config * cnf, const char * arg)
+int ldaputils_config_set_host(LDAPUtils * cnf, const char * arg)
 {
    snprintf(cnf->uribuff, LDAPUTILS_OPT_LEN, "ldap://%s:%i/", arg, cnf->port);
    ldaputils_config_set_uri(cnf, cnf->uribuff);
@@ -154,7 +154,7 @@ int ldaputils_config_set_host(lutils_config * cnf, const char * arg)
 /// sets LDAP TCP port
 /// @param[in] cnf   reference to common configuration struct
 /// @param[in] arg   value of the command line argument
-int ldaputils_config_set_port(lutils_config * cnf, const char * arg)
+int ldaputils_config_set_port(LDAPUtils * cnf, const char * arg)
 {
    int          port;
    const char * host;
@@ -177,7 +177,7 @@ int ldaputils_config_set_port(lutils_config * cnf, const char * arg)
 
 /// toggles following referrals
 /// @param[in] cnf   reference to common configuration struct
-int ldaputils_config_set_referrals(lutils_config * cnf)
+int ldaputils_config_set_referrals(LDAPUtils * cnf)
 {
    if (cnf->referrals < 0)
       cnf->referrals = 0;
@@ -187,7 +187,7 @@ int ldaputils_config_set_referrals(lutils_config * cnf)
 
 
 // sets LDAP search scope
-int ldaputils_config_set_scope(lutils_config * cnf, const char * arg)
+int ldaputils_config_set_scope(LDAPUtils * cnf, const char * arg)
 {
    if (!(strcasecmp(arg, "sub")))
       cnf->scope = LDAP_SCOPE_SUBTREE;
@@ -207,7 +207,7 @@ int ldaputils_config_set_scope(lutils_config * cnf, const char * arg)
 /// sets LDAP size limit
 /// @param[in] cnf   reference to common configuration struct
 /// @param[in] arg   value of the command line argument
-int ldaputils_config_set_sizelimit(lutils_config * cnf, const char * arg)
+int ldaputils_config_set_sizelimit(LDAPUtils * cnf, const char * arg)
 {
    cnf->sizelimit = (int)atol(arg);
    return(0);
@@ -217,7 +217,7 @@ int ldaputils_config_set_sizelimit(lutils_config * cnf, const char * arg)
 /// sets sort attribute
 /// @param[in] cnf   reference to common configuration struct
 /// @param[in] arg   value of the command line argument
-int ldaputils_config_set_sortattr(lutils_config * cnf, const char * arg)
+int ldaputils_config_set_sortattr(LDAPUtils * cnf, const char * arg)
 {
    cnf->sortattr = arg;
    return(0);
@@ -227,7 +227,7 @@ int ldaputils_config_set_sortattr(lutils_config * cnf, const char * arg)
 /// sets LDAP time limit
 /// @param[in] cnf   reference to common configuration struct
 /// @param[in] arg   value of the command line argument
-int ldaputils_config_set_timelimit(lutils_config * cnf, const char * arg)
+int ldaputils_config_set_timelimit(LDAPUtils * cnf, const char * arg)
 {
    cnf->timelimit = (int)atol(arg);
    return(0);
@@ -237,7 +237,7 @@ int ldaputils_config_set_timelimit(lutils_config * cnf, const char * arg)
 /// sets LDAP server's URI
 /// @param[in] cnf   reference to common configuration struct
 /// @param[in] arg   value of the command line argument
-int ldaputils_config_set_uri(lutils_config * cnf, const char * arg)
+int ldaputils_config_set_uri(LDAPUtils * cnf, const char * arg)
 {
    if ((cnf->ludp))
    {
@@ -268,7 +268,7 @@ int ldaputils_config_set_uri(lutils_config * cnf, const char * arg)
 
 /// toggles verbose mode
 /// @param[in] cnf   reference to common configuration struct
-int ldaputils_config_set_verbose(lutils_config * cnf)
+int ldaputils_config_set_verbose(LDAPUtils * cnf)
 {
    cnf->verbose = 1;
    cnf->debug |= 0x01;
@@ -279,7 +279,7 @@ int ldaputils_config_set_verbose(lutils_config * cnf)
 /// sets LDAP protocol version
 /// @param[in] cnf   reference to common configuration struct
 /// @param[in] arg   value of the command line argument
-int ldaputils_config_set_version(lutils_config * cnf, const char * arg)
+int ldaputils_config_set_version(LDAPUtils * cnf, const char * arg)
 {
    int i;
    i = (int)atol(arg);

@@ -88,7 +88,7 @@ char * ldaputils_chomp(char * str)
 /// @param[in] cnf
 /// @param[in] c
 /// @param[in] arg
-int ldaputils_cmdargs(lutils_config * cnf, int c, const char * arg)
+int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
 {
    /* checks argument */
    switch(c)
@@ -172,7 +172,7 @@ int ldaputils_cmdargs(lutils_config * cnf, int c, const char * arg)
 
 /// frees common config
 /// @param[in] cnf
-void ldaputils_config_free(lutils_config * cnf)
+void ldaputils_config_free(LDAPUtils * cnf)
 {
    if (!(cnf))
       return;
@@ -187,9 +187,9 @@ void ldaputils_config_free(lutils_config * cnf)
 
 /// initializes the common config
 /// @param[in] cnf  reference to common configuration struct
-void ldaputils_config_init(lutils_config * cnf, const char * prog_name)
+void ldaputils_config_init(LDAPUtils * cnf, const char * prog_name)
 {
-   memset(cnf, 0, sizeof(lutils_config));
+   memset(cnf, 0, sizeof(LDAPUtils));
    cnf->referrals  = 0;
    cnf->scope      = LDAP_SCOPE_SUBTREE;
    cnf->prog_name  = prog_name;
@@ -199,7 +199,7 @@ void ldaputils_config_init(lutils_config * cnf, const char * prog_name)
 
 /// prints configuration to stdout
 /// @param[in] cnf  reference to common configuration struct
-void ldaputils_config_print(lutils_config * cnf)
+void ldaputils_config_print(LDAPUtils * cnf)
 {
    int i;
    printf("Common Options:\n");
@@ -292,7 +292,7 @@ int ldaputils_getpass(const char * prompt, char * buff, size_t size)
 /// @param[in] file  file containing the password
 /// @param[in] buff  pointer to buffer for password
 /// @param[in] len   length of the buffer
-int ldaputils_passfile(lutils_config * cnf, const char * file, char * buff,
+int ldaputils_passfile(LDAPUtils * cnf, const char * file, char * buff,
    size_t size)
 {
    int         fd;
