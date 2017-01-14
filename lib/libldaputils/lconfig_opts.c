@@ -177,24 +177,6 @@ int ldaputils_config_set_referrals(LDAPUtils * cnf)
 }
 
 
-// sets LDAP search scope
-int ldaputils_config_set_scope(LDAPUtils * cnf, const char * arg)
-{
-   if (!(strcasecmp(arg, "sub")))
-      cnf->scope = LDAP_SCOPE_SUBTREE;
-   else if (!(strcasecmp(arg, "one")))
-      cnf->scope = LDAP_SCOPE_SUBTREE;
-   else if (!(strcasecmp(arg, "base")))
-      cnf->scope = LDAP_SCOPE_BASE;
-   else
-   {
-      fprintf(stderr, "%s: scope should be base, one, or sub\n", cnf->prog_name);
-      return(1);
-   };
-   return(0);
-}
-
-
 /// sets LDAP size limit
 /// @param[in] cnf   reference to common configuration struct
 /// @param[in] arg   value of the command line argument

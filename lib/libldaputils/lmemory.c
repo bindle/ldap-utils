@@ -97,6 +97,9 @@ int ldaputils_initialize(LDAPUtils ** lup, const char * prog_name)
    };
 
 
+   // set defaults
+   lu->scope = LDAP_SCOPE_DEFAULT;
+
    return(LDAP_SUCCESS);
 }
 

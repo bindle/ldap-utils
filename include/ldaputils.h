@@ -215,9 +215,6 @@ int ldaputils_config_set_port(LDAPUtils * cnf, const char * arg);
 // toggles following referrals
 int ldaputils_config_set_referrals(LDAPUtils * cnf);
 
-// sets LDAP search scope
-int ldaputils_config_set_scope(LDAPUtils * cnf, const char * arg);
-
 // sets LDAP size limit
 int ldaputils_config_set_sizelimit(LDAPUtils * cnf, const char * arg);
 

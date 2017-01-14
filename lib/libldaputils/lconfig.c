@@ -170,7 +170,20 @@ int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
       return(ldaputils_config_set_timelimit(cnf, arg));
 
       case 's':
-      return(ldaputils_config_set_scope(cnf, arg));
+      if (!(strcasecmp(arg, "sub")))
+         cnf->scope = LDAP_SCOPE_SUBTREE;
+      else if (!(strcasecmp(arg, "one")))
+         cnf->scope = LDAP_SCOPE_SUBTREE;
+      else if (!(strcasecmp(arg, "base")))
+         cnf->scope = LDAP_SCOPE_BASE;
+      else if (!(strcasecmp(arg, "children")))
+         cnf->scope = LDAP_SCOPE_CHILDREN;
+      else
+      {
+         fprintf(stderr, "%s: scope should be base, one, or sub\n", cnf->prog_name);
+         return(1);
+      };
+      return(0);
 
       case 'S':
       return(ldaputils_config_set_sortattr(cnf, arg));
