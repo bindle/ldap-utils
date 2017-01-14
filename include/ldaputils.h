@@ -227,9 +227,6 @@ int ldaputils_config_set_timelimit(LDAPUtils * cnf, const char * arg);
 // sets LDAP server's URI
 int ldaputils_config_set_uri(LDAPUtils * cnf, const char * arg);
 
-// toggles verbose mode
-int ldaputils_config_set_verbose(LDAPUtils * cnf);
-
 // sets LDAP protocol version
 int ldaputils_config_set_version(LDAPUtils * cnf, const char * arg);
 

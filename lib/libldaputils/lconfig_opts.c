@@ -220,15 +220,6 @@ int ldaputils_config_set_uri(LDAPUtils * cnf, const char * arg)
 }
 
 
-/// toggles verbose mode
-/// @param[in] cnf   reference to common configuration struct
-int ldaputils_config_set_verbose(LDAPUtils * cnf)
-{
-   cnf->verbose = 1;
-   return(0);
-}
-
-
 /// sets LDAP protocol version
 /// @param[in] cnf   reference to common configuration struct
 /// @param[in] arg   value of the command line argument
