@@ -177,22 +177,6 @@ void ldaputils_config_free(LDAPUtils * cnf)
    if (!(cnf))
       return;
 
-   if (cnf->ludp)
-      ldap_free_urldesc(cnf->ludp);
-   cnf->ludp = NULL;
-
-   return;
-}
-
-
-/// initializes the common config
-/// @param[in] cnf  reference to common configuration struct
-void ldaputils_config_init(LDAPUtils * cnf, const char * prog_name)
-{
-   memset(cnf, 0, sizeof(LDAPUtils));
-   cnf->referrals  = 0;
-   cnf->scope      = LDAP_SCOPE_SUBTREE;
-   cnf->prog_name  = prog_name;
    return;
 }
 

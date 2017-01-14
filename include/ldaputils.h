@@ -118,7 +118,7 @@ typedef struct ldaputils_config_struct   LDAPUtils;
 struct ldaputils_config_struct
 {
    LDAP         * ld;                          ///< LDAP descriptor
-   LDAPURLDesc  * ludp;                        ///< LDAP URL descriptor
+   char         * prog_name;                   ///< program name
    int            continuous;                  // -c continuous operation mode
    long           debug;                       // -d debug level
    int            dryrun;                      // -n dry run mode
@@ -139,7 +139,6 @@ struct ldaputils_config_struct
    const char   * passfile;	                 // -y password file
    const char   * sortattr;	                 // -S sort by attribute
    const char   * uri;                         // -H LDAP URI
-   const char   * prog_name;                   // name of calling program
 };
 
 
@@ -158,9 +157,6 @@ int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg);
 
 // frees common config
 void ldaputils_config_free(LDAPUtils * cnf);
-
-// initializes the common config
-void ldaputils_config_init(LDAPUtils * cnf, const char * prog_name);
 
 // prints configuration to stdout
 void ldaputils_config_print(LDAPUtils * cnf);
@@ -260,6 +256,9 @@ LDAPUtilsEntry ** ldaputils_get_entries(LDAPUtils * cnf, LDAP * ld,
 // retrieves values of an LDAP attribute
 char * ldaputils_get_vals(LDAPUtils * cnf, LDAPUtilsEntry * entry,
    const char * attr);
+
+// connects and binds to LDAP server
+int ldaputils_initialize(LDAPUtils ** lup, const char * prog_name);
 
 // connects and binds to LDAP server
 LDAP * ldaputils_initialize_conn(LDAPUtils * cnf);

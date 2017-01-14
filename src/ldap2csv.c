@@ -102,7 +102,7 @@
 typedef struct my_config MyConfig;
 struct my_config
 {
-   LDAPUtils   common;
+   LDAPUtils   * common;
    char              output[LDAPUTILS_OPT_LEN];
 };
 
@@ -157,7 +157,7 @@ int main(int argc, char * argv[])
    if (!(cnf))
       return(0);
    
-   if (!(ld = ldaputils_initialize_conn(&cnf->common)))
+   if (!(ld = ldaputils_initialize_conn(cnf->common)))
    {
       ldaputils_config_free((LDAPUtils *)cnf);
       free(cnf);
@@ -173,12 +173,12 @@ int main(int argc, char * argv[])
    };
 
    // prints attribute names
-   printf("\"%s\"", cnf->common.attrs[0]);
-   for(x = 1; cnf->common.attrs[x]; x++)
-      printf(",\"%s\"", cnf->common.attrs[x]);
+   printf("\"%s\"", cnf->common->attrs[0]);
+   for(x = 1; cnf->common->attrs[x]; x++)
+      printf(",\"%s\"", cnf->common->attrs[x]);
    printf("\n");
 
-   if (!(entries = ldaputils_get_entries(&cnf->common, ld, res, ((LDAPUtils *)cnf)->sortattr)))
+   if (!(entries = ldaputils_get_entries(cnf->common, ld, res, ((LDAPUtils *)cnf)->sortattr)))
    {
       ldap_msgfree(res);
       ldap_unbind_ext_s(ld, NULL, NULL);
@@ -192,9 +192,9 @@ int main(int argc, char * argv[])
    
    for(x = 0; entries[x]; x++)
    {
-      for(y = 0; cnf->common.attrs[y]; y++)
+      for(y = 0; cnf->common->attrs[y]; y++)
       {
-         if (!(val = ldaputils_get_vals(&cnf->common, entries[x], cnf->common.attrs[y])))
+         if (!(val = ldaputils_get_vals(cnf->common, entries[x], cnf->common->attrs[y])))
          {
                ldap_msgfree(res);
                ldap_unbind_ext_s(ld, NULL, NULL);
@@ -252,7 +252,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    };
    memset(cnf, 0, sizeof(MyConfig));
    
-   ldaputils_config_init((LDAPUtils *) cnf, PROGRAM_NAME);
+   ldaputils_initialize(&cnf->common, PROGRAM_NAME);
 
    // loops through args
    while((c = getopt_long(argc, argv, short_options, long_options, &option_index)) != -1)
@@ -280,17 +280,17 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
       return(1);
    };
    
-   cnf->common.filter = argv[optind];
+   cnf->common->filter = argv[optind];
 
    // configures LDAP attributes to return in results
-   if (!(cnf->common.attrs = (char **) malloc(sizeof(char *) * (size_t)(argc-optind))))
+   if (!(cnf->common->attrs = (char **) malloc(sizeof(char *) * (size_t)(argc-optind))))
    {
       fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
       return(1);
    };
    for(c = 0; c < (argc-optind-1); c++)
-      cnf->common.attrs[c] = argv[optind+1+c];
-   cnf->common.attrs[c] = 0;
+      cnf->common->attrs[c] = argv[optind+1+c];
+   cnf->common->attrs[c] = 0;
    
    *cnfp = cnf;
 

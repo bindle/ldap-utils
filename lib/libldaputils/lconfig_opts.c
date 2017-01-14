@@ -53,6 +53,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <string.h>
+#include <assert.h>
 
 
 /////////////////
@@ -239,28 +240,9 @@ int ldaputils_config_set_timelimit(LDAPUtils * cnf, const char * arg)
 /// @param[in] arg   value of the command line argument
 int ldaputils_config_set_uri(LDAPUtils * cnf, const char * arg)
 {
-   if ((cnf->ludp))
-   {
-      if (cnf->host == cnf->ludp->lud_host)
-         cnf->host = NULL;
-      ldap_free_urldesc(cnf->ludp);
-   };
-   cnf->ludp = NULL;
-   
-   if (!(cnf->uri = arg))
-      return(0);
-   
-   if ((ldap_url_parse(arg, &cnf->ludp)))
-   {
-      // TRANSLATORS: The following strings provide an error message if the
-      // URI provided on the command line is an invalid LDAP URI.
-      fprintf(stderr, "%s: invalid LDAP URI\n", cnf->prog_name);
-      fprintf(stderr, "Try `%s --help' for more information.\n", cnf->prog_name);
-      return(1);
-   };
-   
-   cnf->host  = cnf->ludp->lud_host;
-   cnf->port  = cnf->ludp->lud_port;
+
+   assert(cnf != NULL);
+   assert(arg != NULL);
    
    return(0);
 }

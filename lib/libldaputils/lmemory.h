@@ -46,7 +46,7 @@
 //           //
 ///////////////
 
-#include <ldaputils.h>
+#include "libldaputils.h"
 
 
 ///////////////////

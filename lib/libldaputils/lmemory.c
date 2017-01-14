@@ -48,8 +48,10 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
+#include <strings.h>
 #include <ldap.h>
 #include <stdlib.h>
+#include <assert.h>
 
 
 /////////////////
@@ -58,5 +60,44 @@
 //             //
 /////////////////
 
+// connects and binds to LDAP server
+int ldaputils_initialize(LDAPUtils ** lup, const char * prog_name)
+{
+   int         rc;
+   char      * idx;
+   LDAPUtils * lu;
+
+   assert(lup       != NULL);
+   assert(prog_name != NULL);
+
+
+   // allocate initial memory for base struct
+   if ((lu = malloc(sizeof(LDAPUtils))) == NULL)
+      return(LDAP_NO_MEMORY);
+   bzero(lu, sizeof(LDAPUtils));
+
+
+   // save program name
+   if ((idx = rindex(prog_name, '/')) != NULL)
+      if (idx[1] != '\0')
+         prog_name = &idx[1];
+   if ((lu->prog_name = strdup(prog_name)) == NULL)
+   {
+      free(lu);
+      return(LDAP_NO_MEMORY);
+   };
+
+
+   // initialize LDAP library
+   if ((rc = ldap_initialize(&lu->ld, NULL)) != LDAP_SUCCESS)
+   {
+      free(lu->prog_name);
+      free(lu);
+      return(rc);
+   };
+
+
+   return(LDAP_SUCCESS);
+}
 
 /* end of source file */
