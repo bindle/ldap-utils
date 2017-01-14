@@ -122,16 +122,6 @@ int ldaputils_config_set_continuous(LDAPUtils * cnf)
 }
 
 
-/// sets LDAP debug level
-/// @param[in] cnf   reference to common configuration struct
-/// @param[in] arg   value of the command line argument
-int ldaputils_config_set_debug(LDAPUtils * cnf, const char * arg)
-{
-   cnf->debug = atol(arg);
-   return(0);
-}
-
-
 /// toggles dry run
 /// @param[in] cnf   reference to common configuration struct
 int ldaputils_config_set_dryrun(LDAPUtils * cnf)
@@ -253,7 +243,6 @@ int ldaputils_config_set_uri(LDAPUtils * cnf, const char * arg)
 int ldaputils_config_set_verbose(LDAPUtils * cnf)
 {
    cnf->verbose = 1;
-   cnf->debug |= 0x01;
    return(0);
 }
 

@@ -364,10 +364,6 @@ LDAP * ldaputils_initialize_conn(LDAPUtils * cnf)
    BerValue   * servercredp;
    const char * mechanism;
    const char * uri;
-
-   if (cnf->debug)
-      if ((LDAP_OPT_SUCCESS != ldap_set_option(NULL, LDAP_OPT_DEBUG_LEVEL, (void *)&cnf->debug)))
-         fprintf(stderr, "%s: could not set LDAP_OPT_DEBUG_LEVEL\n", cnf->prog_name);
    
    uri = cnf->uri;
    if ( (!(uri)) && ((cnf->host)) )

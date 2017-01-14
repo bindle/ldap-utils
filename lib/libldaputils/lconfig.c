@@ -51,6 +51,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <inttypes.h>
+#include <stdlib.h>
 #include <fcntl.h>
 
 #ifdef HAVE_TERMIOS_H
@@ -90,6 +92,10 @@ char * ldaputils_chomp(char * str)
 /// @param[in] arg
 int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
 {
+   int     rc;
+   int     valint;
+    char  * endptr;
+
    /* checks argument */
    switch(c)
    {
@@ -109,7 +115,18 @@ int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
       return(ldaputils_config_set_referrals(cnf));
 
       case 'd':
-      return(ldaputils_config_set_debug(cnf, arg));
+      valint = (int)strtoll(arg, &endptr, 0);
+      if ( (optarg == endptr) || (endptr[0] != '\0') )
+      {
+          fprintf(stderr, "%s: debug value\n", cnf->prog_name);
+          return(1);
+      };
+      if ((rc = ldap_set_option(cnf->ld, LDAP_OPT_DEBUG_LEVEL, &valint)) != LDAP_SUCCESS)
+      {
+         fprintf(stderr, "%s: ldap_set_option(LDAP_OPT_DEBUG_LEVEL): %s\n", cnf->prog_name, ldap_err2string(rc));
+         return(1);
+      };
+      return(0);
 
       case 'D':
       return(ldaputils_config_set_binddn(cnf, arg));
@@ -189,7 +206,6 @@ void ldaputils_config_print(LDAPUtils * cnf)
    printf("Common Options:\n");
    printf("   -c: continuous:   %i\n", cnf->continuous);
    printf("   -C: referrals:    %i\n", cnf->referrals);
-   printf("   -d: debug level:  %li\n", cnf->debug);
    printf("   -D: bind DN:      %s\n", ldaputils_config_print_str(cnf->binddn));
    printf("   -h: LDAP host:    %s\n", ldaputils_config_print_str(cnf->host));
    printf("   -H: LDAP URI:     %s\n", ldaputils_config_print_str(cnf->uri));

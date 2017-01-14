@@ -120,7 +120,6 @@ struct ldaputils_config_struct
    LDAP         * ld;                          ///< LDAP descriptor
    char         * prog_name;                   ///< program name
    int            continuous;                  // -c continuous operation mode
-   long           debug;                       // -d debug level
    int            dryrun;                      // -n dry run mode
    int            port;                        // -p LDAP server port
    int            referrals;                   // -C chase referrals
@@ -203,9 +202,6 @@ int ldaputils_config_set_bindpw_prompt(LDAPUtils * cnf);
 
 // toggles continuous mode
 int ldaputils_config_set_continuous(LDAPUtils * cnf);
-
-// sets LDAP debug level
-int ldaputils_config_set_debug(LDAPUtils * cnf, const char * arg);
 
 // toggles dry run
 int ldaputils_config_set_dryrun(LDAPUtils * cnf);
