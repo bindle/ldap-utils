@@ -130,7 +130,8 @@ int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
       return(0);
 
       case 'D':
-      return(ldaputils_config_set_binddn(cnf, arg));
+      cnf->binddn = arg;
+      return(0);
 
       case 'h':
       return(ldaputils_config_set_host(cnf, arg));
