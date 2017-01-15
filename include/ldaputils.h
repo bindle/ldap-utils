@@ -124,7 +124,7 @@ struct ldaputils_config_struct
    int            port;                        // -p LDAP server port
    int            scope;                       // -s LDAP search scope
    int            verbose;                     // -v verbose mode
-   unsigned       version;                     // -P LDAP protocol version
+   int            version;                     // -P LDAP protocol version
    char           bindpw[LDAPUTILS_OPT_LEN];   // -W, -w bind password
    char           uribuff[LDAPUTILS_OPT_LEN];
    char        ** attrs;                       //    result attributes
@@ -184,9 +184,6 @@ int ldaputils_common_cmdargs(LDAPUtils * cnf, int c, const char * arg);
 
 // sets LDAP server's bind password
 int ldaputils_config_set_bindpw(LDAPUtils * cnf, const char * arg);
-
-// sets LDAP protocol version
-int ldaputils_config_set_version(LDAPUtils * cnf, const char * arg);
 
 // compares two LDAP values for sorting
 int ldaputils_cmp_berval(const struct berval ** ptr1, const struct berval ** ptr2);

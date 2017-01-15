@@ -73,29 +73,4 @@ int ldaputils_config_set_bindpw(LDAPUtils * cnf, const char * arg)
 }
 
 
-/// sets LDAP protocol version
-/// @param[in] cnf   reference to common configuration struct
-/// @param[in] arg   value of the command line argument
-int ldaputils_config_set_version(LDAPUtils * cnf, const char * arg)
-{
-   int i;
-   i = (int)atol(arg);
-   switch(i)
-   {
-      case 2:
-      case 3:
-         cnf->version = (unsigned)i;
-         return(0);
-      default:
-         // TRANSLATORS: The following strings provide an error message if the
-         // LDAP protocol version specified on the command line is an invalid
-         // protocol version or unsupported protocol version.
-         fprintf(stderr, "%s: protocol version should be 2 or 3\n", cnf->prog_name);
-         fprintf(stderr, "Try `%s --help' for more information.\n", cnf->prog_name);
-         return(1);
-   };
-   return(0);
-}
-
-
 /* end of source file */

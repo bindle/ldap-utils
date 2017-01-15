@@ -151,7 +151,8 @@ int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
       return(0);
 
       case 'P':
-      return(ldaputils_config_set_version(cnf, arg));
+      cnf->version = atoi(arg);
+      return(0);
 
       case 'v':
       cnf->verbose++;
