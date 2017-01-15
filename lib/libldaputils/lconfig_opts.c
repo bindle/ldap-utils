@@ -63,14 +63,4 @@
 /////////////////
 
 
-/// sets LDAP server's bind password
-/// @param[in] cnf   reference to common configuration struct
-/// @param[in] arg   value of the command line argument
-int ldaputils_config_set_bindpw(LDAPUtils * cnf, const char * arg)
-{
-   strncpy(cnf->bindpw, arg, LDAPUTILS_OPT_LEN);
-   return(0);
-}
-
-
 /* end of source file */

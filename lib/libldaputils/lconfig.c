@@ -163,7 +163,8 @@ int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
       return(-2);
 
       case 'w':
-      return(ldaputils_config_set_bindpw(cnf, arg));
+      strncpy(cnf->bindpw, arg, LDAPUTILS_OPT_LEN);
+      return(0);
 
       case 'W':
       cnf->passfile = "-";

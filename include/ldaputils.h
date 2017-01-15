@@ -182,9 +182,6 @@ void ldaputils_version(const char * prog_name);
 // parses LDAP command line arguments
 int ldaputils_common_cmdargs(LDAPUtils * cnf, int c, const char * arg);
 
-// sets LDAP server's bind password
-int ldaputils_config_set_bindpw(LDAPUtils * cnf, const char * arg);
-
 // compares two LDAP values for sorting
 int ldaputils_cmp_berval(const struct berval ** ptr1, const struct berval ** ptr2);
 
