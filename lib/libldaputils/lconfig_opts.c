@@ -113,15 +113,6 @@ int ldaputils_config_set_bindpw_prompt(LDAPUtils * cnf)
 }
 
 
-/// toggles continuous mode
-/// @param[in] cnf   reference to common configuration struct
-int ldaputils_config_set_continuous(LDAPUtils * cnf)
-{
-   cnf->continuous++;
-   return(0);
-}
-
-
 /// toggles dry run
 /// @param[in] cnf   reference to common configuration struct
 int ldaputils_config_set_dryrun(LDAPUtils * cnf)

@@ -109,7 +109,8 @@ int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
       return(-2);
 
       case 'c':
-      return(ldaputils_config_set_continuous(cnf));
+      cnf->continuous++;
+      return(0);
 
       case 'C':
       return(ldaputils_config_set_referrals(cnf));

@@ -199,9 +199,6 @@ int ldaputils_config_set_bindpw_file(LDAPUtils * cnf, const char * arg);
 // sets LDAP server's bind password
 int ldaputils_config_set_bindpw_prompt(LDAPUtils * cnf);
 
-// toggles continuous mode
-int ldaputils_config_set_continuous(LDAPUtils * cnf);
-
 // toggles dry run
 int ldaputils_config_set_dryrun(LDAPUtils * cnf);
 
