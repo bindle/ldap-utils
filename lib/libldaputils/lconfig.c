@@ -59,8 +59,6 @@
 #include <termios.h>
 #endif
 
-#include "lconfig_opts.h"
-
 
 /////////////////
 //             //

@@ -120,8 +120,6 @@ lib_libldaputils_a_SOURCES		= $(noinst_HEADERS) \
 					  lib/libldaputils/libldaputils.h \
 					  lib/libldaputils/lconfig.c \
 					  lib/libldaputils/lconfig.h \
-					  lib/libldaputils/lconfig_opts.c \
-					  lib/libldaputils/lconfig_opts.h \
 					  lib/libldaputils/lldap.c \
 					  lib/libldaputils/lldap.h \
 					  lib/libldaputils/lmemory.c \
