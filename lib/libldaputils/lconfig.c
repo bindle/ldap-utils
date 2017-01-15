@@ -131,7 +131,8 @@ int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
       return(0);
 
       case 'h':
-      return(ldaputils_config_set_host(cnf, arg));
+      cnf->host = arg;
+      return(0);
 
       case 'H':
       if ((rc = ldap_set_option(cnf->ld, LDAP_OPT_URI, &arg)) != LDAP_SUCCESS)
@@ -146,7 +147,8 @@ int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
       return(0);
 
       case 'p':
-      return(ldaputils_config_set_port(cnf, arg));
+      cnf->port = atoi(arg);
+      return(0);
 
       case 'P':
       return(ldaputils_config_set_version(cnf, arg));

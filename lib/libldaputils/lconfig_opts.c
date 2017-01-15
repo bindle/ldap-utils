@@ -73,51 +73,6 @@ int ldaputils_config_set_bindpw(LDAPUtils * cnf, const char * arg)
 }
 
 
-/// sets LDAP server's host name
-/// @param[in] cnf   reference to common configuration struct
-/// @param[in] arg   value of the command line argument
-int ldaputils_config_set_host(LDAPUtils * cnf, const char * arg)
-{
-   int rc;
-   snprintf(cnf->uribuff, LDAPUTILS_OPT_LEN, "ldap://%s:%i/", arg, cnf->port);
-   if ((rc = ldap_set_option(cnf->ld, LDAP_OPT_URI, cnf->uribuff)) != LDAP_SUCCESS)
-   {
-      fprintf(stderr, "%s: ldap_set_option(LDAP_OPT_URI): %s\n", cnf->prog_name, ldap_err2string(rc));
-      return(1);
-   };
-   return(0);
-}
-
-
-/// sets LDAP TCP port
-/// @param[in] cnf   reference to common configuration struct
-/// @param[in] arg   value of the command line argument
-int ldaputils_config_set_port(LDAPUtils * cnf, const char * arg)
-{
-   int          port;
-   int          rc;
-   const char * host;
-   port = (int)atol(arg);
-   if ( (port < 1) || (port > 0xffff) )
-   {
-      fprintf(stderr, "%s: invalid TCP port\n", cnf->prog_name);
-      fprintf(stderr, "Try `%s --help' for more information.\n", cnf->prog_name);
-      return(1);
-   };
-   if ((cnf->host))
-      host = cnf->host;
-   else
-      host = "";
-   snprintf(cnf->uribuff, LDAPUTILS_OPT_LEN, "ldap://%s:%i/", host, port);
-   if ((rc = ldap_set_option(cnf->ld, LDAP_OPT_URI, cnf->uribuff)) != LDAP_SUCCESS)
-   {
-      fprintf(stderr, "%s: ldap_set_option(LDAP_OPT_URI): %s\n", cnf->prog_name, ldap_err2string(rc));
-      return(1);
-   };
-   return(0);
-}
-
-
 /// sets LDAP protocol version
 /// @param[in] cnf   reference to common configuration struct
 /// @param[in] arg   value of the command line argument

@@ -134,6 +134,7 @@ struct ldaputils_config_struct
    const char   * host;                        // -h LDAP host
    const char   * passfile;	                 // -y password file
    const char   * sortattr;	                 // -S sort by attribute
+   const char   * uri;                         // -H LDAP URI
 };
 
 
@@ -183,12 +184,6 @@ int ldaputils_common_cmdargs(LDAPUtils * cnf, int c, const char * arg);
 
 // sets LDAP server's bind password
 int ldaputils_config_set_bindpw(LDAPUtils * cnf, const char * arg);
-
-// sets LDAP server's host name
-int ldaputils_config_set_host(LDAPUtils * cnf, const char * arg);
-
-// sets LDAP TCP port
-int ldaputils_config_set_port(LDAPUtils * cnf, const char * arg);
 
 // sets LDAP protocol version
 int ldaputils_config_set_version(LDAPUtils * cnf, const char * arg);
