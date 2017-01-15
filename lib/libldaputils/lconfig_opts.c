@@ -139,16 +139,6 @@ int ldaputils_config_set_port(LDAPUtils * cnf, const char * arg)
 }
 
 
-/// sets sort attribute
-/// @param[in] cnf   reference to common configuration struct
-/// @param[in] arg   value of the command line argument
-int ldaputils_config_set_sortattr(LDAPUtils * cnf, const char * arg)
-{
-   cnf->sortattr = arg;
-   return(0);
-}
-
-
 /// sets LDAP time limit
 /// @param[in] cnf   reference to common configuration struct
 /// @param[in] arg   value of the command line argument

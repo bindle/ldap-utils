@@ -197,9 +197,6 @@ int ldaputils_config_set_host(LDAPUtils * cnf, const char * arg);
 // sets LDAP TCP port
 int ldaputils_config_set_port(LDAPUtils * cnf, const char * arg);
 
-// sets sort attribute
-int ldaputils_config_set_sortattr(LDAPUtils * cnf, const char * arg);
-
 // sets LDAP time limit
 int ldaputils_config_set_timelimit(LDAPUtils * cnf, const char * arg);
 

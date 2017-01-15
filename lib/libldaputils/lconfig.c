@@ -193,7 +193,8 @@ int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
       return(0);
 
       case 'S':
-      return(ldaputils_config_set_sortattr(cnf, arg));
+      cnf->sortattr = arg;
+      return(0);
 
       case 'z':
       valint = atoi(arg);
