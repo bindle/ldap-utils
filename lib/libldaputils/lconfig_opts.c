@@ -113,15 +113,6 @@ int ldaputils_config_set_bindpw_prompt(LDAPUtils * cnf)
 }
 
 
-/// toggles dry run
-/// @param[in] cnf   reference to common configuration struct
-int ldaputils_config_set_dryrun(LDAPUtils * cnf)
-{
-   cnf->dryrun++;
-   return(0);
-}
-
-
 /// sets LDAP server's host name
 /// @param[in] cnf   reference to common configuration struct
 /// @param[in] arg   value of the command line argument

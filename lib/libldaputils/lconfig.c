@@ -144,7 +144,8 @@ int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
       return(0);
 
       case 'n':
-      return(ldaputils_config_set_dryrun(cnf));
+      cnf->dryrun++;
+      return(0);
 
       case 'p':
       return(ldaputils_config_set_port(cnf, arg));

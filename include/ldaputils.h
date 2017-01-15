@@ -199,9 +199,6 @@ int ldaputils_config_set_bindpw_file(LDAPUtils * cnf, const char * arg);
 // sets LDAP server's bind password
 int ldaputils_config_set_bindpw_prompt(LDAPUtils * cnf);
 
-// toggles dry run
-int ldaputils_config_set_dryrun(LDAPUtils * cnf);
-
 // sets LDAP server's host name
 int ldaputils_config_set_host(LDAPUtils * cnf, const char * arg);
 
