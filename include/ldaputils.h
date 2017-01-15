@@ -184,9 +184,6 @@ void ldaputils_version(const char * prog_name);
 // parses LDAP command line arguments
 int ldaputils_common_cmdargs(LDAPUtils * cnf, int c, const char * arg);
 
-// sets LDAP server's base DN
-int ldaputils_config_set_basedn(LDAPUtils * cnf, const char * arg);
-
 // sets LDAP server's bind password
 int ldaputils_config_set_bindpw(LDAPUtils * cnf, const char * arg);
 

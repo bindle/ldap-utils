@@ -173,7 +173,8 @@ int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
 
       // search options
       case 'b':
-      return(ldaputils_config_set_basedn(cnf, arg));
+      cnf->basedn = arg;
+      return(0);
 
       case 'l':
       return(ldaputils_config_set_timelimit(cnf, arg));

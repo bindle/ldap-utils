@@ -62,15 +62,6 @@
 //             //
 /////////////////
 
-/// sets LDAP server's base DN
-/// @param[in] cnf   reference to common configuration struct
-/// @param[in] arg   value of the command line argument
-int ldaputils_config_set_basedn(LDAPUtils * cnf, const char * arg)
-{
-   cnf->basedn = arg;
-   return(0);
-}
-
 
 /// sets LDAP server's bind password
 /// @param[in] cnf   reference to common configuration struct
