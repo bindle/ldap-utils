@@ -359,24 +359,12 @@ LDAP * ldaputils_initialize_conn(LDAPUtils * cnf)
 {
    int          err;
    LDAP       * ld;
-   char         uribuff[256];
    BerValue     cred;
    BerValue   * servercredp;
    const char * mechanism;
-   const char * uri;
-   
-   uri = cnf->uri;
-   if ( (!(uri)) && ((cnf->host)) )
-   {
-      if (cnf->port)
-         snprintf(uribuff, 256, "ldap://%s:%i", cnf->host, cnf->port);
-      else
-         snprintf(uribuff, 256, "ldap://%s", cnf->host);
-      uri = uribuff;
-   };
-   
+
    ld = NULL;
-   if (ldap_initialize(&ld, uri))
+   if (ldap_initialize(&ld, NULL))
    {
       fprintf(stderr, "%s: ldaputils_initialize(): %s\n", cnf->prog_name, strerror(errno));
       return(NULL);

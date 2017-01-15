@@ -137,7 +137,6 @@ struct ldaputils_config_struct
    const char   * host;                        // -h LDAP host
    const char   * passfile;	                 // -y password file
    const char   * sortattr;	                 // -S sort by attribute
-   const char   * uri;                         // -H LDAP URI
 };
 
 
@@ -223,9 +222,6 @@ int ldaputils_config_set_sortattr(LDAPUtils * cnf, const char * arg);
 
 // sets LDAP time limit
 int ldaputils_config_set_timelimit(LDAPUtils * cnf, const char * arg);
-
-// sets LDAP server's URI
-int ldaputils_config_set_uri(LDAPUtils * cnf, const char * arg);
 
 // sets LDAP protocol version
 int ldaputils_config_set_version(LDAPUtils * cnf, const char * arg);

@@ -135,7 +135,12 @@ int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
       return(ldaputils_config_set_host(cnf, arg));
 
       case 'H':
-      return(ldaputils_config_set_uri(cnf, arg));
+      if ((rc = ldap_set_option(cnf->ld, LDAP_OPT_URI, &arg)) != LDAP_SUCCESS)
+      {
+         fprintf(stderr, "%s: ldap_set_option(LDAP_OPT_URI): %s\n", cnf->prog_name, ldap_err2string(rc));
+         return(1);
+      };
+      return(0);
 
       case 'n':
       return(ldaputils_config_set_dryrun(cnf));
@@ -222,7 +227,7 @@ void ldaputils_config_print(LDAPUtils * cnf)
    printf("   -C: referrals:    %i\n", cnf->referrals);
    printf("   -D: bind DN:      %s\n", ldaputils_config_print_str(cnf->binddn));
    printf("   -h: LDAP host:    %s\n", ldaputils_config_print_str(cnf->host));
-   printf("   -H: LDAP URI:     %s\n", ldaputils_config_print_str(cnf->uri));
+   printf("   -H: LDAP URI:     %s\n", "n/a");
    printf("   -n: dry run:      %i\n", cnf->dryrun);
    printf("   -P: LDAP port:    %i\n", cnf->port);
    printf("   -P: LDAP version: %i\n", cnf->version);
