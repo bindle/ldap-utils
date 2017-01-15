@@ -206,6 +206,10 @@ int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
       cnf->sortattr = arg;
       return(0);
 
+      case 'Z':
+      cnf->tls_req++;
+      return(0);
+
       case 'z':
       valint = atoi(arg);
       if ((rc = ldap_set_option(cnf->ld, LDAP_OPT_SIZELIMIT, &valint)) != LDAP_SUCCESS)

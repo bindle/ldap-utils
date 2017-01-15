@@ -123,6 +123,7 @@ struct ldaputils_config_struct
    int            dryrun;                      // -n dry run mode
    int            port;                        // -p LDAP server port
    int            scope;                       // -s LDAP search scope
+   int            tls_req;                     // -Z use TLS
    int            verbose;                     // -v verbose mode
    int            version;                     // -P LDAP protocol version
    char           bindpw[LDAPUTILS_OPT_LEN];   // -W, -w bind password
