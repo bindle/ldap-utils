@@ -196,7 +196,13 @@ int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
       return(ldaputils_config_set_sortattr(cnf, arg));
 
       case 'z':
-      return(ldaputils_config_set_sizelimit(cnf, arg));
+      valint = atoi(arg);
+      if ((rc = ldap_set_option(cnf->ld, LDAP_OPT_SIZELIMIT, &valint)) != LDAP_SUCCESS)
+      {
+         fprintf(stderr, "%s: ldap_set_option(LDAP_OPT_SIZELIMIT): %s\n", cnf->prog_name, ldap_err2string(rc));
+         return(1);
+      };
+      return(0);
 
       default:
       return(c);
@@ -238,7 +244,7 @@ void ldaputils_config_print(LDAPUtils * cnf)
    printf("   -l: time limit:   %i\n", cnf->timelimit);
    printf("   -s: scope:        %i\n", cnf->scope);
    printf("   -S: sort by:      %s\n", ldaputils_config_print_str(cnf->sortattr));
-   printf("   -z: size limit:   %i\n", cnf->sizelimit);
+   printf("   -z: size limit:   %i\n", -1);
    printf("       filter:       %s\n", cnf->filter);
    printf("       attributes:\n");
    for(i = 0; cnf->attrs[i]; i++)

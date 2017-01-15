@@ -123,7 +123,6 @@ struct ldaputils_config_struct
    int            dryrun;                      // -n dry run mode
    int            port;                        // -p LDAP server port
    int            scope;                       // -s LDAP search scope
-   int            sizelimit;                   // -z size limit
    int            timelimit;                   // -l time limit
    int            verbose;                     // -v verbose mode
    unsigned       version;                     // -P LDAP protocol version
@@ -197,9 +196,6 @@ int ldaputils_config_set_host(LDAPUtils * cnf, const char * arg);
 
 // sets LDAP TCP port
 int ldaputils_config_set_port(LDAPUtils * cnf, const char * arg);
-
-// sets LDAP size limit
-int ldaputils_config_set_sizelimit(LDAPUtils * cnf, const char * arg);
 
 // sets sort attribute
 int ldaputils_config_set_sortattr(LDAPUtils * cnf, const char * arg);
