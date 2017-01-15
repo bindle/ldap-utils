@@ -73,27 +73,6 @@ int ldaputils_config_set_bindpw(LDAPUtils * cnf, const char * arg)
 }
 
 
-/// reads LDAP server's bind password from file
-/// @param[in] cnf   reference to common configuration struct
-/// @param[in] arg   value of the command line argument
-int ldaputils_config_set_bindpw_file(LDAPUtils * cnf, const char * arg)
-{
-   return(ldaputils_passfile(cnf, arg, cnf->bindpw, LDAPUTILS_OPT_LEN));
-}
-
-
-/// prompts for LDAP server's bind password
-/// @param[in] cnf   reference to common configuration struct
-/// @param[in] arg   value of the command line argument
-int ldaputils_config_set_bindpw_prompt(LDAPUtils * cnf)
-{
-   // TRANSLATORS: The following string is used as a prompt when the program
-   // requests the user's LDAP bind password.
-   ldaputils_getpass("Enter LDAP Password: ", cnf->bindpw, LDAPUTILS_OPT_LEN);
-   return(0);
-}
-
-
 /// sets LDAP server's host name
 /// @param[in] cnf   reference to common configuration struct
 /// @param[in] arg   value of the command line argument

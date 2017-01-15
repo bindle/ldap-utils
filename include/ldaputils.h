@@ -184,12 +184,6 @@ int ldaputils_common_cmdargs(LDAPUtils * cnf, int c, const char * arg);
 // sets LDAP server's bind password
 int ldaputils_config_set_bindpw(LDAPUtils * cnf, const char * arg);
 
-// reads LDAP server's bind password from file
-int ldaputils_config_set_bindpw_file(LDAPUtils * cnf, const char * arg);
-
-// sets LDAP server's bind password
-int ldaputils_config_set_bindpw_prompt(LDAPUtils * cnf);
-
 // sets LDAP server's host name
 int ldaputils_config_set_host(LDAPUtils * cnf, const char * arg);
 

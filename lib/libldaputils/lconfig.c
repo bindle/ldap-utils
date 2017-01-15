@@ -163,10 +163,12 @@ int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
       return(ldaputils_config_set_bindpw(cnf, arg));
 
       case 'W':
-      return(ldaputils_config_set_bindpw_prompt(cnf));
+      cnf->passfile = "-";
+      return(0);
 
       case 'y':
-      return(ldaputils_config_set_bindpw_file(cnf, arg));
+      cnf->passfile = arg;
+      return(0);
 
       // search options
       case 'b':
@@ -330,6 +332,9 @@ int ldaputils_passfile(LDAPUtils * cnf, const char * file, char * buff,
    int         fd;
    ssize_t     len;
    struct stat sb;
+
+   if (!(strcmp("-", file)))
+      return(ldaputils_getpass("Enter LDAP Password: ", buff, size));
    
    if ((stat(file, &sb)) == -1)
    {
