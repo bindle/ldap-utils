@@ -374,9 +374,6 @@ LDAP * ldaputils_initialize_conn(LDAPUtils * cnf)
    if (cnf->version)
       if ((LDAP_OPT_SUCCESS != ldap_set_option(ld, LDAP_OPT_PROTOCOL_VERSION, &cnf->version)))
          fprintf(stderr, "%s: could not set LDAP_OPT_PROTOCOL_VERSION\n", cnf->prog_name);
-   if (cnf->timelimit)
-      if ((LDAP_OPT_SUCCESS != ldap_set_option(ld, LDAP_OPT_TIMELIMIT, &cnf->timelimit)))
-         fprintf(stderr, "%s: could not set LDAP_OPT_TIMELIMIT\n", cnf->prog_name);
    
    //mechanism   = (const char *)LDAP_AUTH_SIMPLE;
    mechanism   = (const char *)LDAP_SASL_SIMPLE;

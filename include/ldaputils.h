@@ -123,7 +123,6 @@ struct ldaputils_config_struct
    int            dryrun;                      // -n dry run mode
    int            port;                        // -p LDAP server port
    int            scope;                       // -s LDAP search scope
-   int            timelimit;                   // -l time limit
    int            verbose;                     // -v verbose mode
    unsigned       version;                     // -P LDAP protocol version
    char           bindpw[LDAPUTILS_OPT_LEN];   // -W, -w bind password
@@ -196,9 +195,6 @@ int ldaputils_config_set_host(LDAPUtils * cnf, const char * arg);
 
 // sets LDAP TCP port
 int ldaputils_config_set_port(LDAPUtils * cnf, const char * arg);
-
-// sets LDAP time limit
-int ldaputils_config_set_timelimit(LDAPUtils * cnf, const char * arg);
 
 // sets LDAP protocol version
 int ldaputils_config_set_version(LDAPUtils * cnf, const char * arg);

@@ -139,16 +139,6 @@ int ldaputils_config_set_port(LDAPUtils * cnf, const char * arg)
 }
 
 
-/// sets LDAP time limit
-/// @param[in] cnf   reference to common configuration struct
-/// @param[in] arg   value of the command line argument
-int ldaputils_config_set_timelimit(LDAPUtils * cnf, const char * arg)
-{
-   cnf->timelimit = (int)atol(arg);
-   return(0);
-}
-
-
 /// sets LDAP protocol version
 /// @param[in] cnf   reference to common configuration struct
 /// @param[in] arg   value of the command line argument

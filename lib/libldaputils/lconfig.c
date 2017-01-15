@@ -174,7 +174,13 @@ int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
       return(0);
 
       case 'l':
-      return(ldaputils_config_set_timelimit(cnf, arg));
+      valint = atoi(arg);
+      if ((rc = ldap_set_option(cnf->ld, LDAP_OPT_TIMELIMIT, &valint)) != LDAP_SUCCESS)
+      {
+         fprintf(stderr, "%s: ldap_set_option(LDAP_OPT_TIMELIMIT): %s\n", cnf->prog_name, ldap_err2string(rc));
+         return(1);
+      };
+      return(0);
 
       case 's':
       if (!(strcasecmp(arg, "sub")))
@@ -242,7 +248,7 @@ void ldaputils_config_print(LDAPUtils * cnf)
    printf("   -w: bind pass:    %s\n", ldaputils_config_print_str(cnf->bindpw));
    printf("Search Options:\n");
    printf("   -b: basedn:       %s\n", ldaputils_config_print_str(cnf->basedn));
-   printf("   -l: time limit:   %i\n", cnf->timelimit);
+   printf("   -l: time limit:   %i\n", -1);
    printf("   -s: scope:        %i\n", cnf->scope);
    printf("   -S: sort by:      %s\n", ldaputils_config_print_str(cnf->sortattr));
    printf("   -z: size limit:   %i\n", -1);
