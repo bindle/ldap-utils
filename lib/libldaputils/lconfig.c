@@ -112,9 +112,6 @@ int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
       cnf->continuous++;
       return(0);
 
-      case 'C':
-      return(ldaputils_config_set_referrals(cnf));
-
       case 'd':
       valint = (int)strtoll(arg, &endptr, 0);
       if ( (optarg == endptr) || (endptr[0] != '\0') )
@@ -228,7 +225,6 @@ void ldaputils_config_print(LDAPUtils * cnf)
    int i;
    printf("Common Options:\n");
    printf("   -c: continuous:   %i\n", cnf->continuous);
-   printf("   -C: referrals:    %i\n", cnf->referrals);
    printf("   -D: bind DN:      %s\n", ldaputils_config_print_str(cnf->binddn));
    printf("   -h: LDAP host:    %s\n", ldaputils_config_print_str(cnf->host));
    printf("   -H: LDAP URI:     %s\n", "n/a");
@@ -367,7 +363,6 @@ void ldaputils_usage_common(const char * short_options)
       switch(short_options[pos])
       {
          case 'c': printf("  -c                continuous operation mode (do not stop on errors)\n"); break;
-         case 'C': printf("  -C                chase referrals (anonymously)\n"); break;
          case 'd': printf("  -d level          set LDAP debug level to `level'\n"); break;
          case 'D': printf("  -D binddn         bind DN\n"); break;
          case 'h': printf("  -h host           LDAP server\n"); break;

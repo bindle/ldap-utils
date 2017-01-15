@@ -374,9 +374,6 @@ LDAP * ldaputils_initialize_conn(LDAPUtils * cnf)
    if (cnf->version)
       if ((LDAP_OPT_SUCCESS != ldap_set_option(ld, LDAP_OPT_PROTOCOL_VERSION, &cnf->version)))
          fprintf(stderr, "%s: could not set LDAP_OPT_PROTOCOL_VERSION\n", cnf->prog_name);
-   if (cnf->referrals)
-      if ((LDAP_OPT_SUCCESS != ldap_set_option(ld, LDAP_OPT_REFERRALS, &cnf->sizelimit)))
-         fprintf(stderr, "%s: could not set LDAP_OPT_REFERRALS\n", cnf->prog_name);
    if (cnf->sizelimit)
       if ((LDAP_OPT_SUCCESS != ldap_set_option(ld, LDAP_OPT_SIZELIMIT, &cnf->sizelimit)))
          fprintf(stderr, "%s: could not set LDAP_OPT_SIZELIMIT\n", cnf->prog_name);

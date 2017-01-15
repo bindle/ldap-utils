@@ -139,17 +139,6 @@ int ldaputils_config_set_port(LDAPUtils * cnf, const char * arg)
 }
 
 
-/// toggles following referrals
-/// @param[in] cnf   reference to common configuration struct
-int ldaputils_config_set_referrals(LDAPUtils * cnf)
-{
-   if (cnf->referrals < 0)
-      cnf->referrals = 0;
-   cnf->referrals++;
-   return(0);
-}
-
-
 /// sets LDAP size limit
 /// @param[in] cnf   reference to common configuration struct
 /// @param[in] arg   value of the command line argument

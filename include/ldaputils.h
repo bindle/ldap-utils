@@ -85,7 +85,7 @@
 #define LDAPUTILS_BUFF_LEN                 4096
 #define LDAPUTILS_OPT_LEN                  128
 
-#define LDAPUTILS_OPTIONS_COMMON           "9cCd:D:h:H:np:P:uvVw:Wxy:Z"
+#define LDAPUTILS_OPTIONS_COMMON           "9cd:D:h:H:np:P:uvVw:Wxy:Z"
 #define LDAPUTILS_OPTIONS_SEARCH           "b:l:s:S:z:"
 
 
@@ -122,7 +122,6 @@ struct ldaputils_config_struct
    int            continuous;                  // -c continuous operation mode
    int            dryrun;                      // -n dry run mode
    int            port;                        // -p LDAP server port
-   int            referrals;                   // -C chase referrals
    int            scope;                       // -s LDAP search scope
    int            sizelimit;                   // -z size limit
    int            timelimit;                   // -l time limit
@@ -198,9 +197,6 @@ int ldaputils_config_set_host(LDAPUtils * cnf, const char * arg);
 
 // sets LDAP TCP port
 int ldaputils_config_set_port(LDAPUtils * cnf, const char * arg);
-
-// toggles following referrals
-int ldaputils_config_set_referrals(LDAPUtils * cnf);
 
 // sets LDAP size limit
 int ldaputils_config_set_sizelimit(LDAPUtils * cnf, const char * arg);
