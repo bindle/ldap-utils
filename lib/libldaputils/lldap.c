@@ -170,26 +170,38 @@ void ldaputils_free_entries(LDAPUtilsEntry ** entries)
    int  x;
    int  y;
    
-   if (!(entries))
+   if (entries == NULL)
       return;
    
-   for(x = 0; entries[x]; x++)
+   for(x = 0; (entries[x] != NULL); x++)
    {
-      if (entries[x]->dn)
+      // frees DN
+      if (entries[x]->dn != NULL)
          ldap_memfree(entries[x]->dn);
-      if (entries[x]->sortval)
+      entries[x]->dn = NULL;
+
+      // frees sort value
+      if (entries[x]->sortval != NULL)
          free(entries[x]->sortval);
-      if (entries[x]->attributes)
+
+      // frees attributes
+      if (entries[x]->attributes != NULL)
       {
-         for(y = 0; entries[x]->attributes[y]; y++)
+         for(y = 0; (entries[x]->attributes[y] != NULL); y++)
          {
-            if (entries[x]->attributes[y]->name)
+            // frees attribute name
+            if (entries[x]->attributes[y]->name != NULL)
                ldap_memfree(entries[x]->attributes[y]->name);
-            if (entries[x]->attributes[y]->vals)
+
+            // frees attribute values
+            if (entries[x]->attributes[y]->vals != NULL)
                ldap_value_free_len(entries[x]->attributes[y]->vals);
+
+            // frees attribute
             free(entries[x]->attributes[y]);
          };
          free(entries[x]->attributes);
+         entries[x]->attributes = NULL;
       };
       free(entries[x]);
    };
