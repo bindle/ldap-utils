@@ -1,6 +1,6 @@
 #
 #   LDAP Utilities
-#   Copyright (C) 2015 Bindle Binaries <syzdek@bindlebinaries.com>.
+#   Copyright (C) 2015, 2019 Bindle Binaries <syzdek@bindlebinaries.com>.
 #
 #   @BINDLE_BINARIES_BSD_LICENSE_START@
 #
@@ -44,7 +44,7 @@
 
 AC_PREREQ(2.65)
 
-AC_COPYRIGHT([Copyright (C) 2015 Bindle Binaries <syzdek@bindlebinaries.com>.])
+AC_COPYRIGHT([Copyright (C) 2015, 2019 Bindle Binaries <syzdek@bindlebinaries.com>.])
 AC_REVISION(0.1)
 AC_INIT([LDAP Utilities],[0.1.2],[syzdek@bindlebinaries.com],[ldap-utils])
 
@@ -64,7 +64,7 @@ AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
 
 # configures for automake
-AM_INIT_AUTOMAKE(gnu std-options subdir-objects)
+AM_INIT_AUTOMAKE(gnu std-options subdir-objects foreign)
 
 # Compilers                                                       
 AC_PROG_CC
