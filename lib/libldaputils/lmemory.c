@@ -61,44 +61,41 @@
 /////////////////
 
 // connects and binds to LDAP server
-int ldaputils_initialize(LDAPUtils ** lup, const char * prog_name)
+int ldaputils_initialize(LDAPUtils ** ludp, const char * prog_name)
 {
    int         rc;
    char      * idx;
-   LDAPUtils * lu;
+   LDAPUtils * lud;
 
-   assert(lup       != NULL);
+   assert(ludp      != NULL);
    assert(prog_name != NULL);
 
-
    // allocate initial memory for base struct
-   if ((lu = malloc(sizeof(LDAPUtils))) == NULL)
+   if ((lud = malloc(sizeof(LDAPUtils))) == NULL)
       return(LDAP_NO_MEMORY);
-   bzero(lu, sizeof(LDAPUtils));
-
+   bzero(lud, sizeof(LDAPUtils));
 
    // save program name
    if ((idx = rindex(prog_name, '/')) != NULL)
       if (idx[1] != '\0')
          prog_name = &idx[1];
-   if ((lu->prog_name = strdup(prog_name)) == NULL)
+   if ((lud->prog_name = strdup(prog_name)) == NULL)
    {
-      free(lu);
+      free(lud);
       return(LDAP_NO_MEMORY);
    };
 
-
    // initialize LDAP library
-   if ((rc = ldap_initialize(&lu->ld, NULL)) != LDAP_SUCCESS)
+   if ((rc = ldap_initialize(&lud->ld, NULL)) != LDAP_SUCCESS)
    {
-      free(lu->prog_name);
-      free(lu);
+      free(lud);
       return(rc);
    };
 
-
    // set defaults
-   lu->scope = LDAP_SCOPE_DEFAULT;
+   lud->scope = LDAP_SCOPE_DEFAULT;
+
+   *ludp = lud;
 
    return(LDAP_SUCCESS);
 }

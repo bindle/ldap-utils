@@ -88,11 +88,11 @@ char * ldaputils_chomp(char * str)
 /// @param[in] cnf
 /// @param[in] c
 /// @param[in] arg
-int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
+int ldaputils_cmdargs(LDAPUtils * lud, int c, const char * arg)
 {
    int     rc;
    int     valint;
-    char  * endptr;
+   char  * endptr;
 
    /* checks argument */
    switch(c)
@@ -107,114 +107,114 @@ int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
       return(-2);
 
       case 'c':
-      cnf->continuous++;
+      lud->continuous++;
       return(0);
 
       case 'd':
       valint = (int)strtoll(arg, &endptr, 0);
       if ( (optarg == endptr) || (endptr[0] != '\0') )
       {
-          fprintf(stderr, "%s: debug value\n", cnf->prog_name);
+          fprintf(stderr, "%s: debug value\n", lud->prog_name);
           return(1);
       };
-      if ((rc = ldap_set_option(cnf->ld, LDAP_OPT_DEBUG_LEVEL, &valint)) != LDAP_SUCCESS)
+      if ((rc = ldap_set_option(lud->ld, LDAP_OPT_DEBUG_LEVEL, &valint)) != LDAP_SUCCESS)
       {
-         fprintf(stderr, "%s: ldap_set_option(LDAP_OPT_DEBUG_LEVEL): %s\n", cnf->prog_name, ldap_err2string(rc));
+         fprintf(stderr, "%s: ldap_set_option(LDAP_OPT_DEBUG_LEVEL): %s\n", lud->prog_name, ldap_err2string(rc));
          return(1);
       };
       return(0);
 
       case 'D':
-      cnf->binddn = arg;
+      lud->binddn = arg;
       return(0);
 
       case 'h':
-      cnf->host = arg;
+      lud->host = arg;
       return(0);
 
       case 'H':
-      if ((rc = ldap_set_option(cnf->ld, LDAP_OPT_URI, &arg)) != LDAP_SUCCESS)
+      if ((rc = ldap_set_option(lud->ld, LDAP_OPT_URI, &arg)) != LDAP_SUCCESS)
       {
-         fprintf(stderr, "%s: ldap_set_option(LDAP_OPT_URI): %s\n", cnf->prog_name, ldap_err2string(rc));
+         fprintf(stderr, "%s: ldap_set_option(LDAP_OPT_URI): %s\n", lud->prog_name, ldap_err2string(rc));
          return(1);
       };
       return(0);
 
       case 'n':
-      cnf->dryrun++;
+      lud->dryrun++;
       return(0);
 
       case 'p':
-      cnf->port = atoi(arg);
+      lud->port = atoi(arg);
       return(0);
 
       case 'P':
-      cnf->version = atoi(arg);
+      lud->version = atoi(arg);
       return(0);
 
       case 'v':
-      cnf->verbose++;
+      lud->verbose++;
       return(0);
 
       case 'V':
-      ldaputils_version(cnf->prog_name);
+      ldaputils_version(lud->prog_name);
       return(-2);
 
       case 'w':
-      strncpy(cnf->bindpw, arg, LDAPUTILS_OPT_LEN);
+      strncpy(lud->bindpw, arg, LDAPUTILS_OPT_LEN);
       return(0);
 
       case 'W':
-      cnf->passfile = "-";
+      lud->passfile = "-";
       return(0);
 
       case 'y':
-      cnf->passfile = arg;
+      lud->passfile = arg;
       return(0);
 
       // search options
       case 'b':
-      cnf->basedn = arg;
+      lud->basedn = arg;
       return(0);
 
       case 'l':
       valint = atoi(arg);
-      if ((rc = ldap_set_option(cnf->ld, LDAP_OPT_TIMELIMIT, &valint)) != LDAP_SUCCESS)
+      if ((rc = ldap_set_option(lud->ld, LDAP_OPT_TIMELIMIT, &valint)) != LDAP_SUCCESS)
       {
-         fprintf(stderr, "%s: ldap_set_option(LDAP_OPT_TIMELIMIT): %s\n", cnf->prog_name, ldap_err2string(rc));
+         fprintf(stderr, "%s: ldap_set_option(LDAP_OPT_TIMELIMIT): %s\n", lud->prog_name, ldap_err2string(rc));
          return(1);
       };
       return(0);
 
       case 's':
       if (!(strcasecmp(arg, "sub")))
-         cnf->scope = LDAP_SCOPE_SUBTREE;
+         lud->scope = LDAP_SCOPE_SUBTREE;
       else if (!(strcasecmp(arg, "one")))
-         cnf->scope = LDAP_SCOPE_SUBTREE;
+         lud->scope = LDAP_SCOPE_SUBTREE;
       else if (!(strcasecmp(arg, "base")))
-         cnf->scope = LDAP_SCOPE_BASE;
+         lud->scope = LDAP_SCOPE_BASE;
       else if (!(strcasecmp(arg, "children")))
-         cnf->scope = LDAP_SCOPE_CHILDREN;
+         lud->scope = LDAP_SCOPE_CHILDREN;
       else
       {
-         fprintf(stderr, "%s: scope should be base, one, or sub\n", cnf->prog_name);
+         fprintf(stderr, "%s: scope should be base, one, or sub\n", lud->prog_name);
          return(1);
       };
       return(0);
 
       case 'S':
-      cnf->sortattr = arg;
+      lud->sortattr = arg;
       return(0);
 
       case 'Z':
-      cnf->tls_req++;
+      lud->tls_req++;
       return(0);
 
       case 'z':
       valint = atoi(arg);
-      if ((rc = ldap_set_option(cnf->ld, LDAP_OPT_SIZELIMIT, &valint)) != LDAP_SUCCESS)
+      if ((rc = ldap_set_option(lud->ld, LDAP_OPT_SIZELIMIT, &valint)) != LDAP_SUCCESS)
       {
-         fprintf(stderr, "%s: ldap_set_option(LDAP_OPT_SIZELIMIT): %s\n", cnf->prog_name, ldap_err2string(rc));
+         fprintf(stderr, "%s: ldap_set_option(LDAP_OPT_SIZELIMIT): %s\n", lud->prog_name, ldap_err2string(rc));
          return(1);
       };
       return(0);
@@ -230,10 +230,24 @@ int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg)
 
 /// frees common config
 /// @param[in] cnf
-void ldaputils_config_free(LDAPUtils * cnf)
+void ldaputils_config_free(LDAPUtils * lud)
 {
-   if (!(cnf))
+   int    i;
+
+   if (!(lud))
       return;
+
+   if ((lud->ld))
+      ldap_unbind(lud->ld);
+
+   if ((lud->attrs))
+   {
+      for(i = 0; ((lud->attrs[i])); i++)
+         free(lud->attrs[i]);
+      free(lud->attrs);
+   };
+
+   free(lud);
 
    return;
 }
@@ -241,29 +255,29 @@ void ldaputils_config_free(LDAPUtils * cnf)
 
 /// prints configuration to stdout
 /// @param[in] cnf  reference to common configuration struct
-void ldaputils_config_print(LDAPUtils * cnf)
+void ldaputils_config_print(LDAPUtils * lud)
 {
    int i;
    printf("Common Options:\n");
-   printf("   -c: continuous:   %i\n", cnf->continuous);
-   printf("   -D: bind DN:      %s\n", ldaputils_config_print_str(cnf->binddn));
-   printf("   -h: LDAP host:    %s\n", ldaputils_config_print_str(cnf->host));
+   printf("   -c: continuous:   %i\n", lud->continuous);
+   printf("   -D: bind DN:      %s\n", ldaputils_config_print_str(lud->binddn));
+   printf("   -h: LDAP host:    %s\n", ldaputils_config_print_str(lud->host));
    printf("   -H: LDAP URI:     %s\n", "n/a");
-   printf("   -n: dry run:      %i\n", cnf->dryrun);
-   printf("   -P: LDAP port:    %i\n", cnf->port);
-   printf("   -P: LDAP version: %i\n", cnf->version);
-   printf("   -v: verbose mode: %i\n", cnf->verbose);
-   printf("   -w: bind pass:    %s\n", ldaputils_config_print_str(cnf->bindpw));
+   printf("   -n: dry run:      %i\n", lud->dryrun);
+   printf("   -P: LDAP port:    %i\n", lud->port);
+   printf("   -P: LDAP version: %i\n", lud->version);
+   printf("   -v: verbose mode: %i\n", lud->verbose);
+   printf("   -w: bind pass:    %s\n", ldaputils_config_print_str(lud->bindpw));
    printf("Search Options:\n");
-   printf("   -b: basedn:       %s\n", ldaputils_config_print_str(cnf->basedn));
+   printf("   -b: basedn:       %s\n", ldaputils_config_print_str(lud->basedn));
    printf("   -l: time limit:   %i\n", -1);
-   printf("   -s: scope:        %i\n", cnf->scope);
-   printf("   -S: sort by:      %s\n", ldaputils_config_print_str(cnf->sortattr));
+   printf("   -s: scope:        %i\n", lud->scope);
+   printf("   -S: sort by:      %s\n", ldaputils_config_print_str(lud->sortattr));
    printf("   -z: size limit:   %i\n", -1);
-   printf("       filter:       %s\n", cnf->filter);
+   printf("       filter:       %s\n", lud->filter);
    printf("       attributes:\n");
-   for(i = 0; cnf->attrs[i]; i++)
-      printf("                     %s\n", cnf->attrs[i]);
+   for(i = 0; lud->attrs[i]; i++)
+      printf("                     %s\n", lud->attrs[i]);
    return;
 }
 
@@ -332,7 +346,7 @@ int ldaputils_getpass(const char * prompt, char * buff, size_t size)
 /// @param[in] file  file containing the password
 /// @param[in] buff  pointer to buffer for password
 /// @param[in] len   length of the buffer
-int ldaputils_passfile(LDAPUtils * cnf, const char * file, char * buff,
+int ldaputils_passfile(LDAPUtils * lud, const char * file, char * buff,
    size_t size)
 {
    int         fd;
@@ -344,24 +358,24 @@ int ldaputils_passfile(LDAPUtils * cnf, const char * file, char * buff,
    
    if ((stat(file, &sb)) == -1)
    {
-      fprintf(stderr, "%s: %s: %s\n", cnf->prog_name, file, strerror(errno));
+      fprintf(stderr, "%s: %s: %s\n", lud->prog_name, file, strerror(errno));
       return(1);
    };
    if (sb.st_mode & 0066)
       // TRANSLATORS: The following string provides an error message if the
       // file which contains the password has insecure file permissions. The
       // string arguments are the name of the program and the name of the file.
-      fprintf(stderr, "%s: Password file %s is publicly readable/writeable\n", cnf->prog_name, file);
+      fprintf(stderr, "%s: Password file %s is publicly readable/writeable\n", lud->prog_name, file);
    
    if ((fd = open(file, O_RDONLY)) == -1)
    {
-      fprintf(stderr, "%s: %s: %s\n", cnf->prog_name, file, strerror(errno));
+      fprintf(stderr, "%s: %s: %s\n", lud->prog_name, file, strerror(errno));
       return(1);
    };
    
    if ((len = read(fd, buff,size-1)) == -1)
    {
-      fprintf(stderr, "%s: %s: %s\n", cnf->prog_name, file, strerror(errno));
+      fprintf(stderr, "%s: %s: %s\n", lud->prog_name, file, strerror(errno));
       return(1);
    };
    buff[len] = '\0';

@@ -214,7 +214,7 @@ void ldaputils_free_entries(LDAPUtilsEntry ** entries)
 /// retrieves LDAP entries from result
 /// @param[in] ld      refernce to LDAP socket data
 /// @param[in] res     refernce to LDAP result message
-LDAPUtilsEntry ** ldaputils_get_entries(LDAPUtils * cnf, LDAP * ld,
+LDAPUtilsEntry ** ldaputils_get_entries(LDAPUtils * lud, LDAP * ld,
    LDAPMessage * res, const char * sortattr)
 {
    char                * name;
@@ -235,7 +235,7 @@ LDAPUtilsEntry ** ldaputils_get_entries(LDAPUtils * cnf, LDAP * ld,
       // allocates entry
       if ( (entry = malloc(sizeof(LDAPUtilsEntry))) == NULL )
       {
-         fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
+         fprintf(stderr, "%s: out of virtual memory\n", lud->prog_name);
          ldaputils_free_entries(entries);
          return(NULL);
       };
@@ -245,7 +245,7 @@ LDAPUtilsEntry ** ldaputils_get_entries(LDAPUtils * cnf, LDAP * ld,
       entry_count++;
       if ((ptr = realloc(entries, sizeof(LDAPUtilsEntry *) * (entry_count+1))) == NULL)
       {
-         fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
+         fprintf(stderr, "%s: out of virtual memory\n", lud->prog_name);
          free(entry);
          ldaputils_free_entries(entries);
          return(NULL);
@@ -257,7 +257,7 @@ LDAPUtilsEntry ** ldaputils_get_entries(LDAPUtils * cnf, LDAP * ld,
       // retrieves entry DN
       if ((entry->dn = ldap_get_dn(ld, msg)) == NULL)
       {
-         fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
+         fprintf(stderr, "%s: out of virtual memory\n", lud->prog_name);
          ldaputils_free_entries(entries);
          return(NULL);
       };
@@ -269,7 +269,7 @@ LDAPUtilsEntry ** ldaputils_get_entries(LDAPUtils * cnf, LDAP * ld,
          // allocates attribute
          if (!(attr = malloc(sizeof(LDAPUtilsAttribute))))
          {
-            fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
+            fprintf(stderr, "%s: out of virtual memory\n", lud->prog_name);
             ldaputils_free_entries(entries);
             return(NULL);
          };
@@ -279,7 +279,7 @@ LDAPUtilsEntry ** ldaputils_get_entries(LDAPUtils * cnf, LDAP * ld,
          entry->count++;
          if (!(ptr = realloc(entry->attributes, sizeof(LDAPUtilsAttribute *) * (entry->count+1))))
          {
-            fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
+            fprintf(stderr, "%s: out of virtual memory\n", lud->prog_name);
             free(attr);
             ldaputils_free_entries(entries);
             return(NULL);
@@ -315,7 +315,7 @@ LDAPUtilsEntry ** ldaputils_get_entries(LDAPUtils * cnf, LDAP * ld,
 /// @param[in] ld      refernce to LDAP socket data
 /// @param[in] entry   pointer to LDAP entry
 /// @param[in] attr    attribute to retrieve
-char * ldaputils_get_vals(LDAPUtils * cnf, LDAPUtilsEntry * entry,
+char * ldaputils_get_vals(LDAPUtils * lud, LDAPUtilsEntry * entry,
    const char * attr)
 {
    int              x;
@@ -331,7 +331,7 @@ char * ldaputils_get_vals(LDAPUtils * cnf, LDAPUtilsEntry * entry,
 
    if (!(val = (char *) malloc(sizeof(char) * val_len)))
    {
-      fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
+      fprintf(stderr, "%s: out of virtual memory\n", lud->prog_name);
       return(NULL);
    };
    memset(val, 0, val_len);
@@ -340,7 +340,7 @@ char * ldaputils_get_vals(LDAPUtils * cnf, LDAPUtilsEntry * entry,
    {
       if (!(ptr = realloc(val, sizeof(char)*(strlen(entry->dn)+1))))
       {
-         fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
+         fprintf(stderr, "%s: out of virtual memory\n", lud->prog_name);
          free(val);
          return(NULL);
       };
@@ -365,7 +365,7 @@ char * ldaputils_get_vals(LDAPUtils * cnf, LDAPUtilsEntry * entry,
          new_len = val_len + att_len + 256;
          if (!(ptr = (char * ) realloc(val, (sizeof(char) * new_len))))
          {
-            fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
+            fprintf(stderr, "%s: out of virtual memory\n", lud->prog_name);
             free(val);
             return(NULL);
          };
@@ -383,8 +383,8 @@ char * ldaputils_get_vals(LDAPUtils * cnf, LDAPUtilsEntry * entry,
 
 
 /// connects and binds to LDAP server
-/// @param[in] cnf   reference to common configuration struct
-LDAP * ldaputils_initialize_conn(LDAPUtils * cnf)
+/// @param[in] lud   reference to LDAP utilities struct
+LDAP * ldaputils_initialize_conn(LDAPUtils * lud)
 {
    int          err;
    LDAP       * ld;
@@ -395,24 +395,24 @@ LDAP * ldaputils_initialize_conn(LDAPUtils * cnf)
    ld = NULL;
    if (ldap_initialize(&ld, NULL))
    {
-      fprintf(stderr, "%s: ldaputils_initialize(): %s\n", cnf->prog_name, strerror(errno));
+      fprintf(stderr, "%s: ldaputils_initialize(): %s\n", lud->prog_name, strerror(errno));
       return(NULL);
    };
 
-   cnf->version = 3;
-   if (cnf->version)
-      if ((LDAP_OPT_SUCCESS != ldap_set_option(ld, LDAP_OPT_PROTOCOL_VERSION, &cnf->version)))
-         fprintf(stderr, "%s: could not set LDAP_OPT_PROTOCOL_VERSION\n", cnf->prog_name);
+   lud->version = 3;
+   if (lud->version)
+      if ((LDAP_OPT_SUCCESS != ldap_set_option(ld, LDAP_OPT_PROTOCOL_VERSION, &lud->version)))
+         fprintf(stderr, "%s: could not set LDAP_OPT_PROTOCOL_VERSION\n", lud->prog_name);
    
    //mechanism   = (const char *)LDAP_AUTH_SIMPLE;
    mechanism   = (const char *)LDAP_SASL_SIMPLE;
-   cred.bv_val = cnf->bindpw;
-   cred.bv_len = (size_t) strlen(cnf->bindpw);
+   cred.bv_val = lud->bindpw;
+   cred.bv_len = (size_t) strlen(lud->bindpw);
    
    servercredp = NULL;
-   if ((err = ldap_sasl_bind_s(ld, cnf->binddn, mechanism, &cred, NULL, NULL,  &servercredp)) != LDAP_SUCCESS)
+   if ((err = ldap_sasl_bind_s(ld, lud->binddn, mechanism, &cred, NULL, NULL,  &servercredp)) != LDAP_SUCCESS)
    {
-      fprintf(stderr, "%s: ldap_sasl_bind_s(): %s\n", cnf->prog_name, ldap_err2string(err));
+      fprintf(stderr, "%s: ldap_sasl_bind_s(): %s\n", lud->prog_name, ldap_err2string(err));
       ldap_unbind_ext_s(ld, NULL, NULL);
       return(NULL);
    };
@@ -423,16 +423,16 @@ LDAP * ldaputils_initialize_conn(LDAPUtils * cnf)
 
 /// connects and binds to LDAP server
 /// @param[in] ld    refernce to LDAP socket data
-/// @param[in] cnf   reference to common configuration struct
-int ldaputils_search(LDAP * ld, LDAPUtils * cnf, LDAPMessage ** resp)
+/// @param[in] lud   reference to LDAP utilities struct
+int ldaputils_search(LDAP * ld, LDAPUtils * lud, LDAPMessage ** resp)
 {
    int rc;
    int err;
    int msgid;
 
-   if ((err = ldap_search_ext(ld, cnf->basedn, cnf->scope, cnf->filter, cnf->attrs, 0, NULL, NULL, NULL, -1, &msgid)))
+   if ((err = ldap_search_ext(ld, lud->basedn, lud->scope, lud->filter, lud->attrs, 0, NULL, NULL, NULL, -1, &msgid)))
    {
-      fprintf(stderr, "%s: ldap_search_ext_s(): %s\n", cnf->prog_name, ldap_err2string(err));
+      fprintf(stderr, "%s: ldap_search_ext_s(): %s\n", lud->prog_name, ldap_err2string(err));
       ldap_unbind_ext_s(ld, NULL, NULL);
       return(-1);
    };
@@ -442,7 +442,7 @@ int ldaputils_search(LDAP * ld, LDAPUtils * cnf, LDAPMessage ** resp)
       case 0:
          break;
       case -1:
-         fprintf(stderr, "%s: ldap_result(): %s\n", cnf->prog_name, ldap_err2string(err));
+         fprintf(stderr, "%s: ldap_result(): %s\n", lud->prog_name, ldap_err2string(err));
          ldap_unbind_ext_s(ld, NULL, NULL);
          return(-1);
       default:
@@ -452,13 +452,13 @@ int ldaputils_search(LDAP * ld, LDAPUtils * cnf, LDAPMessage ** resp)
    rc = ldap_parse_result(ld, *resp, &err, NULL, NULL, NULL, NULL, 0);
    if (rc != LDAP_SUCCESS)
    {
-      fprintf(stderr, "%s: ldap_parse_result(): %s\n", cnf->prog_name, ldap_err2string(rc));
+      fprintf(stderr, "%s: ldap_parse_result(): %s\n", lud->prog_name, ldap_err2string(rc));
       ldap_unbind_ext_s(ld, NULL, NULL);
       return(-1);
    };
    if (err != LDAP_SUCCESS)
    {
-      fprintf(stderr, "%s: ldap_parse_result(): %s\n", cnf->prog_name, ldap_err2string(err));
+      fprintf(stderr, "%s: ldap_parse_result(): %s\n", lud->prog_name, ldap_err2string(err));
       ldap_unbind_ext_s(ld, NULL, NULL);
       return(-1);
    };

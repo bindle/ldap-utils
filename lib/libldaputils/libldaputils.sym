@@ -53,5 +53,28 @@
 #      libtool --mode=clean rm -f libldaputils.la otadm_config.lo
 #
 #
+ldaputils_chomp
+ldaputils_cmdargs
+ldaputils_config_free
+ldaputils_config_print
+ldaputils_config_print_str
+ldaputils_getpass
+ldaputils_passfile
+ldaputils_usage
+ldaputils_usage_common
+ldaputils_usage_search
+ldaputils_version
+ldaputils_common_cmdargs
+ldaputils_cmp_berval
+ldaputils_cmp_entry
+ldaputils_free_entries
+ldaputils_get_entries
+ldaputils_get_vals
+ldaputils_initialize
+ldaputils_initialize_conn
+ldaputils_search
+ldaputils_sort_entries
+ldaputils_sort_values
+#
 ldif_package_version
 # end of symbol export file
