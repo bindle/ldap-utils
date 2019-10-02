@@ -217,77 +217,94 @@ void ldaputils_free_entries(LDAPUtilsEntry ** entries)
 LDAPUtilsEntry ** ldaputils_get_entries(LDAPUtils * cnf, LDAP * ld,
    LDAPMessage * res, const char * sortattr)
 {
-   char                * attr;
+   char                * name;
    void                * ptr;
    size_t                entry_count;
    BerElement          * ber;
-   LDAPMessage         * entry;
-   LDAPUtilsEntry      * e;
+   LDAPMessage         * msg;
+   LDAPUtilsEntry      * entry;
    LDAPUtilsEntry     ** entries;
-   LDAPUtilsAttribute  * a;
-   
+   LDAPUtilsAttribute  * attr;
+
    entries     = NULL;
    entry_count = 0;
-   
-   entry = ldap_first_entry(ld, res);
-   while(entry)
-   {
-      if (!(e = malloc(sizeof(LDAPUtilsEntry))))
-      {
-         fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
-         return(NULL);
-      };
-      memset(e, 0, sizeof(LDAPUtilsEntry));
-      
-      entry_count++;
-      if (!(ptr = realloc(entries, sizeof(LDAPUtilsEntry *) * (entry_count+1))))
-      {
-         fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
-         free(e);
-         return(NULL);
-      };
-      entries = ptr;
-      entries[entry_count-1] = e;
-      entries[entry_count-0] = NULL;
-      
-      e->dn = ldap_get_dn(ld, entry);
 
-      attr = ldap_first_attribute(ld, entry, &ber);
-      while(attr)
+   msg = ldap_first_entry(ld, res);
+   while(msg)
+   {
+      // allocates entry
+      if ( (entry = malloc(sizeof(LDAPUtilsEntry))) == NULL )
       {
-         if (!(a = malloc(sizeof(LDAPUtilsAttribute))))
+         fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
+         ldaputils_free_entries(entries);
+         return(NULL);
+      };
+      memset(entry, 0, sizeof(LDAPUtilsEntry));
+
+      // increases size of entry list
+      entry_count++;
+      if ((ptr = realloc(entries, sizeof(LDAPUtilsEntry *) * (entry_count+1))) == NULL)
+      {
+         fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
+         free(entry);
+         ldaputils_free_entries(entries);
+         return(NULL);
+      };
+      entries                = ptr;
+      entries[entry_count-1] = entry;
+      entries[entry_count-0] = NULL;
+
+      // retrieves entry DN
+      if ((entry->dn = ldap_get_dn(ld, msg)) == NULL)
+      {
+         fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
+         ldaputils_free_entries(entries);
+         return(NULL);
+      };
+
+      // retrieves attributes
+      name = ldap_first_attribute(ld, msg, &ber);
+      while(name != NULL)
+      {
+         // allocates attribute
+         if (!(attr = malloc(sizeof(LDAPUtilsAttribute))))
          {
             fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
+            ldaputils_free_entries(entries);
             return(NULL);
          };
-         memset(a, 0, sizeof(LDAPUtilsAttribute));
-         
-         e->count++;
-         if (!(ptr = realloc(e->attributes, sizeof(LDAPUtilsAttribute *) * (e->count+1))))
+         memset(attr, 0, sizeof(LDAPUtilsAttribute));
+
+         // increases size of attribute list
+         entry->count++;
+         if (!(ptr = realloc(entry->attributes, sizeof(LDAPUtilsAttribute *) * (entry->count+1))))
          {
             fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
-            free(a);
+            free(attr);
+            ldaputils_free_entries(entries);
             return(NULL);
          };
-         e->attributes = ptr;
-         e->attributes[e->count-1] = a;
-         e->attributes[e->count-0] = NULL;
+         entry->attributes                 = ptr;
+         entry->attributes[entry->count-1] = attr;
+         entry->attributes[entry->count-0] = NULL;
+
+         // populates attribute name and values
+         attr->name = name;
+         attr->vals = ldap_get_values_len(ld, msg, name);
+         ldaputils_sort_values(attr->vals);
+
+         // saves entry's sort value
+         if (sortattr != NULL)
+            if (!(strcasecmp(name, sortattr)))
+               if (attr->vals != NULL)
+                  if (attr->vals[0] != NULL)
+                     entry->sortval = strdup(attr->vals[0]->bv_val);
                   
-         a->name = attr;
-         a->vals = ldap_get_values_len(ld, entry, attr);
-         ldaputils_sort_values(a->vals);
-         
-         if (sortattr)
-            if (!(strcasecmp(attr, sortattr)))
-               if (a->vals)
-                  if (a->vals[0])
-                     e->sortval = strdup(a->vals[0]->bv_val);
-                  
-         attr = ldap_next_attribute(ld, entry, ber);
+         name = ldap_next_attribute(ld, msg, ber);
       };
       ber_free(ber, 0);
       
-      entry = ldap_next_entry(ld, entry);
+      msg = ldap_next_entry(ld, msg);
    };
    
    return(entries);
