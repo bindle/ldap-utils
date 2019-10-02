@@ -63,19 +63,28 @@ fi
 
 
 # generates files for bindletools
-${SRCDIR}/contrib/bindletools/autogen.sh || exit 1
-echo "running ${0} ..."
+if test -x ${SRCDIR}/contrib/bindletools/autogen.sh;then
+   ${SRCDIR}/contrib/bindletools/autogen.sh || exit 1
+fi
+
+
+# symlinks Bindle Tools M4 macros
+if test -f ${SRCDIR}/contrib/bindletools/m4/bindle-gcc.m4;then
+   cd ${SRCDIR}/m4
+   rm -f ./bindle*.m4 || exit 1
+   ln -s ../contrib/bindletools/m4/bindle*.m4 ./
+   cd -
+fi
+
+
+# perform pre-hook
+if test -f ${SRCDIR}/build-aux/autogen-pre-hook.sh;then
+   . ${SRCDIR}/build-aux/autogen-pre-hook.sh
+fi
 
 
 # Performs some useful checks
 autoscan ${SRCDIR} || exit 1
-
-
-# symlinks M4 macros
-cd ${SRCDIR}/m4
-rm -f ./bindle*.m4 || exit 1
-ln -s ../contrib/bindletools/m4/bindle*.m4 ./
-cd -
 
 
 # generates/installs autotools files
@@ -84,6 +93,12 @@ autoreconf -v -i -f -Wall \
    -m \
    ${SRCDIR} \
    || exit 1
+
+
+# perform post-hook
+if test -f ${SRCDIR}/build-aux/autogen-post-hook.sh;then
+   . ${SRCDIR}/build-aux/autogen-post-hook.sh
+fi
 
 
 # makes build directory
