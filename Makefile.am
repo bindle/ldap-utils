@@ -50,7 +50,9 @@ AM_LDFLAGS				=
 AM_CFLAGS				= -O2 $(CFLAGS_WARNINGS)
 AM_CXXFLAGS				= -O2 @AM_CXXFLAGS@
 AM_OBJCFLAGS				= -O2 @AM_OBJCFLAGS@
-AM_CPPFLAGS				= -O2 -UPMARK -DHAVE_CONFIG_H=1 \
+AM_CPPFLAGS				= -O2 \
+					  -UPMARK \
+					  -DHAVE_CONFIG_H=1 \
 					  -I$(top_builddir)/include \
 					  -I$(top_srcdir)/include \
 					  -DSYSCONFDIR=\"$(sysconfdir)\"
