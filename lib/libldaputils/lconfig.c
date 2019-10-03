@@ -133,7 +133,7 @@ int ldaputils_cmdargs(LDAPUtils * lud, int c, const char * arg)
       return(0);
 
       case 'H':
-      if ((rc = ldap_set_option(lud->ld, LDAP_OPT_URI, &arg)) != LDAP_SUCCESS)
+      if ((rc = ldap_set_option(lud->ld, LDAP_OPT_URI, arg)) != LDAP_SUCCESS)
       {
          fprintf(stderr, "%s: ldap_set_option(LDAP_OPT_URI): %s\n", lud->prog_name, ldap_err2string(rc));
          return(1);
