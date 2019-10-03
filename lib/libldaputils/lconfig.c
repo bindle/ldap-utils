@@ -182,6 +182,10 @@ int ldaputils_cmdargs(LDAPUtils * lud, int c, const char * arg)
       lud->sasl_mech = arg;
       return(0);
 
+      case 'Z':
+      lud->tls_req++;
+      return(0);
+
       // search options
       case 'b':
       lud->basedn = arg;
@@ -214,10 +218,6 @@ int ldaputils_cmdargs(LDAPUtils * lud, int c, const char * arg)
 
       case 'S':
       lud->sortattr = arg;
-      return(0);
-
-      case 'Z':
-      lud->tls_req++;
       return(0);
 
       case 'z':
@@ -256,6 +256,7 @@ void ldaputils_config_print(LDAPUtils * lud)
    printf("   -v: verbose mode: %i\n", lud->verbose);
    printf("   -x: sasl mech:    %s\n", ldaputils_config_print_str(lud->sasl_mech));
    printf("   -w: bind pass:    %s\n", ldaputils_config_print_str(lud->bindpw));
+   printf("   -Z: require TLS:  %i\n", lud->tls_req);
    printf("Search Options:\n");
    printf("   -b: basedn:       %s\n", ldaputils_config_print_str(lud->basedn));
    printf("   -l: time limit:   %i\n", -1);
@@ -430,6 +431,7 @@ void ldaputils_usage_common(const char * short_options)
          case 'x': printf("  -x                simple authentication\n"); break;
          case 'y': printf("  -y file           read password from file\n"); break;
          case 'Y': printf("  -Y mech           SASL mechanism\n"); break;
+         case 'Z': printf("  -Z[Z]             issue StartTLS, multiple options require TLS to be successful\n"); break;
          case '9': printf("  --help            print this help and exit\n"); break;
          default: break;
       };

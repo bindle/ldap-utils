@@ -394,6 +394,13 @@ int ldaputils_bind_s(LDAPUtils * lud)
    ld          = lud->ld;
    servercredp = NULL;
 
+   // starts TLS
+   if (lud->tls_req > 0)
+      if ((err = ldap_start_tls_s(lud->ld, NULL, NULL)) != LDAP_SUCCESS)
+         if (lud->tls_req > 1)
+            return(err);
+
+   // copies credentials
    bzero(&cred, sizeof(cred));
    if ((lud->bindpw[0]))
    {
