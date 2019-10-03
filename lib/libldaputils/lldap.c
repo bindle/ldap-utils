@@ -384,86 +384,76 @@ char * ldaputils_get_vals(LDAPUtils * lud, LDAPUtilsEntry * entry,
 
 /// connects and binds to LDAP server
 /// @param[in] lud   reference to LDAP utilities struct
-LDAP * ldaputils_initialize_conn(LDAPUtils * lud)
+int ldaputils_bind_s(LDAPUtils * lud)
 {
    int          err;
    LDAP       * ld;
    BerValue     cred;
    BerValue   * servercredp;
-   const char * mechanism;
 
-   ld = NULL;
-   if (ldap_initialize(&ld, NULL))
-   {
-      fprintf(stderr, "%s: ldaputils_initialize(): %s\n", lud->prog_name, strerror(errno));
-      return(NULL);
-   };
-
-   lud->version = 3;
-   if (lud->version)
-      if ((LDAP_OPT_SUCCESS != ldap_set_option(ld, LDAP_OPT_PROTOCOL_VERSION, &lud->version)))
-         fprintf(stderr, "%s: could not set LDAP_OPT_PROTOCOL_VERSION\n", lud->prog_name);
-   
-   //mechanism   = (const char *)LDAP_AUTH_SIMPLE;
-   mechanism   = (const char *)LDAP_SASL_SIMPLE;
-   cred.bv_val = lud->bindpw;
-   cred.bv_len = (size_t) strlen(lud->bindpw);
-   
+   ld          = lud->ld;
    servercredp = NULL;
-   if ((err = ldap_sasl_bind_s(ld, lud->binddn, mechanism, &cred, NULL, NULL,  &servercredp)) != LDAP_SUCCESS)
+
+   bzero(&cred, sizeof(cred));
+   if ((lud->bindpw[0]))
    {
-      fprintf(stderr, "%s: ldap_sasl_bind_s(): %s\n", lud->prog_name, ldap_err2string(err));
-      ldap_unbind_ext_s(ld, NULL, NULL);
-      return(NULL);
+      cred.bv_val = lud->bindpw;
+      cred.bv_len = (size_t) strlen(lud->bindpw);
    };
 
-   return(ld);
+   if ((err = ldap_sasl_bind_s(ld, lud->binddn, lud->sasl_mech, &cred, NULL, NULL, &servercredp)) != LDAP_SUCCESS)
+   {
+      return(err);
+   };
+
+   return(LDAP_SUCCESS);
 }
 
 
 /// connects and binds to LDAP server
 /// @param[in] ld    refernce to LDAP socket data
 /// @param[in] lud   reference to LDAP utilities struct
-int ldaputils_search(LDAP * ld, LDAPUtils * lud, LDAPMessage ** resp)
+int ldaputils_search(LDAPUtils * lud, LDAPMessage ** resp)
 {
-   int rc;
-   int err;
-   int msgid;
+   int    rc;
+   int    err;
+   int    msgid;
+   LDAP * ld;
 
-   if ((err = ldap_search_ext(ld, lud->basedn, lud->scope, lud->filter, lud->attrs, 0, NULL, NULL, NULL, -1, &msgid)))
+   ld  = lud->ld;
+
+   if ((err = ldap_search_ext(ld, lud->basedn, lud->scope, lud->filter, lud->attrs, 0, NULL, NULL, NULL, -1, &msgid)) != LDAP_SUCCESS)
    {
-      fprintf(stderr, "%s: ldap_search_ext_s(): %s\n", lud->prog_name, ldap_err2string(err));
       ldap_unbind_ext_s(ld, NULL, NULL);
-      return(-1);
+      return(err);
    };
 
    switch((err = ldap_result(ld, msgid, LDAP_MSG_ALL, NULL, resp)))
    {
       case 0:
-         break;
+      break;
+
       case -1:
-         fprintf(stderr, "%s: ldap_result(): %s\n", lud->prog_name, ldap_err2string(err));
-         ldap_unbind_ext_s(ld, NULL, NULL);
-         return(-1);
+      ldap_unbind_ext_s(ld, NULL, NULL);
+      return(err);
+
       default:
-         break;
+      break;
    };
 
    rc = ldap_parse_result(ld, *resp, &err, NULL, NULL, NULL, NULL, 0);
    if (rc != LDAP_SUCCESS)
    {
-      fprintf(stderr, "%s: ldap_parse_result(): %s\n", lud->prog_name, ldap_err2string(rc));
       ldap_unbind_ext_s(ld, NULL, NULL);
-      return(-1);
+      return(rc);
    };
    if (err != LDAP_SUCCESS)
    {
-      fprintf(stderr, "%s: ldap_parse_result(): %s\n", lud->prog_name, ldap_err2string(err));
       ldap_unbind_ext_s(ld, NULL, NULL);
-      return(-1);
+      return(err);
    };
-   
-   return(0);
+
+   return(LDAP_SUCCESS);
 }
 
 

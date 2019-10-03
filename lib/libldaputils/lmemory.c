@@ -65,6 +65,7 @@ int ldaputils_initialize(LDAPUtils ** ludp, const char * prog_name)
 {
    int         rc;
    char      * idx;
+   int         i;
    LDAPUtils * lud;
 
    assert(ludp      != NULL);
@@ -79,25 +80,44 @@ int ldaputils_initialize(LDAPUtils ** ludp, const char * prog_name)
    if ((idx = rindex(prog_name, '/')) != NULL)
       if (idx[1] != '\0')
          prog_name = &idx[1];
-   if ((lud->prog_name = strdup(prog_name)) == NULL)
-   {
-      free(lud);
-      return(LDAP_NO_MEMORY);
-   };
+   lud->prog_name = prog_name;
+
+   // set defaults
+   lud->scope = LDAP_SCOPE_SUB;
 
    // initialize LDAP library
    if ((rc = ldap_initialize(&lud->ld, NULL)) != LDAP_SUCCESS)
    {
-      free(lud);
+      ldaputils_unbind(lud);
       return(rc);
    };
 
    // set defaults
-   lud->scope = LDAP_SCOPE_DEFAULT;
+   lud->scope = LDAP_SCOPE_SUBTREE;
+   i = 3; ldap_set_option(lud->ld, LDAP_OPT_PROTOCOL_VERSION, &i);
 
    *ludp = lud;
 
    return(LDAP_SUCCESS);
+}
+
+
+/// frees common config
+/// @param[in] lud
+void ldaputils_unbind(LDAPUtils * lud)
+{
+   if (!(lud))
+      return;
+
+   if ((lud->ld))
+      ldap_unbind_ext_s(lud->ld, NULL, NULL);
+
+   if ((lud->attrs))
+      free(lud->attrs);
+
+   free(lud);
+
+   return;
 }
 
 /* end of source file */

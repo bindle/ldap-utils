@@ -85,7 +85,7 @@
 #define LDAPUTILS_BUFF_LEN                 4096
 #define LDAPUTILS_OPT_LEN                  128
 
-#define LDAPUTILS_OPTIONS_COMMON           "9cd:D:h:H:np:P:uvVw:Wxy:Z"
+#define LDAPUTILS_OPTIONS_COMMON           "9cd:D:h:H:np:P:uvVw:Wxy:Y:Z"
 #define LDAPUTILS_OPTIONS_SEARCH           "b:l:s:S:z:"
 
 
@@ -118,7 +118,7 @@ typedef struct ldaputils_config_struct   LDAPUtils;
 struct ldaputils_config_struct
 {
    LDAP         * ld;                          ///< LDAP descriptor
-   char         * prog_name;                   ///< program name
+   const char   * prog_name;                   ///< program name
    int            continuous;                  // -c continuous operation mode
    int            dryrun;                      // -n dry run mode
    int            port;                        // -p LDAP server port
@@ -129,6 +129,7 @@ struct ldaputils_config_struct
    char           bindpw[LDAPUTILS_OPT_LEN];   // -W, -w bind password
    char           uribuff[LDAPUTILS_OPT_LEN];
    char        ** attrs;                       //    result attributes
+   const char   * sasl_mech;                   // -Y sasl mechanism
    const char   * basedn;                      // -b base DN
    const char   * binddn;                      // -D bind DN
    const char   * filter;                      //    search filter
@@ -150,13 +151,10 @@ LDAPUTILS_BEGIN_C_DECLS
 char * ldaputils_chomp(char * str);
 
 // parses LDAP command line arguments
-int ldaputils_cmdargs(LDAPUtils * cnf, int c, const char * arg);
-
-// frees common config
-void ldaputils_config_free(LDAPUtils * cnf);
+int ldaputils_cmdargs(LDAPUtils * lud, int c, const char * arg);
 
 // prints configuration to stdout
-void ldaputils_config_print(LDAPUtils * cnf);
+void ldaputils_config_print(LDAPUtils * lud);
 
 // prints string to stdout
 const char * ldaputils_config_print_str(const char * str);
@@ -165,7 +163,7 @@ const char * ldaputils_config_print_str(const char * str);
 int ldaputils_getpass(const char * prompt, char * buff, size_t size);
 
 // retrieves password from file
-int ldaputils_passfile(LDAPUtils * cnf, const char * file,
+int ldaputils_passfile(LDAPUtils * lud, const char * file,
    char * buff, size_t size);
 
 // prints program usage and exits
@@ -181,7 +179,7 @@ void ldaputils_usage_search(const char * short_options);
 void ldaputils_version(const char * prog_name);
 
 // parses LDAP command line arguments
-int ldaputils_common_cmdargs(LDAPUtils * cnf, int c, const char * arg);
+int ldaputils_common_cmdargs(LDAPUtils * lud, int c, const char * arg);
 
 // compares two LDAP values for sorting
 int ldaputils_cmp_berval(const struct berval ** ptr1, const struct berval ** ptr2);
@@ -193,21 +191,21 @@ int ldaputils_cmp_entry(const LDAPUtilsEntry ** ptr1, const LDAPUtilsEntry ** pt
 void ldaputils_free_entries(LDAPUtilsEntry ** entries);
 
 // retrieves LDAP entries from result
-LDAPUtilsEntry ** ldaputils_get_entries(LDAPUtils * cnf, LDAP * ld,
+LDAPUtilsEntry ** ldaputils_get_entries(LDAPUtils * lud, LDAP * ld,
    LDAPMessage * res, const char * sortattr);
 
 // retrieves values of an LDAP attribute
-char * ldaputils_get_vals(LDAPUtils * cnf, LDAPUtilsEntry * entry,
+char * ldaputils_get_vals(LDAPUtils * lud, LDAPUtilsEntry * entry,
    const char * attr);
 
 // connects and binds to LDAP server
 int ldaputils_initialize(LDAPUtils ** lup, const char * prog_name);
 
 // connects and binds to LDAP server
-LDAP * ldaputils_initialize_conn(LDAPUtils * cnf);
+int ldaputils_bind_s(LDAPUtils * lud);
 
 // connects and binds to LDAP server
-int ldaputils_search(LDAP * ld, LDAPUtils * cnf, LDAPMessage ** resp);
+int ldaputils_search(LDAPUtils * lud, LDAPMessage ** resp);
 
 // sorts values
 int ldaputils_sort_entries(LDAPUtilsEntry ** entries);
@@ -215,6 +213,8 @@ int ldaputils_sort_entries(LDAPUtilsEntry ** entries);
 // sorts values
 int ldaputils_sort_values(struct berval ** vals);
 
+// frees common config
+void ldaputils_unbind(LDAPUtils * lud);
 
 LDAPUTILS_END_C_DECLS
 #endif /* end of header */

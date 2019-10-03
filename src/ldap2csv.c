@@ -75,6 +75,7 @@
 #include <string.h>
 #include <time.h>
 #include <getopt.h>
+#include <assert.h>
 
 #include <ldaputils.h>
 
@@ -102,8 +103,8 @@
 typedef struct my_config MyConfig;
 struct my_config
 {
-   LDAPUtils   * common;
-   char              output[LDAPUTILS_OPT_LEN];
+   LDAPUtils   * lud;
+   char          output[LDAPUTILS_OPT_LEN];
 };
 
 
@@ -118,6 +119,11 @@ int main(int argc, char * argv[]);
 
 // parses configuration
 int my_config(int argc, char * argv[], MyConfig ** cnfp);
+
+int my_results(MyConfig * cnf, LDAPMessage * res);
+
+// fress resources
+void my_unbind(MyConfig * cnf);
 
 
 /////////////////
@@ -143,80 +149,49 @@ void ldaputils_usage(void)
 int main(int argc, char * argv[])
 {
    int              x;
-   int              y;
-   //int              z;
-   char           * val;
-   LDAP           * ld;
+   int              err;
    MyConfig       * cnf;
    LDAPMessage    * res;
-//   LDAPMessage    * entry;
-   LDAPUtilsEntry ** entries;
 
-   if ((my_config(argc, argv, &cnf)))
+   cnf = NULL;
+
+   // initializes resources and parses CLI arguments
+   if ((err = my_config(argc, argv, &cnf)) != 0)
       return(1);
    if (!(cnf))
       return(0);
-   
-   if (!(ld = ldaputils_initialize_conn(cnf->common)))
+
+   // starts TLS and binds to LDAP
+   if ((err = ldaputils_bind_s(cnf->lud)) != LDAP_SUCCESS)
    {
-      ldaputils_config_free((LDAPUtils *)cnf);
-      free(cnf);
+      fprintf(stderr, "%s: ldap_sasl_bind_s(): %s\n", cnf->lud->prog_name, ldap_err2string(err));
+      my_unbind(cnf);
       return(1);
    };
 
-   if ((ldaputils_search(ld, (LDAPUtils *)cnf, &res)))
+   // performs LDAP search
+   if ((err = ldaputils_search(cnf->lud, &res)) != LDAP_SUCCESS)
    {
-      ldap_unbind_ext_s(ld, NULL, NULL);
-      ldaputils_config_free((LDAPUtils *)cnf);
-      free(cnf);
+      fprintf(stderr, "%s: ldaputils_search(): %s\n", cnf->lud->prog_name, ldap_err2string(err));
+      my_unbind(cnf);
       return(1);
    };
 
    // prints attribute names
-   printf("\"%s\"", cnf->common->attrs[0]);
-   for(x = 1; cnf->common->attrs[x]; x++)
-      printf(",\"%s\"", cnf->common->attrs[x]);
+   printf("\"%s\"", cnf->lud->attrs[0]);
+   for(x = 1; cnf->lud->attrs[x]; x++)
+      printf(",\"%s\"", cnf->lud->attrs[x]);
    printf("\n");
 
-   if (!(entries = ldaputils_get_entries(cnf->common, ld, res, ((LDAPUtils *)cnf)->sortattr)))
+   // prints values
+   if ((err = my_results(cnf, res)) != LDAP_SUCCESS)
    {
-      ldap_msgfree(res);
-      ldap_unbind_ext_s(ld, NULL, NULL);
-      ldaputils_config_free((LDAPUtils *)cnf);
-      free(cnf);
+      my_unbind(cnf);
       return(1);
    };
    
-   if ( ((LDAPUtils *)cnf)->sortattr )
-      ldaputils_sort_entries(entries);
-   
-   for(x = 0; entries[x]; x++)
-   {
-      for(y = 0; cnf->common->attrs[y]; y++)
-      {
-         if (!(val = ldaputils_get_vals(cnf->common, entries[x], cnf->common->attrs[y])))
-         {
-               ldap_msgfree(res);
-               ldap_unbind_ext_s(ld, NULL, NULL);
-               ldaputils_config_free((LDAPUtils *)cnf);
-               free(cnf);
-               return(1);
-         };
-         if ((y))
-            printf(",\"%s\"", val);
-         else
-            printf("\"%s\"", val);
-         free(val);
-      };
-      printf("\n");
-   };
-
-   ldaputils_free_entries(entries);
-   
    ldap_msgfree(res);
-   ldap_unbind_ext_s(ld, NULL, NULL);
-   ldaputils_config_free((LDAPUtils *)cnf);
-   free(cnf);
+   my_unbind(cnf);
 
    return(0);
 }
@@ -229,6 +204,7 @@ int main(int argc, char * argv[])
 int my_config(int argc, char * argv[], MyConfig ** cnfp)
 {
    int        c;
+   int        err;
    int        option_index;
    MyConfig * cnf;
    
@@ -240,9 +216,6 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
       {"version",       no_argument, 0, 'V'},
       {NULL,            0,           0, 0  }
    };
-   
-   option_index = 0;
-   *cnfp        = NULL;
 
    // allocates memory for configuration
    if (!(cnf = (MyConfig *) malloc(sizeof(MyConfig))))
@@ -251,51 +224,201 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
       return(1);
    };
    memset(cnf, 0, sizeof(MyConfig));
-   
-   ldaputils_initialize(&cnf->common, PROGRAM_NAME);
+
+   // initialize ldap utilities
+   if ((err = ldaputils_initialize(&cnf->lud, PROGRAM_NAME)) != LDAP_SUCCESS)
+   {
+      fprintf(stderr, "%s: ldaputils_initialize(): %s\n", PROGRAM_NAME, ldap_err2string(err));
+      my_unbind(cnf);
+      return(1);
+   };
 
    // loops through args
+   option_index = 0;
    while((c = getopt_long(argc, argv, short_options, long_options, &option_index)) != -1)
    {
-      switch(ldaputils_cmdargs((LDAPUtils *) cnf, c, optarg))
+      switch(ldaputils_cmdargs(cnf->lud, c, optarg))
       {
-         case -2: return(0); // shared option exit without error
-         case -1: break;     // no more arguments 
-         case 0:  break;     // long options toggles
-         case 1:  return(1); // shared option error
-         case '?':           // argument error
-            fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
-            return(1);
+         // shared option exit without error
+         case -2:
+         my_unbind(cnf);
+         return(0);
+
+         // no more arguments
+         case -1:
+         break;
+
+         // long options toggles
+         case 0:
+         break;
+
+         // shared option error
+         case 1:
+         my_unbind(cnf);
+         return(1);
+
+         // argument error
+         case '?':
+         fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
+         my_unbind(cnf);
+         return(1);
+
+         // unknown argument error
          default:
-            fprintf(stderr, "%s: unrecognized option `--%c'\n", PROGRAM_NAME, c);
-            fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
-            return(1);
+         fprintf(stderr, "%s: unrecognized option `--%c'\n", PROGRAM_NAME, c);
+         fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
+         my_unbind(cnf);
+         return(1);
       };
    };
-   
+
+   // checks for required arguments
    if (argc < (optind+2))
    {
       fprintf(stderr, "%s: missing required arguments\n", PROGRAM_NAME);
       fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
+      my_unbind(cnf);
       return(1);
    };
-   
-   cnf->common->filter = argv[optind];
+
+   // saves filter
+   cnf->lud->filter = argv[optind];
 
    // configures LDAP attributes to return in results
-   if (!(cnf->common->attrs = (char **) malloc(sizeof(char *) * (size_t)(argc-optind))))
+   if (!(cnf->lud->attrs = (char **) malloc(sizeof(char *) * (size_t)(argc-optind))))
    {
       fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
+      my_unbind(cnf);
       return(1);
    };
    for(c = 0; c < (argc-optind-1); c++)
-      cnf->common->attrs[c] = argv[optind+1+c];
-   cnf->common->attrs[c] = 0;
-   
+      cnf->lud->attrs[c] = argv[optind+1+c];
+   cnf->lud->attrs[c] = NULL;
+
    *cnfp = cnf;
 
    return(0);
 }
 
+
+// prints results
+int my_results(MyConfig * cnf, LDAPMessage * res)
+{
+   int               x;
+   int               y;
+   void            * ptr;
+   char            * buff;
+   size_t            bufflen;
+   char            * dn;
+   char            * delim;
+   LDAPMessage     * msg;
+   struct berval  ** vals;
+   LDAP            * ld;
+
+   assert(cnf != NULL);
+   assert(res != NULL);
+
+   ld      = cnf->lud->ld;
+
+   // initialize buffer
+   bufflen = 32;
+   if ((buff = malloc(bufflen)) == NULL)
+   {
+      fprintf(stderr, "%s: malloc(): out of virtual memory\n", cnf->lud->prog_name);
+      return(LDAP_NO_MEMORY);
+   };
+
+   // loops through entries
+   msg = ldap_first_entry(ld, res);
+   while ((msg))
+   {
+      printf("\"");
+      for(x = 0; (cnf->lud->attrs[x] != NULL); x++)
+      {
+         // print delimiter
+         if (x > 0)
+            printf("\",\"");
+
+         // prints dn if specified
+         if (strcasecmp("dn", cnf->lud->attrs[x]) == 0)
+         {
+            if ((dn = ldap_get_dn(cnf->lud->ld, msg)) == NULL)
+            {
+               fprintf(stderr, "%s: malloc(): out of virtual memory\n", cnf->lud->prog_name);
+               free(buff);
+               return(LDAP_NO_MEMORY);
+            };
+            delim = dn;
+            while((delim = index(delim, '"')) != NULL)
+               delim[0] = '\'';
+            printf("%s", dn);
+            ldap_memfree(dn);
+            continue;
+         };
+
+         // retrieves values
+         if ((vals = ldap_get_values_len(cnf->lud->ld, msg, cnf->lud->attrs[x])) == NULL)
+            continue;
+
+         // processes values
+         for(y = 0; (y < ldap_count_values_len(vals)); y++)
+         {
+            // adjusts size of buffer
+            if (bufflen < (vals[y]->bv_len + 1))
+            {
+               bufflen = vals[y]->bv_len + 1;
+               if ((ptr = realloc(buff, bufflen)) == NULL)
+               {
+                  fprintf(stderr, "%s: realloc(): out of virtual memory\n", cnf->lud->prog_name);
+                  free(buff);
+                  return(LDAP_NO_MEMORY);
+               };
+               buff = ptr;
+            };
+
+            // copies value into buffer
+            memcpy(buff, vals[y]->bv_val, vals[y]->bv_len);
+            buff[vals[y]->bv_len] = '\0';
+
+            // replace double quotation character with single quotation character
+            delim = buff;
+            while((delim = index(delim, '"')) != NULL)
+               delim[0] = '\'';
+            delim = buff;
+            while((delim = index(delim, '|')) != NULL)
+               delim[0] = ':';
+
+            // print value
+            if (y > 0)
+               printf("|%s", buff);
+            else
+               printf("%s", buff);
+         };
+         ldap_value_free_len(vals);
+      };
+      printf("\"\n");
+
+      // retrieves next entry
+      msg = ldap_next_entry(ld, msg);
+   };
+
+   free(buff);
+
+   return(LDAP_SUCCESS);
+}
+
+
+// fress resources
+void my_unbind(MyConfig * cnf)
+{
+   assert(cnf != NULL);
+
+   if ((cnf->lud))
+      ldaputils_unbind(cnf->lud);
+
+   free(cnf);
+
+   return;
+}
 
 /* end of source file */

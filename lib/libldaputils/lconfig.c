@@ -85,7 +85,7 @@ char * ldaputils_chomp(char * str)
 
 
 /// parses LDAP command line arguments
-/// @param[in] cnf
+/// @param[in] lud
 /// @param[in] c
 /// @param[in] arg
 int ldaputils_cmdargs(LDAPUtils * lud, int c, const char * arg)
@@ -150,6 +150,8 @@ int ldaputils_cmdargs(LDAPUtils * lud, int c, const char * arg)
 
       case 'P':
       lud->version = atoi(arg);
+      if ((rc = ldap_set_option(lud->ld, LDAP_OPT_PROTOCOL_VERSION, &lud->version)) != LDAP_SUCCESS)
+         fprintf(stderr, "%s: ldap_set_option(LDAP_OPT_PROTOCOL_VERSION): %s\n", lud->prog_name, ldap_err2string(rc));
       return(0);
 
       case 'v':
@@ -168,8 +170,16 @@ int ldaputils_cmdargs(LDAPUtils * lud, int c, const char * arg)
       lud->passfile = "-";
       return(0);
 
+      case 'x':
+      lud->sasl_mech = (const char *)LDAP_SASL_SIMPLE;
+      return(0);
+
       case 'y':
       lud->passfile = arg;
+      return(0);
+
+      case 'Y':
+      lud->sasl_mech = arg;
       return(0);
 
       // search options
@@ -228,45 +238,23 @@ int ldaputils_cmdargs(LDAPUtils * lud, int c, const char * arg)
 }
 
 
-/// frees common config
-/// @param[in] cnf
-void ldaputils_config_free(LDAPUtils * lud)
-{
-   int    i;
-
-   if (!(lud))
-      return;
-
-   if ((lud->ld))
-      ldap_unbind(lud->ld);
-
-   if ((lud->attrs))
-   {
-      for(i = 0; ((lud->attrs[i])); i++)
-         free(lud->attrs[i]);
-      free(lud->attrs);
-   };
-
-   free(lud);
-
-   return;
-}
-
-
 /// prints configuration to stdout
-/// @param[in] cnf  reference to common configuration struct
+/// @param[in] lud  reference to common configuration struct
 void ldaputils_config_print(LDAPUtils * lud)
 {
    int i;
+   char str[256];
+
    printf("Common Options:\n");
    printf("   -c: continuous:   %i\n", lud->continuous);
    printf("   -D: bind DN:      %s\n", ldaputils_config_print_str(lud->binddn));
    printf("   -h: LDAP host:    %s\n", ldaputils_config_print_str(lud->host));
-   printf("   -H: LDAP URI:     %s\n", "n/a");
+   printf("   -H: LDAP URI:     %s\n", ldaputils_print_option_str(lud, LDAP_OPT_URI, str, sizeof(str)));
    printf("   -n: dry run:      %i\n", lud->dryrun);
    printf("   -P: LDAP port:    %i\n", lud->port);
    printf("   -P: LDAP version: %i\n", lud->version);
    printf("   -v: verbose mode: %i\n", lud->verbose);
+   printf("   -x: sasl mech:    %s\n", ldaputils_config_print_str(lud->sasl_mech));
    printf("   -w: bind pass:    %s\n", ldaputils_config_print_str(lud->bindpw));
    printf("Search Options:\n");
    printf("   -b: basedn:       %s\n", ldaputils_config_print_str(lud->basedn));
@@ -275,10 +263,38 @@ void ldaputils_config_print(LDAPUtils * lud)
    printf("   -S: sort by:      %s\n", ldaputils_config_print_str(lud->sortattr));
    printf("   -z: size limit:   %i\n", -1);
    printf("       filter:       %s\n", lud->filter);
-   printf("       attributes:\n");
-   for(i = 0; lud->attrs[i]; i++)
-      printf("                     %s\n", lud->attrs[i]);
+   if ((lud->attrs))
+   {
+      printf("       attributes:   %s\n", lud->attrs[0]);
+      for(i = 1; lud->attrs[i]; i++)
+         printf("                     %s\n", lud->attrs[i]);
+   }
+   else
+   {
+      printf("       attributes:   n/a\n");
+   };
    return;
+}
+
+
+/// prints string to stdout
+char * ldaputils_print_option_str(LDAPUtils * lud, int option, char * str, size_t size)
+{
+   char * val;
+
+   val = NULL;
+   ldap_get_option(lud->ld, option, &str);
+   if ((str))
+   {
+      snprintf(str, size, "%s", val);
+      ldap_memfree(str);
+   }
+   else
+   {
+      snprintf(str, size, "(null)");
+   };
+
+   return(str);
 }
 
 
@@ -411,7 +427,9 @@ void ldaputils_usage_common(const char * short_options)
          case 'V': printf("  -V, --version     print version number and exit\n"); break;
          case 'w': printf("  -w, passwd        bind password (for simple authentication)\n"); break;
          case 'W': printf("  -W                prompt for bind password\n"); break;
+         case 'x': printf("  -x                simple authentication\n"); break;
          case 'y': printf("  -y file           read password from file\n"); break;
+         case 'Y': printf("  -Y mech           SASL mechanism\n"); break;
          case '9': printf("  --help            print this help and exit\n"); break;
          default: break;
       };

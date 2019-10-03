@@ -68,4 +68,6 @@
 //              //
 //////////////////
 
+char * ldaputils_print_option_str(LDAPUtils * lud, int option, char * str, size_t size);
+
 #endif /* end of header file */
