@@ -401,6 +401,7 @@ int ldaputils_bind_s(LDAPUtils * lud)
       cred.bv_len = (size_t) strlen(lud->bindpw);
    };
 
+   // binds to LDAP
    if ((err = ldap_sasl_bind_s(ld, lud->binddn, lud->sasl_mech, &cred, NULL, NULL, &servercredp)) != LDAP_SUCCESS)
    {
       return(err);
