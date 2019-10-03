@@ -295,6 +295,16 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
       cnf->lud->attrs[c] = argv[optind+1+c];
    cnf->lud->attrs[c] = NULL;
 
+   // reads password
+   if ((cnf->lud->passfile))
+   {
+      if ((err = ldaputils_passfile(cnf->lud, cnf->lud->passfile, cnf->lud->bindpw, sizeof(cnf->lud->bindpw))) != 0)
+      {
+         my_unbind(cnf);
+         return(1);
+      };
+   };
+
    *cnfp = cnf;
 
    return(0);
