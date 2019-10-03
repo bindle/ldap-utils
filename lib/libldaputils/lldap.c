@@ -424,10 +424,7 @@ int ldaputils_search(LDAPUtils * lud, LDAPMessage ** resp)
    ld  = lud->ld;
 
    if ((err = ldap_search_ext(ld, lud->basedn, lud->scope, lud->filter, lud->attrs, 0, NULL, NULL, NULL, -1, &msgid)) != LDAP_SUCCESS)
-   {
-      ldap_unbind_ext_s(ld, NULL, NULL);
       return(err);
-   };
 
    switch((err = ldap_result(ld, msgid, LDAP_MSG_ALL, NULL, resp)))
    {
@@ -435,7 +432,6 @@ int ldaputils_search(LDAPUtils * lud, LDAPMessage ** resp)
       break;
 
       case -1:
-      ldap_unbind_ext_s(ld, NULL, NULL);
       return(err);
 
       default:
@@ -444,15 +440,9 @@ int ldaputils_search(LDAPUtils * lud, LDAPMessage ** resp)
 
    rc = ldap_parse_result(ld, *resp, &err, NULL, NULL, NULL, NULL, 0);
    if (rc != LDAP_SUCCESS)
-   {
-      ldap_unbind_ext_s(ld, NULL, NULL);
       return(rc);
-   };
    if (err != LDAP_SUCCESS)
-   {
-      ldap_unbind_ext_s(ld, NULL, NULL);
       return(err);
-   };
 
    return(LDAP_SUCCESS);
 }
