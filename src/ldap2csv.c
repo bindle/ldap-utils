@@ -73,10 +73,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <strings.h>
 #include <time.h>
 #include <getopt.h>
 #include <assert.h>
 
+#define LDAP_DEPRECATED 1
 #include <ldaputils.h>
 
 
@@ -337,6 +339,10 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
       fprintf(stderr, "%s: malloc(): out of virtual memory\n", cnf->lud->prog_name);
       return(LDAP_NO_MEMORY);
    };
+
+   // sorts entries
+   if ((cnf->lud->sortattr))
+      ldap_sort_entries(cnf->lud->ld, &res, cnf->lud->sortattr, strcasecmp);
 
    // loops through entries
    msg = ldap_first_entry(ld, res);
