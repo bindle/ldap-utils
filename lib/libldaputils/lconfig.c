@@ -54,9 +54,13 @@
 #include <inttypes.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <assert.h>
 
 #ifdef HAVE_TERMIOS_H
 #include <termios.h>
+#endif
+#ifdef HAVE_SGTTY_H
+#include <sgtty.h>
 #endif
 
 
@@ -163,11 +167,28 @@ int ldaputils_cmdargs(LDAPUtils * lud, int c, const char * arg)
       return(-2);
 
       case 'w':
-      strncpy(lud->bindpw, arg, LDAPUTILS_OPT_LEN);
+      if ( ((lud->passfile)) || ((lud->want_pass)) )
+      {
+         fprintf(stderr, "%s: -%c incompatible with -w\n",lud->prog_name, ((lud->passfile)) ? 'y' : 'W');
+         return(1);
+      };
+      if ((lud->passwd.bv_val))
+         free(lud->passwd.bv_val);
+      if ((lud->passwd.bv_val = strdup(arg)) == NULL)
+      {
+         fprintf(stderr, "%s: out of virtual memory\n", lud->prog_name);
+         return(1);
+      };
+      lud->passwd.bv_len = strlen(arg);
       return(0);
 
       case 'W':
-      lud->passfile = "-";
+      if ( ((lud->passfile)) || ((lud->passwd.bv_val)) )
+      {
+         fprintf(stderr, "%s: -%c incompatible with -W\n",lud->prog_name, ((lud->passfile)) ? 'y' : 'w');
+         return(1);
+      };
+      lud->want_pass++;
       return(0);
 
       case 'x':
@@ -175,6 +196,11 @@ int ldaputils_cmdargs(LDAPUtils * lud, int c, const char * arg)
       return(0);
 
       case 'y':
+      if ( ((lud->want_pass)) || ((lud->passwd.bv_val)) )
+      {
+         fprintf(stderr, "%s: -%c incompatible with -y\n",lud->prog_name, ((lud->want_pass)) ? 'W' : 'w');
+         return(1);
+      };
       lud->passfile = arg;
       return(0);
 
@@ -258,7 +284,7 @@ void ldaputils_config_print(LDAPUtils * lud)
    printf("   -P: LDAP version: %i\n", lud->version);
    printf("   -v: verbose mode: %i\n", lud->verbose);
    printf("   -x: sasl mech:    %s\n", ldaputils_config_print_str(lud->sasl_mech));
-   printf("   -w: bind pass:    %s\n", ldaputils_config_print_str(lud->bindpw));
+   printf("   -w: bind pass:    %s\n", ldaputils_config_print_str(lud->passwd.bv_val));
    printf("   -Z: require TLS:  %i\n", lud->tls_req);
    printf("Search Options:\n");
    printf("   -b: basedn:       %s\n", ldaputils_config_print_str(lud->basedn));
@@ -311,54 +337,95 @@ const char * ldaputils_config_print_str(const char * str)
 }
 
 
+/// retrieves password
+/// @param[in] file  file containing the password
+/// @param[in] buff  pointer to buffer for password
+/// @param[in] len   length of the buffer
+int ldaputils_pass(LDAPUtils * lud)
+{
+   char    * str;
+
+   assert(lud != NULL);
+
+   // exitting, already have password
+   if ((lud->passwd.bv_len))
+      return(LDAP_SUCCESS);
+
+   // prompt for password
+   if ((lud->want_pass))
+   {
+      if ((str = ldaputils_getpass("Enter LDAP Password: ")) == NULL)
+      {
+         fprintf(stderr, "%s: ldaputils_getpass(): unknown error\n", lud->prog_name);
+         return(1);
+      };
+      if ((lud->passwd.bv_val = strdup(str)) == NULL)
+      {
+         fprintf(stderr, "%s: out of virtual memory\n", lud->prog_name);
+         return(1);
+      };
+      lud->passwd.bv_len = strlen(str);
+      return(LDAP_SUCCESS);
+   };
+
+   // read password from file
+   return(ldaputils_passfile(lud));
+}
+
+
+
 /// getpass() replacement -- SUSV 2 deprecated getpass()
 /// @param[in] prompt
-/// @param[in] buff
-/// @param[in] len
-int ldaputils_getpass(const char * prompt, char * buff, size_t size)
+char * ldaputils_getpass(const char * prompt)
 {
-   /* declares local vars */
-   ssize_t        len;
-#ifdef HAVE_TERMIOS_H
+   static char    buff[512];
+   FILE         * fs;
+   int            c;
+   size_t         pos;
+#if defined(HAVE_TERMIOS_H) || defined(HAVE_SGTTY_H)
    struct termios old;
    struct termios new;
+   void          (*sig)( int sig );
 #endif
 
-   /* clears memory and flusses buffer */
-   memset(buff, 0, size);
-
-   /* prompts for password */
+   // prompts for password
+   prompt = ((prompt)) ? prompt : "Password: ";
    if (prompt)
       fprintf(stderr, "%s", prompt);
    fflush(stdout);
 
-   /* disables ECHO */
+   // disables ECHO
 #ifdef HAVE_TERMIOS_H
-   if(tcgetattr(STDIN_FILENO, &old) == -1)
-      return(1);
+   if ((fs = fopen("/dev/tty", "r")) == NULL)
+      fs = stdin;
+   if(tcgetattr(fileno(fs), &old) == -1)
+      return(NULL);
+   sig          = signal(SIGINT, SIG_IGN);
    new          = old;
    new.c_lflag &= ~ECHO;
-   if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &new))
-      return(1);
+   if(tcsetattr(fileno(fs), TCSANOW, &new))
+      return(NULL);
+#else
+   fs = stdin;
 #endif
 
-   /* reads buffer */
-   if ((len = read(STDIN_FILENO, buff, size-1)) == -1)
-      return(1);
-   buff[len] = '\0';
-   ldaputils_chomp(buff);
+   // reads buffer
+   pos = 0;
+   while ( ((c = getc(fs)) != EOF) && (c != '\n') && (c != '\r') )
+      if (pos < (sizeof(buff)-1))
+         buff[pos++] = (char)c;
+   buff[pos] = '\0';
    
-   /* restores previous terminal */
+   // restores previous terminal
+   fprintf(stderr, "\n");
 #ifdef HAVE_TERMIOS_H
-   if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &old))
-      return(1);
+   fflush(stderr);
+   if(tcsetattr(fileno(fs), TCSANOW, &old))
+      return(NULL);
+   signal(SIGINT, sig);
 #endif
 
-   /* prints newline */
-   printf("\n");
-
-   /* ends function */
-   return(0);
+   return(buff);
 }
 
 
@@ -366,43 +433,49 @@ int ldaputils_getpass(const char * prompt, char * buff, size_t size)
 /// @param[in] file  file containing the password
 /// @param[in] buff  pointer to buffer for password
 /// @param[in] len   length of the buffer
-int ldaputils_passfile(LDAPUtils * lud, const char * file, char * buff,
-   size_t size)
+int ldaputils_passfile(LDAPUtils * lud)
 {
-   int         fd;
-   ssize_t     len;
-   struct stat sb;
+   int           fd;
+   ssize_t       len;
+   char        * buff;
+   struct stat   sb;
 
-   if (!(strcmp("-", file)))
-      return(ldaputils_getpass("Enter LDAP Password: ", buff, size));
-   
-   if ((stat(file, &sb)) == -1)
+   // obtain file information
+   if ((stat(lud->passfile, &sb)) == -1)
    {
-      fprintf(stderr, "%s: %s: %s\n", lud->prog_name, file, strerror(errno));
+      fprintf(stderr, "%s: %s: %s\n", lud->prog_name, lud->passfile, strerror(errno));
       return(1);
    };
    if (sb.st_mode & 0066)
-      // TRANSLATORS: The following string provides an error message if the
-      // file which contains the password has insecure file permissions. The
-      // string arguments are the name of the program and the name of the file.
-      fprintf(stderr, "%s: Password file %s is publicly readable/writeable\n", lud->prog_name, file);
-   
-   if ((fd = open(file, O_RDONLY)) == -1)
+      fprintf(stderr, "%s: Password file %s is publicly readable/writeable\n", lud->prog_name, lud->passfile);
+
+   // allocate buffer
+   if ((buff = malloc((size_t)sb.st_size+2)) == NULL)
    {
-      fprintf(stderr, "%s: %s: %s\n", lud->prog_name, file, strerror(errno));
+      fprintf(stderr, "%s: malloc(): %s\n", lud->prog_name, strerror(errno));
       return(1);
    };
-   
-   if ((len = read(fd, buff,size-1)) == -1)
+
+   // open and read file
+   if ((fd = open(lud->passfile, O_RDONLY)) == -1)
    {
-      fprintf(stderr, "%s: %s: %s\n", lud->prog_name, file, strerror(errno));
+      fprintf(stderr, "%s: %s: %s\n", lud->prog_name, lud->passfile, strerror(errno));
+      free(buff);
       return(1);
    };
-   buff[len] = '\0';
-   
+   if ((len = read(fd, buff, (size_t)sb.st_size)) == -1)
+   {
+      fprintf(stderr, "%s: read(): %s\n", lud->prog_name, strerror(errno));
+      free(buff);
+      return(1);
+   };
    close(fd);
+
+   buff[sb.st_size]   = '\0';
+   lud->passwd.bv_val = buff;
+   lud->passwd.bv_len = (size_t)sb.st_size;
    
-   return(0);
+   return(LDAP_SUCCESS);
 }
 
 

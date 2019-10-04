@@ -388,7 +388,6 @@ int ldaputils_bind_s(LDAPUtils * lud)
 {
    int          err;
    LDAP       * ld;
-   BerValue     cred;
    BerValue   * servercredp;
 
    ld          = lud->ld;
@@ -400,19 +399,9 @@ int ldaputils_bind_s(LDAPUtils * lud)
          if (lud->tls_req > 1)
             return(err);
 
-   // copies credentials
-   bzero(&cred, sizeof(cred));
-   if ((lud->bindpw[0]))
-   {
-      cred.bv_val = lud->bindpw;
-      cred.bv_len = (size_t) strlen(lud->bindpw);
-   };
-
    // binds to LDAP
-   if ((err = ldap_sasl_bind_s(ld, lud->binddn, lud->sasl_mech, &cred, NULL, NULL, &servercredp)) != LDAP_SUCCESS)
-   {
+   if ((err = ldap_sasl_bind_s(ld, lud->binddn, lud->sasl_mech, &lud->passwd, NULL, NULL, &servercredp)) != LDAP_SUCCESS)
       return(err);
-   };
 
    return(LDAP_SUCCESS);
 }

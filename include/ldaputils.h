@@ -126,7 +126,8 @@ struct ldaputils_config_struct
    int            tls_req;                     // -Z use TLS
    int            verbose;                     // -v verbose mode
    int            version;                     // -P LDAP protocol version
-   char           bindpw[LDAPUTILS_OPT_LEN];   // -W, -w bind password
+   int            want_pass;                   // -W prompt for passowrd
+   struct berval  passwd;                      //    stores password from -y, -w, and -W
    char           uribuff[LDAPUTILS_OPT_LEN];
    char        ** attrs;                       //    result attributes
    const char   * sasl_mech;                   // -Y sasl mechanism
@@ -159,12 +160,14 @@ void ldaputils_config_print(LDAPUtils * lud);
 // prints string to stdout
 const char * ldaputils_config_print_str(const char * str);
 
+// retrieves password
+int ldaputils_pass(LDAPUtils * lud);
+
 // getpass() replacement -- SUSV 2 deprecated getpass()
-int ldaputils_getpass(const char * prompt, char * buff, size_t size);
+char * ldaputils_getpass(const char * prompt);
 
 // retrieves password from file
-int ldaputils_passfile(LDAPUtils * lud, const char * file,
-   char * buff, size_t size);
+int ldaputils_passfile(LDAPUtils * lud);
 
 // prints program usage and exits
 void ldaputils_usage(void);
