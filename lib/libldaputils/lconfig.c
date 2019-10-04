@@ -200,6 +200,9 @@ int ldaputils_cmdargs(LDAPUtils * lud, int c, const char * arg)
       };
       return(0);
 
+      case 'L': // allows for compatibility with ldapsearch
+      return(0);
+
       case 's':
       if (!(strcasecmp(arg, "sub")))
          lud->scope = LDAP_SCOPE_SUBTREE;
