@@ -211,7 +211,7 @@ int ldaputils_cmdargs(LDAPUtils * lud, int c, const char * arg)
          lud->scope = LDAP_SCOPE_CHILDREN;
       else
       {
-         fprintf(stderr, "%s: scope should be base, one, or sub\n", lud->prog_name);
+         fprintf(stderr, "%s: scope should be base, one, sub, or children\n", lud->prog_name);
          return(1);
       };
       return(0);
