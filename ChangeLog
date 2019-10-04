@@ -2,6 +2,10 @@
 LDAP Utilities
 Copyright (C) 2012 Bindle Binaries <syzdek@bindlebinaries.com>.
 
+0.3
+      - refactoring libldaputils (syzdek)
+      - adding TLS support
+
 0.2   
       - Recreating Xcode project file. (syzdek)
       - Removing files installed by autotools from git repo. (syzdek)
