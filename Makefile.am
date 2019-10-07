@@ -88,6 +88,7 @@ TESTS					=
 XFAIL_TESTS				=
 EXTRA_MANS				=
 EXTRA_DIST				= $(noinst_HEADERS) \
+					  ChangeLog.md \
 					  lib/libldaputils/libldaputils.sym
 CLEANFILES				= \
 					  $(builddir)/a.out   $(srcdir)/a.out \
