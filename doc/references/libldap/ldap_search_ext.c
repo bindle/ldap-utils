@@ -183,7 +183,7 @@ int main(void)
    {
       dn = ldap_get_dn(ld, msg);
       printf("dn: %s\n", dn);
-      ldap_dnfree(dn);
+      ldap_memfree(dn);
 
       name = ldap_first_attribute(ld, msg, &ber);
       while((name))
