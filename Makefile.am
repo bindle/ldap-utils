@@ -90,6 +90,7 @@ EXTRA_MANS				=
 EXTRA_DIST				= $(noinst_HEADERS) \
 					  ChangeLog.md \
 					  NEWS.md \
+					  README.md \
 					  TODO.md \
 					  lib/libldaputils/libldaputils.sym
 CLEANFILES				= \
