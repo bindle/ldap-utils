@@ -319,6 +319,8 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
    char            * buff;
    size_t            bufflen;
    char            * dn;
+   char           ** dns;
+   char            * dnstr;
    char            * delim;
    LDAPMessage     * msg;
    struct berval  ** vals;
@@ -346,6 +348,19 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
    while ((msg))
    {
       printf("\"");
+
+      // retrieve DN and make CSV safe
+      if ((dn = ldap_get_dn(cnf->lud->ld, msg)) == NULL)
+      {
+         fprintf(stderr, "%s: malloc(): out of virtual memory\n", cnf->lud->prog_name);
+         free(buff);
+         return(LDAP_NO_MEMORY);
+      };
+      delim = dn;
+      while((delim = index(delim, '"')) != NULL)
+         delim[0] = '\'';
+
+      // loop through attributes
       for(x = 0; (cnf->lud->attrs[x] != NULL); x++)
       {
          // print delimiter
@@ -355,17 +370,63 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
          // prints dn if specified
          if (strcasecmp("dn", cnf->lud->attrs[x]) == 0)
          {
-            if ((dn = ldap_get_dn(cnf->lud->ld, msg)) == NULL)
+            printf("%s", dn);
+            continue;
+         };
+
+         // print RDN
+         if (strcasecmp("rdn", cnf->lud->attrs[x]) == 0)
+         {
+            if ((dns = ldap_explode_dn(dn, 0)) == NULL)
             {
-               fprintf(stderr, "%s: malloc(): out of virtual memory\n", cnf->lud->prog_name);
+               fprintf(stderr, "%s: ldap_explode_dn(): out of virtual memory\n", cnf->lud->prog_name);
                free(buff);
                return(LDAP_NO_MEMORY);
             };
-            delim = dn;
-            while((delim = index(delim, '"')) != NULL)
-               delim[0] = '\'';
-            printf("%s", dn);
-            ldap_memfree(dn);
+            printf("%s", dns[0]);
+            ldap_value_free(dns);
+            continue;
+         };
+
+         // print DN in UFN format
+         if (strcasecmp("ufn", cnf->lud->attrs[x]) == 0)
+         {
+            if ((dnstr = ldap_dn2ufn(dn)) == NULL)
+            {
+               fprintf(stderr, "%s: ldap_dn2ufn(): out of virtual memory\n", cnf->lud->prog_name);
+               free(buff);
+               return(LDAP_NO_MEMORY);
+            };
+            printf("%s", dnstr);
+            ldap_memfree(dnstr);
+            continue;
+         };
+
+         // print DN in DCE format
+         if (strcasecmp("dce", cnf->lud->attrs[x]) == 0)
+         {
+            if ((dnstr = ldap_dn2dcedn(dn)) == NULL)
+            {
+               fprintf(stderr, "%s: ldap_dn2dcedn(): out of virtual memory\n", cnf->lud->prog_name);
+               free(buff);
+               return(LDAP_NO_MEMORY);
+            };
+            printf("%s", dnstr);
+            ldap_memfree(dnstr);
+            continue;
+         };
+
+         // print DN in AD canonical format
+         if (strcasecmp("adc", cnf->lud->attrs[x]) == 0)
+         {
+            if ((dnstr = ldap_dn2ad_canonical(dn)) == NULL)
+            {
+               fprintf(stderr, "%s: ldap_dn2ad_canonical(): out of virtual memory\n", cnf->lud->prog_name);
+               free(buff);
+               return(LDAP_NO_MEMORY);
+            };
+            printf("%s", dnstr);
+            ldap_memfree(dnstr);
             continue;
          };
 
@@ -410,6 +471,9 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
          ldap_value_free_len(vals);
       };
       printf("\"\n");
+
+      // frees DN
+      ldap_memfree(dn);
 
       // retrieves next entry
       msg = ldap_next_entry(ld, msg);
