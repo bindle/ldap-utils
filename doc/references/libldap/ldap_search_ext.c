@@ -41,6 +41,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+
+#define LDAP_DEPRECATED 1
 #include <ldap.h>
 
 int main(void);
@@ -62,6 +64,7 @@ int main(void)
    BerValue         cred;
    BerElement     * ber;
    BerValue       * servercredp;
+   char          ** rdns;
    struct berval ** vals;
    char           * attrs[32];
 
@@ -181,7 +184,54 @@ int main(void)
    msg = ldap_first_entry(ld, res);
    while ((msg))
    {
+      // retrieve DN
       dn = ldap_get_dn(ld, msg);
+
+      // prints DN in "User Friendly Naming" format
+      if ((str = ldap_dn2ufn(dn)) == NULL)
+      {
+         fprintf(stderr, "ldap_dn2ufn(): out of virtual memory\n");
+         ldap_unbind_ext_s(ld, NULL, NULL);
+         return(1);
+      };
+      printf("# UFN: %s\n", str);
+      ldap_memfree(str);
+
+      // prints DN using "DCE" style
+      if ((str = ldap_dn2dcedn(dn)) == NULL)
+      {
+         fprintf(stderr, "ldap_dn2dcedn(): out of virtual memory\n");
+         ldap_unbind_ext_s(ld, NULL, NULL);
+         return(1);
+      };
+      printf("# DCE: %s\n", str);
+      ldap_memfree(str);
+
+      // prints DN as "AD canonical name"
+      if ((str = ldap_dn2ad_canonical(dn)) == NULL)
+      {
+         fprintf(stderr, "ldap_dn2dcedn(): out of virtual memory\n");
+         ldap_unbind_ext_s(ld, NULL, NULL);
+         return(1);
+      };
+      printf("# ADC: %s\n", str);
+      ldap_memfree(str);
+
+      // prints RDNs
+      if ((rdns = ldap_explode_dn(dn, 0)) == NULL)
+      {
+         fprintf(stderr, "ldap_explode_dn(): out of virtual memory\n");
+         ldap_unbind_ext_s(ld, NULL, NULL);
+         return(1);
+      };
+      for(i = 0; ((rdns[i])); i++)
+      {
+         printf("# RDN %i: %s\n", i, rdns[i]);
+      };
+      ldap_value_free(rdns);
+
+
+      // prints and free DN
       printf("dn: %s\n", dn);
       ldap_memfree(dn);
 
