@@ -368,8 +368,11 @@ int ldaputils_pass(LDAPUtils * lud)
       return(LDAP_SUCCESS);
    };
 
+   if ((lud->passfile))
+      return(ldaputils_passfile(lud));
+
    // read password from file
-   return(ldaputils_passfile(lud));
+   return(LDAP_SUCCESS);
 }
 
 
@@ -439,6 +442,9 @@ int ldaputils_passfile(LDAPUtils * lud)
    ssize_t       len;
    char        * buff;
    struct stat   sb;
+
+   assert(lud           != NULL);
+   assert(lud->passfile != NULL);
 
    // obtain file information
    if ((stat(lud->passfile, &sb)) == -1)
