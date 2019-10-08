@@ -4,6 +4,7 @@
 *.o
 *.pbxuser
 *.xcworkspace
+*.swp
 .DS_Store
 .deps
 .dirstamp
