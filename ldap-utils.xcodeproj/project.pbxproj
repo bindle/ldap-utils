@@ -142,12 +142,15 @@
 		A027AA871C32006600EA81CB /* libldap.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libldap.a; path = ../../../../../opt/local/lib/libldap.a; sourceTree = "<group>"; };
 		A0352B3B1CB3563700B70F71 /* LDAP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LDAP.framework; path = System/Library/Frameworks/LDAP.framework; sourceTree = SDKROOT; };
 		A04B49CB1AE9544800E43529 /* autogen.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = autogen.sh; sourceTree = "<group>"; };
+		A081E7D6234C0BA300593D29 /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
+		A081E7D7234C0BA300593D29 /* ChangeLog.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ChangeLog.md; sourceTree = "<group>"; };
+		A081E7D8234C0BA300593D29 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
+		A081E7D9234C0BA300593D29 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		A081E7DA234C0BA300593D29 /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
+		A081E7DB234C0BA300593D29 /* NEWS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = NEWS.md; sourceTree = "<group>"; };
 		A094019A15266907003B9698 /* acinclude.m4 */ = {isa = PBXFileReference; explicitFileType = text.script; path = acinclude.m4; sourceTree = "<group>"; };
-		A094019B15266907003B9698 /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
 		A09401A415266907003B9698 /* git-package-version.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "git-package-version.sh"; sourceTree = "<group>"; };
-		A09401A915266907003B9698 /* ChangeLog */ = {isa = PBXFileReference; lastKnownFileType = text; path = ChangeLog; sourceTree = "<group>"; };
 		A09401AA15266907003B9698 /* configure.ac */ = {isa = PBXFileReference; explicitFileType = text.script; path = configure.ac; sourceTree = "<group>"; };
-		A09401AB15266907003B9698 /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
 		A09401AF15266907003B9698 /* ldaputils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ldaputils.h; sourceTree = "<group>"; };
 		A09401B015266907003B9698 /* ldif.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ldif.h; sourceTree = "<group>"; };
 		A09401B215266907003B9698 /* api.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = api.c; sourceTree = "<group>"; };
@@ -155,13 +158,10 @@
 		A09401B415266907003B9698 /* libldif.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libldif.h; sourceTree = "<group>"; };
 		A09401B515266907003B9698 /* libldif.sym */ = {isa = PBXFileReference; lastKnownFileType = text; path = libldif.sym; sourceTree = "<group>"; };
 		A09401BD15266907003B9698 /* Makefile.am */ = {isa = PBXFileReference; explicitFileType = sourcecode.make; indentWidth = 8; path = Makefile.am; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
-		A09401BE15266907003B9698 /* NEWS */ = {isa = PBXFileReference; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
-		A09401BF15266907003B9698 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		A09401C115266907003B9698 /* csv2ldif.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = csv2ldif.c; sourceTree = "<group>"; };
 		A09401C215266907003B9698 /* ldap2csv.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ldap2csv.c; sourceTree = "<group>"; };
 		A09401C315266907003B9698 /* ldapconfprint.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ldapconfprint.c; sourceTree = "<group>"; };
 		A09401C415266907003B9698 /* ldaprc */ = {isa = PBXFileReference; lastKnownFileType = text; path = ldaprc; sourceTree = "<group>"; };
-		A09401CB15266907003B9698 /* TODO */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
 		A09401D115266AAB003B9698 /* ldap2csv */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ldap2csv; sourceTree = BUILT_PRODUCTS_DIR; };
 		A09401DB15266AEE003B9698 /* libldap.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libldap.dylib; path = usr/lib/libldap.dylib; sourceTree = SDKROOT; };
 		A09401DC15266AEE003B9698 /* libldap.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libldap.dylib; path = usr/local/lib/libldap.dylib; sourceTree = SDKROOT; };
@@ -305,16 +305,16 @@
 		A0F8DF031526685100AC5FD3 = {
 			isa = PBXGroup;
 			children = (
+				A081E7DA234C0BA300593D29 /* AUTHORS */,
+				A081E7D7234C0BA300593D29 /* ChangeLog.md */,
+				A081E7D6234C0BA300593D29 /* COPYING */,
+				A081E7DB234C0BA300593D29 /* NEWS.md */,
+				A081E7D9234C0BA300593D29 /* README.md */,
+				A081E7D8234C0BA300593D29 /* TODO.md */,
 				A094019A15266907003B9698 /* acinclude.m4 */,
-				A094019B15266907003B9698 /* AUTHORS */,
 				A04B49CB1AE9544800E43529 /* autogen.sh */,
-				A09401A915266907003B9698 /* ChangeLog */,
 				A09401AA15266907003B9698 /* configure.ac */,
-				A09401AB15266907003B9698 /* COPYING */,
 				A09401BD15266907003B9698 /* Makefile.am */,
-				A09401BE15266907003B9698 /* NEWS */,
-				A09401BF15266907003B9698 /* README */,
-				A09401CB15266907003B9698 /* TODO */,
 				A094019C15266907003B9698 /* build-aux */,
 				A09401AC15266907003B9698 /* doc */,
 				A09401AD15266907003B9698 /* include */,
