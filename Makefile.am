@@ -71,10 +71,10 @@ bin_PROGRAMS				= src/ldap2csv \
 					  src/ldaptree
 check_PROGRAMS				=
 doc_DATA				=
-EXTRA_PROGRAMS				= src/csv2ldif
+EXTRA_PROGRAMS				=
 include_HEADERS				=
 info_TEXINFOS				=
-EXTRA_LTLIBRARIES			= lib/libldif.la
+EXTRA_LTLIBRARIES			=
 man_MANS				=
 noinst_HEADERS				= include/ldaputils.h \
 					  include/ldaputils_cdefs.h
@@ -108,19 +108,6 @@ CLEANFILES				= \
 DISTCHECK_CONFIGURE_FLAGS		= --enable-strictwarnings
 
 
-# macros for lib/libldif.la
-lib_libldif_la_DEPENDENCIES		= Makefile lib/libldif/libldif.sym
-lib_libldif_la_CFLAGS			= $(AM_CFLAGS)
-lib_libldif_la_LIBADD			= $(AM_LIBS)
-lib_libldif_la_LDFLAGS			= -rpath '$(libdir)' \
-					  -version-info $(LIB_VERSION_INFO) \
-					  $(AM_LDFLAGS) \
-					  -export-symbols $(srcdir)/lib/libldif/libldif.sym
-lib_libldif_la_SOURCES			= include/ldif.h \
-					  lib/libldif/api.c \
-					  lib/libldif/api.h
-
-
 # macros for lib/libutil.la
 lib_libldaputils_a_DEPENDENCIES		= Makefile lib/libldaputils/libldaputils.sym
 lib_libldaputils_a_CFLAGS		= $(AM_CFLAGS)
@@ -137,16 +124,7 @@ lib_libldaputils_a_SOURCES		= $(noinst_HEADERS) \
 					  lib/libldaputils/lmemory.h
 
 
-# macros for csv2ldif
-src_csv2ldif_DEPENDENCIES		= Makefile lib/libldaputils.a
-src_csv2ldif_CPPFLAGS			= -DPROGRAM_NAME="\"csv2ldif\"" $(AM_CPPFLAGS)
-src_csv2ldif_CFLAGS			= $(AM_CFLAGS)
-src_csv2ldif_LDFLAGS			= $(AM_LDFLAGS)
-src_csv2ldif_LDADD			= $(AM_LDADD) lib/libldaputils.a
-src_csv2ldif_SOURCES			= \
-					  src/csv2ldif.c
-
-
+# macros for ldap2csv
 src_ldap2csv_DEPENDENCIES		= Makefile lib/libldaputils.a
 src_ldap2csv_CPPFLAGS			= -DPROGRAM_NAME="\"ldap2csv\"" $(AM_CPPFLAGS)
 src_ldap2csv_CFLAGS			= $(AM_CFLAGS)
@@ -156,6 +134,7 @@ src_ldap2csv_SOURCES			= \
 					  src/ldap2csv.c
 
 
+# macros for ldaptree
 src_ldaptree_DEPENDENCIES		= Makefile lib/libldaputils.a
 src_ldaptree_CPPFLAGS			= -DPROGRAM_NAME="\"ldaptree\"" $(AM_CPPFLAGS)
 src_ldaptree_CFLAGS			= $(AM_CFLAGS)

@@ -16,7 +16,6 @@
 				A027AA821C31FEBA00EA81CB /* PBXTargetDependency */,
 				A027AA5E1C31C95000EA81CB /* PBXTargetDependency */,
 				A027AA421C31AC1D00EA81CB /* PBXTargetDependency */,
-				A027AA441C31AC1D00EA81CB /* PBXTargetDependency */,
 			);
 			name = "LDAP Utils: ALL";
 			productName = "LDAP Utils: ALL";
@@ -28,7 +27,6 @@
 		A01EB9B21CB40F9E005606AC /* lmemory.c in Sources */ = {isa = PBXBuildFile; fileRef = A01EB9B01CB40F9E005606AC /* lmemory.c */; };
 		A01EB9B31CB40F9E005606AC /* lmemory.h in Headers */ = {isa = PBXBuildFile; fileRef = A01EB9B11CB40F9E005606AC /* lmemory.h */; };
 		A01EB9B51CB4108D005606AC /* libldaputils.h in Headers */ = {isa = PBXBuildFile; fileRef = A01EB9B41CB4108D005606AC /* libldaputils.h */; };
-		A027AA641C31C96A00EA81CB /* libldaputils.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A027AA591C31C94900EA81CB /* libldaputils.a */; };
 		A027AA701C31C98A00EA81CB /* lconfig.c in Sources */ = {isa = PBXBuildFile; fileRef = A027AA671C31C97B00EA81CB /* lconfig.c */; };
 		A027AA711C31C98A00EA81CB /* lconfig.h in Headers */ = {isa = PBXBuildFile; fileRef = A027AA681C31C97B00EA81CB /* lconfig.h */; };
 		A027AA721C31C98A00EA81CB /* lldap.c in Sources */ = {isa = PBXBuildFile; fileRef = A027AA691C31C97B00EA81CB /* lldap.c */; };
@@ -37,9 +35,7 @@
 		A027AA851C31FF0700EA81CB /* libldaputils.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A027AA591C31C94900EA81CB /* libldaputils.a */; };
 		A0352B3C1CB3563700B70F71 /* LDAP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0352B3B1CB3563700B70F71 /* LDAP.framework */; };
 		A0352B3D1CB3564100B70F71 /* LDAP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0352B3B1CB3563700B70F71 /* LDAP.framework */; };
-		A0352B3E1CB3564A00B70F71 /* LDAP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0352B3B1CB3563700B70F71 /* LDAP.framework */; };
 		A09401E415266B28003B9698 /* ldap2csv.c in Sources */ = {isa = PBXBuildFile; fileRef = A09401C215266907003B9698 /* ldap2csv.c */; };
-		A09401F915266DB3003B9698 /* csv2ldif.c in Sources */ = {isa = PBXBuildFile; fileRef = A09401C115266907003B9698 /* csv2ldif.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,21 +46,7 @@
 			remoteGlobalIDString = A09401D015266AAB003B9698;
 			remoteInfo = ldap2csv;
 		};
-		A027AA431C31AC1D00EA81CB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A0F8DF051526685100AC5FD3 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A09401EE15266D9B003B9698;
-			remoteInfo = cvs2ldif;
-		};
 		A027AA5D1C31C95000EA81CB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A0F8DF051526685100AC5FD3 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A027AA581C31C94900EA81CB;
-			remoteInfo = ldaputils;
-		};
-		A027AA611C31C95C00EA81CB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A0F8DF051526685100AC5FD3 /* Project object */;
 			proxyType = 1;
@@ -113,15 +95,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
-		A09401ED15266D9B003B9698 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -142,6 +115,8 @@
 		A027AA871C32006600EA81CB /* libldap.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libldap.a; path = ../../../../../opt/local/lib/libldap.a; sourceTree = "<group>"; };
 		A0352B3B1CB3563700B70F71 /* LDAP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LDAP.framework; path = System/Library/Frameworks/LDAP.framework; sourceTree = SDKROOT; };
 		A04B49CB1AE9544800E43529 /* autogen.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = autogen.sh; sourceTree = "<group>"; };
+		A0811225234E9363000FD24D /* lentry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lentry.h; sourceTree = "<group>"; };
+		A0811226234E9363000FD24D /* lentry.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lentry.c; sourceTree = "<group>"; };
 		A081E7D6234C0BA300593D29 /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
 		A081E7D7234C0BA300593D29 /* ChangeLog.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ChangeLog.md; sourceTree = "<group>"; };
 		A081E7D8234C0BA300593D29 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
@@ -152,22 +127,14 @@
 		A09401A415266907003B9698 /* git-package-version.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "git-package-version.sh"; sourceTree = "<group>"; };
 		A09401AA15266907003B9698 /* configure.ac */ = {isa = PBXFileReference; explicitFileType = text.script; path = configure.ac; sourceTree = "<group>"; };
 		A09401AF15266907003B9698 /* ldaputils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ldaputils.h; sourceTree = "<group>"; };
-		A09401B015266907003B9698 /* ldif.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ldif.h; sourceTree = "<group>"; };
-		A09401B215266907003B9698 /* api.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = api.c; sourceTree = "<group>"; };
-		A09401B315266907003B9698 /* api.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = api.h; sourceTree = "<group>"; };
-		A09401B415266907003B9698 /* libldif.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libldif.h; sourceTree = "<group>"; };
-		A09401B515266907003B9698 /* libldif.sym */ = {isa = PBXFileReference; lastKnownFileType = text; path = libldif.sym; sourceTree = "<group>"; };
 		A09401BD15266907003B9698 /* Makefile.am */ = {isa = PBXFileReference; explicitFileType = sourcecode.make; indentWidth = 8; path = Makefile.am; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
-		A09401C115266907003B9698 /* csv2ldif.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = csv2ldif.c; sourceTree = "<group>"; };
 		A09401C215266907003B9698 /* ldap2csv.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ldap2csv.c; sourceTree = "<group>"; };
 		A09401C315266907003B9698 /* ldapconfprint.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ldapconfprint.c; sourceTree = "<group>"; };
-		A09401C415266907003B9698 /* ldaprc */ = {isa = PBXFileReference; lastKnownFileType = text; path = ldaprc; sourceTree = "<group>"; };
 		A09401D115266AAB003B9698 /* ldap2csv */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ldap2csv; sourceTree = BUILT_PRODUCTS_DIR; };
 		A09401DB15266AEE003B9698 /* libldap.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libldap.dylib; path = usr/lib/libldap.dylib; sourceTree = SDKROOT; };
 		A09401DC15266AEE003B9698 /* libldap.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libldap.dylib; path = usr/local/lib/libldap.dylib; sourceTree = SDKROOT; };
 		A09401DF15266AFB003B9698 /* liblber.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = liblber.dylib; path = usr/lib/liblber.dylib; sourceTree = SDKROOT; };
 		A09401E015266AFB003B9698 /* liblber.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = liblber.dylib; path = usr/local/lib/liblber.dylib; sourceTree = SDKROOT; };
-		A09401EF15266D9B003B9698 /* cvs2ldif */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = cvs2ldif; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,22 +163,12 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A09401EC15266D9B003B9698 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A0352B3E1CB3564A00B70F71 /* LDAP.framework in Frameworks */,
-				A027AA641C31C96A00EA81CB /* libldaputils.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		A08458031C1243F800F2B609 /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				A09401B115266907003B9698 /* libldif */,
 				A08458041C1246A600F2B609 /* libldaputils */,
 			);
 			path = lib;
@@ -224,6 +181,8 @@
 				A01EB9B41CB4108D005606AC /* libldaputils.h */,
 				A027AA671C31C97B00EA81CB /* lconfig.c */,
 				A027AA681C31C97B00EA81CB /* lconfig.h */,
+				A0811226234E9363000FD24D /* lentry.c */,
+				A0811225234E9363000FD24D /* lentry.h */,
 				A027AA691C31C97B00EA81CB /* lldap.c */,
 				A027AA6A1C31C97B00EA81CB /* lldap.h */,
 				A01EB9B01CB40F9E005606AC /* lmemory.c */,
@@ -252,20 +211,8 @@
 			children = (
 				A09401AF15266907003B9698 /* ldaputils.h */,
 				A027AA741C31FB1D00EA81CB /* ldaputils_cdefs.h */,
-				A09401B015266907003B9698 /* ldif.h */,
 			);
 			path = include;
-			sourceTree = "<group>";
-		};
-		A09401B115266907003B9698 /* libldif */ = {
-			isa = PBXGroup;
-			children = (
-				A09401B215266907003B9698 /* api.c */,
-				A09401B315266907003B9698 /* api.h */,
-				A09401B415266907003B9698 /* libldif.h */,
-				A09401B515266907003B9698 /* libldif.sym */,
-			);
-			path = libldif;
 			sourceTree = "<group>";
 		};
 		A09401B615266907003B9698 /* m4 */ = {
@@ -278,10 +225,8 @@
 		A09401C015266907003B9698 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				A09401C115266907003B9698 /* csv2ldif.c */,
 				A09401C215266907003B9698 /* ldap2csv.c */,
 				A09401C315266907003B9698 /* ldapconfprint.c */,
-				A09401C415266907003B9698 /* ldaprc */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -330,7 +275,6 @@
 			isa = PBXGroup;
 			children = (
 				A09401D115266AAB003B9698 /* ldap2csv */,
-				A09401EF15266D9B003B9698 /* cvs2ldif */,
 				A027AA591C31C94900EA81CB /* libldaputils.a */,
 				A027AA791C31FE9A00EA81CB /* ldapconfprint */,
 			);
@@ -407,24 +351,6 @@
 			productReference = A09401D115266AAB003B9698 /* ldap2csv */;
 			productType = "com.apple.product-type.tool";
 		};
-		A09401EE15266D9B003B9698 /* cvs2ldif */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A09401F615266D9B003B9698 /* Build configuration list for PBXNativeTarget "cvs2ldif" */;
-			buildPhases = (
-				A09401EB15266D9B003B9698 /* Sources */,
-				A09401EC15266D9B003B9698 /* Frameworks */,
-				A09401ED15266D9B003B9698 /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A027AA621C31C95C00EA81CB /* PBXTargetDependency */,
-			);
-			name = cvs2ldif;
-			productName = cvs2ldif;
-			productReference = A09401EF15266D9B003B9698 /* cvs2ldif */;
-			productType = "com.apple.product-type.tool";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -457,7 +383,6 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A09401EE15266D9B003B9698 /* cvs2ldif */,
 				A09401D015266AAB003B9698 /* ldap2csv */,
 				A027AA781C31FE9A00EA81CB /* ldapconfprint */,
 				A027AA3D1C31AC1600EA81CB /* LDAP Utils: ALL */,
@@ -493,14 +418,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A09401EB15266D9B003B9698 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A09401F915266DB3003B9698 /* csv2ldif.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -509,20 +426,10 @@
 			target = A09401D015266AAB003B9698 /* ldap2csv */;
 			targetProxy = A027AA411C31AC1D00EA81CB /* PBXContainerItemProxy */;
 		};
-		A027AA441C31AC1D00EA81CB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A09401EE15266D9B003B9698 /* cvs2ldif */;
-			targetProxy = A027AA431C31AC1D00EA81CB /* PBXContainerItemProxy */;
-		};
 		A027AA5E1C31C95000EA81CB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A027AA581C31C94900EA81CB /* ldaputils */;
 			targetProxy = A027AA5D1C31C95000EA81CB /* PBXContainerItemProxy */;
-		};
-		A027AA621C31C95C00EA81CB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A027AA581C31C94900EA81CB /* ldaputils */;
-			targetProxy = A027AA611C31C95C00EA81CB /* PBXContainerItemProxy */;
 		};
 		A027AA821C31FEBA00EA81CB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -664,40 +571,6 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "-";
 				OTHER_CFLAGS = "-DPROGRAM_NAME=\\\"ldap2csv\\\"";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
-		A09401F715266D9B003B9698 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "-";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-					"PROGRAM_NAME=\\\"cvs2ldif\\\"",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/local/lib,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		A09401F815266D9B003B9698 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "-";
-				GCC_PREPROCESSOR_DEFINITIONS = "PROGRAM_NAME=\\\"cvs2ldif\\\"";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/local/lib,
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -867,15 +740,6 @@
 			buildConfigurations = (
 				A09401D915266AAB003B9698 /* Debug */,
 				A09401DA15266AAB003B9698 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A09401F615266D9B003B9698 /* Build configuration list for PBXNativeTarget "cvs2ldif" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A09401F715266D9B003B9698 /* Debug */,
-				A09401F815266D9B003B9698 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
