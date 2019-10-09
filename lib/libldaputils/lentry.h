@@ -34,10 +34,11 @@
  *  @BINDLE_BINARIES_BSD_LICENSE_END@
  */
 /**
- *  @file src/ldaputils_misc.c contains shared functions and variables
+ *  @file lib/libldaputils/lentry.h  contains shared functions and variables
  */
-#define _LIB_LIBLDAPUTILS_LLDAP_C 1
-#include "lldap.h"
+#ifndef _LIB_LIBLDAPUTILS_LENTRY_H
+#define _LIB_LIBLDAPUTILS_LENTRY_H 1
+
 
 ///////////////
 //           //
@@ -45,82 +46,22 @@
 //           //
 ///////////////
 
-#include <errno.h>
-#include <stdio.h>
-#include <string.h>
-#include <ldap.h>
-#include <stdlib.h>
-#include <assert.h>
-
+#include <ldaputils.h>
 #include "lconfig.h"
 
 
-/////////////////
-//             //
-//  Functions  //
-//             //
-/////////////////
+///////////////////
+//               //
+//  Definitions  //
+//               //
+///////////////////
 
 
-/// connects and binds to LDAP server
-/// @param[in] lud   reference to LDAP utilities struct
-int ldaputils_bind_s(LDAPUtils * lud)
-{
-   int          err;
-   LDAP       * ld;
-   BerValue   * servercredp;
-
-   ld          = lud->ld;
-   servercredp = NULL;
-
-   // starts TLS
-   if (lud->tls_req > 0)
-      if ((err = ldap_start_tls_s(lud->ld, NULL, NULL)) != LDAP_SUCCESS)
-         if (lud->tls_req > 1)
-            return(err);
-
-   // binds to LDAP
-   if ((err = ldap_sasl_bind_s(ld, lud->binddn, lud->sasl_mech, &lud->passwd, NULL, NULL, &servercredp)) != LDAP_SUCCESS)
-      return(err);
-
-   return(LDAP_SUCCESS);
-}
+//////////////////
+//              //
+//  Prototypes  //
+//              //
+//////////////////
 
 
-/// connects and binds to LDAP server
-/// @param[in] ld    refernce to LDAP socket data
-/// @param[in] lud   reference to LDAP utilities struct
-int ldaputils_search(LDAPUtils * lud, LDAPMessage ** resp)
-{
-   int    rc;
-   int    err;
-   int    msgid;
-   LDAP * ld;
-
-   ld  = lud->ld;
-
-   if ((err = ldap_search_ext(ld, lud->basedn, lud->scope, lud->filter, lud->attrs, 0, NULL, NULL, NULL, -1, &msgid)) != LDAP_SUCCESS)
-      return(err);
-
-   switch((err = ldap_result(ld, msgid, LDAP_MSG_ALL, NULL, resp)))
-   {
-      case 0:
-      break;
-
-      case -1:
-      return(err);
-
-      default:
-      break;
-   };
-
-   rc = ldap_parse_result(ld, *resp, &err, NULL, NULL, NULL, NULL, 0);
-   if (rc != LDAP_SUCCESS)
-      return(rc);
-   if (err != LDAP_SUCCESS)
-      return(err);
-
-   return(LDAP_SUCCESS);
-}
-
-/* end of source file */
+#endif /* end of header file */

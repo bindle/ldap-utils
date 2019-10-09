@@ -67,7 +67,8 @@ LDADD					= $(lib_LTLIBRARIES) \
 
 
 # automake targets
-bin_PROGRAMS				= src/ldap2csv
+bin_PROGRAMS				= src/ldap2csv \
+					  src/ldaptree
 check_PROGRAMS				=
 doc_DATA				=
 EXTRA_PROGRAMS				= src/csv2ldif
@@ -128,6 +129,8 @@ lib_libldaputils_a_SOURCES		= $(noinst_HEADERS) \
 					  lib/libldaputils/libldaputils.h \
 					  lib/libldaputils/lconfig.c \
 					  lib/libldaputils/lconfig.h \
+					  lib/libldaputils/lentry.c \
+					  lib/libldaputils/lentry.h \
 					  lib/libldaputils/lldap.c \
 					  lib/libldaputils/lldap.h \
 					  lib/libldaputils/lmemory.c \
@@ -151,6 +154,15 @@ src_ldap2csv_LDFLAGS			= $(AM_LDFLAGS)
 src_ldap2csv_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
 src_ldap2csv_SOURCES			= \
 					  src/ldap2csv.c
+
+
+src_ldaptree_DEPENDENCIES		= Makefile lib/libldaputils.a
+src_ldaptree_CPPFLAGS			= -DPROGRAM_NAME="\"ldaptree\"" $(AM_CPPFLAGS)
+src_ldaptree_CFLAGS			= $(AM_CFLAGS)
+src_ldaptree_LDFLAGS			= $(AM_LDFLAGS)
+src_ldaptree_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
+src_ldaptree_SOURCES			= \
+					  src/ldaptree.c
 
 
 # macros for ldapconfprint
