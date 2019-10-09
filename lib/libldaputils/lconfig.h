@@ -38,6 +38,7 @@
  */
 #ifndef _LIB_LIBLDAPUTILS_LCONFIG_H
 #define _LIB_LIBLDAPUTILS_LCONFIG_H 1
+#undef __LDAPUTILS_PMARK
 
 
 ///////////////
@@ -45,6 +46,9 @@
 //  Headers  //
 //           //
 ///////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Headers
+#endif
 
 #include <ldaputils.h>
 
@@ -53,6 +57,9 @@
 //  Definitions  //
 //               //
 ///////////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Definitions
+#endif
 
 
 /////////////////
@@ -60,6 +67,9 @@
 //  Datatypes  //
 //             //
 /////////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Datatypes
+#endif
 
 
 //////////////////
@@ -67,6 +77,9 @@
 //  Prototypes  //
 //              //
 //////////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Prototypes
+#endif
 
 char * ldaputils_print_option_str(LDAPUtils * lud, int option, char * str, size_t size);
 

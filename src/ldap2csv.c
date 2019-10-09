@@ -61,6 +61,7 @@
  *             ldaputils_config_opts.lo ldaputils_ldap.lo ldap2csv
  */
 #define _LDAP_UTILS_SRC_LDAP2CSV 1
+#undef __LDAPUTILS_PMARK
 
 
 ///////////////
@@ -68,6 +69,9 @@
 //  Headers  //
 //           //
 ///////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Headers
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -87,6 +91,9 @@
 //  Definitions  //
 //               //
 ///////////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Definitions
+#endif
 
 #ifndef PROGRAM_NAME
 #define PROGRAM_NAME "ldap2csv"
@@ -100,6 +107,9 @@
 //  Datatypes  //
 //             //
 /////////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Datatypes
+#endif
 
 /* configuration union */
 typedef struct my_config MyConfig;
@@ -115,6 +125,9 @@ struct my_config
 //  Prototypes  //
 //              //
 //////////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Prototypes
+#endif
 
 // main statement
 int main(int argc, char * argv[]);
@@ -133,6 +146,9 @@ void my_unbind(MyConfig * cnf);
 //  Functions  //
 //             //
 /////////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Functions
+#endif
 
 /// prints program usage and exits
 void ldaputils_usage(void)

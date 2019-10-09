@@ -44,6 +44,9 @@
 //  Headers  //
 //           //
 ///////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Headers
+#endif
 
 #include <errno.h>
 #include <stdio.h>
@@ -60,7 +63,9 @@
 //  Functions  //
 //             //
 /////////////////
-
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Functions
+#endif
 
 /// connects and binds to LDAP server
 /// @param[in] lud   reference to LDAP utilities struct

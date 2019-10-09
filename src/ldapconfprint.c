@@ -59,6 +59,7 @@
  *             ldaputils_config_opts.lo ldapconfprint
  */
 #define _LDAP_UTILS_SRC_LDAPCONFPRINT 1
+#undef __LDAPUTILS_PMARK
 
 
 ///////////////
@@ -66,6 +67,9 @@
 //  Headers  //
 //           //
 ///////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Headers
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -82,6 +86,9 @@
 //  Definitions  //
 //               //
 ///////////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Definitions
+#endif
 
 #ifndef PROGRAM_NAME
 #define PROGRAM_NAME "ldapconfprint"
@@ -95,6 +102,9 @@
 //  Prototypes  //
 //              //
 //////////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Prototypes
+#endif
 
 // main statement
 int main(int argc, char * argv[]);
@@ -108,6 +118,9 @@ int my_config(int argc, char * argv[], LDAPUtils ** ludp);
 //  Functions  //
 //             //
 /////////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Functions
+#endif
 
 /// prints program usage and exits
 void ldaputils_usage(void)

@@ -38,12 +38,16 @@
  */
 #ifndef __LDAPUTILS_H
 #define __LDAPUTILS_H 1
+#undef  __LDAPUTILS_PMARK
 
 ///////////////
 //           //
 //  Headers  //
 //           //
 ///////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Headers
+#endif
 
 #include <ldaputils_cdefs.h>
 
@@ -56,6 +60,9 @@
 //  Definitions  //
 //               //
 ///////////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Definitions
+#endif
 
 #ifndef PACKAGE_BUGREPORT
 #define PACKAGE_BUGREPORT ""
@@ -94,6 +101,9 @@
 //  Datatypes  //
 //             //
 /////////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Datatypes
+#endif
 
 typedef struct ldap_utils_attribute LDAPUtilsAttribute;
 struct ldap_utils_attribute
@@ -149,6 +159,9 @@ struct ldaputils_config_struct
 //  Prototypes  //
 //              //
 //////////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Prototypes
+#endif
 LDAPUTILS_BEGIN_C_DECLS
 
 // removes newlines and carriage returns
