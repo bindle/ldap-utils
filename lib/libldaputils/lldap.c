@@ -50,6 +50,7 @@
 #include <string.h>
 #include <ldap.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #include "lconfig.h"
 
@@ -105,60 +106,96 @@ int ldaputils_cmp_berval(const struct berval ** ptr1, const struct berval ** ptr
 /// compares two LDAP values for sorting
 /// @param[in] ptr1   pointer to first data item to compare
 /// @param[in] ptr2   pointer to second data item to compare
-int ldaputils_cmp_entry(const LDAPUtilsEntry ** ptr1, const LDAPUtilsEntry ** ptr2)
+int ldaputils_cmp_entry(const void * ptr1, const void * ptr2)
 {
    int rc;
-   
-   // quick check of the arguments
-   if ( (!(ptr1)) && (!(ptr2)) )
-      return(0);
-   if (!(ptr1))
-      return(-1);
-   if (!(ptr2))
-      return(1);
-   
+   const LDAPUtilsEntry   * e1;
+   const LDAPUtilsEntry   * e2;
+
+   assert(ptr1 != NULL);
+   assert(ptr2 != NULL);
+
+   e1 = *((const LDAPUtilsEntry * const *)ptr1);
+   e2 = *((const LDAPUtilsEntry * const *)ptr2);
+
    // quick check of the pointers
-   if ( (!(*ptr1)) && (!(*ptr2)) )
+   if ( (!(e1)) && (!(e2)) )
       return(0);
-   if (!(*ptr1))
+   if (!(e1))
       return(-1);
-   if (!(*ptr2))
+   if (!(e2))
       return(1);
 
    // quick check of the pointers
-   if ( (!(*ptr1)->sortval) && (!(*ptr2)->sortval) )
-   {
-      // compare of DN
-      if ((rc = strcasecmp((*ptr1)->dn, (*ptr2)->dn)))
-         return(rc);
-      if ((rc = strcmp((*ptr1)->dn, (*ptr2)->dn)))
-         return(rc);
-      return(0);
-   };
-   if (!(*ptr1)->sortval)
+   if ( (!(e1->sortval)) && (!(e2->sortval)) )
+      return(ldaputils_cmp_entrydn(ptr1, ptr2));
+   if (!(e1->sortval))
       return(-1);
-   if (!(*ptr2)->sortval)
+   if (!(e2->sortval))
       return(1);
    
    // compare of sort value
-   if ((rc = strcasecmp((*ptr1)->sortval, (*ptr2)->sortval)))
+   if ((rc = strcasecmp(e1->sortval, e2->sortval)))
       return(rc);
-   if ((rc = strcmp((*ptr1)->sortval, (*ptr2)->sortval)))
+   if ((rc = strcmp(e1->sortval, e2->sortval)))
       return(rc);
 
    // compare of DN
-   if ((rc = strcasecmp((*ptr1)->dn, (*ptr2)->dn)))
-      return(rc);
-   if ((rc = strcmp((*ptr1)->dn, (*ptr2)->dn)))
-      return(rc);
-   
-   // fall back to comparing memory location
-   if ( *ptr1 < *ptr2 )
+   return(ldaputils_cmp_entrydn(ptr1, ptr2));
+}
+
+
+/// compares two LDAP values for sorting
+/// @param[in] ptr1   pointer to first data item to compare
+/// @param[in] ptr2   pointer to second data item to compare
+int ldaputils_cmp_entrydn(const void * ptr1, const void * ptr2)
+{
+   int                      rc;
+   size_t                   u;
+   size_t                   complen;
+   const LDAPUtilsEntry   * e1;
+   const LDAPUtilsEntry   * e2;
+
+   assert(ptr1 != NULL);
+   assert(ptr2 != NULL);
+
+   e1 = *((const LDAPUtilsEntry * const *)ptr1);
+   e2 = *((const LDAPUtilsEntry * const *)ptr2);
+
+   // quick check of the pointers
+   if ( (!(e1)) && (!(e2)) )
+      return(0);
+   if (!(e1))
       return(-1);
-   if ( *ptr1 > *ptr2 )
+   if (!(e2))
       return(1);
-   
-   // pointers must point to the same object
+
+   if ( (!(e1->components)) || (!(e2->components)) )
+   {
+      if ((rc = strcasecmp(e1->dn, e2->dn)))
+         return(rc);
+      return(strcmp(e1->dn, e2->dn));
+   };
+
+   // determine minimum number of DN components
+   complen = (e1->components_len < e2->components_len) ? e1->components_len : e2->components_len;
+
+   // case insensitive compare of DN components
+   for(u = 0; u < complen; u++)
+      if ((rc = strcasecmp(e1->components[u], e2->components[u])))
+         return(rc);
+
+   // compare DN compnent counts
+   if (e1->components_len < e2->components_len)
+      return(-1);
+   if (e1->components_len > e2->components_len)
+      return(1);
+
+   // case sensitive compare of DN components
+   for(u = 0; u < complen; u++)
+       if ((rc = strcmp(e1->components[u], e2->components[u])))
+         return(rc);
+
    return(0);
 }
 
@@ -184,24 +221,28 @@ void ldaputils_free_entries(LDAPUtilsEntry ** entries)
       if (entries[x]->sortval != NULL)
          free(entries[x]->sortval);
 
+      // frees DN components
+      if (entries[x]->components != NULL)
+         free(entries[x]->components);
+
       // frees attributes
-      if (entries[x]->attributes != NULL)
+      if (entries[x]->attrs != NULL)
       {
-         for(y = 0; (entries[x]->attributes[y] != NULL); y++)
+         for(y = 0; (entries[x]->attrs[y] != NULL); y++)
          {
             // frees attribute name
-            if (entries[x]->attributes[y]->name != NULL)
-               ldap_memfree(entries[x]->attributes[y]->name);
+            if (entries[x]->attrs[y]->name != NULL)
+               ldap_memfree(entries[x]->attrs[y]->name);
 
             // frees attribute values
-            if (entries[x]->attributes[y]->vals != NULL)
-               ldap_value_free_len(entries[x]->attributes[y]->vals);
+            if (entries[x]->attrs[y]->vals != NULL)
+               ldap_value_free_len(entries[x]->attrs[y]->vals);
 
             // frees attribute
-            free(entries[x]->attributes[y]);
+            free(entries[x]->attrs[y]);
          };
-         free(entries[x]->attributes);
-         entries[x]->attributes = NULL;
+         free(entries[x]->attrs);
+         entries[x]->attrs = NULL;
       };
       free(entries[x]);
    };
@@ -214,17 +255,23 @@ void ldaputils_free_entries(LDAPUtilsEntry ** entries)
 /// retrieves LDAP entries from result
 /// @param[in] ld      refernce to LDAP socket data
 /// @param[in] res     refernce to LDAP result message
-LDAPUtilsEntry ** ldaputils_get_entries(LDAPUtils * lud, LDAP * ld,
-   LDAPMessage * res, const char * sortattr)
+LDAPUtilsEntry ** ldaputils_get_entries(LDAP * ld, LDAPMessage * res,
+   const char * sortattr)
 {
    char                * name;
+   char                * str;
    void                * ptr;
+   size_t                u;
+   size_t                len;
    size_t                entry_count;
    BerElement          * ber;
    LDAPMessage         * msg;
    LDAPUtilsEntry      * entry;
    LDAPUtilsEntry     ** entries;
    LDAPUtilsAttribute  * attr;
+
+   assert(ld  != NULL);
+   assert(res != NULL);
 
    entries     = NULL;
    entry_count = 0;
@@ -235,7 +282,6 @@ LDAPUtilsEntry ** ldaputils_get_entries(LDAPUtils * lud, LDAP * ld,
       // allocates entry
       if ( (entry = malloc(sizeof(LDAPUtilsEntry))) == NULL )
       {
-         fprintf(stderr, "%s: out of virtual memory\n", lud->prog_name);
          ldaputils_free_entries(entries);
          return(NULL);
       };
@@ -245,7 +291,6 @@ LDAPUtilsEntry ** ldaputils_get_entries(LDAPUtils * lud, LDAP * ld,
       entry_count++;
       if ((ptr = realloc(entries, sizeof(LDAPUtilsEntry *) * (entry_count+1))) == NULL)
       {
-         fprintf(stderr, "%s: out of virtual memory\n", lud->prog_name);
          free(entry);
          ldaputils_free_entries(entries);
          return(NULL);
@@ -257,9 +302,24 @@ LDAPUtilsEntry ** ldaputils_get_entries(LDAPUtils * lud, LDAP * ld,
       // retrieves entry DN
       if ((entry->dn = ldap_get_dn(ld, msg)) == NULL)
       {
-         fprintf(stderr, "%s: out of virtual memory\n", lud->prog_name);
          ldaputils_free_entries(entries);
          return(NULL);
+      };
+
+      // breaks DN into components
+      if ((entry->components = ldap_explode_dn(entry->dn, 0)) == NULL)
+      {
+         ldaputils_free_entries(entries);
+         return(NULL);
+      };
+      entry->rdn = entry->components[0];
+      for(len = 0; (entry->components[len] != NULL); len++);
+      entry->components_len = len;
+      for(u = 0; (u < (len/2)); u++)
+      {
+         str                        = entry->components[u];
+         entry->components[u]       = entry->components[len-u-1];
+         entry->components[len-u-1] = str;
       };
 
       // retrieves attributes
@@ -269,24 +329,22 @@ LDAPUtilsEntry ** ldaputils_get_entries(LDAPUtils * lud, LDAP * ld,
          // allocates attribute
          if (!(attr = malloc(sizeof(LDAPUtilsAttribute))))
          {
-            fprintf(stderr, "%s: out of virtual memory\n", lud->prog_name);
             ldaputils_free_entries(entries);
             return(NULL);
          };
          memset(attr, 0, sizeof(LDAPUtilsAttribute));
 
          // increases size of attribute list
-         entry->count++;
-         if (!(ptr = realloc(entry->attributes, sizeof(LDAPUtilsAttribute *) * (entry->count+1))))
+         entry->attrs_count++;
+         if (!(ptr = realloc(entry->attrs, sizeof(LDAPUtilsAttribute *) * (entry->attrs_count+1))))
          {
-            fprintf(stderr, "%s: out of virtual memory\n", lud->prog_name);
             free(attr);
             ldaputils_free_entries(entries);
             return(NULL);
          };
-         entry->attributes                 = ptr;
-         entry->attributes[entry->count-1] = attr;
-         entry->attributes[entry->count-0] = NULL;
+         entry->attrs                 = ptr;
+         entry->attrs[entry->attrs_count-1] = attr;
+         entry->attrs[entry->attrs_count-0] = NULL;
 
          // populates attribute name and values
          attr->name = name;
@@ -350,9 +408,9 @@ char * ldaputils_get_vals(LDAPUtils * lud, LDAPUtilsEntry * entry,
    };
    
    vals = NULL;
-   for(x = 0; entry->attributes[x]; x++)
-      if (!(strcasecmp(entry->attributes[x]->name, attr)))
-         vals = entry->attributes[x]->vals;
+   for(x = 0; entry->attrs[x]; x++)
+      if (!(strcasecmp(entry->attrs[x]->name, attr)))
+         vals = entry->attrs[x]->vals;
    
    if (!(vals))
       return(val);
@@ -446,13 +504,14 @@ int ldaputils_search(LDAPUtils * lud, LDAPMessage ** resp)
 
 /// sorts values
 /// @param[in] entries   list of attribute values to sort
-int ldaputils_sort_entries(LDAPUtilsEntry ** entries)
+int ldaputils_sort_entries(LDAPUtilsEntry ** entries, int (*compar)(const void *, const void *))
 {
    size_t  len;
    if (!(entries))
       return(1);
    for(len = 0; entries[len]; len++);
-   qsort(entries, len, sizeof(LDAPUtilsEntry *), (int (*)(const void *, const void *))ldaputils_cmp_entry);
+   qsort(entries, len, sizeof(LDAPUtilsEntry *), compar);
+//   qsort(entries, len, sizeof(LDAPUtilsEntry *), (int (*)(const void *, const void *))ldaputils_cmp_entry);
    return(0);
 }
 

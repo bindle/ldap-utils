@@ -95,21 +95,24 @@
 //             //
 /////////////////
 
-typedef struct ldap_utils_entry LDAPUtilsEntry;
-struct ldap_utils_entry
-{
-   char   * dn;
-   char   * sortval;
-   size_t   count;
-   struct ldap_utils_attribute ** attributes;
-};
-
-
 typedef struct ldap_utils_attribute LDAPUtilsAttribute;
 struct ldap_utils_attribute
 {
    char           * name;
    struct berval ** vals;
+};
+
+
+typedef struct ldap_utils_entry LDAPUtilsEntry;
+struct ldap_utils_entry
+{
+   char                * dn;
+   const char          * rdn;
+   char                * sortval;
+   size_t                components_len;
+   size_t                attrs_count;
+   char               ** components;
+   LDAPUtilsAttribute ** attrs;
 };
 
 
@@ -131,7 +134,7 @@ struct ldaputils_config_struct
    char           uribuff[LDAPUTILS_OPT_LEN];
    char        ** attrs;                       //    result attributes
    const char   * sasl_mech;                   // -Y sasl mechanism
-   const char   * basedn;                      // -b base DN
+   char         * basedn;                      // -b base DN
    const char   * binddn;                      // -D bind DN
    const char   * filter;                      //    search filter
    const char   * host;                        // -h LDAP host
@@ -188,14 +191,17 @@ int ldaputils_common_cmdargs(LDAPUtils * lud, int c, const char * arg);
 int ldaputils_cmp_berval(const struct berval ** ptr1, const struct berval ** ptr2);
 
 // compares two LDAP values for sorting
-int ldaputils_cmp_entry(const LDAPUtilsEntry ** ptr1, const LDAPUtilsEntry ** ptr2);
+int ldaputils_cmp_entry(const void * ptr1, const void * ptr2);
+
+// compares two LDAP entry DNs for sorting
+int ldaputils_cmp_entrydn(const void * ptr1, const void * ptr2);
 
 // frees list of entries
 void ldaputils_free_entries(LDAPUtilsEntry ** entries);
 
 // retrieves LDAP entries from result
-LDAPUtilsEntry ** ldaputils_get_entries(LDAPUtils * lud, LDAP * ld,
-   LDAPMessage * res, const char * sortattr);
+LDAPUtilsEntry ** ldaputils_get_entries(LDAP * ld, LDAPMessage * res,
+   const char * sortattr);
 
 // retrieves values of an LDAP attribute
 char * ldaputils_get_vals(LDAPUtils * lud, LDAPUtilsEntry * entry,
@@ -211,7 +217,7 @@ int ldaputils_bind_s(LDAPUtils * lud);
 int ldaputils_search(LDAPUtils * lud, LDAPMessage ** resp);
 
 // sorts values
-int ldaputils_sort_entries(LDAPUtilsEntry ** entries);
+int ldaputils_sort_entries(LDAPUtilsEntry ** entries, int (*compar)(const void *, const void *));
 
 // sorts values
 int ldaputils_sort_values(struct berval ** vals);

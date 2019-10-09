@@ -63,7 +63,7 @@
 // connects and binds to LDAP server
 int ldaputils_initialize(LDAPUtils ** ludp, const char * prog_name)
 {
-   int         rc;
+   int         err;
    char      * idx;
    int         i;
    LDAPUtils * lud;
@@ -86,15 +86,19 @@ int ldaputils_initialize(LDAPUtils ** ludp, const char * prog_name)
    lud->scope = LDAP_SCOPE_SUB;
 
    // initialize LDAP library
-   if ((rc = ldap_initialize(&lud->ld, NULL)) != LDAP_SUCCESS)
+   if ((err = ldap_initialize(&lud->ld, NULL)) != LDAP_SUCCESS)
    {
       ldaputils_unbind(lud);
-      return(rc);
+      return(err);
    };
 
    // set defaults
    lud->scope = LDAP_SCOPE_SUBTREE;
    i = 3; ldap_set_option(lud->ld, LDAP_OPT_PROTOCOL_VERSION, &i);
+
+   // retrieve LDAP basedn
+   if ((err = ldap_get_option(lud->ld, LDAP_OPT_DEFBASE, &lud->basedn)) != LDAP_SUCCESS)
+      return(LDAP_NO_MEMORY);
 
    *ludp = lud;
 
@@ -111,6 +115,9 @@ void ldaputils_unbind(LDAPUtils * lud)
 
    if ((lud->ld))
       ldap_unbind_ext_s(lud->ld, NULL, NULL);
+
+   if ((lud->basedn))
+      free(lud->basedn);
 
    if ((lud->attrs))
       free(lud->attrs);

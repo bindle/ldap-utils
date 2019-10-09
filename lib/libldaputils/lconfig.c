@@ -214,7 +214,13 @@ int ldaputils_cmdargs(LDAPUtils * lud, int c, const char * arg)
 
       // search options
       case 'b':
-      lud->basedn = arg;
+      if ((lud->basedn))
+         free(lud->basedn);
+      if ((lud->basedn = strdup(arg)) == NULL)
+      {
+         fprintf(stderr, "%s: strdup(): out of virtual memory\n", lud->prog_name);
+         return(1);
+      };
       return(0);
 
       case 'l':
