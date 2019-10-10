@@ -139,13 +139,55 @@ struct ldaputils_config_struct
 //  Prototypes  //
 //              //
 //////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Prototypes
-#endif
 LDAPUTILS_BEGIN_C_DECLS
+
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Prototypes: Passwords
+#endif
+
+// getpass() replacement -- SUSV 2 deprecated getpass()
+char * ldaputils_getpass(const char * prompt);
+
+// retrieves password
+int ldaputils_pass(LDAPUtils * lud);
+
+
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Prototypes: Entries and Values
+#endif
+
+// compares two LDAP values for sorting
+int ldaputils_cmp_berval(const struct berval ** ptr1, const struct berval ** ptr2);
+
+// compares two LDAP values for sorting
+int ldaputils_cmp_entry(const void * ptr1, const void * ptr2);
+
+// compares two LDAP entry DNs for sorting
+int ldaputils_cmp_entrydn(const void * ptr1, const void * ptr2);
+
+void ldaputils_entry_free(LDAPUtilsEntry * entry);
+
+// retrieves LDAP entries from result
+LDAPUtilsEntry ** ldaputils_get_entries(LDAP * ld, LDAPMessage * res,
+   const char * sortattr);
+
+// sorts values
+int ldaputils_entries_sort(LDAPUtilsEntry ** entries, int (*compar)(const void *, const void *));
+
+// sorts values
+int ldaputils_values_sort(struct berval ** vals);
+
+
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Prototypes: Utilities
+#endif
 
 // removes newlines and carriage returns
 char * ldaputils_chomp(char * str);
+
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Prototypes: Configuration
+#endif
 
 // parses LDAP command line arguments
 int ldaputils_cmdargs(LDAPUtils * lud, int c, const char * arg);
@@ -156,17 +198,18 @@ void ldaputils_config_print(LDAPUtils * lud);
 // prints string to stdout
 const char * ldaputils_config_print_str(const char * str);
 
-void ldaputils_entry_free(LDAPUtilsEntry * entry);
-
-// retrieves password
-int ldaputils_pass(LDAPUtils * lud);
-
-// getpass() replacement -- SUSV 2 deprecated getpass()
-char * ldaputils_getpass(const char * prompt);
-
 const char * ldaputils_get_dn(LDAPUtilsEntry * entry);
 const char * ldaputils_get_rdn(LDAPUtilsEntry * entry);
 const char * const * ldaputils_get_dn_components(LDAPUtilsEntry * entry, size_t * lenp);
+
+const char * ldaputils_get_prog_name(LDAPUtils * lud);
+LDAP * ldaputils_get_ld(LDAPUtils * lud);
+const char * const * ldaputils_get_attribute_list(LDAPUtils * lud);
+
+
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Prototypes: Usage
+#endif
 
 // prints program usage and exits
 void ldaputils_usage(void);
@@ -180,40 +223,18 @@ void ldaputils_usage_search(const char * short_options);
 // displays usage
 void ldaputils_version(const char * prog_name);
 
-const char * ldaputils_get_prog_name(LDAPUtils * lud);
-LDAP * ldaputils_get_ld(LDAPUtils * lud);
-const char * const * ldaputils_get_attribute_list(LDAPUtils * lud);
-
-// parses LDAP command line arguments
-int ldaputils_common_cmdargs(LDAPUtils * lud, int c, const char * arg);
-
-// compares two LDAP values for sorting
-int ldaputils_cmp_berval(const struct berval ** ptr1, const struct berval ** ptr2);
-
-// compares two LDAP values for sorting
-int ldaputils_cmp_entry(const void * ptr1, const void * ptr2);
-
-// compares two LDAP entry DNs for sorting
-int ldaputils_cmp_entrydn(const void * ptr1, const void * ptr2);
-
-// retrieves LDAP entries from result
-LDAPUtilsEntry ** ldaputils_get_entries(LDAP * ld, LDAPMessage * res,
-   const char * sortattr);
-
-// connects and binds to LDAP server
-int ldaputils_initialize(LDAPUtils ** lup, const char * prog_name);
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Prototypes: LDAP Operations
+#endif
 
 // connects and binds to LDAP server
 int ldaputils_bind_s(LDAPUtils * lud);
 
 // connects and binds to LDAP server
+int ldaputils_initialize(LDAPUtils ** lup, const char * prog_name);
+
+// connects and binds to LDAP server
 int ldaputils_search(LDAPUtils * lud, LDAPMessage ** resp);
-
-// sorts values
-int ldaputils_entries_sort(LDAPUtilsEntry ** entries, int (*compar)(const void *, const void *));
-
-// sorts values
-int ldaputils_values_sort(struct berval ** vals);
 
 // frees common config
 void ldaputils_unbind(LDAPUtils * lud);
