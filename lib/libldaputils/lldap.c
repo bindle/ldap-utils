@@ -104,7 +104,7 @@ int ldaputils_search(LDAPUtils * lud, LDAPMessage ** resp)
 
    ld  = lud->ld;
 
-   if ((err = ldap_search_ext(ld, lud->basedn, lud->scope, lud->filter, lud->attrs, 0, NULL, NULL, NULL, -1, &msgid)) != LDAP_SUCCESS)
+   if ((err = ldap_search_ext(ld, NULL, lud->scope, lud->filter, lud->attrs, 0, NULL, NULL, NULL, -1, &msgid)) != LDAP_SUCCESS)
       return(err);
 
    switch((err = ldap_result(ld, msgid, LDAP_MSG_ALL, NULL, resp)))

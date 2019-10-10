@@ -63,6 +63,42 @@
 #endif
 
 
+/////////////////
+//             //
+//  Datatypes  //
+//             //
+/////////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Datatypes
+#endif
+
+struct ldap_utils_attribute
+{
+   char           * name;
+   struct berval ** vals;
+};
+
+
+struct ldap_utils_entry
+{
+   char                * dn;
+   const char          * rdn;
+   char                * sortval;
+   size_t                components_len;
+   size_t                attrs_count;
+   char               ** components;
+   LDAPUtilsAttribute ** attrs;
+};
+
+
+struct ldap_utils_entries
+{
+   size_t                count;
+   size_t                cursor;
+   LDAPUtilsEntry     ** entries;
+};
+
+
 //////////////////
 //              //
 //  Prototypes  //
@@ -71,5 +107,6 @@
 #ifdef __LDAPUTILS_PMARK
 #pragma mark - Prototypes
 #endif
+
 
 #endif /* end of header file */

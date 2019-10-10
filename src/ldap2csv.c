@@ -116,6 +116,8 @@ typedef struct my_config MyConfig;
 struct my_config
 {
    LDAPUtils   * lud;
+   const char  * filter;
+   const char  * prog_name;
    char          output[LDAPUTILS_OPT_LEN];
 };
 
@@ -172,10 +174,11 @@ void ldaputils_usage(void)
 /// @param[in] argv   array of arguments
 int main(int argc, char * argv[])
 {
-   int              x;
-   int              err;
-   MyConfig       * cnf;
-   LDAPMessage    * res;
+   int                    x;
+   int                    err;
+   MyConfig             * cnf;
+   LDAPMessage          * res;
+   const char * const   * attrs;
 
    cnf = NULL;
 
@@ -188,7 +191,7 @@ int main(int argc, char * argv[])
    // starts TLS and binds to LDAP
    if ((err = ldaputils_bind_s(cnf->lud)) != LDAP_SUCCESS)
    {
-      fprintf(stderr, "%s: ldap_sasl_bind_s(): %s\n", cnf->lud->prog_name, ldap_err2string(err));
+      fprintf(stderr, "%s: ldap_sasl_bind_s(): %s\n", ldaputils_get_prog_name(cnf->lud), ldap_err2string(err));
       my_unbind(cnf);
       return(1);
    };
@@ -196,15 +199,16 @@ int main(int argc, char * argv[])
    // performs LDAP search
    if ((err = ldaputils_search(cnf->lud, &res)) != LDAP_SUCCESS)
    {
-      fprintf(stderr, "%s: ldaputils_search(): %s\n", cnf->lud->prog_name, ldap_err2string(err));
+      fprintf(stderr, "%s: ldaputils_search(): %s\n", ldaputils_get_prog_name(cnf->lud), ldap_err2string(err));
       my_unbind(cnf);
       return(1);
    };
 
    // prints attribute names
-   printf("\"%s\"", cnf->lud->attrs[0]);
-   for(x = 1; cnf->lud->attrs[x]; x++)
-      printf(",\"%s\"", cnf->lud->attrs[x]);
+   attrs = ldaputils_get_attribute_list(cnf->lud);
+   printf("\"%s\"", attrs[0]);
+   for(x = 1; attrs[x]; x++)
+      printf(",\"%s\"", attrs[x]);
    printf("\n");
 
    // prints values
@@ -231,7 +235,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    int        err;
    int        option_index;
    MyConfig * cnf;
-   
+
    static char   short_options[] = MY_SHORT_OPTIONS;
    static struct option long_options[] =
    {
@@ -296,11 +300,13 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
       };
    };
 
+   cnf->prog_name = ldaputils_get_prog_name(cnf->lud);
+
    // checks for required arguments
    if (argc < (optind+2))
    {
-      fprintf(stderr, "%s: missing required arguments\n", PROGRAM_NAME);
-      fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
+      fprintf(stderr, "%s: missing required arguments\n", cnf->prog_name);
+      fprintf(stderr, "Try `%s --help' for more information.\n", cnf->prog_name);
       my_unbind(cnf);
       return(1);
    };
@@ -311,7 +317,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    // configures LDAP attributes to return in results
    if (!(cnf->lud->attrs = (char **) malloc(sizeof(char *) * (size_t)(argc-optind))))
    {
-      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
+      fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
       my_unbind(cnf);
       return(1);
    };
@@ -351,19 +357,19 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
    assert(cnf != NULL);
    assert(res != NULL);
 
-   ld      = cnf->lud->ld;
+   ld      = ldaputils_get_ld(cnf->lud);
 
    // initialize buffer
    bufflen = 32;
    if ((buff = malloc(bufflen)) == NULL)
    {
-      fprintf(stderr, "%s: malloc(): out of virtual memory\n", cnf->lud->prog_name);
+      fprintf(stderr, "%s: malloc(): out of virtual memory\n", cnf->prog_name);
       return(LDAP_NO_MEMORY);
    };
 
    // sorts entries
    if ((cnf->lud->sortattr))
-      ldap_sort_entries(cnf->lud->ld, &res, cnf->lud->sortattr, strcasecmp);
+      ldap_sort_entries(ld, &res, cnf->lud->sortattr, strcasecmp);
 
    // loops through entries
    msg = ldap_first_entry(ld, res);
@@ -372,9 +378,9 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
       printf("\"");
 
       // retrieve DN and make CSV safe
-      if ((dn = ldap_get_dn(cnf->lud->ld, msg)) == NULL)
+      if ((dn = ldap_get_dn(ld, msg)) == NULL)
       {
-         fprintf(stderr, "%s: malloc(): out of virtual memory\n", cnf->lud->prog_name);
+         fprintf(stderr, "%s: malloc(): out of virtual memory\n", cnf->prog_name);
          free(buff);
          return(LDAP_NO_MEMORY);
       };
@@ -401,7 +407,7 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
          {
             if ((dns = ldap_explode_dn(dn, 0)) == NULL)
             {
-               fprintf(stderr, "%s: ldap_explode_dn(): out of virtual memory\n", cnf->lud->prog_name);
+               fprintf(stderr, "%s: ldap_explode_dn(): out of virtual memory\n", cnf->prog_name);
                free(buff);
                return(LDAP_NO_MEMORY);
             };
@@ -415,7 +421,7 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
          {
             if ((dnstr = ldap_dn2ufn(dn)) == NULL)
             {
-               fprintf(stderr, "%s: ldap_dn2ufn(): out of virtual memory\n", cnf->lud->prog_name);
+               fprintf(stderr, "%s: ldap_dn2ufn(): out of virtual memory\n", cnf->prog_name);
                free(buff);
                return(LDAP_NO_MEMORY);
             };
@@ -429,7 +435,7 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
          {
             if ((dnstr = ldap_dn2dcedn(dn)) == NULL)
             {
-               fprintf(stderr, "%s: ldap_dn2dcedn(): out of virtual memory\n", cnf->lud->prog_name);
+               fprintf(stderr, "%s: ldap_dn2dcedn(): out of virtual memory\n", cnf->prog_name);
                free(buff);
                return(LDAP_NO_MEMORY);
             };
@@ -443,7 +449,7 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
          {
             if ((dnstr = ldap_dn2ad_canonical(dn)) == NULL)
             {
-               fprintf(stderr, "%s: ldap_dn2ad_canonical(): out of virtual memory\n", cnf->lud->prog_name);
+               fprintf(stderr, "%s: ldap_dn2ad_canonical(): out of virtual memory\n", cnf->prog_name);
                free(buff);
                return(LDAP_NO_MEMORY);
             };
@@ -453,7 +459,7 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
          };
 
          // retrieves values
-         if ((vals = ldap_get_values_len(cnf->lud->ld, msg, cnf->lud->attrs[x])) == NULL)
+         if ((vals = ldap_get_values_len(ld, msg, cnf->lud->attrs[x])) == NULL)
             continue;
 
          // processes values
@@ -465,7 +471,7 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
                bufflen = vals[y]->bv_len + 1;
                if ((ptr = realloc(buff, bufflen)) == NULL)
                {
-                  fprintf(stderr, "%s: realloc(): out of virtual memory\n", cnf->lud->prog_name);
+                  fprintf(stderr, "%s: realloc(): out of virtual memory\n", cnf->prog_name);
                   free(buff);
                   return(LDAP_NO_MEMORY);
                };

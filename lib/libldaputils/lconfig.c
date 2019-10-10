@@ -139,7 +139,11 @@ int ldaputils_cmdargs(LDAPUtils * lud, int c, const char * arg)
       return(0);
 
       case 'h':
-      lud->host = arg;
+      if ((rc = ldap_set_option(lud->ld, LDAP_OPT_HOST_NAME, arg)) != LDAP_SUCCESS)
+      {
+         fprintf(stderr, "%s: ldap_set_option(LDAP_OPT_HOST_NAME): %s\n", lud->prog_name, ldap_err2string(rc));
+         return(1);
+      };
       return(0);
 
       case 'H':
@@ -154,13 +158,9 @@ int ldaputils_cmdargs(LDAPUtils * lud, int c, const char * arg)
       lud->dryrun++;
       return(0);
 
-      case 'p':
-      lud->port = atoi(arg);
-      return(0);
-
       case 'P':
-      lud->version = atoi(arg);
-      if ((rc = ldap_set_option(lud->ld, LDAP_OPT_PROTOCOL_VERSION, &lud->version)) != LDAP_SUCCESS)
+      valint = atoi(arg);
+      if ((rc = ldap_set_option(lud->ld, LDAP_OPT_PROTOCOL_VERSION, &valint)) != LDAP_SUCCESS)
          fprintf(stderr, "%s: ldap_set_option(LDAP_OPT_PROTOCOL_VERSION): %s\n", lud->prog_name, ldap_err2string(rc));
       return(0);
 
@@ -220,11 +220,9 @@ int ldaputils_cmdargs(LDAPUtils * lud, int c, const char * arg)
 
       // search options
       case 'b':
-      if ((lud->basedn))
-         free(lud->basedn);
-      if ((lud->basedn = strdup(arg)) == NULL)
+      if ((rc = ldap_set_option(lud->ld, LDAP_OPT_DEFBASE, arg)) != LDAP_SUCCESS)
       {
-         fprintf(stderr, "%s: strdup(): out of virtual memory\n", lud->prog_name);
+         fprintf(stderr, "%s: ldap_set_option(LDAP_OPT_DEFBASE): %s\n", lud->prog_name, ldap_err2string(rc));
          return(1);
       };
       return(0);
@@ -289,17 +287,17 @@ void ldaputils_config_print(LDAPUtils * lud)
    printf("Common Options:\n");
    printf("   -c: continuous:   %i\n", lud->continuous);
    printf("   -D: bind DN:      %s\n", ldaputils_config_print_str(lud->binddn));
-   printf("   -h: LDAP host:    %s\n", ldaputils_config_print_str(lud->host));
+   //printf("   -h: LDAP host:    %s\n", ldaputils_config_print_str(lud->host));
    printf("   -H: LDAP URI:     %s\n", ldaputils_print_option_str(lud, LDAP_OPT_URI, str, sizeof(str)));
    printf("   -n: dry run:      %i\n", lud->dryrun);
-   printf("   -P: LDAP port:    %i\n", lud->port);
-   printf("   -P: LDAP version: %i\n", lud->version);
+   //printf("   -P: LDAP port:    %i\n", lud->port);
+   //printf("   -P: LDAP version: %i\n", lud->version);
    printf("   -v: verbose mode: %i\n", lud->verbose);
    printf("   -x: sasl mech:    %s\n", ldaputils_config_print_str(lud->sasl_mech));
    printf("   -w: bind pass:    %s\n", ldaputils_config_print_str(lud->passwd.bv_val));
    printf("   -Z: require TLS:  %i\n", lud->tls_req);
    printf("Search Options:\n");
-   printf("   -b: basedn:       %s\n", ldaputils_config_print_str(lud->basedn));
+   //printf("   -b: basedn:       %s\n", ldaputils_config_print_str(lud->basedn));
    printf("   -l: time limit:   %i\n", -1);
    printf("   -s: scope:        %i\n", lud->scope);
    printf("   -S: sort by:      %s\n", ldaputils_config_print_str(lud->sortattr));
@@ -346,6 +344,27 @@ const char * ldaputils_config_print_str(const char * str)
    if (str)
       return(str);
    return("(null)");
+}
+
+
+const char * ldaputils_get_prog_name(LDAPUtils * lud)
+{
+   assert(lud != NULL);
+   return(lud->prog_name);
+}
+
+
+LDAP * ldaputils_get_ld(LDAPUtils * lud)
+{
+   assert(lud != NULL);
+   return(lud->ld);
+}
+
+
+const char * const * ldaputils_get_attribute_list(LDAPUtils * lud)
+{
+   assert(lud != NULL);
+   return((const char * const *)lud->attrs);
 }
 
 
