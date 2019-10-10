@@ -35,6 +35,10 @@
 		A027AA851C31FF0700EA81CB /* libldaputils.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A027AA591C31C94900EA81CB /* libldaputils.a */; };
 		A0352B3C1CB3563700B70F71 /* LDAP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0352B3B1CB3563700B70F71 /* LDAP.framework */; };
 		A0352B3D1CB3564100B70F71 /* LDAP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0352B3B1CB3563700B70F71 /* LDAP.framework */; };
+		A0811228234EA789000FD24D /* lentry.c in Sources */ = {isa = PBXBuildFile; fileRef = A0811226234E9363000FD24D /* lentry.c */; };
+		A0811237234EA84B000FD24D /* ldaptree.c in Sources */ = {isa = PBXBuildFile; fileRef = A0811236234EA84B000FD24D /* ldaptree.c */; };
+		A0811238234EA875000FD24D /* libldaputils.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A027AA591C31C94900EA81CB /* libldaputils.a */; };
+		A0811239234EA89F000FD24D /* LDAP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0352B3B1CB3563700B70F71 /* LDAP.framework */; };
 		A09401E415266B28003B9698 /* ldap2csv.c in Sources */ = {isa = PBXBuildFile; fileRef = A09401C215266907003B9698 /* ldap2csv.c */; };
 /* End PBXBuildFile section */
 
@@ -74,10 +78,26 @@
 			remoteGlobalIDString = A027AA581C31C94900EA81CB;
 			remoteInfo = ldaputils;
 		};
+		A0811234234EA836000FD24D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0F8DF051526685100AC5FD3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A027AA581C31C94900EA81CB;
+			remoteInfo = ldaputils;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		A027AA771C31FE9A00EA81CB /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		A081122B234EA826000FD24D /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -117,6 +137,8 @@
 		A04B49CB1AE9544800E43529 /* autogen.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = autogen.sh; sourceTree = "<group>"; };
 		A0811225234E9363000FD24D /* lentry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lentry.h; sourceTree = "<group>"; };
 		A0811226234E9363000FD24D /* lentry.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lentry.c; sourceTree = "<group>"; };
+		A081122D234EA826000FD24D /* ldaptree */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ldaptree; sourceTree = BUILT_PRODUCTS_DIR; };
+		A0811236234EA84B000FD24D /* ldaptree.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ldaptree.c; sourceTree = "<group>"; };
 		A081E7D6234C0BA300593D29 /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
 		A081E7D7234C0BA300593D29 /* ChangeLog.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ChangeLog.md; sourceTree = "<group>"; };
 		A081E7D8234C0BA300593D29 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
@@ -151,6 +173,15 @@
 			files = (
 				A0352B3D1CB3564100B70F71 /* LDAP.framework in Frameworks */,
 				A027AA851C31FF0700EA81CB /* libldaputils.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A081122A234EA826000FD24D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0811239234EA89F000FD24D /* LDAP.framework in Frameworks */,
+				A0811238234EA875000FD24D /* libldaputils.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,6 +258,7 @@
 			children = (
 				A09401C215266907003B9698 /* ldap2csv.c */,
 				A09401C315266907003B9698 /* ldapconfprint.c */,
+				A0811236234EA84B000FD24D /* ldaptree.c */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -277,6 +309,7 @@
 				A09401D115266AAB003B9698 /* ldap2csv */,
 				A027AA591C31C94900EA81CB /* libldaputils.a */,
 				A027AA791C31FE9A00EA81CB /* ldapconfprint */,
+				A081122D234EA826000FD24D /* ldaptree */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -333,6 +366,24 @@
 			productReference = A027AA791C31FE9A00EA81CB /* ldapconfprint */;
 			productType = "com.apple.product-type.tool";
 		};
+		A081122C234EA826000FD24D /* ldaptree */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A0811231234EA826000FD24D /* Build configuration list for PBXNativeTarget "ldaptree" */;
+			buildPhases = (
+				A0811229234EA826000FD24D /* Sources */,
+				A081122A234EA826000FD24D /* Frameworks */,
+				A081122B234EA826000FD24D /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A0811235234EA836000FD24D /* PBXTargetDependency */,
+			);
+			name = ldaptree;
+			productName = ldaptree;
+			productReference = A081122D234EA826000FD24D /* ldaptree */;
+			productType = "com.apple.product-type.tool";
+		};
 		A09401D015266AAB003B9698 /* ldap2csv */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A09401D815266AAB003B9698 /* Build configuration list for PBXNativeTarget "ldap2csv" */;
@@ -368,6 +419,10 @@
 					A027AA781C31FE9A00EA81CB = {
 						CreatedOnToolsVersion = 7.2;
 					};
+					A081122C234EA826000FD24D = {
+						CreatedOnToolsVersion = 11.0;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = A0F8DF081526685100AC5FD3 /* Build configuration list for PBXProject "ldap-utils" */;
@@ -385,6 +440,7 @@
 			targets = (
 				A09401D015266AAB003B9698 /* ldap2csv */,
 				A027AA781C31FE9A00EA81CB /* ldapconfprint */,
+				A081122C234EA826000FD24D /* ldaptree */,
 				A027AA3D1C31AC1600EA81CB /* LDAP Utils: ALL */,
 				A027AA581C31C94900EA81CB /* ldaputils */,
 			);
@@ -399,6 +455,7 @@
 				A027AA721C31C98A00EA81CB /* lldap.c in Sources */,
 				A027AA701C31C98A00EA81CB /* lconfig.c in Sources */,
 				A01EB9B21CB40F9E005606AC /* lmemory.c in Sources */,
+				A0811228234EA789000FD24D /* lentry.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -407,6 +464,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				A027AA801C31FEAB00EA81CB /* ldapconfprint.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A0811229234EA826000FD24D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0811237234EA84B000FD24D /* ldaptree.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -445,6 +510,11 @@
 			isa = PBXTargetDependency;
 			target = A027AA581C31C94900EA81CB /* ldaputils */;
 			targetProxy = A0352B3F1CB3572300B70F71 /* PBXContainerItemProxy */;
+		};
+		A0811235234EA836000FD24D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A027AA581C31C94900EA81CB /* ldaputils */;
+			targetProxy = A0811234234EA836000FD24D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -551,6 +621,63 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		A0811232234EA826000FD24D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A0811233234EA826000FD24D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -731,6 +858,15 @@
 			buildConfigurations = (
 				A027AA7E1C31FE9A00EA81CB /* Debug */,
 				A027AA7F1C31FE9A00EA81CB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A0811231234EA826000FD24D /* Build configuration list for PBXNativeTarget "ldaptree" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A0811232234EA826000FD24D /* Debug */,
+				A0811233234EA826000FD24D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
