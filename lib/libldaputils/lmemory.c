@@ -66,6 +66,24 @@
 #pragma mark - Functions
 #endif
 
+/// removes newlines and carriage returns
+/// @param[in] str
+char * ldaputils_chomp(char * str)
+{
+   char * idx;
+
+   if (!(str))
+      return(NULL);
+
+   if ((idx = strchr(str, '\n')))
+      idx[0] = '\0';
+   if ((idx = strchr(str, '\r')))
+      idx[0] = '\0';
+
+   return(str);
+}
+
+
 // connects and binds to LDAP server
 int ldaputils_initialize(LDAPUtils ** ludp, const char * prog_name)
 {

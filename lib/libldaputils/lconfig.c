@@ -76,24 +76,6 @@
 #pragma mark - Functions
 #endif
 
-/// removes newlines and carriage returns
-/// @param[in] str
-char * ldaputils_chomp(char * str)
-{
-   char * idx;
-
-   if (!(str))
-      return(NULL);
-
-   if ((idx = strchr(str, '\n')))
-      idx[0] = '\0';
-   if ((idx = strchr(str, '\r')))
-      idx[0] = '\0';
-
-   return(str);
-}
-
-
 /// parses LDAP command line arguments
 /// @param[in] lud
 /// @param[in] c
@@ -533,10 +515,10 @@ void ldaputils_usage_common(const char * short_options)
          case 'c': printf("  -c                continuous operation mode (do not stop on errors)\n"); break;
          case 'd': printf("  -d level          set LDAP debug level to `level'\n"); break;
          case 'D': printf("  -D binddn         bind DN\n"); break;
-         case 'h': printf("  -h host           LDAP server\n"); break;
+         //case 'h': printf("  -h host           LDAP server\n"); break;
          case 'H': printf("  -H URI            LDAP Uniform Resource Identifier(s)\n"); break;
          case 'n': printf("  -n                show what would be done but don't actually do it\n"); break;
-         case 'p': printf("  -p port           port on LDAP server\n"); break;
+         //case 'p': printf("  -p port           port on LDAP server\n"); break;
          case 'v': printf("  -v, --verbose     run in verbose mode\n"); break;
          case 'V': printf("  -V, --version     print version number and exit\n"); break;
          case 'w': printf("  -w, passwd        bind password (for simple authentication)\n"); break;
