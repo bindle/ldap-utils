@@ -69,6 +69,26 @@
 #include "lpasswd.h"
 
 
+//////////////////
+//              //
+//  Prototypes  //
+//              //
+//////////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Prototypes
+#endif
+
+// prints string to stdout
+const char * ldaputils_config_print_str(const char * str);
+void ldaputils_param_print(const char * key, const char * val);
+void ldaputils_param_int(LDAPUtils * lud, const char * key, int ival);
+void ldaputils_param_option_str(LDAPUtils * lud, const char * key, int option);
+void ldaputils_param_option_strlist(LDAPUtils * lud, const char * key, int option);
+void ldaputils_param_option_int(LDAPUtils * lud, const char * key, int option);
+void ldaputils_param_option_time(LDAPUtils * lud, const char * key, int option);
+void ldaputils_param_option_bool(LDAPUtils * lud, const char * key, int option);
+
+
 /////////////////
 //             //
 //  Functions  //
@@ -82,7 +102,7 @@
 /// @param[in] lud
 /// @param[in] c
 /// @param[in] arg
-int ldaputils_cmdargs(LDAPUtils * lud, int c, const char * arg)
+int ldaputils_getopt(LDAPUtils * lud, int c, const char * arg)
 {
    int     rc;
    int     valint;
@@ -263,71 +283,247 @@ int ldaputils_cmdargs(LDAPUtils * lud, int c, const char * arg)
 
 /// prints configuration to stdout
 /// @param[in] lud  reference to common configuration struct
-void ldaputils_config_print(LDAPUtils * lud)
+void ldaputils_params(LDAPUtils * lud)
 {
-   int i;
-   char str[256];
+   int          i;
+   const char * str;
 
-   printf("Common Options:\n");
-   printf("   -c: continuous:   %i\n", lud->continuous);
-   printf("   -D: bind DN:      %s\n", ldaputils_config_print_str(lud->binddn));
-   //printf("   -h: LDAP host:    %s\n", ldaputils_config_print_str(lud->host));
-   printf("   -H: LDAP URI:     %s\n", ldaputils_print_option_str(lud, LDAP_OPT_URI, str, sizeof(str)));
-   printf("   -n: dry run:      %i\n", lud->dryrun);
-   //printf("   -P: LDAP port:    %i\n", lud->port);
-   //printf("   -P: LDAP version: %i\n", lud->version);
-   printf("   -v: verbose mode: %i\n", lud->verbose);
-   printf("   -x: sasl mech:    %s\n", ldaputils_config_print_str(lud->sasl_mech));
-   printf("   -w: bind pass:    %s\n", ldaputils_config_print_str(lud->passwd.bv_val));
-   printf("   -Z: require TLS:  %i\n", lud->tls_req);
-   printf("Search Options:\n");
-   //printf("   -b: basedn:       %s\n", ldaputils_config_print_str(lud->basedn));
-   printf("   -l: time limit:   %i\n", -1);
-   printf("   -s: scope:        %i\n", lud->scope);
-   printf("   -S: sort by:      %s\n", ldaputils_config_print_str(lud->sortattr));
-   printf("   -z: size limit:   %i\n", -1);
-   printf("       filter:       %s\n", lud->filter);
+   printf("Miscellaneous:\n");
+   ldaputils_param_int(lud, "Continuous:",              lud->continuous);
+   ldaputils_param_int(lud, "Dry Run:",                 lud->dryrun);
+   ldaputils_param_int(lud, "Verbose:",                 lud->verbose);
+   printf("\n");
+
+   printf("LDAP Host:\n");
+   ldaputils_param_option_str(lud, "URI:",              LDAP_OPT_URI);
+   ldaputils_param_option_str(lud, "Hostname:",         LDAP_OPT_HOST_NAME);
+   ldaputils_param_option_int(lud, "Protocol Version:", LDAP_OPT_PROTOCOL_VERSION);
+   ldaputils_param_option_int(lud, "Debug Level:",      LDAP_OPT_DEBUG_LEVEL);
+   ldaputils_param_option_time(lud, "Network Timeout:", LDAP_OPT_NETWORK_TIMEOUT);
+   ldaputils_param_option_bool(lud,  "Restart:",        LDAP_OPT_RESTART);
+   ldaputils_param_print(          "Bind DN:",             lud->binddn);
+   printf("\n");
+
+   printf("LDAP TCP Options:\n");
+   ldaputils_param_option_int(lud, "Keepalive Idle:",    LDAP_OPT_X_KEEPALIVE_IDLE);
+   ldaputils_param_option_int(lud, "Keepalive Probes:",  LDAP_OPT_X_KEEPALIVE_PROBES);
+   ldaputils_param_option_int(lud, "Keepalive Interval:",  LDAP_OPT_X_KEEPALIVE_INTERVAL);
+   printf("\n");
+
+   printf("LDAP TLS Options:\n");
+   switch (lud->tls_req)
+   {
+      case 0:  str = "none";    break;
+      case 1:  str = "try";     break;
+      case 2:  str = "require"; break;
+      default: str = "unknown"; break;
+   };
+   ldaputils_param_print(          "TLS:",             str);
+   ldaputils_param_option_int(lud, "TLS Minimum Version:",           LDAP_OPT_X_TLS_PROTOCOL_MIN);
+   ldaputils_param_option_str(lud, "TLS CA Certificates Directory:", LDAP_OPT_X_TLS_CACERTDIR);
+   ldaputils_param_option_str(lud, "TLS CA Certificate:",            LDAP_OPT_X_TLS_CACERTFILE);
+   if (ldap_get_option(lud->ld, LDAP_OPT_X_TLS_REQUIRE_CERT, &i) == LDAP_SUCCESS)
+   {
+      switch(i)
+      {
+         case LDAP_OPT_X_TLS_NEVER:  str = "never"; break;
+         case LDAP_OPT_X_TLS_HARD:   str = "hard"; break;
+         case LDAP_OPT_X_TLS_DEMAND: str = "demand"; break;
+         case LDAP_OPT_X_TLS_ALLOW:  str = "allow"; break;
+         case LDAP_OPT_X_TLS_TRY:    str = "try"; break;
+         default:                    str = "unknown"; break;
+      };
+      ldaputils_param_print(       "TLS Peer Check:",     str);
+   };
+   ldaputils_param_option_str(lud, "TLS DH File:",                   LDAP_OPT_X_TLS_DHFILE);
+   ldaputils_param_option_str(lud, "TLS Key File:",              LDAP_OPT_X_TLS_KEYFILE);
+   ldaputils_param_option_str(lud, "TLS Random File:",              LDAP_OPT_X_TLS_RANDOM_FILE);
+   if (ldap_get_option(lud->ld, LDAP_OPT_X_TLS_CRLCHECK, &i) == LDAP_SUCCESS)
+   {
+      switch(i)
+      {
+         case LDAP_OPT_X_TLS_CRL_NONE: str = "none"; break;
+         case LDAP_OPT_X_TLS_CRL_PEER: str = "peer"; break;
+         case LDAP_OPT_X_TLS_CRL_ALL:  str = "all"; break;
+         default:                      str = "unknown"; break;
+      };
+      ldaputils_param_print(       "TLS CRL Check:",     str);
+   };
+   ldaputils_param_option_str(lud, "CRL File:",                  LDAP_OPT_X_TLS_CRLFILE);
+   ldaputils_param_option_str(lud, "Host Certificate:",          LDAP_OPT_X_TLS_CERTFILE);
+   ldaputils_param_option_strlist(lud, "Cipher Suite:",          LDAP_OPT_X_TLS_CIPHER_SUITE);
+   printf("\n");
+
+   printf("SASL:\n");
+   ldaputils_param_option_str(lud,  "SASL Username:",       LDAP_OPT_X_SASL_USERNAME);
+   ldaputils_param_option_str(lud,  "SASL Realm:",          LDAP_OPT_X_SASL_REALM);
+   ldaputils_param_option_str(lud,  "SASL Mechanism:",      LDAP_OPT_X_SASL_MECH);
+   ldaputils_param_option_str(lud,  "SASL Authentication:", LDAP_OPT_X_SASL_AUTHCID);
+   ldaputils_param_option_bool(lud, "SASL NOCANON Flag:",   LDAP_OPT_X_SASL_NOCANON);
+   ldaputils_param_option_strlist(lud, "SASL Mechanism List:", LDAP_OPT_X_SASL_MECHLIST);
+   printf("\n");
+
+   printf("LDAP Operations:\n");
+   ldaputils_param_option_time(lud, "Operation Timeout:", LDAP_OPT_TIMEOUT);
+   printf("\n");
+
+   printf("LDAP Search:\n");
+   ldaputils_param_option_str(lud, "Base DN:",          LDAP_OPT_DEFBASE);
+   ldaputils_param_print(          "Filter:",           lud->filter);
+   switch(lud->scope)
+   {
+      case LDAP_SCOPE_BASE: str = "base"; break;
+      case LDAP_SCOPE_ONE:  str = "one"; break;
+      case LDAP_SCOPE_SUB:  str = "sub"; break;
+      case LDAP_SCOPE_DEFAULT: str = "default"; break;
+      default: str = "unknown"; break;
+   };
+   ldaputils_param_print(          "Search Scope:",     str);
+   ldaputils_param_int(lud,        "Scope:",            lud->scope);
+   ldaputils_param_print(          "Sort Attribute:",   lud->sortattr);
+   ldaputils_param_option_int(lud, "Time Limit:",       LDAP_OPT_TIMELIMIT);
+   ldaputils_param_option_int(lud, "Size Limit:",       LDAP_OPT_SIZELIMIT);
+   ldaputils_param_option_int(lud, "Follow Referrals:", LDAP_OPT_REFERRALS);
+   if (ldap_get_option(lud->ld, LDAP_OPT_DEREF, &i) == LDAP_SUCCESS)
+   {
+      switch(i)
+      {
+         case LDAP_DEREF_NEVER:      str = "never"; break;
+         case LDAP_DEREF_SEARCHING:  str = "searching"; break;
+         case LDAP_DEREF_FINDING:    str = "finding"; break;
+         case LDAP_DEREF_ALWAYS:     str = "always"; break;
+         default:                    str = "unknown"; break;
+      };
+      ldaputils_param_print(       "Dereferencing:",     str);
+   };
    if ((lud->attrs))
    {
-      printf("       attributes:   %s\n", lud->attrs[0]);
+      ldaputils_param_print("Attributes:", lud->attrs[0]);
       for(i = 1; lud->attrs[i]; i++)
-         printf("                     %s\n", lud->attrs[i]);
+         ldaputils_param_print("", lud->attrs[i]);
    }
    else
    {
-      printf("       attributes:   n/a\n");
+      ldaputils_param_print("Attributes:", "n/a");
    };
+   printf("\n");
+
    return;
 }
 
 
 /// prints string to stdout
-char * ldaputils_print_option_str(LDAPUtils * lud, int option, char * str, size_t size)
+void ldaputils_param_print(const char * key, const char * val)
 {
-   char * val;
-
-   val = NULL;
-   ldap_get_option(lud->ld, option, &str);
-   if ((str))
-   {
-      snprintf(str, size, "%s", val);
-      ldap_memfree(str);
-   }
-   else
-   {
-      snprintf(str, size, "(null)");
-   };
-
-   return(str);
+   if ((val))
+      printf("   %-20s %s\n", key, val);
+   return;
 }
 
 
 /// prints string to stdout
-const char * ldaputils_config_print_str(const char * str)
+void ldaputils_param_int(LDAPUtils * lud, const char * key, int ival)
 {
-   if (str)
-      return(str);
-   return("(null)");
+   char val[16];
+
+   assert(lud != NULL);
+
+   ival = 0;
+   snprintf(val, sizeof(val), "%i", ival);
+   ldaputils_param_print(key, val);
+
+   return;
+}
+
+
+/// prints string to stdout
+void ldaputils_param_option_bool(LDAPUtils * lud, const char * key, int option)
+{
+   int  ival;
+
+   assert(lud != NULL);
+
+   ival = 0;
+   ldap_get_option(lud->ld, option, &ival);
+   if (ival == (int)LDAP_OPT_ON)
+      ldaputils_param_print(key, "ON");
+   else
+      ldaputils_param_print(key, "OFF");
+
+   return;
+}
+
+
+/// prints string to stdout
+void ldaputils_param_option_int(LDAPUtils * lud, const char * key, int option)
+{
+   int  ival;
+   char val[16];
+
+   assert(lud != NULL);
+
+   ival = 0;
+   ldap_get_option(lud->ld, option, &ival);
+   snprintf(val, sizeof(val), "%i", ival);
+   ldaputils_param_print(key, val);
+
+   return;
+}
+
+
+/// prints string to stdout
+void ldaputils_param_option_str(LDAPUtils * lud, const char * key, int option)
+{
+   char * val;
+
+   assert(lud != NULL);
+
+   val = NULL;
+   ldap_get_option(lud->ld, option, &val);
+   if ((val))
+   {
+      ldaputils_param_print(key, val);
+      ldap_memfree(val);
+   };
+
+   return;
+}
+
+
+/// prints string to stdout
+void ldaputils_param_option_strlist(LDAPUtils * lud, const char * key, int option)
+{
+   int     i;
+   char ** list;
+
+   assert(lud != NULL);
+
+   list = NULL;
+   ldap_get_option(lud->ld, option, &list);
+   if (!(list))
+      return;
+
+   ldaputils_param_print(key, list[0]);
+   for(i = 1; ((list[i])); i++)
+      ldaputils_param_print("", list[i]);
+
+   return;
+}
+
+
+void ldaputils_param_option_time(LDAPUtils * lud, const char * key, int option)
+{
+   struct timeval * ival;
+   char             val[64];
+
+   assert(lud != NULL);
+
+   ldap_get_option(lud->ld, option, &ival);
+   snprintf(val, sizeof(val), "%ld secs,  %d usecs", ival->tv_sec, ival->tv_usec);
+   ldap_memfree(ival);
+   ldaputils_param_print(key, val);
+
+   return;
 }
 
 

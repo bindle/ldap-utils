@@ -190,20 +190,16 @@ char * ldaputils_chomp(char * str);
 #endif
 
 // parses LDAP command line arguments
-int ldaputils_cmdargs(LDAPUtils * lud, int c, const char * arg);
+int ldaputils_getopt(LDAPUtils * lud, int c, const char * arg);
 
 // prints configuration to stdout
-void ldaputils_config_print(LDAPUtils * lud);
+void ldaputils_params(LDAPUtils * lud);
 
-// prints string to stdout
-const char * ldaputils_config_print_str(const char * str);
-
-const char * ldaputils_get_dn(LDAPUtilsEntry * entry);
-const char * ldaputils_get_rdn(LDAPUtilsEntry * entry);
+const char *         ldaputils_get_dn(LDAPUtilsEntry * entry);
+const char *         ldaputils_get_rdn(LDAPUtilsEntry * entry);
 const char * const * ldaputils_get_dn_components(LDAPUtilsEntry * entry, size_t * lenp);
-
-const char * ldaputils_get_prog_name(LDAPUtils * lud);
-LDAP * ldaputils_get_ld(LDAPUtils * lud);
+const char *         ldaputils_get_prog_name(LDAPUtils * lud);
+LDAP *               ldaputils_get_ld(LDAPUtils * lud);
 const char * const * ldaputils_get_attribute_list(LDAPUtils * lud);
 
 

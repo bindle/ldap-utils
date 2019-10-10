@@ -145,7 +145,9 @@ int main(int argc, char * argv[])
    if (!(lud))
       return(0);
 
-   ldaputils_config_print(lud);
+   ldaputils_bind_s(lud);
+
+   ldaputils_params(lud);
 
    ldaputils_unbind(lud);
 
@@ -185,7 +187,7 @@ int my_config(int argc, char * argv[], LDAPUtils ** ludp)
    // loops through args
    while((c = getopt_long(argc, argv, short_options, long_options, &option_index)) != -1)
    {
-      switch(ldaputils_cmdargs(*ludp, c, optarg))
+      switch(ldaputils_getopt(*ludp, c, optarg))
       {
          // shared option exit without error
          case -2:
@@ -235,14 +237,18 @@ int my_config(int argc, char * argv[], LDAPUtils ** ludp)
    {
       fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
       ldaputils_unbind(*ludp);
-      *ludp = NULL;
       return(1);
    };
-
-   // saves list of attributes
    for(c = 0; c < (argc-optind-1); c++)
       (*ludp)->attrs[c] = argv[optind+1+c];
    (*ludp)->attrs[c] = NULL;
+
+   // reads password
+   if ((err = ldaputils_pass(*ludp)) != 0)
+   {
+      ldaputils_unbind(*ludp);
+      return(1);
+   };
 
    return(0);
 }

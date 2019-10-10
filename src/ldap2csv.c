@@ -265,7 +265,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    option_index = 0;
    while((c = getopt_long(argc, argv, short_options, long_options, &option_index)) != -1)
    {
-      switch(ldaputils_cmdargs(cnf->lud, c, optarg))
+      switch(ldaputils_getopt(cnf->lud, c, optarg))
       {
          // shared option exit without error
          case -2:
