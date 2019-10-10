@@ -168,9 +168,6 @@ const char * ldaputils_get_dn(LDAPUtilsEntry * entry);
 const char * ldaputils_get_rdn(LDAPUtilsEntry * entry);
 const char * const * ldaputils_get_dn_components(LDAPUtilsEntry * entry, size_t * lenp);
 
-// retrieves password from file
-int ldaputils_passfile(LDAPUtils * lud);
-
 // prints program usage and exits
 void ldaputils_usage(void);
 
