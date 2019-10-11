@@ -105,15 +105,14 @@
 #pragma mark - Datatypes
 #endif
 
-typedef struct ldap_utils_attribute LDAPUtilsAttribute;
-
-typedef struct ldap_utils_entry LDAPUtilsEntry;
-
-typedef struct ldap_utils_entries LDAPUtilsEntries;
-
-
-/* store common structs */
+typedef struct ldap_utils_attribute    LDAPUtilsAttribute;
+typedef struct ldap_utils_entry        LDAPUtilsEntry;
+typedef struct ldap_utils_entries      LDAPUtilsEntries;
+typedef struct ldap_utils_tree         LDAPUtilsTree;
 typedef struct ldaputils_config_struct LDAPUtils;
+
+
+// store common structs
 struct ldaputils_config_struct
 {
    LDAP            * ld;           ///< LDAP descriptor
@@ -157,22 +156,29 @@ int ldaputils_pass(LDAPUtils * lud);
 #endif
 
 // compares two LDAP values for sorting
-int ldaputils_cmp_berval(const struct berval ** ptr1, const struct berval ** ptr2);
+int ldaputils_berval_cmp(const struct berval ** ptr1, const struct berval ** ptr2);
+
+// frees list of entries
+void ldaputils_entries_free(LDAPUtilsEntries * entries);
+
+// sorts values
+int ldaputils_entries_sort(LDAPUtilsEntries * entries, int (*compar)(const void *, const void *));
 
 // compares two LDAP values for sorting
-int ldaputils_cmp_entry(const void * ptr1, const void * ptr2);
+int ldaputils_entry_cmp(const void * ptr1, const void * ptr2);
 
 // compares two LDAP entry DNs for sorting
-int ldaputils_cmp_entrydn(const void * ptr1, const void * ptr2);
+int ldaputils_entry_cmp_dn(const void * ptr1, const void * ptr2);
 
 void ldaputils_entry_free(LDAPUtilsEntry * entry);
 
-// retrieves LDAP entries from result
-LDAPUtilsEntry ** ldaputils_get_entries(LDAP * ld, LDAPMessage * res,
-   const char * sortattr);
+int ldaputils_count_entries(LDAPUtilsEntries * entries);
+LDAPUtilsEntry * ldaputils_first_entry(LDAPUtilsEntries * entries);
+LDAPUtilsEntry * ldaputils_next_entry(LDAPUtilsEntries * entries);
 
-// sorts values
-int ldaputils_entries_sort(LDAPUtilsEntry ** entries, int (*compar)(const void *, const void *));
+// retrieves LDAP entries from result
+LDAPUtilsEntries * ldaputils_get_entries(LDAP * ld, LDAPMessage * res,
+   const char * sortattr);
 
 // sorts values
 int ldaputils_values_sort(struct berval ** vals);
@@ -234,6 +240,14 @@ int ldaputils_search(LDAPUtils * lud, LDAPMessage ** resp);
 
 // frees common config
 void ldaputils_unbind(LDAPUtils * lud);
+
+
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Prototypes: LDAP Tree
+#endif
+
+LDAPUtilsTree * ldaputils_tree_initialize(LDAPUtilsEntries * entries);
+
 
 LDAPUTILS_END_C_DECLS
 #endif /* end of header */

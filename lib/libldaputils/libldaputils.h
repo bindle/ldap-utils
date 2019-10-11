@@ -75,6 +75,7 @@
 struct ldap_utils_attribute
 {
    char           * name;
+   size_t           len;
    struct berval ** vals;
 };
 
@@ -95,7 +96,7 @@ struct ldap_utils_entries
 {
    size_t                count;
    size_t                cursor;
-   LDAPUtilsEntry     ** entries;
+   LDAPUtilsEntry     ** list;
 };
 
 

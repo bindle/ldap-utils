@@ -67,9 +67,19 @@
 #pragma mark - Prototypes
 #endif
 
-// frees list of entries
-void ldaputils_entries_free(LDAPUtilsEntry ** entries);
+int ldaputils_attribute_add_values(LDAPUtilsAttribute * attr, struct berval ** vals);
+void ldaputils_attribute_free(LDAPUtilsAttribute * attr);
+LDAPUtilsAttribute * ldaputils_attribute_initialize(const char * name, struct berval **vals);
 
+int ldaputils_entry_add_attribute(LDAPUtilsEntry * entry, const char * name, struct berval ** vals);
+LDAPUtilsEntry * ldaputils_entry_initialize(const char * dn);
+
+int ldaputils_entries_add_entry(LDAPUtilsEntries * entries, LDAPUtilsEntry * entry);
+
+// initializes list of entries
+LDAPUtilsEntries * ldaputils_entries_initialize(void);
+
+struct berval ** ldaputils_values_len_dup(const struct berval * const * vals);
 
 /////////////////
 //             //
@@ -80,10 +90,105 @@ void ldaputils_entries_free(LDAPUtilsEntry ** entries);
 #pragma mark - Functions
 #endif
 
+int ldaputils_attribute_add_values(LDAPUtilsAttribute * attr, struct berval ** vals)
+{
+   size_t          len;
+   size_t          u;
+   struct berval * val;
+   void          * ptr;
+
+   assert(attr != NULL);
+   assert(vals != NULL);
+
+   // count values
+   for(len = 0; ((vals[len])); len++);
+
+   // increase size of array
+   if ((ptr = realloc(attr->vals, (sizeof(struct berval *)*(len+attr->len+1)))) == NULL)
+      return(LDAP_SUCCESS);
+   attr->vals = ptr;
+
+   // add bervals
+   for (u = 0; u < len; u++)
+   {
+      // allocate berval
+      if ((val = malloc(sizeof(struct berval))) == NULL)
+         return(LDAP_NO_MEMORY);
+      bzero(val, sizeof(struct berval));
+
+      // populate berval
+      val->bv_len = vals[u]->bv_len;
+      if ((val->bv_val = malloc(val->bv_len)) == NULL)
+      {
+         free(val);
+         return(LDAP_NO_MEMORY);
+      };
+      memcpy(val->bv_val, vals[u]->bv_val, vals[u]->bv_len);
+
+      // add berval to list
+      attr->vals[attr->len+0] = val;
+      attr->vals[attr->len+1] = NULL;
+      attr->len++;
+   };
+
+   // sort values
+   ldaputils_values_sort(attr->vals);
+
+   return(LDAP_SUCCESS);
+}
+
+
+void ldaputils_attribute_free(LDAPUtilsAttribute * attr)
+{
+   assert(attr != NULL);
+
+   if ((attr->vals))
+      ldap_value_free_len(attr->vals);
+
+   if ((attr->name))
+      free(attr->name);
+
+   free(attr);
+
+   return;
+}
+
+
+LDAPUtilsAttribute * ldaputils_attribute_initialize(const char * name, struct berval **vals)
+{
+   int                  err;
+   LDAPUtilsAttribute * attr;
+
+   assert(name != NULL);
+
+   if ((attr = malloc(sizeof(LDAPUtilsAttribute))) == NULL)
+      return(NULL);
+   bzero(attr, sizeof(LDAPUtilsAttribute));
+
+   if ((attr->name = strdup(name)) == NULL)
+   {
+      ldaputils_attribute_free(attr);
+      return(NULL);
+   };
+
+   if (!(vals))
+      return(attr);
+
+   // count entries
+   if ((err = ldaputils_attribute_add_values(attr, vals)) != LDAP_SUCCESS)
+   {
+      ldaputils_attribute_free(attr);
+      return(NULL);
+   };
+
+   return(attr);
+}
+
+
 /// compares two LDAP values for sorting
 /// @param[in] ptr1   pointer to first data item to compare
 /// @param[in] ptr2   pointer to second data item to compare
-int ldaputils_cmp_berval(const struct berval ** ptr1, const struct berval ** ptr2)
+int ldaputils_berval_cmp(const struct berval ** ptr1, const struct berval ** ptr2)
 {
    int rc;
    
@@ -122,10 +227,136 @@ int ldaputils_cmp_berval(const struct berval ** ptr1, const struct berval ** ptr
 }
 
 
+// initializes list of entries
+int ldaputils_entries_add_entry(LDAPUtilsEntries * entries, LDAPUtilsEntry * entry)
+{
+   size_t            len;
+   LDAPUtilsEntry ** list;
+
+   assert(entries != NULL);
+   assert(entry   != NULL);
+
+   // increase size of entry array
+   len = sizeof(LDAPUtilsEntry *) * (entries->count + 2);
+   if ((list = realloc(entries->list, len)) == NULL)
+      return(LDAP_NO_MEMORY);
+   entries->list = list;
+
+   // save entry reference to list
+   entries->list[entries->count++] = entry;
+   entries->list[entries->count]   = NULL;
+
+   return(LDAP_SUCCESS);
+}
+
+
+/// frees list of entries
+/// @param[in] entries   list of entries to free
+void ldaputils_entries_free(LDAPUtilsEntries * entries)
+{
+   size_t  x;
+
+   assert(entries != NULL);
+
+   if ((entries->list))
+   {
+      for(x = 0; x < entries->count; x++)
+         ldaputils_entry_free(entries->list[x]);
+      free(entries->list);
+   };
+
+   free(entries);
+   
+   return;
+}
+
+
+// initializes list of entries
+LDAPUtilsEntries * ldaputils_entries_initialize(void)
+{
+   LDAPUtilsEntries * entries;
+
+   // initialize memory
+   if ((entries = malloc(sizeof(LDAPUtilsEntries))) == NULL)
+      return(NULL);
+   bzero(entries, sizeof(LDAPUtilsEntries));
+
+   // initialize list
+   if ((entries->list = malloc(sizeof(LDAPUtilsEntry *))) == NULL)
+   {
+      ldaputils_entries_free(entries);
+      return(NULL);
+   };
+   bzero(entries->list, sizeof(LDAPUtilsEntry *));
+
+   return(entries);
+}
+
+
+/// sorts values
+/// @param[in] entries   list of attribute values to sort
+int ldaputils_entries_sort(LDAPUtilsEntries * entries, int (*compar)(const void *, const void *))
+{
+   assert(entries != NULL);
+
+   if (compar == NULL)
+      compar = ldaputils_entry_cmp;
+   qsort(entries->list, entries->count, sizeof(LDAPUtilsEntry *), compar);
+   return(0);
+}
+
+
+int ldaputils_entry_add_attribute(LDAPUtilsEntry * entry, const char * name, struct berval ** vals)
+{
+   size_t               u;
+   size_t               size;
+   int                  err;
+   void               * ptr;
+   LDAPUtilsAttribute * attr;
+
+   assert(entry != NULL);
+   assert(name  != NULL);
+
+   // find existing attribute
+   attr = NULL;
+   for(u = 0; u < entry->attrs_count; u++)
+   {
+      if (!(strcmp(entry->attrs[u]->name, name)))
+      {
+         attr = entry->attrs[u];
+         u = entry->attrs_count;
+      };
+   };
+
+   // adds values
+   if ((attr))
+   {
+      if ((err = ldaputils_attribute_add_values(attr, vals)) != LDAP_SUCCESS)
+         return(err);
+      return(LDAP_SUCCESS);
+   };
+
+   // resize attribute array
+   size = sizeof(LDAPUtilsAttribute *) * (entry->attrs_count + 2);
+   if ((ptr = realloc(entry->attrs, size)) == NULL)
+      return(LDAP_NO_MEMORY);
+   entry->attrs                       = ptr;
+   entry->attrs[entry->attrs_count+0] = NULL;
+   entry->attrs[entry->attrs_count+1] = NULL;
+
+   // allocate and assign attributes
+   if ((entry->attrs[entry->attrs_count] = ldaputils_attribute_initialize(name, vals)) == NULL)
+      return(LDAP_NO_MEMORY);
+   entry->attrs_count++;
+
+   return(LDAP_SUCCESS);
+}
+
+
 /// compares two LDAP values for sorting
 /// @param[in] ptr1   pointer to first data item to compare
 /// @param[in] ptr2   pointer to second data item to compare
-int ldaputils_cmp_entry(const void * ptr1, const void * ptr2)
+int ldaputils_entry_cmp(const void * ptr1, const void * ptr2)
 {
    int rc;
    const LDAPUtilsEntry   * e1;
@@ -147,12 +378,12 @@ int ldaputils_cmp_entry(const void * ptr1, const void * ptr2)
 
    // quick check of the pointers
    if ( (!(e1->sortval)) && (!(e2->sortval)) )
-      return(ldaputils_cmp_entrydn(ptr1, ptr2));
+      return(ldaputils_entry_cmp_dn(ptr1, ptr2));
    if (!(e1->sortval))
       return(-1);
    if (!(e2->sortval))
       return(1);
-   
+
    // compare of sort value
    if ((rc = strcasecmp(e1->sortval, e2->sortval)))
       return(rc);
@@ -160,14 +391,14 @@ int ldaputils_cmp_entry(const void * ptr1, const void * ptr2)
       return(rc);
 
    // compare of DN
-   return(ldaputils_cmp_entrydn(ptr1, ptr2));
+   return(ldaputils_entry_cmp_dn(ptr1, ptr2));
 }
 
 
 /// compares two LDAP values for sorting
 /// @param[in] ptr1   pointer to first data item to compare
 /// @param[in] ptr2   pointer to second data item to compare
-int ldaputils_cmp_entrydn(const void * ptr1, const void * ptr2)
+int ldaputils_entry_cmp_dn(const void * ptr1, const void * ptr2)
 {
    int                      rc;
    size_t                   u;
@@ -219,6 +450,7 @@ int ldaputils_cmp_entrydn(const void * ptr1, const void * ptr2)
 }
 
 
+// initializes list of entries
 void ldaputils_entry_free(LDAPUtilsEntry * entry)
 {
    int  y;
@@ -263,138 +495,134 @@ void ldaputils_entry_free(LDAPUtilsEntry * entry)
 }
 
 
-/// frees list of entries
-/// @param[in] entries   list of entries to free
-void ldaputils_entries_free(LDAPUtilsEntry ** entries)
+// initializes list of entries
+LDAPUtilsEntry * ldaputils_entry_initialize(const char * dn)
 {
-   int  x;
+   size_t           len;
+   size_t           u;
+   char           * str;
+   LDAPUtilsEntry * entry;
 
-   if (entries == NULL)
-      return;
-   
-   for(x = 0; (entries[x] != NULL); x++)
-      ldaputils_entry_free(entries[x]);
+   // initialize memory
+   if ((entry = malloc(sizeof(LDAPUtilsEntry))) == NULL)
+      return(NULL);
+   bzero(entry, sizeof(LDAPUtilsEntry));
 
-   free(entries);
-   
-   return;
+   // copy dn
+   if ((entry->dn = strdup(dn)) == NULL)
+   {
+      free(entry);
+      return(NULL);
+   };
+
+   // breaks DN into components
+   if ((entry->components = ldap_explode_dn(entry->dn, 0)) == NULL)
+   {
+      ldaputils_entry_free(entry);
+      return(NULL);
+   };
+   entry->rdn = entry->components[0];
+   for(len = 0; (entry->components[len] != NULL); len++);
+   entry->components_len = len;
+   for(u = 0; (u < (len/2)); u++)
+   {
+      str                        = entry->components[u];
+      entry->components[u]       = entry->components[len-u-1];
+      entry->components[len-u-1] = str;
+   };
+
+   return(entry);
+}
+
+
+LDAPUtilsEntry * ldaputils_first_entry(LDAPUtilsEntries * entries)
+{
+   assert(entries != NULL);
+   entries->cursor = 0;
+   return(ldaputils_next_entry(entries));
+}
+
+
+LDAPUtilsEntry * ldaputils_next_entry(LDAPUtilsEntries * entries)
+{
+   assert(entries != NULL);
+   if (entries->cursor < entries->count)
+      return(entries->list[entries->cursor++]);
+   return(NULL);
 }
 
 
 /// retrieves LDAP entries from result
 /// @param[in] ld      refernce to LDAP socket data
 /// @param[in] res     refernce to LDAP result message
-LDAPUtilsEntry ** ldaputils_get_entries(LDAP * ld, LDAPMessage * res,
+LDAPUtilsEntries * ldaputils_get_entries(LDAP * ld, LDAPMessage * res,
    const char * sortattr)
 {
+   int                   err;
    char                * name;
    char                * str;
-   void                * ptr;
-   size_t                u;
-   size_t                len;
-   size_t                entry_count;
    BerElement          * ber;
    LDAPMessage         * msg;
+   struct berval      ** vals;
    LDAPUtilsEntry      * entry;
-   LDAPUtilsEntry     ** entries;
-   LDAPUtilsAttribute  * attr;
+   LDAPUtilsEntries    * entries;
 
    assert(ld  != NULL);
    assert(res != NULL);
 
-   entries     = NULL;
-   entry_count = 0;
+   if ((entries = ldaputils_entries_initialize()) == NULL)
+      return(NULL);
 
    msg = ldap_first_entry(ld, res);
    while(msg)
    {
-      // allocates entry
-      if ( (entry = malloc(sizeof(LDAPUtilsEntry))) == NULL )
+      // initial entry
+      if ((str = ldap_get_dn(ld, msg)) == NULL)
       {
          ldaputils_entries_free(entries);
          return(NULL);
       };
-      memset(entry, 0, sizeof(LDAPUtilsEntry));
-
-      // increases size of entry list
-      entry_count++;
-      if ((ptr = realloc(entries, sizeof(LDAPUtilsEntry *) * (entry_count+1))) == NULL)
+      if ((entry = ldaputils_entry_initialize(str)) == NULL)
       {
-         free(entry);
+         free(str);
          ldaputils_entries_free(entries);
          return(NULL);
       };
-      entries                = ptr;
-      entries[entry_count-1] = entry;
-      entries[entry_count-0] = NULL;
-
-      // retrieves entry DN
-      if ((entry->dn = ldap_get_dn(ld, msg)) == NULL)
-      {
-         ldaputils_entries_free(entries);
-         return(NULL);
-      };
-
-      // breaks DN into components
-      if ((entry->components = ldap_explode_dn(entry->dn, 0)) == NULL)
-      {
-         ldaputils_entries_free(entries);
-         return(NULL);
-      };
-      entry->rdn = entry->components[0];
-      for(len = 0; (entry->components[len] != NULL); len++);
-      entry->components_len = len;
-      for(u = 0; (u < (len/2)); u++)
-      {
-         str                        = entry->components[u];
-         entry->components[u]       = entry->components[len-u-1];
-         entry->components[len-u-1] = str;
-      };
+      free(str);
 
       // retrieves attributes
       name = ldap_first_attribute(ld, msg, &ber);
       while(name != NULL)
       {
-         // allocates attribute
-         if (!(attr = malloc(sizeof(LDAPUtilsAttribute))))
+         // retrieve values
+         if ((vals = ldap_get_values_len(ld, msg, name)) != NULL)
          {
-            ldaputils_entries_free(entries);
-            return(NULL);
+            ldaputils_entry_add_attribute(entry, name, vals);
+            if (!(strcasecmp(sortattr, name)))
+            {
+               ldaputils_values_sort(vals);
+               entry->sortval = strdup(vals[0]->bv_val);
+            };
+            ldap_value_free_len(vals);
          };
-         memset(attr, 0, sizeof(LDAPUtilsAttribute));
 
-         // increases size of attribute list
-         entry->attrs_count++;
-         if (!(ptr = realloc(entry->attrs, sizeof(LDAPUtilsAttribute *) * (entry->attrs_count+1))))
-         {
-            free(attr);
-            ldaputils_entries_free(entries);
-            return(NULL);
-         };
-         entry->attrs                 = ptr;
-         entry->attrs[entry->attrs_count-1] = attr;
-         entry->attrs[entry->attrs_count-0] = NULL;
-
-         // populates attribute name and values
-         attr->name = name;
-         attr->vals = ldap_get_values_len(ld, msg, name);
-         ldaputils_values_sort(attr->vals);
-
-         // saves entry's sort value
-         if (sortattr != NULL)
-            if (!(strcasecmp(name, sortattr)))
-               if (attr->vals != NULL)
-                  if (attr->vals[0] != NULL)
-                     entry->sortval = strdup(attr->vals[0]->bv_val);
-                  
          name = ldap_next_attribute(ld, msg, ber);
       };
       ber_free(ber, 0);
+
+      if ((err = ldaputils_entries_add_entry(entries, entry)) != LDAP_SUCCESS)
+         ldaputils_entry_free(entry);
       
       msg = ldap_next_entry(ld, msg);
    };
    
    return(entries);
+}
+
+int ldaputils_count_entries(LDAPUtilsEntries * entries)
+{
+   assert(entries != NULL);
+   return((int)entries->count);
 }
 
 
@@ -421,16 +649,45 @@ const char * ldaputils_get_rdn(LDAPUtilsEntry * entry)
 }
 
 
-/// sorts values
-/// @param[in] entries   list of attribute values to sort
-int ldaputils_entries_sort(LDAPUtilsEntry ** entries, int (*compar)(const void *, const void *))
+struct berval ** ldaputils_values_len_dup(const struct berval * const * vals)
 {
-   size_t  len;
-   if (!(entries))
-      return(1);
-   for(len = 0; entries[len]; len++);
-   qsort(entries, len, sizeof(LDAPUtilsEntry *), compar);
-   return(0);
+   size_t           x;
+   size_t           len;
+   size_t           size;
+   struct berval ** newvals;
+
+   assert(vals != NULL);
+
+   // count values
+   for(len = 0; ((vals[len])); len++);
+
+   // create array
+   size = sizeof(struct berval *) * (len + 1);
+   if ((newvals = malloc(size)) == NULL)
+      return(NULL);
+   bzero(newvals, size);
+
+   // copy values into array
+   for(x = 0; ((vals[x])); x++)
+   {
+      // allocate new berval
+      if ((newvals[x] = malloc(sizeof(struct berval))) == NULL)
+      {
+         ldap_value_free_len(newvals);
+         return(NULL);
+      };
+
+      // copy value
+      if ((newvals[x]->bv_val = malloc(vals[x]->bv_len)) == NULL)
+      {
+         ldap_value_free_len(newvals);
+         return(NULL);
+      };
+      memcpy(newvals[x]->bv_val, vals[x]->bv_val, vals[x]->bv_len);
+      newvals[x]->bv_len = vals[x]->bv_len;
+   };
+
+   return(newvals);
 }
 
 
@@ -442,7 +699,7 @@ int ldaputils_values_sort(struct berval ** vals)
    if (!(vals))
       return(1);
    for(len = 0; vals[len]; len++);
-   qsort(vals, len, sizeof(char *), (int (*)(const void *, const void *))ldaputils_cmp_berval);
+   qsort(vals, len, sizeof(char *), (int (*)(const void *, const void *))ldaputils_berval_cmp);
    return(0);
 }
 

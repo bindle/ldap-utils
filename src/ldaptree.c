@@ -162,7 +162,8 @@ int main(int argc, char * argv[])
    int                    err;
    MyConfig             * cnf;
    LDAPMessage          * res;
-   LDAPUtilsEntry      ** entries;
+   LDAPUtilsEntry       * entry;
+   LDAPUtilsEntries     * entries;
    const char * const   * components;
    size_t                 components_len;
 
@@ -199,18 +200,22 @@ int main(int argc, char * argv[])
    };
 
    // sort entries
-   ldaputils_entries_sort(entries, ldaputils_cmp_entrydn);
+   ldaputils_entries_sort(entries, ldaputils_entry_cmp_dn);
 
 
-size_t x;
 size_t y;
-for(x = 0; ((entries[x])); x++)
+
+printf("count: %i\n", ldaputils_count_entries(entries));
+entry = ldaputils_first_entry(entries);
+while ((entry))
 {
-   components = ldaputils_get_dn_components(entries[x], &components_len);
+   //printf("dn: %s\n", ldaputils_get_dn(entry));
+   components = ldaputils_get_dn_components(entry, &components_len);
    printf("dn: %s", components[0]);
    for(y = 1; ((components[y])); y++)
       printf(",%s", components[y]);
    printf("\n");
+   entry = ldaputils_next_entry(entries);
 };
 
    //// prints values
