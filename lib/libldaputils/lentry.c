@@ -661,7 +661,7 @@ LDAPUtilsEntries * ldaputils_get_entries(LDAP * ld, LDAPMessage * res,
          if ((vals = ldap_get_values_len(ld, msg, name)) != NULL)
          {
             ldaputils_entry_add_attribute(entry, name, vals);
-            if (!(strcasecmp(sortattr, name)))
+            if ( ((sortattr)) && (!(strcasecmp(sortattr, name))) )
             {
                ldaputils_values_sort(vals);
                entry->sortval = strdup(vals[0]->bv_val);
@@ -761,7 +761,7 @@ int ldaputils_values_sort(struct berval ** vals)
    size_t  len;
    if (!(vals))
       return(1);
-   for(len = 0; vals[len]; len++);
+   for(len = 0; ((vals[len])); len++);
    qsort(vals, len, sizeof(char *), (int (*)(const void *, const void *))ldaputils_berval_cmp);
    return(0);
 }
