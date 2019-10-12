@@ -78,6 +78,8 @@
 #include <time.h>
 #include <getopt.h>
 
+#define LDAP_DEPRECATED 1
+#include <ldap.h>
 #include <ldaputils.h>
 
 

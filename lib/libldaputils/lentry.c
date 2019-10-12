@@ -68,6 +68,7 @@
 #endif
 
 int ldaputils_attribute_add_values(LDAPUtilsAttribute * attr, struct berval ** vals);
+LDAPUtilsAttribute * ldaputils_attribute_copy(LDAPUtilsAttribute * attr);
 void ldaputils_attribute_free(LDAPUtilsAttribute * attr);
 LDAPUtilsAttribute * ldaputils_attribute_initialize(const char * name, struct berval **vals);
 
@@ -79,7 +80,7 @@ int ldaputils_entries_add_entry(LDAPUtilsEntries * entries, LDAPUtilsEntry * ent
 // initializes list of entries
 LDAPUtilsEntries * ldaputils_entries_initialize(void);
 
-struct berval ** ldaputils_values_len_dup(const struct berval * const * vals);
+struct berval ** ldaputils_values_len_copy(struct berval ** vals);
 
 /////////////////
 //             //
@@ -135,6 +136,33 @@ int ldaputils_attribute_add_values(LDAPUtilsAttribute * attr, struct berval ** v
    ldaputils_values_sort(attr->vals);
 
    return(LDAP_SUCCESS);
+}
+
+
+LDAPUtilsAttribute * ldaputils_attribute_copy(LDAPUtilsAttribute * attr)
+{
+   LDAPUtilsAttribute * new;
+
+   assert(attr != NULL);
+
+   if ((new = malloc(sizeof(LDAPUtilsAttribute))) == NULL)
+      return(NULL);
+   bzero(new, sizeof(LDAPUtilsAttribute));
+
+   if ((new->vals = ldaputils_values_len_copy(attr->vals)) == NULL)
+   {
+      ldaputils_attribute_free(new);
+      return(NULL);
+   };
+   new->len = attr->len;
+
+   if ((new->name = strdup(attr->name)) == NULL)
+   {
+      ldaputils_attribute_free(new);
+      return(NULL);
+   };
+
+   return(new);
 }
 
 
@@ -450,6 +478,41 @@ int ldaputils_entry_cmp_dn(const void * ptr1, const void * ptr2)
 }
 
 
+LDAPUtilsEntry * ldaputils_entry_copy(LDAPUtilsEntry * entry)
+{
+   size_t           x;
+   size_t           size;
+   LDAPUtilsEntry * new;
+
+   assert(entry != NULL);
+
+   // initialize
+   if ((new = ldaputils_entry_initialize(entry->dn)))
+      return(NULL);
+
+   // initialize  attributes list
+   size = sizeof(LDAPUtilsEntry *) * (entry->attrs_count+1);
+   if ((new->attrs = malloc(size)) == NULL)
+   {
+      ldaputils_entry_free(new);
+      return(NULL);
+   };
+   bzero(new->attrs, size);
+
+   // copy attributes
+   for(x = 0; x < entry->attrs_count; x++)
+   {
+      if ((new->attrs[x] = ldaputils_attribute_copy(entry->attrs[x])) == NULL)
+      {
+         ldaputils_entry_free(new);
+         return(NULL);
+      };
+   };
+
+   return(new);
+}
+
+
 // initializes list of entries
 void ldaputils_entry_free(LDAPUtilsEntry * entry)
 {
@@ -649,7 +712,7 @@ const char * ldaputils_get_rdn(LDAPUtilsEntry * entry)
 }
 
 
-struct berval ** ldaputils_values_len_dup(const struct berval * const * vals)
+struct berval ** ldaputils_values_len_copy(struct berval ** vals)
 {
    size_t           x;
    size_t           len;

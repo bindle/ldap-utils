@@ -52,7 +52,6 @@
 #include <ldaputils_cdefs.h>
 
 #include <inttypes.h>
-#include <ldap.h>
 
 
 ///////////////////
@@ -246,7 +245,19 @@ void ldaputils_unbind(LDAPUtils * lud);
 #pragma mark - Prototypes: LDAP Tree
 #endif
 
-LDAPUtilsTree * ldaputils_tree_initialize(LDAPUtilsEntries * entries);
+int ldaputils_tree_add_dn(LDAPUtilsTree * tree, const char * dn);
+
+int ldaputils_tree_add_entry(LDAPUtilsTree * tree, LDAPUtilsEntry * entry, int copy);
+
+void ldaputils_tree_free(LDAPUtilsTree * tree);
+
+LDAPUtilsTree * ldaputils_tree_initialize(LDAPUtilsEntries * entries, int copy);
+
+size_t ldaputils_tree_level_count(LDAPUtilsTree * tree);
+
+void ldaputils_tree_print_bullets(LDAPUtilsTree * tree);
+
+void ldaputils_tree_print_hierarchy(LDAPUtilsTree * tree);
 
 
 LDAPUTILS_END_C_DECLS

@@ -78,6 +78,7 @@
 #include <assert.h>
 
 #define LDAP_DEPRECATED 1
+#include <ldap.h>
 #include <ldaputils.h>
 
 
@@ -162,10 +163,8 @@ int main(int argc, char * argv[])
    int                    err;
    MyConfig             * cnf;
    LDAPMessage          * res;
-   LDAPUtilsEntry       * entry;
+   LDAPUtilsTree        * tree;
    LDAPUtilsEntries     * entries;
-   const char * const   * components;
-   size_t                 components_len;
 
    cnf = NULL;
 
@@ -198,34 +197,20 @@ int main(int argc, char * argv[])
       my_unbind(cnf);
       return(1);
    };
-
-   // sort entries
-   ldaputils_entries_sort(entries, ldaputils_entry_cmp_dn);
-
-
-size_t y;
-
-printf("count: %i\n", ldaputils_count_entries(entries));
-entry = ldaputils_first_entry(entries);
-while ((entry))
-{
-   //printf("dn: %s\n", ldaputils_get_dn(entry));
-   components = ldaputils_get_dn_components(entry, &components_len);
-   printf("dn: %s", components[0]);
-   for(y = 1; ((components[y])); y++)
-      printf(",%s", components[y]);
-   printf("\n");
-   entry = ldaputils_next_entry(entries);
-};
-
-   //// prints values
-   //if ((err = my_results(cnf, res)) != LDAP_SUCCESS)
-   //{
-   //   my_unbind(cnf);
-   //   return(1);
-   //};
-   
    ldap_msgfree(res);
+
+   if ((tree = ldaputils_tree_initialize(entries, 0)) == NULL)
+   {
+      fprintf(stderr, "%s: ldaputils_tree_initialize(): out of virtual memory\n", cnf->lud->prog_name);
+      ldaputils_entries_free(entries);
+      my_unbind(cnf);
+      return(1);
+   };
+   ldaputils_entries_free(entries);
+
+   ldaputils_tree_print_hierarchy(tree);
+   //ldaputils_tree_print_bullets(tree);
+
    my_unbind(cnf);
 
    return(0);

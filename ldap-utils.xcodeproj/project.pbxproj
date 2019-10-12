@@ -41,6 +41,8 @@
 		A0811239234EA89F000FD24D /* LDAP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0352B3B1CB3563700B70F71 /* LDAP.framework */; };
 		A081123C234EE248000FD24D /* lpasswd.h in Headers */ = {isa = PBXBuildFile; fileRef = A081123A234EE248000FD24D /* lpasswd.h */; };
 		A081123D234EE248000FD24D /* lpasswd.c in Sources */ = {isa = PBXBuildFile; fileRef = A081123B234EE248000FD24D /* lpasswd.c */; };
+		A0811240234FC9FB000FD24D /* ltree.c in Sources */ = {isa = PBXBuildFile; fileRef = A081123E234FC9FB000FD24D /* ltree.c */; };
+		A0811241234FC9FB000FD24D /* ltree.h in Headers */ = {isa = PBXBuildFile; fileRef = A081123F234FC9FB000FD24D /* ltree.h */; };
 		A09401E415266B28003B9698 /* ldap2csv.c in Sources */ = {isa = PBXBuildFile; fileRef = A09401C215266907003B9698 /* ldap2csv.c */; };
 /* End PBXBuildFile section */
 
@@ -143,6 +145,8 @@
 		A0811236234EA84B000FD24D /* ldaptree.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ldaptree.c; sourceTree = "<group>"; };
 		A081123A234EE248000FD24D /* lpasswd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lpasswd.h; sourceTree = "<group>"; };
 		A081123B234EE248000FD24D /* lpasswd.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lpasswd.c; sourceTree = "<group>"; };
+		A081123E234FC9FB000FD24D /* ltree.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ltree.c; sourceTree = "<group>"; };
+		A081123F234FC9FB000FD24D /* ltree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ltree.h; sourceTree = "<group>"; };
 		A081E7D6234C0BA300593D29 /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
 		A081E7D7234C0BA300593D29 /* ChangeLog.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ChangeLog.md; sourceTree = "<group>"; };
 		A081E7D8234C0BA300593D29 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
@@ -224,6 +228,8 @@
 				A01EB9B11CB40F9E005606AC /* lmemory.h */,
 				A081123B234EE248000FD24D /* lpasswd.c */,
 				A081123A234EE248000FD24D /* lpasswd.h */,
+				A081123E234FC9FB000FD24D /* ltree.c */,
+				A081123F234FC9FB000FD24D /* ltree.h */,
 			);
 			path = libldaputils;
 			sourceTree = "<group>";
@@ -330,6 +336,7 @@
 				A01EB9B51CB4108D005606AC /* libldaputils.h in Headers */,
 				A01EB9B31CB40F9E005606AC /* lmemory.h in Headers */,
 				A027AA731C31C98A00EA81CB /* lldap.h in Headers */,
+				A0811241234FC9FB000FD24D /* ltree.h in Headers */,
 				A081123C234EE248000FD24D /* lpasswd.h in Headers */,
 				A027AA711C31C98A00EA81CB /* lconfig.h in Headers */,
 			);
@@ -459,6 +466,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0811240234FC9FB000FD24D /* ltree.c in Sources */,
 				A027AA721C31C98A00EA81CB /* lldap.c in Sources */,
 				A027AA701C31C98A00EA81CB /* lconfig.c in Sources */,
 				A01EB9B21CB40F9E005606AC /* lmemory.c in Sources */,

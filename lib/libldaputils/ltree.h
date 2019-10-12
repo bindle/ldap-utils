@@ -36,8 +36,8 @@
 /**
  *  @file lib/libldaputils/lentry.h  contains shared functions and variables
  */
-#ifndef _LIB_LIBLDAPUTILS_LENTRY_H
-#define _LIB_LIBLDAPUTILS_LENTRY_H 1
+#ifndef _LIB_LIBLDAPUTILS_LTREE_H
+#define _LIB_LIBLDAPUTILS_LTREE_H 1
 #undef __LDAPUTILS_PMARK
 
 
@@ -64,6 +64,16 @@
 #endif
 
 
+/////////////////
+//             //
+//  Datatypes  //
+//             //
+/////////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Datatypes
+#endif
+
+
 //////////////////
 //              //
 //  Prototypes  //
@@ -72,8 +82,6 @@
 #ifdef __LDAPUTILS_PMARK
 #pragma mark - Prototypes
 #endif
-
-LDAPUtilsEntry * ldaputils_entry_copy(LDAPUtilsEntry * entry);
 
 
 #endif /* end of header file */

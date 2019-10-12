@@ -123,7 +123,9 @@ lib_libldaputils_a_SOURCES		= $(noinst_HEADERS) \
 					  lib/libldaputils/lmemory.c \
 					  lib/libldaputils/lmemory.h \
 					  lib/libldaputils/lpasswd.c \
-					  lib/libldaputils/lpasswd.h
+					  lib/libldaputils/lpasswd.h \
+					  lib/libldaputils/ltree.c \
+					  lib/libldaputils/ltree.h
 
 
 # macros for ldap2csv
