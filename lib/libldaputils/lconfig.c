@@ -247,7 +247,7 @@ int ldaputils_getopt(LDAPUtils * lud, int c, const char * arg)
       if (!(strcasecmp(arg, "sub")))
          lud->scope = LDAP_SCOPE_SUBTREE;
       else if (!(strcasecmp(arg, "one")))
-         lud->scope = LDAP_SCOPE_SUBTREE;
+         lud->scope = LDAP_SCOPE_ONE;
       else if (!(strcasecmp(arg, "base")))
          lud->scope = LDAP_SCOPE_BASE;
       else if (!(strcasecmp(arg, "children")))
