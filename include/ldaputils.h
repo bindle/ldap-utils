@@ -115,6 +115,7 @@ struct ldap_utils_tree_opts
    size_t    maxleafs;
    size_t    maxchildren;
    size_t    style;
+   size_t    compact;
 };
 
 

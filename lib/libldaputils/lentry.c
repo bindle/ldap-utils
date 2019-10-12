@@ -487,7 +487,7 @@ LDAPUtilsEntry * ldaputils_entry_copy(LDAPUtilsEntry * entry)
    assert(entry != NULL);
 
    // initialize
-   if ((new = ldaputils_entry_initialize(entry->dn)))
+   if ((new = ldaputils_entry_initialize(entry->dn)) == NULL)
       return(NULL);
 
    // initialize  attributes list
@@ -507,6 +507,7 @@ LDAPUtilsEntry * ldaputils_entry_copy(LDAPUtilsEntry * entry)
          ldaputils_entry_free(new);
          return(NULL);
       };
+      new->attrs_count++;
    };
 
    return(new);
@@ -678,7 +679,7 @@ LDAPUtilsEntries * ldaputils_get_entries(LDAP * ld, LDAPMessage * res,
       
       msg = ldap_next_entry(ld, msg);
    };
-   
+
    return(entries);
 }
 
@@ -741,13 +742,14 @@ struct berval ** ldaputils_values_len_copy(struct berval ** vals)
       };
 
       // copy value
-      if ((newvals[x]->bv_val = malloc(vals[x]->bv_len)) == NULL)
+      if ((newvals[x]->bv_val = malloc(vals[x]->bv_len+1)) == NULL)
       {
          ldap_value_free_len(newvals);
          return(NULL);
       };
       memcpy(newvals[x]->bv_val, vals[x]->bv_val, vals[x]->bv_len);
       newvals[x]->bv_len = vals[x]->bv_len;
+      newvals[x]->bv_val[newvals[x]->bv_len] = '\0';
    };
 
    return(newvals);

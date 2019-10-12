@@ -106,9 +106,9 @@ void ldaputils_tree_print_bullets(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts
 
 void ldaputils_tree_print_bullets_recursive(LDAPUtilsTree * tree, size_t level);
 
-void ldaputils_tree_print_hierarchy(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts);
+void ldaputils_tree_print_indent(LDAPUtilsTree * tree, size_t level, LDAPUtilsTreeRecursion * recur);
 
-void ldaputils_tree_print_hierarchy_recursive(LDAPUtilsTree * tree, size_t level, LDAPUtilsTreeRecursion * recur);
+void ldaputils_tree_print_recursive(LDAPUtilsTree * tree, size_t level, LDAPUtilsTreeRecursion * recur);
 
 /////////////////
 //             //
@@ -173,7 +173,6 @@ int ldaputils_tree_add_entry(LDAPUtilsTree * tree, LDAPUtilsEntry * entry, int c
 
    assert(tree  != NULL);
    assert(entry != NULL);
-   assert(copy  != 1);
 
    // loop through DN components
    for (cur_comp = 0; cur_comp < entry->components_len; cur_comp++)
@@ -439,7 +438,7 @@ void ldaputils_tree_print(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts)
          printf("* %s\n", dn);
       else
          printf("+--%s\n", dn);
-      ldaputils_tree_print_hierarchy_recursive(child, 0, &recur);
+      ldaputils_tree_print_recursive(child, 0, &recur);
 
       printf("\n");
    };
@@ -449,8 +448,31 @@ void ldaputils_tree_print(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts)
    return;
 }
 
+void ldaputils_tree_print_indent(LDAPUtilsTree * tree, size_t level, LDAPUtilsTreeRecursion * recur)
+{
+   size_t y;
 
-void ldaputils_tree_print_hierarchy_recursive(LDAPUtilsTree * tree, size_t level, LDAPUtilsTreeRecursion * recur)
+   assert(tree  != NULL);
+   assert(recur != NULL);
+
+   // prints indent string
+   switch(recur->opts->style)
+   {
+      case LDAPUTILS_TREE_BULLETS:
+      for(y = 0; y < level; y++)
+         printf("  ");
+      break;
+
+      default:
+      printf("  ");
+      for(y = 1; y < level; y++)
+         printf("  %c", recur->map[y]);
+      break;
+   };
+}
+
+
+void ldaputils_tree_print_recursive(LDAPUtilsTree * tree, size_t level, LDAPUtilsTreeRecursion * recur)
 {
    size_t x;
    size_t y;
@@ -459,16 +481,21 @@ void ldaputils_tree_print_hierarchy_recursive(LDAPUtilsTree * tree, size_t level
    size_t noleaf;
    size_t leaf_count;
    size_t children_count;
+   size_t have_children;
+
+   LDAPUtilsEntry * entry;
+   size_t           attr;
+   size_t           val;
 
    assert(tree != NULL);
 
-   noleaf = recur->opts->noleaf;
    level++;
 
    if ((level >= recur->opts->maxdepth) && ((recur->opts->maxdepth)))
       return;
 
    // loops through children
+   noleaf         = recur->opts->noleaf;
    stop           = 0;
    children_count = 0;
    leaf_count     = 0;
@@ -485,22 +512,16 @@ void ldaputils_tree_print_hierarchy_recursive(LDAPUtilsTree * tree, size_t level
       children_count++;
 
       // prints indent string
-      for(y = 0; y < level; y++)
-      {
-         if (recur->opts->style == LDAPUTILS_TREE_BULLETS)
-            printf("  ");
-         else
-            printf("%c  ", recur->map[y]);
-      };
+      ldaputils_tree_print_indent(tree, level, recur);
 
       // checks for last non-leaf node
       if ((noleaf))
       {
          stop = 1;
-         for(z = (x+1); z < tree->children_len; z++)
-            if (tree->children[z]->children_len != 0)
+         for(y = (x+1); y < tree->children_len; y++)
+            if (tree->children[y]->children_len != 0)
             {
-               z = tree->children_len;
+               y = tree->children_len;
                stop = 0;
             };
       };
@@ -509,22 +530,81 @@ void ldaputils_tree_print_hierarchy_recursive(LDAPUtilsTree * tree, size_t level
       if ( ((recur->opts->maxchildren)) && (children_count >= recur->opts->maxchildren))
          stop = 1;
 
-      // updates indent map
+      // print RDN and update indent map
       if (recur->opts->style == LDAPUTILS_TREE_BULLETS)
       {
          printf("* %s\n", tree->children[x]->rdn);
       } else if ( ((x+1) < tree->children_len) && (!(stop)) ) {
          recur->map[level] = '|';
-         printf("+--%s\n", tree->children[x]->rdn);
+         printf("  +--%s\n", tree->children[x]->rdn);
       } else {
          recur->map[level] = ' ';
-         printf("\\--%s\n", tree->children[x]->rdn);
+         printf("  \\--%s\n", tree->children[x]->rdn);
+      };
+
+      // prints requested attributes
+      if ((entry = tree->children[x]->entry) != NULL)
+      {
+         // determines if there are children of this node
+         if (recur->opts->noleaf)
+         {
+            have_children = 0;
+            for(z = 0; ((z < tree->children[x]->children_len)&&((!(have_children)))); z++)
+               have_children = (tree->children[x]->children[z]->children_len > 0) ? 1 : 0;
+         } else {
+            have_children = (tree->children[x]->children_len) ? 1 : 0;
+         };
+
+         if ((recur->opts->style == LDAPUTILS_TREE_BULLETS) && (entry->attrs_count > 0))
+         {
+            ldaputils_tree_print_indent(tree, level, recur);
+            printf("  * Attributes\n");
+         };
+
+         // loops through attributes
+         for (attr = 0; attr < entry->attrs_count; attr++)
+         {
+            // loops through values
+            ldaputils_tree_print_indent(tree, level+1, recur);
+            for(val = 0; ((entry->attrs[attr]->vals[val])); val++)
+            {
+               // prints attribute and value
+               if (recur->opts->style == LDAPUTILS_TREE_BULLETS)
+               {
+                  printf("  - %s: %s\n", entry->attrs[attr]->name, entry->attrs[attr]->vals[val]->bv_val);
+               } else {
+                  printf("  %c  %s: %s\n", (have_children) ? '|' : ' ', entry->attrs[attr]->name, entry->attrs[attr]->vals[val]->bv_val);
+               };
+            };
+         };
+
+         // prints empty line to attributes more readable in hierarchy in style
+         if (recur->opts->style == LDAPUTILS_TREE_BULLETS)
+         {
+            if (!(recur->opts->compact))
+            {
+               ldaputils_tree_print_indent(tree, level, recur);
+               printf("\n");
+            };
+         } else if ((entry->attrs_count > 0) && (!(recur->opts->compact)))
+         {
+            if ( (!(stop)) || ((have_children)) )
+            {
+               ldaputils_tree_print_indent(tree, level+1, recur);
+               if ((have_children))
+                  printf("  |\n");
+               else
+                  printf("\n");
+            };
+         };
       };
 
       // recurses to next child
-      ldaputils_tree_print_hierarchy_recursive(tree->children[x], level, recur);
+      ldaputils_tree_print_recursive(tree->children[x], level, recur);
    };
 
+   if ((recur->opts->compact))
+      return;
    if (recur->opts->style == LDAPUTILS_TREE_BULLETS)
       return;
 
@@ -536,8 +616,7 @@ void ldaputils_tree_print_hierarchy_recursive(LDAPUtilsTree * tree, size_t level
    if ((recur->prevempty))
       return;
    recur->prevempty = 1;
-   for(y = 0; y < level; y++)
-      printf("%c  ", recur->map[y]);
+   ldaputils_tree_print_indent(tree, level, recur);
    printf("\n");
 
    return;

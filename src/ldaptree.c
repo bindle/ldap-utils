@@ -95,7 +95,7 @@
 #define PROGRAM_NAME "ldaptree"
 #endif
 
-#define MY_SHORT_OPTIONS LDAPUTILS_OPTIONS_COMMON LDAPUTILS_OPTIONS_SEARCH "87:6:5:4:"
+#define MY_SHORT_OPTIONS LDAPUTILS_OPTIONS_COMMON LDAPUTILS_OPTIONS_SEARCH "87:6:5:4:3"
 
 
 /////////////////
@@ -112,6 +112,7 @@ typedef struct my_config MyConfig;
 struct my_config
 {
    LDAPUtils          * lud;
+   int                  copy_entry;
    char               * basedn;
    LDAPUtilsTreeOpts    treeopts;
 };
@@ -157,6 +158,7 @@ void ldaputils_usage(void)
    printf("  --max-leafs=num   maximum leafs on each node to display\n");
    printf("  --max-nodes=num   maximum branches and leafs on each node to display\n");
    printf("  --style=format    output format of bullets or hierarchy (default: hierarchy)\n");
+   printf("  --compact         remove white space used for styling\n");
    printf("\nReport bugs to <%s>.\n", PACKAGE_BUGREPORT);
    return;
 }
@@ -206,9 +208,7 @@ int main(int argc, char * argv[])
    };
    ldap_msgfree(res);
 
-printf("count: %i\n", ldaputils_count_entries(entries));
-
-   if ((tree = ldaputils_tree_initialize(entries, 0)) == NULL)
+   if ((tree = ldaputils_tree_initialize(entries, cnf->copy_entry)) == NULL)
    {
       fprintf(stderr, "%s: ldaputils_tree_initialize(): out of virtual memory\n", cnf->lud->prog_name);
       ldaputils_entries_free(entries);
@@ -239,6 +239,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    static char   short_options[] = MY_SHORT_OPTIONS;
    static struct option long_options[] =
    {
+      {"compact",        no_argument,      0, '3'},
       {"style",         required_argument, 0, '4'},
       {"style",         required_argument, 0, '4'},
       {"max-nodes",     required_argument, 0, '5'},
@@ -295,6 +296,10 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
          my_unbind(cnf);
          return(1);
 
+         case '3':
+         cnf->treeopts.compact = 1;
+         break;
+
          case '4':
          if (!(strcasecmp(optarg, "bullets")))
             cnf->treeopts.style = LDAPUTILS_TREE_BULLETS;
@@ -348,20 +353,33 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
       cnf->lud->filter = argv[optind];
 
    // configures LDAP attributes to return in results
-   if (!(cnf->lud->attrs = (char **) malloc(sizeof(char *) * 2)))
+   if (argc > (optind+1))
    {
-      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
-      my_unbind(cnf);
-      return(1);
-   };
-   cnf->lud->attrs[0] = NULL;
-   cnf->lud->attrs[1] = NULL;
-   if ((cnf->lud->attrs[0] = strdup("structuralObjectClass")) == NULL)
-   //if ((cnf->lud->attrs[0] = strdup("dn")) == NULL)
-   {
-      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
-      my_unbind(cnf);
-      return(1);
+      cnf->copy_entry = 1;
+      if (!(cnf->lud->attrs = (char **) malloc(sizeof(char *) * (size_t)(argc-optind))))
+      {
+         fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
+         my_unbind(cnf);
+         return(1);
+      };
+      for(c = 0; c < (argc-optind-1); c++)
+         cnf->lud->attrs[c] = argv[optind+1+c];
+      cnf->lud->attrs[c] = NULL;
+   } else {
+      if (!(cnf->lud->attrs = (char **) malloc(sizeof(char *) * 2)))
+      {
+         fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
+         my_unbind(cnf);
+         return(1);
+      };
+      cnf->lud->attrs[0] = NULL;
+      cnf->lud->attrs[1] = NULL;
+      if ((cnf->lud->attrs[0] = strdup("structuralObjectClass")) == NULL)
+      {
+         fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
+         my_unbind(cnf);
+         return(1);
+      };
    };
 
    // reads password
