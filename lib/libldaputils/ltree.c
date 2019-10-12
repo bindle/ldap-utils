@@ -77,6 +77,15 @@ struct ldap_utils_tree
    LDAPUtilsTree    ** children;
 };
 
+typedef struct ldap_utils_tree_recur LDAPUtilsTreeRecursion;
+
+struct ldap_utils_tree_recur
+{
+   char                * map;
+   size_t                prevempty;
+   LDAPUtilsTreeOpts   * opts;
+};
+
 
 //////////////////
 //              //
@@ -93,10 +102,13 @@ int ldaputils_tree_cmp(const void * ptr1, const void * ptr2);
 
 void ldaputils_tree_level_count_recursive(LDAPUtilsTree * tree, size_t level, size_t * depthp);
 
+void ldaputils_tree_print_bullets(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts);
+
 void ldaputils_tree_print_bullets_recursive(LDAPUtilsTree * tree, size_t level);
 
-void ldaputils_tree_print_hierarchy_recursive(LDAPUtilsTree * tree, size_t level, char * map);
+void ldaputils_tree_print_hierarchy(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts);
 
+void ldaputils_tree_print_hierarchy_recursive(LDAPUtilsTree * tree, size_t level, LDAPUtilsTreeRecursion * recur);
 
 /////////////////
 //             //
@@ -390,73 +402,27 @@ void ldaputils_tree_level_count_recursive(LDAPUtilsTree * tree, size_t level, si
 }
 
 
-void ldaputils_tree_print_bullets(LDAPUtilsTree * tree)
+void ldaputils_tree_print(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts)
 {
-   size_t          x;
-   LDAPUtilsTree * child;
-   char            dn[512];
-   char            tmp[512];
+   size_t                    x;
+   size_t                    depth;
+   LDAPUtilsTree           * child;
+   char                      dn[512];
+   char                      tmp[512];
+   LDAPUtilsTreeRecursion    recur;
 
    assert(tree != NULL);
+   assert(opts != NULL);
 
-   for(x = 0; x < tree->children_len; x++)
-   {
-      snprintf(dn, sizeof(dn), "%s", tree->children[x]->rdn);
-      child = tree->children[x];
-      while (child->children_len < 2)
-      {
-         snprintf(tmp, sizeof(tmp), "%s, %s", child->children[0]->rdn, dn);
-         strncpy(dn, tmp, sizeof(dn));
-         child = child->children[0];
-      };
-      printf("* %s\n", dn);
-      ldaputils_tree_print_bullets_recursive(child, 0);
-      printf("\n");
-   };
-
-   return;
-}
-
-
-void ldaputils_tree_print_bullets_recursive(LDAPUtilsTree * tree, size_t level)
-{
-   size_t x;
-   size_t y;
-
-   assert(tree != NULL);
-
-   level++;
-
-   for(x = 0; x < tree->children_len; x++)
-   {
-      for(y = 0; y < level; y++)
-         printf("  ");
-      printf("* %s\n", tree->children[x]->rdn);
-      ldaputils_tree_print_bullets_recursive(tree->children[x], level);
-   };
-
-   return;
-}
-
-
-void ldaputils_tree_print_hierarchy(LDAPUtilsTree * tree)
-{
-   size_t          x;
-   size_t          depth;
-   char          * map;
-   LDAPUtilsTree * child;
-   char            dn[512];
-   char            tmp[512];
-
-   assert(tree != NULL);
+   recur.opts = opts;
 
    // initializes delmiter map
    depth = ldaputils_tree_level_count(tree);
-   if ((map = malloc(depth+1)) == NULL)
+   if ((recur.map = malloc(depth+1)) == NULL)
       return;
    for(x = 0; x < depth; x++)
-      map[x] = ' ';
-   map[x] = '\0';
+      recur.map[x] = ' ';
+   recur.map[x] = '\0';
 
    // loops through root DNs
    for(x = 0; x < tree->children_len; x++)
@@ -469,46 +435,109 @@ void ldaputils_tree_print_hierarchy(LDAPUtilsTree * tree)
          strncpy(dn, tmp, sizeof(dn));
          child = child->children[0];
       };
-      printf("+--%s\n", dn);
-      ldaputils_tree_print_hierarchy_recursive(child, 0, map);
+      if (opts->style == LDAPUTILS_TREE_BULLETS)
+         printf("* %s\n", dn);
+      else
+         printf("+--%s\n", dn);
+      ldaputils_tree_print_hierarchy_recursive(child, 0, &recur);
 
       printf("\n");
    };
 
-   free(map);
+   free(recur.map);
 
    return;
 }
 
 
-void ldaputils_tree_print_hierarchy_recursive(LDAPUtilsTree * tree, size_t level, char * map)
+void ldaputils_tree_print_hierarchy_recursive(LDAPUtilsTree * tree, size_t level, LDAPUtilsTreeRecursion * recur)
 {
    size_t x;
    size_t y;
+   size_t z;
+   size_t stop;
+   size_t noleaf;
+   size_t leaf_count;
+   size_t children_count;
 
    assert(tree != NULL);
 
+   noleaf = recur->opts->noleaf;
    level++;
 
-   for(x = 0; x < tree->children_len; x++)
+   if ((level >= recur->opts->maxdepth) && ((recur->opts->maxdepth)))
+      return;
+
+   // loops through children
+   stop           = 0;
+   children_count = 0;
+   leaf_count     = 0;
+   for(x = 0; ((x < tree->children_len) && (!(stop))); x++)
    {
-      for(y = 0; y < level; y++)
-         printf("%c  ", map[y]);
-      if ((x+1) < tree->children_len)
+      if (tree->children[x]->children_len == 0)
       {
-         map[level] = '|';
+         if ((noleaf))
+            continue;
+         leaf_count++;
+         if ( ((leaf_count+1) > recur->opts->maxleafs) && ((recur->opts->maxleafs)) )
+            noleaf = 1;
+      };
+      children_count++;
+
+      // prints indent string
+      for(y = 0; y < level; y++)
+      {
+         if (recur->opts->style == LDAPUTILS_TREE_BULLETS)
+            printf("  ");
+         else
+            printf("%c  ", recur->map[y]);
+      };
+
+      // checks for last non-leaf node
+      if ((noleaf))
+      {
+         stop = 1;
+         for(z = (x+1); z < tree->children_len; z++)
+            if (tree->children[z]->children_len != 0)
+            {
+               z = tree->children_len;
+               stop = 0;
+            };
+      };
+
+      // checks for max children
+      if ( ((recur->opts->maxchildren)) && (children_count >= recur->opts->maxchildren))
+         stop = 1;
+
+      // updates indent map
+      if (recur->opts->style == LDAPUTILS_TREE_BULLETS)
+      {
+         printf("* %s\n", tree->children[x]->rdn);
+      } else if ( ((x+1) < tree->children_len) && (!(stop)) ) {
+         recur->map[level] = '|';
          printf("+--%s\n", tree->children[x]->rdn);
       } else {
-         map[level] = ' ';
+         recur->map[level] = ' ';
          printf("\\--%s\n", tree->children[x]->rdn);
       };
-      ldaputils_tree_print_hierarchy_recursive(tree->children[x], level, map);
+
+      // recurses to next child
+      ldaputils_tree_print_hierarchy_recursive(tree->children[x], level, recur);
    };
 
-   if (tree->children_len == 0)
+   if (recur->opts->style == LDAPUTILS_TREE_BULLETS)
       return;
+
+   if (children_count == 0)
+   {
+      recur->prevempty = 0;
+      return;
+   };
+   if ((recur->prevempty))
+      return;
+   recur->prevempty = 1;
    for(y = 0; y < level; y++)
-      printf("%c  ", map[y]);
+      printf("%c  ", recur->map[y]);
    printf("\n");
 
    return;

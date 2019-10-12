@@ -95,7 +95,7 @@
 #define PROGRAM_NAME "ldaptree"
 #endif
 
-#define MY_SHORT_OPTIONS LDAPUTILS_OPTIONS_COMMON LDAPUTILS_OPTIONS_SEARCH "o:"
+#define MY_SHORT_OPTIONS LDAPUTILS_OPTIONS_COMMON LDAPUTILS_OPTIONS_SEARCH "87:6:5:4:"
 
 
 /////////////////
@@ -111,8 +111,9 @@
 typedef struct my_config MyConfig;
 struct my_config
 {
-   LDAPUtils   * lud;
-   char        * basedn;
+   LDAPUtils          * lud;
+   char               * basedn;
+   LDAPUtilsTreeOpts    treeopts;
 };
 
 
@@ -150,6 +151,12 @@ void ldaputils_usage(void)
    printf("Usage: %s [options] [filter] ...\n", PROGRAM_NAME);
    ldaputils_usage_search(MY_SHORT_OPTIONS);
    ldaputils_usage_common(MY_SHORT_OPTIONS);
+   printf("Display Options:\n");
+   printf("  --noleaf          do not print leaf nodes\n");
+   printf("  --max-depth=num   maximum depth to display\n");
+   printf("  --max-leafs=num   maximum leafs on each node to display\n");
+   printf("  --max-nodes=num   maximum branches and leafs on each node to display\n");
+   printf("  --style=format    output format of bullets or hierarchy (default: hierarchy)\n");
    printf("\nReport bugs to <%s>.\n", PACKAGE_BUGREPORT);
    return;
 }
@@ -199,6 +206,8 @@ int main(int argc, char * argv[])
    };
    ldap_msgfree(res);
 
+printf("count: %i\n", ldaputils_count_entries(entries));
+
    if ((tree = ldaputils_tree_initialize(entries, 0)) == NULL)
    {
       fprintf(stderr, "%s: ldaputils_tree_initialize(): out of virtual memory\n", cnf->lud->prog_name);
@@ -208,8 +217,7 @@ int main(int argc, char * argv[])
    };
    ldaputils_entries_free(entries);
 
-   ldaputils_tree_print_hierarchy(tree);
-   //ldaputils_tree_print_bullets(tree);
+   ldaputils_tree_print(tree, &cnf->treeopts);
 
    my_unbind(cnf);
 
@@ -231,10 +239,20 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    static char   short_options[] = MY_SHORT_OPTIONS;
    static struct option long_options[] =
    {
-      {"help",          no_argument, 0, '9'},
-      {"verbose",       no_argument, 0, 'v'},
-      {"version",       no_argument, 0, 'V'},
-      {NULL,            0,           0, 0  }
+      {"style",         required_argument, 0, '4'},
+      {"style",         required_argument, 0, '4'},
+      {"max-nodes",     required_argument, 0, '5'},
+      {"maxnodes",      required_argument, 0, '5'},
+      {"max-leafs",     required_argument, 0, '6'},
+      {"maxleafs",      required_argument, 0, '6'},
+      {"max-depth",     required_argument, 0, '7'},
+      {"maxdepth",      required_argument, 0, '7'},
+      {"no-leafs",      no_argument,       0, '8'},
+      {"noleafs",       no_argument,       0, '8'},
+      {"help",          no_argument,       0, '9'},
+      {"verbose",       no_argument,       0, 'v'},
+      {"version",       no_argument,       0, 'V'},
+      {NULL,            0,                 0, 0  }
    };
 
    // allocates memory for configuration
@@ -277,6 +295,38 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
          my_unbind(cnf);
          return(1);
 
+         case '4':
+         if (!(strcasecmp(optarg, "bullets")))
+            cnf->treeopts.style = LDAPUTILS_TREE_BULLETS;
+         else if (!(strcasecmp(optarg, "bullet")))
+            cnf->treeopts.style = LDAPUTILS_TREE_BULLETS;
+         else if (!(strcasecmp(optarg, "hierarchy")))
+            cnf->treeopts.style = LDAPUTILS_TREE_HIERARCHY;
+         else
+         {
+            fprintf(stderr, "%s: unrecognized style `--%s'\n", PROGRAM_NAME, optarg);
+            fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
+            my_unbind(cnf);
+            return(1);
+         };
+         break;
+
+         case '5':
+         cnf->treeopts.maxchildren = (size_t)atoll(optarg);
+         break;
+
+         case '6':
+         cnf->treeopts.maxleafs = (size_t)atoll(optarg);
+         break;
+
+         case '7':
+         cnf->treeopts.maxdepth = (size_t)atoll(optarg);
+         break;
+
+         case '8':
+         cnf->treeopts.noleaf = 1;
+         break;
+
          // argument error
          case '?':
          fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
@@ -290,15 +340,6 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
          my_unbind(cnf);
          return(1);
       };
-   };
-
-   // checks for required arguments
-   if (argc > (optind+1))
-   {
-      fprintf(stderr, "%s: unknown argument \"%s\"\n", PROGRAM_NAME, argv[optind+1]);
-      fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
-      my_unbind(cnf);
-      return(1);
    };
 
    // saves filter
@@ -315,8 +356,8 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    };
    cnf->lud->attrs[0] = NULL;
    cnf->lud->attrs[1] = NULL;
-   //if ((cnf->lud->attrs[0] = strdup("structuralObjectClass")) == NULL)
-   if ((cnf->lud->attrs[0] = strdup("dn")) == NULL)
+   if ((cnf->lud->attrs[0] = strdup("structuralObjectClass")) == NULL)
+   //if ((cnf->lud->attrs[0] = strdup("dn")) == NULL)
    {
       fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
       my_unbind(cnf);

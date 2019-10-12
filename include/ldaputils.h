@@ -80,19 +80,16 @@
 #endif
 
 
-#ifndef LDAP_VENDOR_NAME
-#define LDAP_VENDOR_NAME "Unknown"
-#endif
-#ifndef LDAP_VENDOR_VERSION
-#define LDAP_VENDOR_VERSION 0
-#endif
-
-
 #define LDAPUTILS_BUFF_LEN                 4096
 #define LDAPUTILS_OPT_LEN                  128
 
+
 #define LDAPUTILS_OPTIONS_COMMON           "9cd:D:h:H:Lnp:P:uvVw:Wxy:Y:Z"
 #define LDAPUTILS_OPTIONS_SEARCH           "b:l:s:S:z:"
+
+
+#define LDAPUTILS_TREE_HIERARCHY           0x0000
+#define LDAPUTILS_TREE_BULLETS             0x0001
 
 
 /////////////////
@@ -109,6 +106,16 @@ typedef struct ldap_utils_entry        LDAPUtilsEntry;
 typedef struct ldap_utils_entries      LDAPUtilsEntries;
 typedef struct ldap_utils_tree         LDAPUtilsTree;
 typedef struct ldaputils_config_struct LDAPUtils;
+typedef struct ldap_utils_tree_opts    LDAPUtilsTreeOpts;
+
+struct ldap_utils_tree_opts
+{
+   size_t    noleaf;
+   size_t    maxdepth;
+   size_t    maxleafs;
+   size_t    maxchildren;
+   size_t    style;
+};
 
 
 // store common structs
@@ -255,9 +262,7 @@ LDAPUtilsTree * ldaputils_tree_initialize(LDAPUtilsEntries * entries, int copy);
 
 size_t ldaputils_tree_level_count(LDAPUtilsTree * tree);
 
-void ldaputils_tree_print_bullets(LDAPUtilsTree * tree);
-
-void ldaputils_tree_print_hierarchy(LDAPUtilsTree * tree);
+void ldaputils_tree_print(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts);
 
 
 LDAPUTILS_END_C_DECLS
