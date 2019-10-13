@@ -715,9 +715,9 @@ void ldaputils_tree_print_recursive(LDAPUtilsTree * tree, size_t level, LDAPUtil
          for (attr = 0; attr < entry->attrs_count; attr++)
          {
             // loops through values
-            ldaputils_tree_print_indent(tree, level+1, recur);
             for(val = 0; ((entry->attrs[attr]->vals[val])); val++)
             {
+               ldaputils_tree_print_indent(tree, level+1, recur);
                // prints attribute and value
                if (recur->opts->style == LDAPUTILS_TREE_BULLETS)
                {
