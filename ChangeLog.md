@@ -6,6 +6,7 @@ Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>
 
 0.3
 ---
+   Released 2019/10/13
    - copyright: updating copyright with legal name of sole proprietor (syzdek)
    - libldaputils: refactoring source (syzdek)
    - libldaputils: adding TLS support (syzdek)
