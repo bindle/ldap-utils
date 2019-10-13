@@ -519,7 +519,7 @@ void ldaputils_param_option_time(LDAPUtils * lud, const char * key, int option)
    assert(lud != NULL);
 
    ldap_get_option(lud->ld, option, &ival);
-   snprintf(val, sizeof(val), "%ld secs,  %d usecs", ival->tv_sec, ival->tv_usec);
+   snprintf(val, sizeof(val), "%li secs,  %i usecs", (long int) ival->tv_sec, (int) ival->tv_usec);
    ldap_memfree(ival);
    ldaputils_param_print(key, val);
 
