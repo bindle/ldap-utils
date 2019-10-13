@@ -58,6 +58,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <assert.h>
+#include <signal.h>
 
 #ifdef HAVE_TERMIOS_H
 #include <termios.h>
