@@ -40,6 +40,7 @@ Contents
    * Software Requirements
    * Utilities
      - ldap2csv
+     - ldapdebug
      - ldaptree
    * Source Code
    * Package Maintence Notes
@@ -87,6 +88,19 @@ Example usage:
       "jdough","John","Dough","doughboy42@example.com"
       "syzdek","David M.","Syzdek","david@syzdek.net"
       $
+
+
+ldapdebug
+---------
+
+ldapdebug is a utility which initiates a connection the an LDAP server
+and optionally binds to the LDAP server.  Once the LDAP session has been
+established, the utility will display the values of various options
+available from `ldap_get_option()`.  This utility is useful for debugging
+`ldap.conf` and `.ldaprc` files.
+
+ldapdebug is not installed by default.  To enable building and installing
+ldapdebug, the flag `--enable-ldapdebug` must be passed to configure.
 
 
 ldaptree

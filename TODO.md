@@ -6,6 +6,9 @@ All rights reserved.
    - [x] ldap2csv
      -   [ ] write man page
 
+   - [x] ldapdebug
+     - [ ] write man page
+
    - [ ] ldapdiff
      - [ ] write utility which compares results of two LDAP searches
      - [ ] write man page
