@@ -16,6 +16,7 @@ Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>
 
 0.2
 ---
+   Released 2015/04/23
    - Recreating Xcode project file. (syzdek)
    - Removing files installed by autotools from git repo. (syzdek)
    - Updating autotools files (Makefile.am, configure.ac, etc). (syzdek)
@@ -24,6 +25,7 @@ Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>
 
 0.1.1
 -----
+   Released 2009/01/19
    - Updating ldaputils_getpass() to use stderr.
    - Modifying behavior of --verbose to set debug level
    - Removing debugging lines for LDAP API Version.
@@ -40,5 +42,6 @@ Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>
 
 0.1.0
 -----
+   Released 2009/01/19.
    - initial release of package (syzdek)
 
