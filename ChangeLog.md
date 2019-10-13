@@ -4,8 +4,10 @@ Copyright (C) 2012 Bindle Binaries <syzdek@bindlebinaries.com>.
 
 0.3
 ---
-   - refactoring libldaputils (syzdek)
-   - adding TLS support
+   - libldaputils: refactoring source (syzdek)
+   - libldaputils: adding TLS support (syzdek)
+   - ldapconfprint: refactoring source (syzdek)
+   - ldaptree: adding utility (syzdek)
 
 0.2   
 ---
