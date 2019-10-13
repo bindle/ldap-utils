@@ -208,8 +208,11 @@ int main(int argc, char * argv[])
    };
    ldap_msgfree(res);
 
+   // displays entries
    ldaputils_tree_print(tree, &cnf->treeopts);
 
+   // frees resources
+   ldaputils_tree_free(tree);
    my_unbind(cnf);
 
    return(0);
