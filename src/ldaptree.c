@@ -173,7 +173,6 @@ int main(int argc, char * argv[])
    MyConfig             * cnf;
    LDAPMessage          * res;
    LDAPUtilsTree        * tree;
-   LDAPUtilsEntries     * entries;
 
    cnf = NULL;
 
@@ -200,22 +199,14 @@ int main(int argc, char * argv[])
    };
 
    // retrieve entries
-   if ((entries = ldaputils_get_entries(cnf->lud->ld, res, NULL)) == NULL)
+   if ((tree = ldaputils_get_tree(cnf->lud->ld, res, cnf->copy_entry)) == NULL)
    {
       fprintf(stderr, "%s: ldaputils_get_entries(): out of virtual memory\n", cnf->lud->prog_name);
       my_unbind(cnf);
+      ldap_msgfree(res);
       return(1);
    };
    ldap_msgfree(res);
-
-   if ((tree = ldaputils_tree_initialize(entries, cnf->copy_entry)) == NULL)
-   {
-      fprintf(stderr, "%s: ldaputils_tree_initialize(): out of virtual memory\n", cnf->lud->prog_name);
-      ldaputils_entries_free(entries);
-      my_unbind(cnf);
-      return(1);
-   };
-   ldaputils_entries_free(entries);
 
    ldaputils_tree_print(tree, &cnf->treeopts);
 

@@ -253,7 +253,10 @@ void ldaputils_unbind(LDAPUtils * lud);
 #pragma mark - Prototypes: LDAP Tree
 #endif
 
-int ldaputils_tree_add_dn(LDAPUtilsTree * tree, const char * dn);
+LDAPUtilsTree * ldaputils_get_tree(LDAP * ld, LDAPMessage * res,
+int copy);
+
+int ldaputils_tree_add_dn(LDAPUtilsTree * tree, const char * dn, LDAPUtilsTree ** nodep);
 
 int ldaputils_tree_add_entry(LDAPUtilsTree * tree, LDAPUtilsEntry * entry, int copy);
 

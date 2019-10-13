@@ -96,6 +96,10 @@ struct ldap_utils_tree_recur
 #pragma mark - Prototypes
 #endif
 
+int ldaputils_tree_add_dn_components(LDAPUtilsTree * tree, char ** components, size_t components_len, LDAPUtilsTree ** nodep);
+
+LDAPUtilsTree * ldaputils_tree_child_find(LDAPUtilsTree * tree, const char * rdn, size_t * prevp);
+
 LDAPUtilsTree * ldaputils_tree_child_init(LDAPUtilsTree * tree, const char * rdn);
 
 int ldaputils_tree_cmp(const void * ptr1, const void * ptr2);
@@ -119,44 +123,111 @@ void ldaputils_tree_print_recursive(LDAPUtilsTree * tree, size_t level, LDAPUtil
 #pragma mark - Functions
 #endif
 
-int ldaputils_tree_add_dn(LDAPUtilsTree * tree, const char * dn)
+
+/// retrieves LDAP entries from result
+/// @param[in] ld      refernce to LDAP socket data
+/// @param[in] res     refernce to LDAP result message
+LDAPUtilsTree * ldaputils_get_tree(LDAP * ld, LDAPMessage * res,
+   int copy)
+{
+   int                   err;
+   char                * name;
+   char                * str;
+   BerElement          * ber;
+   LDAPMessage         * msg;
+   struct berval      ** vals;
+   LDAPUtilsEntry      * entry;
+   LDAPUtilsTree       * tree;
+   LDAPUtilsTree       * node;
+
+   assert(ld  != NULL);
+   assert(res != NULL);
+
+   if ((tree = ldaputils_tree_initialize(NULL, 0)) == NULL)
+      return(NULL);
+
+   msg = ldap_first_entry(ld, res);
+   while(msg)
+   {
+      // add node to tree
+      if ((str = ldap_get_dn(ld, msg)) == NULL)
+      {
+         ldaputils_tree_free(tree);
+         return(NULL);
+      };
+      if ((err = ldaputils_tree_add_dn(tree, str, &node)) != LDAP_SUCCESS)
+      {
+         free(str);
+         ldaputils_tree_free(tree);
+         return(NULL);
+      };
+
+      // copy entry
+      if ((copy))
+      {
+
+         // create entry
+         if ((entry = ldaputils_entry_initialize(str)) == NULL)
+         {
+            free(str);
+            ldaputils_tree_free(tree);
+            return(NULL);
+         };
+
+         // retrieves attributes
+         name = ldap_first_attribute(ld, msg, &ber);
+         while(name != NULL)
+         {
+            // retrieve values
+            if ((vals = ldap_get_values_len(ld, msg, name)) != NULL)
+            {
+               ldaputils_entry_add_attribute(entry, name, vals);
+               ldap_value_free_len(vals);
+            };
+
+            name = ldap_next_attribute(ld, msg, ber);
+         };
+         ber_free(ber, 0);
+
+         // save entry
+         node->entry = entry;
+      };
+
+      free(str);
+      msg = ldap_next_entry(ld, msg);
+   };
+
+   return(tree);
+}
+
+
+int ldaputils_tree_add_dn(LDAPUtilsTree * tree, const char * dn, LDAPUtilsTree ** nodep)
 {
    char           ** components;
    size_t            components_len;
-   LDAPUtilsTree   * child;
-   size_t            cur_chld;
-   size_t            cur_comp;
+   size_t            u;
+   char            * str;
+   int               err;
 
    assert(tree  != NULL);
    assert(dn    != NULL);
 
-   // explode DN into components
-   if ((components = ldap_explode_rdn(dn, 0)) == NULL)
+   // explode DN into components and reverse order
+   if ((components = ldap_explode_dn(dn, 0)) == NULL)
       return(LDAP_NO_MEMORY);
    for(components_len = 0; ((components[components_len])); components_len++);
+   for(u = 0; (u < (components_len/2)); u++)
+   {
+      str                            = components[u];
+      components[u]                  = components[components_len-u-1];
+      components[components_len-u-1] = str;
+   };
 
    // loop through DN components
-   for (cur_comp = 0; cur_comp < components_len; cur_comp++)
+   if ((err = ldaputils_tree_add_dn_components(tree, components, components_len, nodep)) != LDAP_SUCCESS)
    {
-      child = NULL;
-
-      // search for matching child
-      for(cur_chld = 0; ((cur_chld < tree->children_len) && (child == NULL)); cur_chld++)
-         if (!(strcasecmp(tree->children[cur_chld]->rdn, components[cur_comp])))
-            child = tree->children[cur_chld];
-
-      // initialize child if it does not exist
-      if (!(child))
-      {
-         if ((child = ldaputils_tree_child_init(tree, components[cur_comp])))
-         {
-            ldap_value_free(components);
-            return(LDAP_NO_MEMORY);
-         };
-      };
-
-      // step up to child
-      tree = child;
+      ldap_value_free(components);
+      return(LDAP_NO_MEMORY);
    };
 
    ldap_value_free(components);
@@ -165,38 +236,50 @@ int ldaputils_tree_add_dn(LDAPUtilsTree * tree, const char * dn)
 }
 
 
-int ldaputils_tree_add_entry(LDAPUtilsTree * tree, LDAPUtilsEntry * entry, int copy)
+int ldaputils_tree_add_dn_components(LDAPUtilsTree * tree, char ** components, size_t components_len, LDAPUtilsTree ** nodep)
 {
-   LDAPUtilsTree * child;
-   size_t          cur_chld;
-   size_t          cur_comp;
-
-   assert(tree  != NULL);
-   assert(entry != NULL);
+   size_t            cur_comp;
+   LDAPUtilsTree   * child;
 
    // loop through DN components
-   for (cur_comp = 0; cur_comp < entry->components_len; cur_comp++)
+   for (cur_comp = 0; cur_comp < components_len; cur_comp++)
    {
       child = NULL;
 
-      // search for matching child
-      for(cur_chld = 0; ((cur_chld < tree->children_len) && (child == NULL)); cur_chld++)
-         if (!(strcasecmp(tree->children[cur_chld]->rdn, entry->components[cur_comp])))
-            child = tree->children[cur_chld];
-
-      // initialize child if it does not exist
-      if (!(child))
-         if ((child = ldaputils_tree_child_init(tree, entry->components[cur_comp])) == NULL)
-            return(LDAP_NO_MEMORY);
+      if ((child = ldaputils_tree_child_init(tree, components[cur_comp])) == NULL)
+      {
+         ldap_value_free(components);
+         return(LDAP_NO_MEMORY);
+      };
 
       // step up to child
       tree = child;
    };
 
+   if ((nodep))
+      *nodep = tree;
+
+   return(LDAP_SUCCESS);
+}
+
+
+int ldaputils_tree_add_entry(LDAPUtilsTree * tree, LDAPUtilsEntry * entry, int copy)
+{
+   LDAPUtilsTree * child;
+   int             err;
+
+   assert(tree  != NULL);
+   assert(entry != NULL);
+
+   if ((err = ldaputils_tree_add_dn_components(tree, entry->components, entry->components_len, &child)) != LDAP_SUCCESS)
+      return(LDAP_NO_MEMORY);
+
+   if (!(copy))
+      return(LDAP_SUCCESS);
+
    // copy entry into tree
-   if ((copy))
-      if ((tree->entry = ldaputils_entry_copy(entry)) == NULL)
-         return(LDAP_NO_MEMORY);
+   if ((tree->entry = ldaputils_entry_copy(entry)) == NULL)
+      return(LDAP_NO_MEMORY);
 
    return(LDAP_SUCCESS);
 }
@@ -237,14 +320,89 @@ int ldaputils_tree_cmp(const void * ptr1, const void * ptr2)
 }
 
 
+LDAPUtilsTree * ldaputils_tree_child_find(LDAPUtilsTree * tree, const char * rdn, size_t * idxp)
+{
+   size_t          low;
+   size_t          mid;
+   size_t          high;
+   int             res;
+
+   assert(tree != NULL);
+   assert(rdn  != NULL);
+
+   if (tree->children_len == 0)
+      return(NULL);
+
+   low   = 0;
+   high  = tree->children_len - 1;
+
+   while((high - low) > 1)
+   {
+      mid = (low + high) / 2;
+      res = strcasecmp(rdn, tree->children[mid]->rdn);
+      if (res < 0)
+         high = mid;
+      else if (res > 0)
+         low = mid;
+      else
+      {
+         if ((idxp))
+            *idxp = mid;
+         return(tree->children[mid]);
+      };
+   };
+
+   // checks low value
+   if ((res = strcasecmp(rdn, tree->children[low]->rdn)) == 0)
+   {
+      if ((idxp))
+         *idxp = low;
+      return(tree->children[low]);
+   };
+   if (res < 0)
+   {
+      if ((idxp))
+         *idxp = low;
+      return(NULL);
+   };
+
+   // checks high value
+   if ((res = strcasecmp(rdn, tree->children[high]->rdn)) > 0)
+   {
+      if ((idxp))
+         *idxp = high+1;
+      return(NULL);
+   };
+   if ((idxp))
+      *idxp = high;
+   if (res == 0)
+      return(tree->children[high]);
+
+   return(NULL);
+}
+
+
 LDAPUtilsTree * ldaputils_tree_child_init(LDAPUtilsTree * tree, const char * rdn)
 {
    LDAPUtilsTree * child;
    size_t          size;
+   size_t          idx;
+   size_t          u;
    void          * ptr;
 
    assert(tree  != NULL);
    assert(rdn   != NULL);
+
+   // increase size of children list
+   size = sizeof(LDAPUtilsTree *) * (tree->children_len + 2);
+   if ((ptr = realloc(tree->children, size)) == NULL)
+      return(NULL);
+   tree->children = ptr;
+   tree->children[tree->children_len+1] = NULL;
+
+   // search for existing child
+   if ((child = ldaputils_tree_child_find(tree, rdn, &idx)) != NULL)
+      return(child);
 
    // initialize child
    if ((child = malloc(sizeof(LDAPUtilsTree))) == NULL)
@@ -258,22 +416,14 @@ LDAPUtilsTree * ldaputils_tree_child_init(LDAPUtilsTree * tree, const char * rdn
       return(NULL);
    };
 
-   // increase size of children list
-   size = sizeof(LDAPUtilsTree *) * (tree->children_len + 2);
-   if ((ptr = realloc(tree->children, size)) == NULL)
-   {
-      ldaputils_tree_free(child);
-      return(NULL);
-   };
-   tree->children = ptr;
-
    // save child to children list
    child->parent                        = tree;
    tree->children[tree->children_len++] = child;
    tree->children[tree->children_len]   = NULL;
 
-   // sort children list
-   qsort(tree->children, tree->children_len, sizeof(LDAPUtilsTree *), (int (*)(const void *, const void *))ldaputils_tree_cmp);
+   for (u = tree->children_len; u > idx; u--)
+      tree->children[u] = tree->children[u-1];
+   tree->children[u] = child;
 
    return(child);
 }

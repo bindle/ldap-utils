@@ -72,9 +72,6 @@ LDAPUtilsAttribute * ldaputils_attribute_copy(LDAPUtilsAttribute * attr);
 void ldaputils_attribute_free(LDAPUtilsAttribute * attr);
 LDAPUtilsAttribute * ldaputils_attribute_initialize(const char * name, struct berval **vals);
 
-int ldaputils_entry_add_attribute(LDAPUtilsEntry * entry, const char * name, struct berval ** vals);
-LDAPUtilsEntry * ldaputils_entry_initialize(const char * dn);
-
 int ldaputils_entries_add_entry(LDAPUtilsEntries * entries, LDAPUtilsEntry * entry);
 
 // initializes list of entries

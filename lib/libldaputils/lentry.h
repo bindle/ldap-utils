@@ -74,6 +74,7 @@
 #endif
 
 LDAPUtilsEntry * ldaputils_entry_copy(LDAPUtilsEntry * entry);
-
+int ldaputils_entry_add_attribute(LDAPUtilsEntry * entry, const char * name, struct berval ** vals);
+LDAPUtilsEntry * ldaputils_entry_initialize(const char * dn);
 
 #endif /* end of header file */
