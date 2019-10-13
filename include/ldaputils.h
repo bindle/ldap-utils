@@ -84,7 +84,7 @@
 #define LDAPUTILS_OPT_LEN                  128
 
 
-#define LDAPUTILS_OPTIONS_COMMON           "9cd:D:h:H:Lnp:P:uvVw:Wxy:Y:Z"
+#define LDAPUTILS_OPTIONS_COMMON           "cd:D:hH:Lnp:P:uvVw:Wxy:Y:Z"
 #define LDAPUTILS_OPTIONS_SEARCH           "b:l:s:S:z:"
 
 

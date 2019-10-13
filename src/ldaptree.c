@@ -149,7 +149,7 @@ void my_unbind(MyConfig * cnf);
 /// prints program usage and exits
 void ldaputils_usage(void)
 {
-   printf("Usage: %s [options] [filter] ...\n", PROGRAM_NAME);
+   printf("Usage: %s [options] [filter [attributes...]]\n", PROGRAM_NAME);
    ldaputils_usage_search(MY_SHORT_OPTIONS);
    ldaputils_usage_common(MY_SHORT_OPTIONS);
    printf("Display Options:\n");
@@ -244,7 +244,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
       {"maxdepth",      required_argument, 0, '7'},
       {"no-leafs",      no_argument,       0, '8'},
       {"noleafs",       no_argument,       0, '8'},
-      {"help",          no_argument,       0, '9'},
+      {"help",          no_argument,       0, 'h'},
       {"verbose",       no_argument,       0, 'v'},
       {"version",       no_argument,       0, 'V'},
       {NULL,            0,                 0, 0  }

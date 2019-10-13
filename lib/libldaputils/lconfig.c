@@ -116,10 +116,6 @@ int ldaputils_getopt(LDAPUtils * lud, int c, const char * arg)
       return(c);
 
       // Common Options
-      case '9':
-      ldaputils_usage();
-      return(-2);
-
       case 'c':
       lud->continuous++;
       return(0);
@@ -143,12 +139,8 @@ int ldaputils_getopt(LDAPUtils * lud, int c, const char * arg)
       return(0);
 
       case 'h':
-      if ((rc = ldap_set_option(lud->ld, LDAP_OPT_HOST_NAME, arg)) != LDAP_SUCCESS)
-      {
-         fprintf(stderr, "%s: ldap_set_option(LDAP_OPT_HOST_NAME): %s\n", lud->prog_name, ldap_err2string(rc));
-         return(1);
-      };
-      return(0);
+      ldaputils_usage();
+      return(-2);
 
       case 'H':
       if ((rc = ldap_set_option(lud->ld, LDAP_OPT_URI, arg)) != LDAP_SUCCESS)
@@ -565,7 +557,7 @@ void ldaputils_usage_common(const char * short_options)
          case 'c': printf("  -c                continuous operation mode (do not stop on errors)\n"); break;
          case 'd': printf("  -d level          set LDAP debug level to `level'\n"); break;
          case 'D': printf("  -D binddn         bind DN\n"); break;
-         //case 'h': printf("  -h host           LDAP server\n"); break;
+         case 'h': printf("  -h, --help        print this help and exit\n"); break;
          case 'H': printf("  -H URI            LDAP Uniform Resource Identifier(s)\n"); break;
          case 'n': printf("  -n                show what would be done but don't actually do it\n"); break;
          //case 'p': printf("  -p port           port on LDAP server\n"); break;
@@ -577,7 +569,6 @@ void ldaputils_usage_common(const char * short_options)
          case 'y': printf("  -y file           read password from file\n"); break;
          case 'Y': printf("  -Y mech           SASL mechanism\n"); break;
          case 'Z': printf("  -Z[Z]             issue StartTLS, multiple options require TLS to be successful\n"); break;
-         case '9': printf("  --help            print this help and exit\n"); break;
          default: break;
       };
    };

@@ -240,7 +240,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    static char   short_options[] = MY_SHORT_OPTIONS;
    static struct option long_options[] =
    {
-      {"help",          no_argument, 0, '9'},
+      {"help",          no_argument, 0, 'h'},
       {"verbose",       no_argument, 0, 'v'},
       {"version",       no_argument, 0, 'V'},
       {NULL,            0,           0, 0  }
