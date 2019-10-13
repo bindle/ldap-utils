@@ -445,7 +445,7 @@ void ldaputils_param_option_bool(LDAPUtils * lud, const char * key, int option)
 
    ival = 0;
    ldap_get_option(lud->ld, option, &ival);
-   if (ival == (int)LDAP_OPT_ON)
+   if ((ival))
       ldaputils_param_print(key, "ON");
    else
       ldaputils_param_print(key, "OFF");
