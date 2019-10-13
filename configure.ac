@@ -158,6 +158,8 @@ AC_CHECK_HEADERS([fcntl.h],,           [AC_MSG_ERROR([missing required header])]
 AC_CHECK_HEADERS([termios.h],,         [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([ldap.h],,            [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([getopt.h],,          [AC_MSG_ERROR([missing required header])])
+AC_CHECK_HEADERS([signal.h],,          [AC_MSG_ERROR([missing required header])])
+AC_CHECK_HEADERS([sgtty.h])
 
 # initiates bindle tools macros
 AC_BINDLE(contrib/bindletools)
