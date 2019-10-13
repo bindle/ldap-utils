@@ -27,6 +27,7 @@ All rights reserved.
 
    - [x] ldaptree
      - [ ] write man page
+     - [ ] add ability to display number of truncated entries
 
    - [ ] ldaplint
      - [ ] write utility which validats LDAP entries against schema
