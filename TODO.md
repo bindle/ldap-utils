@@ -3,7 +3,7 @@ LDAP Utilities
 Copyright (c) 2019 David M. Syzdek <david@syzdek.net>.
 All rights reserved.
 
-   - [-] ldap2csv
+   - [x] ldap2csv
      -   [ ] write man page
 
    - [ ] ldapdiff
@@ -22,7 +22,7 @@ All rights reserved.
      - [ ] write utility which retrieves LDAP server's TLS certificate
      - [ ] write man page
 
-   - [-] ldaptree
+   - [x] ldaptree
      - [ ] write man page
 
    - [ ] ldaplint
@@ -45,7 +45,7 @@ All rights reserved.
      - [ ] write utility which parses and sorts LDIF
      - [ ] write man page
 
-   - [-] libldaputils
+   - [x] libldaputils
      - [ ] add support for auth mechanisms other than simple auth.
      - [ ] write LDIF parser
      - [ ] write shema parser
