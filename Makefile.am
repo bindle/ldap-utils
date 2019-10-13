@@ -63,7 +63,7 @@ LDADD					= $(lib_LTLIBRARIES) \
 
 
 # automake targets
-bin_PROGRAMS				= src/ldaptree
+bin_PROGRAMS				=
 check_PROGRAMS				=
 doc_DATA				=
 EXTRA_PROGRAMS				=
@@ -137,6 +137,9 @@ src_ldap2csv_SOURCES			= \
 
 
 # macros for ldaptree
+if LDAPUTILS_LDAPTREE
+bin_PROGRAMS                            += src/ldaptree
+endif
 src_ldaptree_DEPENDENCIES		= Makefile lib/libldaputils.a
 src_ldaptree_CPPFLAGS			= -DPROGRAM_NAME="\"ldaptree\"" $(AM_CPPFLAGS)
 src_ldaptree_CFLAGS			= $(AM_CFLAGS)

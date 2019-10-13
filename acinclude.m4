@@ -53,4 +53,26 @@ AC_DEFUN([AC_LDAP_UTILS_LDAP2CSV],[dnl
 ])dnl
 
 
+# AC_LDAP_UTILS_LDAPTREE
+# ______________________________________________________________________________
+AC_DEFUN([AC_LDAP_UTILS_LDAPTREE],[dnl
+
+   enableval=""
+   AC_ARG_ENABLE(
+      ldaptree,
+      [AS_HELP_STRING([--disable-ldaptree], [disable building ldaptree])],
+      [ ELDAPTREE=$enableval ],
+      [ ELDAPTREE=$enableval ]
+   )
+
+   if test "x${ELDAPTREE}" != "xno";then
+      ELDAPTREE=yes
+   fi
+   LDAPUTILS_LDAPTREE=${ELDAPTREE}
+
+   AM_CONDITIONAL([LDAPUTILS_LDAPTREE], [test "x$LDAPUTILS_LDAPTREE" = "xyes"])
+])dnl
+
+
+
 # end of M4 file
