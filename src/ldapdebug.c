@@ -30,31 +30,31 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- *  @file src/ldapconfprint.c export LDAP data to CSV file
+ *  @file src/ldapdebug.c export LDAP data to CSV file
  */
 /*
  *  Simple Build:
- *     export CFLAGS='-DPROGRAM_NAME="ldapconfprint" -Wall -I../include'
- *     gcc ${CFLAGS} -c ldapconfprint.c
+ *     export CFLAGS='-DPROGRAM_NAME="ldapdebug" -Wall -I../include'
+ *     gcc ${CFLAGS} -c ldapdebug.c
  *     gcc ${CFLAGS} -c ldaputils_config.c
  *     gcc ${CFLAGS} -c ldaputils_config_opts.c
- *     gcc ${CFLAGS} -o ldapconfprint ldapconfprint.o ldaputils_config.o \
+ *     gcc ${CFLAGS} -o ldapdebug ldapdebug.o ldaputils_config.o \
  *             ldaputils_config_opts.o -lldap
  *
  *  Libtool Build:
- *     export CFLAGS='-DPROGRAM_NAME="ldapconfprint" -Wall -I../include'
- *     libtool --mode=compile --tag=CC gcc ${CFLAGS} -c ldapconfprint.c
+ *     export CFLAGS='-DPROGRAM_NAME="ldapdebug" -Wall -I../include'
+ *     libtool --mode=compile --tag=CC gcc ${CFLAGS} -c ldapdebug.c
  *     libtool --mode=compile --tag=CC gcc ${CFLAGS} -c ldaputils_config.c
  *     libtool --mode=compile --tag=CC gcc ${CFLAGS} -c ldaputils_config_opts.c
- *     libtool --mode=link    --tag=CC gcc ${CFLAGS} -o ldapconfprint \
- *             ldapconfprint.o ldaputils_config.o ldaputils_config_opts.o \
+ *     libtool --mode=link    --tag=CC gcc ${CFLAGS} -o ldapdebug \
+ *             ldapdebug.o ldaputils_config.o ldaputils_config_opts.o \
  *             -lldap
  *
  *  Libtool Clean:
- *     libtool --mode=clean rm -f ldapconfprint.lo ldaputils_config.lo \
- *             ldaputils_config_opts.lo ldapconfprint
+ *     libtool --mode=clean rm -f ldapdebug.lo ldaputils_config.lo \
+ *             ldaputils_config_opts.lo ldapdebug
  */
-#define _LDAP_UTILS_SRC_LDAPCONFPRINT 1
+#define _LDAP_UTILS_SRC_LDAPDEBUG 1
 #undef __LDAPUTILS_PMARK
 
 
@@ -89,7 +89,7 @@
 #endif
 
 #ifndef PROGRAM_NAME
-#define PROGRAM_NAME "ldapconfprint"
+#define PROGRAM_NAME "ldapdebug"
 #endif
 
 #define MY_SHORT_OPTIONS LDAPUTILS_OPTIONS_COMMON LDAPUTILS_OPTIONS_SEARCH "o:"

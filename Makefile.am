@@ -74,7 +74,7 @@ EXTRA_LTLIBRARIES			=
 man_MANS				=
 noinst_HEADERS				= include/ldaputils.h \
 					  include/ldaputils_cdefs.h
-noinst_PROGRAMS				= src/ldapconfprint
+noinst_PROGRAMS				= src/ldapdebug
 noinst_LIBRARIES			= lib/libldaputils.a
 
 
@@ -144,14 +144,14 @@ src_ldaptree_SOURCES			= \
 					  src/ldaptree.c
 
 
-# macros for ldapconfprint
-src_ldapconfprint_DEPENDENCIES		= Makefile lib/libldaputils.a
-src_ldapconfprint_CPPFLAGS		= -DPROGRAM_NAME="\"ldapconfprint\"" $(AM_CPPFLAGS)
-src_ldapconfprint_CFLAGS			= $(AM_CFLAGS)
-src_ldapconfprint_LDFLAGS		= $(AM_LDFLAGS)
-src_ldapconfprint_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
-src_ldapconfprint_SOURCES		= \
-					  src/ldapconfprint.c
+# macros for ldapdebug
+src_ldapdebug_DEPENDENCIES		= Makefile lib/libldaputils.a
+src_ldapdebug_CPPFLAGS			= -DPROGRAM_NAME="\"ldapdebug\"" $(AM_CPPFLAGS)
+src_ldapdebug_CFLAGS			= $(AM_CFLAGS)
+src_ldapdebug_LDFLAGS			= $(AM_LDFLAGS)
+src_ldapdebug_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
+src_ldapdebug_SOURCES			= \
+					  src/ldapdebug.c
 
 
 # Makefile includes

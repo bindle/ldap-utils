@@ -31,7 +31,7 @@
 		A027AA711C31C98A00EA81CB /* lconfig.h in Headers */ = {isa = PBXBuildFile; fileRef = A027AA681C31C97B00EA81CB /* lconfig.h */; };
 		A027AA721C31C98A00EA81CB /* lldap.c in Sources */ = {isa = PBXBuildFile; fileRef = A027AA691C31C97B00EA81CB /* lldap.c */; };
 		A027AA731C31C98A00EA81CB /* lldap.h in Headers */ = {isa = PBXBuildFile; fileRef = A027AA6A1C31C97B00EA81CB /* lldap.h */; };
-		A027AA801C31FEAB00EA81CB /* ldapconfprint.c in Sources */ = {isa = PBXBuildFile; fileRef = A09401C315266907003B9698 /* ldapconfprint.c */; };
+		A027AA801C31FEAB00EA81CB /* ldapdebug.c in Sources */ = {isa = PBXBuildFile; fileRef = A09401C315266907003B9698 /* ldapdebug.c */; };
 		A027AA851C31FF0700EA81CB /* libldaputils.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A027AA591C31C94900EA81CB /* libldaputils.a */; };
 		A0352B3C1CB3563700B70F71 /* LDAP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0352B3B1CB3563700B70F71 /* LDAP.framework */; };
 		A0352B3D1CB3564100B70F71 /* LDAP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0352B3B1CB3563700B70F71 /* LDAP.framework */; };
@@ -134,7 +134,7 @@
 		A027AA691C31C97B00EA81CB /* lldap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lldap.c; sourceTree = "<group>"; };
 		A027AA6A1C31C97B00EA81CB /* lldap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lldap.h; sourceTree = "<group>"; };
 		A027AA741C31FB1D00EA81CB /* ldaputils_cdefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ldaputils_cdefs.h; sourceTree = "<group>"; };
-		A027AA791C31FE9A00EA81CB /* ldapconfprint */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ldapconfprint; sourceTree = BUILT_PRODUCTS_DIR; };
+		A027AA791C31FE9A00EA81CB /* ldapparams */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ldapparams; sourceTree = BUILT_PRODUCTS_DIR; };
 		A027AA861C32006600EA81CB /* liblber.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblber.a; path = ../../../../../opt/local/lib/liblber.a; sourceTree = "<group>"; };
 		A027AA871C32006600EA81CB /* libldap.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libldap.a; path = ../../../../../opt/local/lib/libldap.a; sourceTree = "<group>"; };
 		A0352B3B1CB3563700B70F71 /* LDAP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LDAP.framework; path = System/Library/Frameworks/LDAP.framework; sourceTree = SDKROOT; };
@@ -159,7 +159,7 @@
 		A09401AF15266907003B9698 /* ldaputils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ldaputils.h; sourceTree = "<group>"; };
 		A09401BD15266907003B9698 /* Makefile.am */ = {isa = PBXFileReference; explicitFileType = sourcecode.make; indentWidth = 8; path = Makefile.am; sourceTree = "<group>"; tabWidth = 8; usesTabs = 1; };
 		A09401C215266907003B9698 /* ldap2csv.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ldap2csv.c; sourceTree = "<group>"; };
-		A09401C315266907003B9698 /* ldapconfprint.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ldapconfprint.c; sourceTree = "<group>"; };
+		A09401C315266907003B9698 /* ldapdebug.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ldapdebug.c; sourceTree = "<group>"; };
 		A09401D115266AAB003B9698 /* ldap2csv */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ldap2csv; sourceTree = BUILT_PRODUCTS_DIR; };
 		A09401DB15266AEE003B9698 /* libldap.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libldap.dylib; path = usr/lib/libldap.dylib; sourceTree = SDKROOT; };
 		A09401DC15266AEE003B9698 /* libldap.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libldap.dylib; path = usr/local/lib/libldap.dylib; sourceTree = SDKROOT; };
@@ -269,7 +269,7 @@
 			isa = PBXGroup;
 			children = (
 				A09401C215266907003B9698 /* ldap2csv.c */,
-				A09401C315266907003B9698 /* ldapconfprint.c */,
+				A09401C315266907003B9698 /* ldapdebug.c */,
 				A0811236234EA84B000FD24D /* ldaptree.c */,
 			);
 			path = src;
@@ -320,7 +320,7 @@
 			children = (
 				A09401D115266AAB003B9698 /* ldap2csv */,
 				A027AA591C31C94900EA81CB /* libldaputils.a */,
-				A027AA791C31FE9A00EA81CB /* ldapconfprint */,
+				A027AA791C31FE9A00EA81CB /* ldapparams */,
 				A081122D234EA826000FD24D /* ldaptree */,
 			);
 			name = Products;
@@ -362,9 +362,9 @@
 			productReference = A027AA591C31C94900EA81CB /* libldaputils.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		A027AA781C31FE9A00EA81CB /* ldapconfprint */ = {
+		A027AA781C31FE9A00EA81CB /* ldapparams */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A027AA7D1C31FE9A00EA81CB /* Build configuration list for PBXNativeTarget "ldapconfprint" */;
+			buildConfigurationList = A027AA7D1C31FE9A00EA81CB /* Build configuration list for PBXNativeTarget "ldapparams" */;
 			buildPhases = (
 				A027AA751C31FE9A00EA81CB /* Sources */,
 				A027AA761C31FE9A00EA81CB /* Frameworks */,
@@ -375,9 +375,9 @@
 			dependencies = (
 				A027AA841C31FF0100EA81CB /* PBXTargetDependency */,
 			);
-			name = ldapconfprint;
+			name = ldapparams;
 			productName = ldapconfprint;
-			productReference = A027AA791C31FE9A00EA81CB /* ldapconfprint */;
+			productReference = A027AA791C31FE9A00EA81CB /* ldapparams */;
 			productType = "com.apple.product-type.tool";
 		};
 		A081122C234EA826000FD24D /* ldaptree */ = {
@@ -453,7 +453,7 @@
 			projectRoot = "";
 			targets = (
 				A09401D015266AAB003B9698 /* ldap2csv */,
-				A027AA781C31FE9A00EA81CB /* ldapconfprint */,
+				A027AA781C31FE9A00EA81CB /* ldapparams */,
 				A081122C234EA826000FD24D /* ldaptree */,
 				A027AA3D1C31AC1600EA81CB /* LDAP Utils: ALL */,
 				A027AA581C31C94900EA81CB /* ldaputils */,
@@ -479,7 +479,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A027AA801C31FEAB00EA81CB /* ldapconfprint.c in Sources */,
+				A027AA801C31FEAB00EA81CB /* ldapdebug.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -514,7 +514,7 @@
 		};
 		A027AA821C31FEBA00EA81CB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A027AA781C31FE9A00EA81CB /* ldapconfprint */;
+			target = A027AA781C31FE9A00EA81CB /* ldapparams */;
 			targetProxy = A027AA811C31FEBA00EA81CB /* PBXContainerItemProxy */;
 		};
 		A027AA841C31FF0100EA81CB /* PBXTargetDependency */ = {
@@ -869,7 +869,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A027AA7D1C31FE9A00EA81CB /* Build configuration list for PBXNativeTarget "ldapconfprint" */ = {
+		A027AA7D1C31FE9A00EA81CB /* Build configuration list for PBXNativeTarget "ldapparams" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A027AA7E1C31FE9A00EA81CB /* Debug */,
