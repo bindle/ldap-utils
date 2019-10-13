@@ -229,7 +229,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    int        err;
    int        option_index;
    MyConfig * cnf;
-   
+
    static char   short_options[] = MY_SHORT_OPTIONS;
    static struct option long_options[] =
    {

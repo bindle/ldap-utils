@@ -114,7 +114,7 @@ int ldaputils_getopt(LDAPUtils * lud, int c, const char * arg)
       case -1:       /* no more arguments */
       case 0:        /* long options toggles */
       return(c);
-         
+
       // Common Options
       case '9':
       ldaputils_usage();

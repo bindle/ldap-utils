@@ -218,7 +218,7 @@ int main(int argc, char * argv[])
       my_unbind(cnf);
       return(1);
    };
-   
+
    ldap_msgfree(res);
    my_unbind(cnf);
 

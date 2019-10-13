@@ -161,7 +161,7 @@ int main(int argc, char * argv[])
 /// @param[in] argc   number of arguments
 /// @param[in] argv   array of arguments
 int my_config(int argc, char * argv[], LDAPUtils ** ludp)
-{ 
+{
    int               c;
    int               err;
    int               option_index;
@@ -174,7 +174,7 @@ int my_config(int argc, char * argv[], LDAPUtils ** ludp)
       {"version",       no_argument, 0, 'V'},
       {NULL,            0,           0, 0  }
    };
-   
+
    option_index = 0;
    *ludp        = NULL;
 

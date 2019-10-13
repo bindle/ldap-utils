@@ -9,7 +9,7 @@ Copyright (C) 2012 Bindle Binaries <syzdek@bindlebinaries.com>.
    - ldapconfprint: refactoring source (syzdek)
    - ldaptree: adding utility (syzdek)
 
-0.2   
+0.2
 ---
    - Recreating Xcode project file. (syzdek)
    - Removing files installed by autotools from git repo. (syzdek)

@@ -117,7 +117,7 @@ char * ldaputils_getpass(const char * prompt)
       if (pos < (sizeof(buff)-1))
          buff[pos++] = (char)c;
    buff[pos] = '\0';
-   
+
    // restores previous terminal
    fprintf(stderr, "\n");
 #ifdef HAVE_TERMIOS_H
@@ -221,7 +221,7 @@ int ldaputils_passfile(LDAPUtils * lud, const char * file, char ** valp, size_t 
    *valp = buff;
    if ((lenp))
       *lenp = (size_t)sb.st_size;
-   
+
    return(LDAP_SUCCESS);
 }
 

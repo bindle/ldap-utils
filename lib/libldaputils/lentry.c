@@ -216,7 +216,7 @@ LDAPUtilsAttribute * ldaputils_attribute_initialize(const char * name, struct be
 int ldaputils_berval_cmp(const struct berval ** ptr1, const struct berval ** ptr2)
 {
    int rc;
-   
+
    // quick check of the arguments
    if ( (!(ptr1)) && (!(ptr2)) )
       return(0);
@@ -224,7 +224,7 @@ int ldaputils_berval_cmp(const struct berval ** ptr1, const struct berval ** ptr
       return(-1);
    if (!(ptr2))
       return(1);
-   
+
    // quick check of the pointers
    if ( (!(*ptr1)) && (!(*ptr2)) )
       return(0);
@@ -232,21 +232,21 @@ int ldaputils_berval_cmp(const struct berval ** ptr1, const struct berval ** ptr
       return(-1);
    if (!(*ptr2))
       return(1);
-   
+
    // case insensitive compare
    if ((rc = strcasecmp((*ptr1)->bv_val, (*ptr2)->bv_val)))
       return(rc);
-   
+
    // case sensitive compare
    if ((rc = strcmp((*ptr1)->bv_val, (*ptr2)->bv_val)))
       return(rc);
-   
+
    // fall back to comparing memory location
    if ( *ptr1 < *ptr2 )
       return(-1);
    if ( *ptr1 > *ptr2 )
       return(1);
-   
+
    // pointers must point to the same object
    return(0);
 }
@@ -291,7 +291,7 @@ void ldaputils_entries_free(LDAPUtilsEntries * entries)
    };
 
    free(entries);
-   
+
    return;
 }
 
@@ -673,7 +673,7 @@ LDAPUtilsEntries * ldaputils_get_entries(LDAP * ld, LDAPMessage * res,
 
       if ((err = ldaputils_entries_add_entry(entries, entry)) != LDAP_SUCCESS)
          ldaputils_entry_free(entry);
-      
+
       msg = ldap_next_entry(ld, msg);
    };
 
