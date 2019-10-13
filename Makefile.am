@@ -73,7 +73,7 @@ EXTRA_LTLIBRARIES			=
 man_MANS				=
 noinst_HEADERS				= include/ldaputils.h \
 					  include/ldaputils_cdefs.h
-noinst_PROGRAMS				= src/ldapdebug
+noinst_PROGRAMS				=
 noinst_LIBRARIES			= lib/libldaputils.a
 
 
@@ -150,6 +150,9 @@ src_ldaptree_SOURCES			= \
 
 
 # macros for ldapdebug
+if LDAPUTILS_LDAPDEBUG
+bin_PROGRAMS                            += src/ldapdebug
+endif
 src_ldapdebug_DEPENDENCIES		= Makefile lib/libldaputils.a
 src_ldapdebug_CPPFLAGS			= -DPROGRAM_NAME="\"ldapdebug\"" $(AM_CPPFLAGS)
 src_ldapdebug_CFLAGS			= $(AM_CFLAGS)
