@@ -32,5 +32,25 @@
 #   acinclude.m4 - custom m4 macros used by configure.ac
 #
 
+# AC_LDAP_UTILS_LDAP2CSV
+# ______________________________________________________________________________
+AC_DEFUN([AC_LDAP_UTILS_LDAP2CSV],[dnl
+
+   enableval=""
+   AC_ARG_ENABLE(
+      ldap2csv,
+      [AS_HELP_STRING([--disable-ldap2csv], [disable building ldap2csv])],
+      [ ELDAP2CSV=$enableval ],
+      [ ELDAP2CSV=$enableval ]
+   )
+
+   if test "x${ELDAP2CSV}" != "xno";then
+      ELDAP2CSV=yes
+   fi
+   LDAPUTILS_LDAP2CSV=${ELDAP2CSV}
+
+   AM_CONDITIONAL([LDAPUTILS_LDAP2CSV], [test "x$LDAPUTILS_LDAP2CSV" = "xyes"])
+])dnl
+
 
 # end of M4 file

@@ -165,6 +165,7 @@ AC_BINDLE_GIT_PACKAGE_VERSION([contrib/bindletools/build-aux/git-package-version
 
 # custom configure options
 AC_BINDLE_ENABLE_WARNINGS
+AC_LDAP_UTILS_LDAP2CSV
 
 # Creates outputs
 AC_CONFIG_FILES([Makefile])
@@ -176,6 +177,8 @@ AC_MSG_NOTICE([   LDAP Utilities ($PACKAGE_VERSION)])
 AC_MSG_NOTICE([ ])
 AC_MSG_NOTICE([   Use Warnings                  $USE_WARNINGS])
 AC_MSG_NOTICE([   Use Strict Warnings           $USE_STRICTWARNINGS])
+AC_MSG_NOTICE([ ])
+AC_MSG_NOTICE([   Build ldap2csv                $LDAPUTILS_LDAP2CSV])
 AC_MSG_NOTICE([ ])
 AC_MSG_NOTICE([   Please send suggestions to:   $PACKAGE_BUGREPORT])
 AC_MSG_NOTICE([ ])

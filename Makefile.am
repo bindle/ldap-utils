@@ -63,8 +63,7 @@ LDADD					= $(lib_LTLIBRARIES) \
 
 
 # automake targets
-bin_PROGRAMS				= src/ldap2csv \
-					  src/ldaptree
+bin_PROGRAMS				= src/ldaptree
 check_PROGRAMS				=
 doc_DATA				=
 EXTRA_PROGRAMS				=
@@ -125,6 +124,9 @@ lib_libldaputils_a_SOURCES		= $(noinst_HEADERS) \
 
 
 # macros for ldap2csv
+if LDAPUTILS_LDAP2CSV
+bin_PROGRAMS                            += src/ldap2csv
+endif
 src_ldap2csv_DEPENDENCIES		= Makefile lib/libldaputils.a
 src_ldap2csv_CPPFLAGS			= -DPROGRAM_NAME="\"ldap2csv\"" $(AM_CPPFLAGS)
 src_ldap2csv_CFLAGS			= $(AM_CFLAGS)
