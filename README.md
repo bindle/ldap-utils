@@ -55,7 +55,7 @@ Tested Platforms
 Maintainers
 ===========
 
-   * David M. Syzdek, Bindle Binaries, <syzdek@bindlebinaries.com>
+   * David M. Syzdek, <david@syzdek.net>
 
 
 Source Code

@@ -1,6 +1,6 @@
 /*
  *  LDAP Utilities
- *  Copyright (C) 2019 Bindle Binaries <syzdek@bindlebinaries.com>.
+ *  Copyright (C) 2019 David M. Syzdek <david@syzdek.net>.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are

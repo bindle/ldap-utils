@@ -1,8 +1,6 @@
 #
 #   LDAP Utilities
-#   Copyright (C) 2015, 2019 Bindle Binaries <syzdek@bindlebinaries.com>.
-#
-#   @BINDLE_BINARIES_BSD_LICENSE_START@
+#   Copyright (C) 2015, 2019 David M. Syzdek <david@syzdek.net>.
 #
 #   Redistribution and use in source and binary forms, with or without
 #   modification, are permitted provided that the following conditions are
@@ -31,8 +29,6 @@
 #   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 #   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
-#   @BINDLE_BINARIES_BSD_LICENSE_END@
-#
 #   configure.ac - automate compiling on a unix platform
 #
 
@@ -44,9 +40,9 @@
 
 AC_PREREQ(2.65)
 
-AC_COPYRIGHT([Copyright (C) 2015, 2019 Bindle Binaries <syzdek@bindlebinaries.com>.])
+AC_COPYRIGHT([Copyright (C) 2015, 2019 David M. Syzdek <david@syzdek.net>.])
 AC_REVISION(0.1)
-AC_INIT([LDAP Utilities],[0.1.2],[syzdek@bindlebinaries.com],[ldap-utils])
+AC_INIT([LDAP Utilities],[0.1.2],[david@syzdek.net],[ldap-utils])
 
 AC_SUBST([RELEASE_MONTH],["April 2015"])
 
