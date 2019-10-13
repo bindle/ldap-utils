@@ -1,5 +1,7 @@
 
 LDAP Utilities
+==============
+
 Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>
 
 0.3
@@ -7,7 +9,9 @@ Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>
    - copyright: updating copyright with legal name of sole proprietor (syzdek)
    - libldaputils: refactoring source (syzdek)
    - libldaputils: adding TLS support (syzdek)
-   - ldapconfprint: refactoring source (syzdek)
+   - ldapdebug: refactoring source (syzdek)
+   - ldapdebug: renaming ldapconfprint to ldapdebug (syzdek)
+   - ldapdebug: adding ability to install via make (syzdek)
    - ldaptree: adding utility (syzdek)
 
 0.2
