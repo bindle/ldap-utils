@@ -721,9 +721,13 @@ void ldaputils_tree_print_recursive(LDAPUtilsTree * tree, size_t level, LDAPUtil
                // prints attribute and value
                if (recur->opts->style == LDAPUTILS_TREE_BULLETS)
                {
-                  printf("  - %s: %s\n", entry->attrs[attr]->name, entry->attrs[attr]->vals[val]->bv_val);
+                  printf("  - %s: ", entry->attrs[attr]->name);
+                  fwrite(entry->attrs[attr]->vals[val]->bv_val, 1, entry->attrs[attr]->vals[val]->bv_len, stdout);
+                  printf("\n");
                } else {
-                  printf("  %c  %s: %s\n", (have_children) ? '|' : ' ', entry->attrs[attr]->name, entry->attrs[attr]->vals[val]->bv_val);
+                  printf("  %c  %s: ", (have_children) ? '|' : ' ', entry->attrs[attr]->name);
+                  fwrite(entry->attrs[attr]->vals[val]->bv_val, 1, entry->attrs[attr]->vals[val]->bv_len, stdout);
+                  printf("\n");
                };
             };
          };
