@@ -4,6 +4,12 @@ LDAP Utilities
 
 Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>
 
+0.4
+---
+  - libldaputils: fixing copyright notice in `ldaputils_version()` (syzdek)
+  - ldaptree: fixing filter handling when specifing attributes (syzdek)
+  - ldaptree: adding comments above graph (syzdek)
+
 0.3
 ---
    Released 2019/10/13
