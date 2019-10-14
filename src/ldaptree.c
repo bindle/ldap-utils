@@ -170,6 +170,8 @@ void ldaputils_usage(void)
 int main(int argc, char * argv[])
 {
    int                    err;
+   int                    i;
+   char                 * str;
    MyConfig             * cnf;
    LDAPMessage          * res;
    LDAPUtilsTree        * tree;
@@ -207,6 +209,30 @@ int main(int argc, char * argv[])
       return(1);
    };
    ldap_msgfree(res);
+
+   // print header
+   if (cnf->lud->silent < 2)
+   {
+      printf("#\n");
+      ldap_get_option(cnf->lud->ld, LDAP_OPT_DEFBASE, &str);
+      switch(cnf->lud->scope)
+      {
+         case LDAP_SCOPE_ONE:      printf("# base: %s with scope one\n", str); break;
+         case LDAP_SCOPE_SUBTREE:  printf("# base: %s with scope subtree\n", str); break;
+         case LDAP_SCOPE_BASE:     printf("# base: %s with scope base\n", str); break;
+         case LDAP_SCOPE_CHILDREN: printf("# base: %s with scope children\n", str); break;
+         default:                  printf("# base: %s\n", str); break;
+      };
+      printf("# filter: %s\n", cnf->lud->filter);
+      if ( ((cnf->lud->attrs)) && ((cnf->copy_entry)) )
+      {
+         printf("# requesting:");
+         for(i = 0; ((cnf->lud->attrs[i])); i++)
+            printf(" %s", cnf->lud->attrs[i]);
+         printf("\n");
+      };
+      printf("#\n");
+   };
 
    // displays entries
    ldaputils_tree_print(tree, &cnf->treeopts);
