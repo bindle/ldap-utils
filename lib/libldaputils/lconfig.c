@@ -229,6 +229,7 @@ int ldaputils_getopt(LDAPUtils * lud, int c, const char * arg)
       return(0);
 
       case 'L': // allows for compatibility with ldapsearch
+      lud->silent++;
       return(0);
 
       case 's':
@@ -588,6 +589,7 @@ void ldaputils_usage_search(const char * short_options)
       {
          case 'b': printf("  -b basedn                 base dn for search\n"); break;
          case 'l': printf("  -l limit                  time limit (in seconds) for search\n"); break;
+         case 'L': printf("  -LL                       disables comments\n"); break;
          case 's': printf("  -s scope                  one of base, one, or sub (search scope)\n"); break;
          case 'S': printf("  -S attr                   sort results by attribute `attr'\n"); break;
          case 'z': printf("  -z limit                  size limit for search\n"); break;

@@ -80,8 +80,8 @@
 #define LDAPUTILS_OPT_LEN                  128
 
 
-#define LDAPUTILS_OPTIONS_COMMON           "cd:D:hH:Lnp:P:uvVw:Wxy:Y:Z"
-#define LDAPUTILS_OPTIONS_SEARCH           "b:l:s:S:z:"
+#define LDAPUTILS_OPTIONS_COMMON           "cd:D:hH:np:P:uvVw:Wxy:Y:Z"
+#define LDAPUTILS_OPTIONS_SEARCH           "b:l:Ls:S:z:"
 
 
 #define LDAPUTILS_TREE_HIERARCHY           0x0000
@@ -124,6 +124,7 @@ struct ldaputils_config_struct
    int               dryrun;       // -n dry run mode
    int               scope;        // -s LDAP search scope
    int               tls_req;      // -Z use TLS
+   int               silent;       // -L
    int               verbose;      // -v verbose mode
    int               want_pass;    // -W prompt for passowrd
    struct berval     passwd;       //    stores password from -y, -w, and -W
