@@ -153,12 +153,12 @@ void ldaputils_usage(void)
    ldaputils_usage_search(MY_SHORT_OPTIONS);
    ldaputils_usage_common(MY_SHORT_OPTIONS);
    printf("Display Options:\n");
-   printf("  --noleaf          do not print leaf nodes\n");
-   printf("  --max-depth=num   maximum depth to display\n");
-   printf("  --max-leafs=num   maximum leafs on each node to display\n");
-   printf("  --max-nodes=num   maximum branches and leafs on each node to display\n");
-   printf("  --style=format    output format of bullets or hierarchy (default: hierarchy)\n");
-   printf("  --compact         remove white space used for styling\n");
+   printf("  --noleaf                  do not print leaf nodes\n");
+   printf("  --max-depth=num           maximum depth to display\n");
+   printf("  --max-leafs=num           maximum leafs on each node to display\n");
+   printf("  --max-nodes=num           maximum branches and leafs on each node to display\n");
+   printf("  --style=format            output format of bullets or hierarchy (default: hierarchy)\n");
+   printf("  --compact                 remove white space used for styling\n");
    printf("\nReport bugs to <%s>.\n", PACKAGE_BUGREPORT);
    return;
 }

@@ -156,11 +156,11 @@ void ldaputils_usage(void)
    ldaputils_usage_search(MY_SHORT_OPTIONS);
    ldaputils_usage_common(MY_SHORT_OPTIONS);
    printf("Special Attributes:\n");
-   printf("  dn                entry's DN\n");
-   printf("  rdn               entry's relative DN\n");
-   printf("  ufn               entry's User Friendly Name\n");
-   printf("  adc               entry's Active Directory canonical name\n");
-   printf("  dce               entry's DN in DCE-style\n");
+   printf("  dn                        entry's DN\n");
+   printf("  rdn                       entry's relative DN\n");
+   printf("  ufn                       entry's User Friendly Name\n");
+   printf("  adc                       entry's Active Directory canonical name\n");
+   printf("  dce                       entry's DN in DCE-style\n");
    printf("\nReport bugs to <%s>.\n", PACKAGE_BUGREPORT);
    return;
 }

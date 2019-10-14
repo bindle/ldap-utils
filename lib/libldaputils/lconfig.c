@@ -550,21 +550,21 @@ void ldaputils_usage_common(const char * short_options)
    {
       switch(short_options[pos])
       {
-         case 'c': printf("  -c                continuous operation mode (do not stop on errors)\n"); break;
-         case 'd': printf("  -d level          set LDAP debug level to `level'\n"); break;
-         case 'D': printf("  -D binddn         bind DN\n"); break;
-         case 'h': printf("  -h, --help        print this help and exit\n"); break;
-         case 'H': printf("  -H URI            LDAP Uniform Resource Identifier(s)\n"); break;
-         case 'n': printf("  -n                show what would be done but don't actually do it\n"); break;
-         //case 'p': printf("  -p port           port on LDAP server\n"); break;
-         case 'v': printf("  -v, --verbose     run in verbose mode\n"); break;
-         case 'V': printf("  -V, --version     print version number and exit\n"); break;
-         case 'w': printf("  -w, passwd        bind password (for simple authentication)\n"); break;
-         case 'W': printf("  -W                prompt for bind password\n"); break;
-         case 'x': printf("  -x                simple authentication\n"); break;
-         case 'y': printf("  -y file           read password from file\n"); break;
-         case 'Y': printf("  -Y mech           SASL mechanism\n"); break;
-         case 'Z': printf("  -Z[Z]             issue StartTLS, multiple options require TLS to be successful\n"); break;
+         case 'c': printf("  -c                        continuous operation mode (do not stop on errors)\n"); break;
+         case 'd': printf("  -d level                  set LDAP debug level to `level'\n"); break;
+         case 'D': printf("  -D binddn                 bind DN\n"); break;
+         case 'h': printf("  -h, --help                print this help and exit\n"); break;
+         case 'H': printf("  -H URI                    LDAP Uniform Resource Identifier(s)\n"); break;
+         case 'n': printf("  -n                        show what would be done but don't actually do it\n"); break;
+         //case 'p': printf("  -p port                  port on LDAP server\n"); break;
+         case 'v': printf("  -v, --verbose             run in verbose mode\n"); break;
+         case 'V': printf("  -V, --version             print version number and exit\n"); break;
+         case 'w': printf("  -w, passwd                bind password (for simple authentication)\n"); break;
+         case 'W': printf("  -W                        prompt for bind password\n"); break;
+         case 'x': printf("  -x                        simple authentication\n"); break;
+         case 'y': printf("  -y file                   read password from file\n"); break;
+         case 'Y': printf("  -Y mech                   SASL mechanism\n"); break;
+         case 'Z': printf("  -Z[Z]                     issue StartTLS, multiple options require TLS\n"); break;
          default: break;
       };
    };
@@ -586,11 +586,11 @@ void ldaputils_usage_search(const char * short_options)
    {
       switch(short_options[pos])
       {
-         case 'b': printf("  -b basedn         base dn for search\n"); break;
-         case 'l': printf("  -l limit          time limit (in seconds) for search\n"); break;
-         case 's': printf("  -s scope          one of base, one, or sub (search scope)\n"); break;
-         case 'S': printf("  -S attr           sort results by attribute `attr'\n"); break;
-         case 'z': printf("  -z limit          size limit for search\n"); break;
+         case 'b': printf("  -b basedn                 base dn for search\n"); break;
+         case 'l': printf("  -l limit                  time limit (in seconds) for search\n"); break;
+         case 's': printf("  -s scope                  one of base, one, or sub (search scope)\n"); break;
+         case 'S': printf("  -S attr                   sort results by attribute `attr'\n"); break;
+         case 'z': printf("  -z limit                  size limit for search\n"); break;
          default: break;
       };
    };
