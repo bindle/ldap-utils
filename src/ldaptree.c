@@ -343,7 +343,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
 
    // saves filter
    cnf->lud->filter = "(objectclass=*)";
-   if (argc == (optind+1))
+   if (argc > (optind))
       cnf->lud->filter = argv[optind];
 
    // configures LDAP attributes to return in results
