@@ -46,6 +46,10 @@ AC_INIT([LDAP Utilities],[0.3],[david@syzdek.net],[ldap-utils])
 
 AC_SUBST([RELEASE_MONTH],["October 2019"])
 
+PACKAGE_COPYRIGHT="Copyright (C) 2008, 2009, 2015, 2019 David M. Syzdek <david@syzdek.net>."
+AC_DEFINE_UNQUOTED(PACKAGE_COPYRIGHT, ["${PACKAGE_COPYRIGHT}"], [Copyright notice.])
+AC_SUBST([PACKAGE_COPYRIGHT], [${PACKAGE_COPYRIGHT}])
+
 
 # directory locations
 AC_CONFIG_AUX_DIR([build-aux])

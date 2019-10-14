@@ -601,16 +601,8 @@ void ldaputils_usage_search(const char * short_options)
 /// displays usage
 void ldaputils_version(const char * prog_name)
 {
-   // TRANSLATORS: The following strings provide version and copyright
-   // information if the program is passed --version on the command line.
-   // The three strings referenced are: PROGRAM_NAME, PACKAGE_NAME,
-   // PACKAGE_VERSION.
-   printf("%s (%s) %s\n"
-         "Copyright (C) 2008 David M. Syzdek.\n"
-         "This is free software; see the source for copying conditions.  There is NO\n"
-         "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
-      , prog_name, PACKAGE_NAME, PACKAGE_VERSION
-   );
+   printf("%s (%s) %s\n", prog_name, PACKAGE_NAME, PACKAGE_VERSION);
+   printf("%s\n", PACKAGE_COPYRIGHT);
    return;
 }
 
