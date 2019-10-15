@@ -262,13 +262,4 @@ Creating Source Distribution Archives:
       $ make distcheck
       $ make dist-bzip2
 
-Creating Windows Binaries from OS X:
-
-      $ export PATH=/usr/local/i386-mingw32/bin:${PATH}
-      $ ./configure --host=i386-mingw32 --prefix=/tmp/ldap-utils \
-        --enable-strictwarnings --enable-dependency-tracking
-      $ make
-      $ rm -fR /tmp/ldap-utils
-      $ make install-strip
-
 
