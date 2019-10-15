@@ -261,5 +261,6 @@ Creating Source Distribution Archives:
       $ make update
       $ make distcheck
       $ make dist-bzip2
+      $ make dist-xz
 
 
