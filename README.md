@@ -81,13 +81,72 @@ value will be replaced with a single quote ('\'') chracter. Each pipe ('|')
 character found in a returned value will be replaced with a colon (':')
 character.
 
+ldap2csv supports psuedo attributes which return the DN of returned entries in
+various formats.  The following are the supported psuedo attributes and examples
+of their format:
+
+   * dn: distinguished name of entry
+     - `uid=dnullman,ou=People,dc=example,dc=net,o=internet`
+     - `uid=jdough,ou=People,dc=example,dc=net,o=internet`
+     - `uid=syzdek,ou=People,dc=syzdek,dc=net,o=internet`
+     - `uid=administrator,ou=People,dc=foo,dc=org`
+  
+   * dce: DCE-style DN
+     - `/o=internet/dc=net/dc=example/ou=People/uid=dnullman`
+     - `/o=internet/dc=net/dc=example/ou=People/uid=jdough`
+     - `/o=internet/dc=net/dc=syzdek/ou=People/uid=syzdek`
+     - `/dc=org/dc=foo/ou=People/uid=administrator`
+
+   * adc: Active Directory canonical name
+     - `internet/net/example/People/dnullman/`
+     - `internet/example.net/People/jdough`
+     - `internet/syzdek.net/People/syzdek`
+     - `foo.org/People/administrator`
+
+   * rdn: relative DN
+     - `uid=dnullman`
+     - `uid=jdough`
+     - `uid=syzdek`
+     - `uid=administrator`
+
+   * ufn: User Friendly Name of DN
+     - `dnullman, People, syzdek, net, internet`
+     - `jdough, People, example, net, internet`
+     - `syzdek, People, example, net, internet`
+     - `administrator, People, foo.org`
+
 Example usage:
 
-      $ ldap2csv -S sn '(uid=*)' uid givenname sn mail
-      "dnullman","Devian","Nullman","noreply@example.com"
-      "jdough","John","Dough","doughboy42@example.com"
-      "syzdek","David M.","Syzdek","david@syzdek.net"
+      $ ldap2csv -LLL -x -b o=internet -S sn '(uid=*)' uid givenname sn mail title rdn
+      "uid","givenname","sn","mail","title","rdn"
+      "dnullman","Devian","Nullman","noreply@example.com","Linux Device : /dev/null","uid=dnullman"
+      "jdough","John","Dough","doughboy42@example.com","'Dough' Master","uid=jdough"
+      "syzdek","David M.","Syzdek","david@syzdek.net","Slackware Linux Administrator","uid=syzdek"
       $
+
+Example of the same search using `ldapsearch`:
+
+      $ ldapsearch -LLL -x -b o=internet -S sn '(uid=*)' uid givenname sn mail title 
+      dn: uid=dnullman,ou=People,dc=example,dc=net,o=internet
+      uid: dnullman
+      givenname: Devian
+      sn: Nullman
+      mail: noreply@example.com
+      title: Linux Device | /dev/null
+       
+      dn: uid=jdough,ou=People,dc=example,dc=net,o=internet
+      uid: jdough
+      givenname: John
+      sn: Dough
+      mail: doughboy42@example.com
+      title: "Dough" Master
+      
+      dn: uid=syzdek,ou=People,dc=syzdek,dc=net,o=internet
+      uid: syzdek
+      givenname: David M.
+      sn: Syzdek
+      mail: david@syzdek.net
+      title: Slackware Linux Administrator
 
 
 ldapdebug
@@ -115,7 +174,11 @@ options to customize the output of either the ASCII graph or the bulletted list.
 
 ASCII graph eexample with compact output and no leaf nodes:
 
-      $ ldaptree --noleafs --compact
+      $ ldaptree -x -b o=internet --noleafs --compact
+      #
+      # base: o=internet with scope subtree
+      # filter: (objectclass=*)
+      #
       +--dc=net, o=internet
           +--dc=example
           |  +--ou=Groups
@@ -126,7 +189,7 @@ ASCII graph eexample with compact output and no leaf nodes:
 
 ASCII graph example with attribute values:
 
-      $ ldaptree '(objectclass=*)' givenname sn mail member description
+      $ ldaptree -LLL -x -b o=internet '(objectclass=*)' givenname sn mail member description
       +--dc=net, o=internet
           +--dc=example
           |  +--ou=Groups
@@ -160,7 +223,7 @@ ASCII graph example with attribute values:
 
 Bulleted list example:
 
-      $ ldaptree --style=bullets --compact '(objectclass=*)' givenname sn \
+      $ ldaptree -x -b o=internet --style=bullets --compact '(objectclass=*)' givenname sn \
       > mail member description
       * dc=net, o=internet
         * dc=example
