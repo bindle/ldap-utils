@@ -55,6 +55,18 @@
 #include "lentry.h"
 
 
+///////////////////
+//               //
+//  Definitions  //
+//               //
+///////////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Definitions
+#endif
+
+#define LDAPUTILS_TREE_SPACE 0
+#define LDAPUTILS_TREE_DATA 1
+
 /////////////////
 //             //
 //  Datatypes  //
@@ -78,7 +90,7 @@ typedef struct ldap_utils_tree_recur LDAPUtilsTreeRecursion;
 struct ldap_utils_tree_recur
 {
    char                * map;
-   size_t                prevempty;
+   size_t                lastline;   // last line contained data
    LDAPUtilsTreeOpts   * opts;
 };
 
@@ -588,6 +600,7 @@ void ldaputils_tree_print(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts)
          printf("* %s\n", dn);
       else
          printf("+--%s\n", dn);
+      recur.lastline = LDAPUTILS_TREE_DATA;
       ldaputils_tree_print_entry(child, 0, &recur, 1);
       ldaputils_tree_print_recursive(child, 0, &recur);
 
@@ -653,6 +666,7 @@ void ldaputils_tree_print_entry(LDAPUtilsTree * tree, size_t level, LDAPUtilsTre
          };
       };
    };
+   recur->lastline = LDAPUTILS_TREE_DATA;
 
    // prints empty line to attributes more readable in hierarchy in style
    if (recur->opts->style == LDAPUTILS_TREE_BULLETS)
@@ -661,6 +675,7 @@ void ldaputils_tree_print_entry(LDAPUtilsTree * tree, size_t level, LDAPUtilsTre
       {
          ldaputils_tree_print_indent(tree, level, recur);
          printf("\n");
+         recur->lastline = LDAPUTILS_TREE_SPACE;
       };
    } else if ((entry->attrs_count > 0) && (!(recur->opts->compact)))
    {
@@ -672,6 +687,7 @@ void ldaputils_tree_print_entry(LDAPUtilsTree * tree, size_t level, LDAPUtilsTre
          else
             printf("\n");
       };
+      recur->lastline = LDAPUTILS_TREE_SPACE;
    };
 
    return;
@@ -765,6 +781,7 @@ void ldaputils_tree_print_recursive(LDAPUtilsTree * tree, size_t level, LDAPUtil
          recur->map[level] = ' ';
          printf("  \\--%s\n", tree->children[x]->rdn);
       };
+      recur->lastline = LDAPUTILS_TREE_DATA;
 
       // prints requested attributes
       ldaputils_tree_print_entry(tree->children[x], level, recur, stop);
@@ -779,13 +796,10 @@ void ldaputils_tree_print_recursive(LDAPUtilsTree * tree, size_t level, LDAPUtil
       return;
 
    if (children_count == 0)
-   {
-      recur->prevempty = 0;
       return;
-   };
-   if ((recur->prevempty))
+   if (recur->lastline == LDAPUTILS_TREE_SPACE)
       return;
-   recur->prevempty = 1;
+   recur->lastline = LDAPUTILS_TREE_SPACE;
    ldaputils_tree_print_indent(tree, level, recur);
    printf("\n");
 
