@@ -41,6 +41,7 @@ Contents
    * Utilities
      - ldap2csv
      - ldapdebug
+     - ldapdn2str
      - ldaptree
    * Source Code
    * Package Maintence Notes
@@ -160,6 +161,55 @@ available from `ldap_get_option()`.  This utility is useful for debugging
 
 ldapdebug is not installed by default.  To enable building and installing
 ldapdebug, the flag `--enable-ldapdebug` must be passed to configure.
+
+
+ldapdn2str
+----------
+
+ldapdn2str is a shell-accessible interface to the ldap_dn2str() interface which
+outputs user supplied 
+
+ldapdn2str parses LDAP distinguished names and prints the parsed DN using the
+requested format.  The OpenLDAP function ldap_dn2str() is used to perform
+the formatting the DN presentation for `dn`, `dce`, `adc`, and `ufn`.
+
+The following are example of the output presentations available:
+
+   * dn: distinguished name
+     - `uid=dnullman,ou=People,dc=example,dc=net,o=internet`
+     - `uid=jdough,ou=People,dc=example,dc=net,o=internet`
+     - `uid=syzdek,ou=People,dc=syzdek,dc=net,o=internet`
+     - `uid=administrator,ou=People,dc=foo,dc=org`
+  
+   * dce: DCE-style DN
+     - `/o=internet/dc=net/dc=example/ou=People/uid=dnullman`
+     - `/o=internet/dc=net/dc=example/ou=People/uid=jdough`
+     - `/o=internet/dc=net/dc=syzdek/ou=People/uid=syzdek`
+     - `/dc=org/dc=foo/ou=People/uid=administrator`
+
+   * adc: Active Directory canonical name
+     - `internet/net/example/People/dnullman/`
+     - `internet/example.net/People/jdough`
+     - `internet/syzdek.net/People/syzdek`
+     - `foo.org/People/administrator`
+
+   * rdn: relative DN
+     - `uid=dnullman`
+     - `uid=jdough`
+     - `uid=syzdek`
+     - `uid=administrator`
+
+   * ufn: User Friendly Name of DN
+     - `dnullman, People, syzdek, net, internet`
+     - `jdough, People, example, net, internet`
+     - `syzdek, People, example, net, internet`
+     - `administrator, People, foo.org`
+
+   * idn: inverted distinguished name
+     - o=internet,dc=net,dc=example,ou=People,uid=dnullman
+     - o=internet,dc=net,dc=example,ou=People,uid=jdough
+     - o=internet,dc=net,dc=syzdek,ou=People,uid=syzdek
+     - dc=org,dc=foo,ou=People,uid=administrator
 
 
 ldaptree

@@ -141,6 +141,9 @@ AC_CHECK_FUNCS([strtol],         [], [AC_MSG_ERROR([missing required functions])
 
 # check for required libraries
 AC_SEARCH_LIBS([getopt_long],          c gnugetopt,,AC_MSG_ERROR([missing required function]))
+AC_SEARCH_LIBS([ldap_dn2str],          ldap,,AC_MSG_ERROR([missing required function]), [-llber])
+AC_SEARCH_LIBS([ldap_dnfree],          ldap,,AC_MSG_ERROR([missing required function]), [-llber])
+AC_SEARCH_LIBS([ldap_explode_dn],      ldap,,AC_MSG_ERROR([missing required function]), [-llber])
 AC_SEARCH_LIBS([ldap_first_entry],     ldap,,AC_MSG_ERROR([missing required function]), [-llber])
 AC_SEARCH_LIBS([ldap_free_urldesc],    ldap,,AC_MSG_ERROR([missing required function]), [-llber])
 AC_SEARCH_LIBS([ldap_get_dn],          ldap,,AC_MSG_ERROR([missing required function]), [-llber])
@@ -149,8 +152,10 @@ AC_SEARCH_LIBS([ldap_result],          ldap,,AC_MSG_ERROR([missing required func
 AC_SEARCH_LIBS([ldap_sasl_bind_s],     ldap,,AC_MSG_ERROR([missing required function]), [-llber])
 AC_SEARCH_LIBS([ldap_search_ext],      ldap,,AC_MSG_ERROR([missing required function]), [-llber])
 AC_SEARCH_LIBS([ldap_set_option],      ldap,,AC_MSG_ERROR([missing required function]), [-llber])
+AC_SEARCH_LIBS([ldap_str2dn],          ldap,,AC_MSG_ERROR([missing required function]), [-llber])
 AC_SEARCH_LIBS([ldap_unbind_ext_s],    ldap,,AC_MSG_ERROR([missing required function]), [-llber])
 AC_SEARCH_LIBS([ldap_url_parse],       ldap,,AC_MSG_ERROR([missing required function]), [-llber])
+AC_SEARCH_LIBS([ldap_value_free],      ldap,,AC_MSG_ERROR([missing required function]), [-llber])
 AC_SEARCH_LIBS([socket],               socket,,AC_MSG_ERROR([missing required function]), [-lresolv])
 
 # check for headers
@@ -171,6 +176,7 @@ AC_BINDLE_GIT_PACKAGE_VERSION([contrib/bindletools/build-aux/git-package-version
 AC_BINDLE_ENABLE_WARNINGS
 AC_LDAP_UTILS_LDAP2CSV
 AC_LDAP_UTILS_LDAPDEBUG
+AC_LDAP_UTILS_LDAPDN2STR
 AC_LDAP_UTILS_LDAPTREE
 
 # Creates outputs
@@ -186,6 +192,7 @@ AC_MSG_NOTICE([   Use Strict Warnings           $USE_STRICTWARNINGS])
 AC_MSG_NOTICE([ ])
 AC_MSG_NOTICE([   Build ldap2csv                $LDAPUTILS_LDAP2CSV])
 AC_MSG_NOTICE([   Build ldapdebug               $LDAPUTILS_LDAPDEBUG])
+AC_MSG_NOTICE([   Build ldapdn2str              $LDAPUTILS_LDAPDN2STR])
 AC_MSG_NOTICE([   Build ldaptree                $LDAPUTILS_LDAPTREE])
 AC_MSG_NOTICE([ ])
 AC_MSG_NOTICE([   Please send suggestions to:   $PACKAGE_BUGREPORT])

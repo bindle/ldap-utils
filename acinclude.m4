@@ -74,6 +74,27 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPDEBUG],[dnl
 ])dnl
 
 
+# AC_LDAP_UTILS_LDAPDN2STR
+# ______________________________________________________________________________
+AC_DEFUN([AC_LDAP_UTILS_LDAPDN2STR],[dnl
+
+   enableval=""
+   AC_ARG_ENABLE(
+      ldapdn2str,
+      [AS_HELP_STRING([--enable-ldapdn2str], [enable building ldapdn2str utility])],
+      [ ELDAPDN2STR=$enableval ],
+      [ ELDAPDN2STR=$enableval ]
+   )
+
+   if test "x${ELDAPDN2STR}" != "xyes";then
+      ELDAPDN2STR=no
+   fi
+   LDAPUTILS_LDAPDN2STR=${ELDAPDN2STR}
+
+   AM_CONDITIONAL([LDAPUTILS_LDAPDN2STR], [test "x$LDAPUTILS_LDAPDN2STR" = "xyes"])
+])dnl
+
+
 # AC_LDAP_UTILS_LDAPTREE
 # ______________________________________________________________________________
 AC_DEFUN([AC_LDAP_UTILS_LDAPTREE],[dnl
