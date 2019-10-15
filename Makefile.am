@@ -136,6 +136,18 @@ src_ldap2csv_SOURCES			= \
 					  src/ldap2csv.c
 
 
+# macros for ldapdn2str
+if LDAPUTILS_LDAPDN2STR
+bin_PROGRAMS                            += src/ldapdn2str
+endif
+src_ldapdn2str_DEPENDENCIES		= Makefile lib/libldaputils.a
+src_ldapdn2str_CPPFLAGS			= -DPROGRAM_NAME="\"ldapdn2str\"" $(AM_CPPFLAGS)
+src_ldapdn2str_CFLAGS			= $(AM_CFLAGS)
+src_ldapdn2str_LDFLAGS			= $(AM_LDFLAGS)
+src_ldapdn2str_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
+src_ldapdn2str_SOURCES			= src/ldapdn2str.c
+
+
 # macros for ldaptree
 if LDAPUTILS_LDAPTREE
 bin_PROGRAMS                            += src/ldaptree
