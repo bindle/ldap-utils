@@ -86,35 +86,11 @@ ldap2csv supports psuedo attributes which return the DN of returned entries in
 various formats.  The following are the supported psuedo attributes and examples
 of their format:
 
-   * dn: distinguished name of entry
-     - `uid=dnullman,ou=People,dc=example,dc=net,o=internet`
-     - `uid=jdough,ou=People,dc=example,dc=net,o=internet`
-     - `uid=syzdek,ou=People,dc=syzdek,dc=net,o=internet`
-     - `uid=administrator,ou=People,dc=foo,dc=org`
-  
-   * dce: DCE-style DN
-     - `/o=internet/dc=net/dc=example/ou=People/uid=dnullman`
-     - `/o=internet/dc=net/dc=example/ou=People/uid=jdough`
-     - `/o=internet/dc=net/dc=syzdek/ou=People/uid=syzdek`
-     - `/dc=org/dc=foo/ou=People/uid=administrator`
-
-   * adc: Active Directory canonical name
-     - `internet/net/example/People/dnullman/`
-     - `internet/example.net/People/jdough`
-     - `internet/syzdek.net/People/syzdek`
-     - `foo.org/People/administrator`
-
-   * rdn: relative DN
-     - `uid=dnullman`
-     - `uid=jdough`
-     - `uid=syzdek`
-     - `uid=administrator`
-
-   * ufn: User Friendly Name of DN
-     - `dnullman, People, syzdek, net, internet`
-     - `jdough, People, example, net, internet`
-     - `syzdek, People, example, net, internet`
-     - `administrator, People, foo.org`
+   * `dn` (distinguished name of entry)
+   * `dce` (DCE-style distinguished name)
+   * `adc` (Active Directory canonical name)
+   * `rdn` (relative distinguished name of entry)
+   * `ufn` (User Friendly Name of DN)
 
 Example usage:
 
@@ -206,10 +182,10 @@ The following are example of the output presentations available:
      - `administrator, People, foo.org`
 
    * idn: inverted distinguished name
-     - o=internet,dc=net,dc=example,ou=People,uid=dnullman
-     - o=internet,dc=net,dc=example,ou=People,uid=jdough
-     - o=internet,dc=net,dc=syzdek,ou=People,uid=syzdek
-     - dc=org,dc=foo,ou=People,uid=administrator
+     - `o=internet,dc=net,dc=example,ou=People,uid=dnullman`
+     - `o=internet,dc=net,dc=example,ou=People,uid=jdough`
+     - `o=internet,dc=net,dc=syzdek,ou=People,uid=syzdek`
+     - `dc=org,dc=foo,ou=People,uid=administrator`
 
 
 ldaptree
