@@ -610,7 +610,7 @@ void ldaputils_tree_print_indent(LDAPUtilsTree * tree, size_t level, LDAPUtilsTr
       break;
 
       default:
-      printf("  ");
+      printf(" ");
       for(y = 1; y < level; y++)
          printf("  %c", recur->map[y]);
       break;
