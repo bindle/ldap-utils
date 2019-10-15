@@ -81,13 +81,13 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPDN2STR],[dnl
    enableval=""
    AC_ARG_ENABLE(
       ldapdn2str,
-      [AS_HELP_STRING([--enable-ldapdn2str], [enable building ldapdn2str utility])],
+      [AS_HELP_STRING([--disable-ldapdn2str], [disable building ldapdn2str utility])],
       [ ELDAPDN2STR=$enableval ],
       [ ELDAPDN2STR=$enableval ]
    )
 
-   if test "x${ELDAPDN2STR}" != "xyes";then
-      ELDAPDN2STR=no
+   if test "x${ELDAPDN2STR}" != "xno";then
+      ELDAPDN2STR=yes
    fi
    LDAPUTILS_LDAPDN2STR=${ELDAPDN2STR}
 
