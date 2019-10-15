@@ -574,7 +574,7 @@ void ldaputils_tree_print(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts)
    {
       snprintf(dn, sizeof(dn), "%s", tree->children[x]->rdn);
       child = tree->children[x];
-      while (child->children_len < 2)
+      while ((child->children_len < 2) && (!(child->entry)))
       {
          snprintf(tmp, sizeof(tmp), "%s, %s", child->children[0]->rdn, dn);
          strncpy(dn, tmp, sizeof(dn));
