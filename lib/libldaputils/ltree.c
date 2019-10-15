@@ -106,6 +106,8 @@ void ldaputils_tree_print_bullets(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts
 
 void ldaputils_tree_print_bullets_recursive(LDAPUtilsTree * tree, size_t level);
 
+void ldaputils_tree_print_entry(LDAPUtilsTree * tree, size_t level, LDAPUtilsTreeRecursion * recur, size_t stop);
+
 void ldaputils_tree_print_indent(LDAPUtilsTree * tree, size_t level, LDAPUtilsTreeRecursion * recur);
 
 void ldaputils_tree_print_recursive(LDAPUtilsTree * tree, size_t level, LDAPUtilsTreeRecursion * recur);
@@ -594,6 +596,85 @@ void ldaputils_tree_print(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts)
    return;
 }
 
+
+void ldaputils_tree_print_entry(LDAPUtilsTree * tree, size_t level, LDAPUtilsTreeRecursion * recur, size_t stop)
+{
+   size_t           have_children;
+   size_t           z;
+   LDAPUtilsEntry * entry;
+   size_t           attr;
+   size_t           val;
+
+   assert(tree  != NULL);
+   assert(recur != NULL);
+
+   // checks for data
+   if ((entry = tree->entry) == NULL)
+      return;
+   if (entry->attrs_count == 0)
+      return;
+
+   // determines if there are children of this node
+   if (recur->opts->noleaf)
+   {
+      have_children = 0;
+      for(z = 0; ((z < tree->children_len)&&((!(have_children)))); z++)
+         have_children = (tree->children[z]->children_len > 0) ? 1 : 0;
+   } else {
+      have_children = (tree->children_len) ? 1 : 0;
+   };
+
+   if (recur->opts->style == LDAPUTILS_TREE_BULLETS)
+   {
+      ldaputils_tree_print_indent(tree, level, recur);
+      printf("  * Attributes\n");
+   };
+
+   // loops through attributes
+   for (attr = 0; attr < entry->attrs_count; attr++)
+   {
+      // loops through values
+      for(val = 0; ((entry->attrs[attr]->vals[val])); val++)
+      {
+         ldaputils_tree_print_indent(tree, level+1, recur);
+         // prints attribute and value
+         if (recur->opts->style == LDAPUTILS_TREE_BULLETS)
+         {
+            printf("  - %s: ", entry->attrs[attr]->name);
+            fwrite(entry->attrs[attr]->vals[val]->bv_val, 1, entry->attrs[attr]->vals[val]->bv_len, stdout);
+            printf("\n");
+         } else {
+            printf("  %c  %s: ", (have_children) ? '|' : ' ', entry->attrs[attr]->name);
+            fwrite(entry->attrs[attr]->vals[val]->bv_val, 1, entry->attrs[attr]->vals[val]->bv_len, stdout);
+            printf("\n");
+         };
+      };
+   };
+
+   // prints empty line to attributes more readable in hierarchy in style
+   if (recur->opts->style == LDAPUTILS_TREE_BULLETS)
+   {
+      if (!(recur->opts->compact))
+      {
+         ldaputils_tree_print_indent(tree, level, recur);
+         printf("\n");
+      };
+   } else if ((entry->attrs_count > 0) && (!(recur->opts->compact)))
+   {
+      if ( (!(stop)) || ((have_children)) )
+      {
+         ldaputils_tree_print_indent(tree, level+1, recur);
+         if ((have_children))
+            printf("  |\n");
+         else
+            printf("\n");
+      };
+   };
+
+   return;
+}
+
+
 void ldaputils_tree_print_indent(LDAPUtilsTree * tree, size_t level, LDAPUtilsTreeRecursion * recur)
 {
    size_t y;
@@ -622,16 +703,10 @@ void ldaputils_tree_print_recursive(LDAPUtilsTree * tree, size_t level, LDAPUtil
 {
    size_t x;
    size_t y;
-   size_t z;
    size_t stop;
    size_t noleaf;
    size_t leaf_count;
    size_t children_count;
-   size_t have_children;
-
-   LDAPUtilsEntry * entry;
-   size_t           attr;
-   size_t           val;
 
    assert(tree != NULL);
 
@@ -689,65 +764,7 @@ void ldaputils_tree_print_recursive(LDAPUtilsTree * tree, size_t level, LDAPUtil
       };
 
       // prints requested attributes
-      if ((entry = tree->children[x]->entry) != NULL)
-      {
-         // determines if there are children of this node
-         if (recur->opts->noleaf)
-         {
-            have_children = 0;
-            for(z = 0; ((z < tree->children[x]->children_len)&&((!(have_children)))); z++)
-               have_children = (tree->children[x]->children[z]->children_len > 0) ? 1 : 0;
-         } else {
-            have_children = (tree->children[x]->children_len) ? 1 : 0;
-         };
-
-         if ((recur->opts->style == LDAPUTILS_TREE_BULLETS) && (entry->attrs_count > 0))
-         {
-            ldaputils_tree_print_indent(tree, level, recur);
-            printf("  * Attributes\n");
-         };
-
-         // loops through attributes
-         for (attr = 0; attr < entry->attrs_count; attr++)
-         {
-            // loops through values
-            for(val = 0; ((entry->attrs[attr]->vals[val])); val++)
-            {
-               ldaputils_tree_print_indent(tree, level+1, recur);
-               // prints attribute and value
-               if (recur->opts->style == LDAPUTILS_TREE_BULLETS)
-               {
-                  printf("  - %s: ", entry->attrs[attr]->name);
-                  fwrite(entry->attrs[attr]->vals[val]->bv_val, 1, entry->attrs[attr]->vals[val]->bv_len, stdout);
-                  printf("\n");
-               } else {
-                  printf("  %c  %s: ", (have_children) ? '|' : ' ', entry->attrs[attr]->name);
-                  fwrite(entry->attrs[attr]->vals[val]->bv_val, 1, entry->attrs[attr]->vals[val]->bv_len, stdout);
-                  printf("\n");
-               };
-            };
-         };
-
-         // prints empty line to attributes more readable in hierarchy in style
-         if (recur->opts->style == LDAPUTILS_TREE_BULLETS)
-         {
-            if (!(recur->opts->compact))
-            {
-               ldaputils_tree_print_indent(tree, level, recur);
-               printf("\n");
-            };
-         } else if ((entry->attrs_count > 0) && (!(recur->opts->compact)))
-         {
-            if ( (!(stop)) || ((have_children)) )
-            {
-               ldaputils_tree_print_indent(tree, level+1, recur);
-               if ((have_children))
-                  printf("  |\n");
-               else
-                  printf("\n");
-            };
-         };
-      };
+      ldaputils_tree_print_entry(tree->children[x], level, recur, stop);
 
       // recurses to next child
       ldaputils_tree_print_recursive(tree->children[x], level, recur);
