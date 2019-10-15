@@ -13,6 +13,9 @@ All rights reserved.
      - [ ] write utility which compares results of two LDAP searches
      - [ ] write man page
 
+   - [x] ldapdn2str
+     - [ ] write man page
+
    - [ ] ldapinfo
      - [ ] write utility which displays LDAP server information
      - [ ] write man page
