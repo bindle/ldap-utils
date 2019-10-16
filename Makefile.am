@@ -69,9 +69,11 @@ doc_DATA				=
 EXTRA_PROGRAMS				=
 include_HEADERS				=
 info_TEXINFOS				=
-EXTRA_LTLIBRARIES			=
+lib_LIBRARIES				=
+lib_LTLIBRARIES				=
 man_MANS				=
-noinst_HEADERS				= include/ldaputils.h \
+noinst_HEADERS				= include/ldapschema.h \
+					  include/ldaputils.h \
 					  include/ldaputils_cdefs.h
 noinst_PROGRAMS				=
 noinst_LIBRARIES			= lib/libldaputils.a
@@ -88,7 +90,10 @@ EXTRA_DIST				= $(noinst_HEADERS) \
 					  NEWS.md \
 					  README.md \
 					  TODO.md \
+					  lib/libldapschema/libldapschema.sym \
 					  lib/libldaputils/libldaputils.sym
+EXTRA_LIBRARIES				=
+EXTRA_LTLIBRARIES			=
 CLEANFILES				= \
 					  $(builddir)/a.out   $(srcdir)/a.out \
 					  $(builddir)/*/a.out $(srcdir)/*/a.out \
@@ -101,6 +106,45 @@ CLEANFILES				= \
 					  @PACKAGE_TARNAME@-*.txz \
 					  @PACKAGE_TARNAME@-*.zip
 DISTCHECK_CONFIGURE_FLAGS		= --enable-strictwarnings
+
+
+# macros for lib/libldapschema.a
+if LDAPUTILS_LIBLDAPSCHEMA
+   lib_LIBRARIES			+= lib/libldapschema.a
+   include_HEADERS			+= include/ldapschema.h
+else
+   if LDAPUTILS_LDAPSCHEMA
+      noinst_LIBRARIES			+= lib/libldapschema.a
+   endif
+endif
+lib_libldapschema_a_DEPENDENCIES	= Makefile lib/libldapschema/libldapschema.sym
+lib_libldapschema_a_CFLAGS		= $(AM_CFLAGS)
+lib_libldapschema_a_LIBADD		= $(AM_LIBS)
+lib_libldapschema_a_SOURCES		= $(noinst_HEADERS) \
+					  lib/libldapschema/libldapschema.h \
+					  lib/libldapschema/lerror.c \
+					  lib/libldapschema/lerror.h \
+					  lib/libldapschema/lmemory.c \
+					  lib/libldapschema/lmemory.h
+
+
+# macros for lib/libldapschema.la
+if LDAPUTILS_LIBLDAPSCHEMA
+   lib_LTLIBRARIES			+= lib/libldapschema.la
+endif
+lib_libldapschema_la_DEPENDENCIES	= Makefile lib/libldapschema/libldapschema.sym
+lib_libldapschema_la_CFLAGS		= $(AM_CFLAGS)
+lib_libldapschema_la_LDFLAGS		= -rpath'$(libdir)' \
+					  -version-info $(LIB_VERSION_INFO) \
+					  $(AM_LDFLAGS) \
+					  -export-symbols $(srcdir)/lib/libldapschema/libldapschema.sym
+lib_libldapschema_la_LIBADD		= $(AM_LIBS)
+lib_libldapschema_la_SOURCES		= $(noinst_HEADERS) \
+					  lib/libldapschema/libldapschema.h \
+					  lib/libldapschema/lerror.c \
+					  lib/libldapschema/lerror.h \
+					  lib/libldapschema/lmemory.c \
+					  lib/libldapschema/lmemory.h
 
 
 # macros for lib/libutil.la
@@ -172,6 +216,18 @@ src_ldapdebug_LDFLAGS			= $(AM_LDFLAGS)
 src_ldapdebug_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
 src_ldapdebug_SOURCES			= \
 					  src/ldapdebug.c
+
+
+# macros for ldapschema
+if LDAPUTILS_LDAPSCHEMA
+   bin_PROGRAMS                         += src/ldapschema
+endif
+src_ldapschema_DEPENDENCIES		= Makefile lib/libldapschema.a lib/libldaputils.a
+src_ldapschema_CPPFLAGS			= -DPROGRAM_NAME="\"ldapschema\"" $(AM_CPPFLAGS)
+src_ldapschema_CFLAGS			= $(AM_CFLAGS)
+src_ldapschema_LDFLAGS			= $(AM_LDFLAGS)
+src_ldapschema_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a lib/libldapschema.a
+src_ldapschema_SOURCES			= src/ldapschema.c
 
 
 # Makefile includes

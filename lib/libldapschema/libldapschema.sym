@@ -1,0 +1,64 @@
+#
+#   LDAP Utilities
+#   Copyright (C) 2019 David M. Syzdek <david@syzdek.net>.
+#
+#   Redistribution and use in source and binary forms, with or without
+#   modification, are permitted provided that the following conditions are
+#   met:
+#
+#      1. Redistributions of source code must retain the above copyright
+#         notice, this list of conditions and the following disclaimer.
+#
+#      2. Redistributions in binary form must reproduce the above copyright
+#         notice, this list of conditions and the following disclaimer in the
+#         documentation and/or other materials provided with the distribution.
+#
+#      3. Neither the name of the copyright holder nor the names of its
+#         contributors may be used to endorse or promote products derived from
+#         this software without specific prior written permission.
+#
+#   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+#   IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+#   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+#   PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+#   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+#   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+#   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+#   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+#   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+#   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+#   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+#   lib/libldapschema.sym - list of symbols to export in libldapschema.la
+#
+#   Simple Build:
+#      gcc -g -O2 -W -Wall -Werror -I../include -c lerror.c
+#      gcc -g -O2 -W -Wall -Werror -I../include -c lmemory.c
+#      ar rcs libldapschema.a lerror.o lmemory.o
+#
+#   Libtool Build:
+#      CFLAGS="-g -O2 -W -Wall -Werror -I../include"
+#      LDFLAGS="-g -O2 -export-symbols libldapschema.sym -rpath /usr/local/lib"
+#      export CFLAGS LDFLAGS
+#
+#      libtool --mode=compile gcc ${CFLAGS}  -c lerror.c
+#      libtool --mode=compile gcc ${CFLAGS}  -c lmemory.c
+#      libtool --mode=link    gcc ${LDFLAGS} -o libldaputils.la \
+#              lerror.lo lmemory.lo
+#
+#   Libtool Install:
+#      libtool --mode=install install -c libldapschema.la /usr/local/lib/libldapschema.la
+#
+#   Libtool Uninstall:
+#      libtool --mode=uninstall rm -f /usr/local/lib/libldapschema.la
+#
+#   Libtool Clean:
+#      libtool --mode=clean rm -f libldapschema.la lsversion.lo
+#
+# error functions
+ldapschema_err2string
+ldapschema_errno
+# memory functions
+ldapschema_free
+ldapschema_initialize
+# end of symbol export file

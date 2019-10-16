@@ -95,6 +95,27 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPDN2STR],[dnl
 ])dnl
 
 
+# AC_LDAP_UTILS_LDAPSCHEMA
+# ______________________________________________________________________________
+AC_DEFUN([AC_LDAP_UTILS_LDAPSCHEMA],[dnl
+
+   enableval=""
+   AC_ARG_ENABLE(
+      ldapschema,
+      [AS_HELP_STRING([--disable-ldapschema], [disable ldapschema utility])],
+      [ ELDAPSCHEMA=$enableval ],
+      [ ELDAPSCHEMA=$enableval ]
+   )
+
+   if test "x${ELDAPSCHEMA}" != "xno";then
+      ELDAPSCHEMA=yes
+   fi
+   LDAPUTILS_LDAPSCHEMA=${ELDAPSCHEMA}
+
+   AM_CONDITIONAL([LDAPUTILS_LDAPSCHEMA], [test "x$LDAPUTILS_LDAPSCHEMA" = "xyes"])
+])dnl
+
+
 # AC_LDAP_UTILS_LDAPTREE
 # ______________________________________________________________________________
 AC_DEFUN([AC_LDAP_UTILS_LDAPTREE],[dnl
@@ -113,6 +134,27 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPTREE],[dnl
    LDAPUTILS_LDAPTREE=${ELDAPTREE}
 
    AM_CONDITIONAL([LDAPUTILS_LDAPTREE], [test "x$LDAPUTILS_LDAPTREE" = "xyes"])
+])dnl
+
+
+# AC_LDAP_UTILS_LIBLDAPSCHEMA
+# ______________________________________________________________________________
+AC_DEFUN([AC_LDAP_UTILS_LIBLDAPSCHEMA],[dnl
+
+   enableval=""
+   AC_ARG_ENABLE(
+      libldapschema,
+      [AS_HELP_STRING([--disable-libldapschema], [disable ldapschema library])],
+      [ ELIBLDAPSCHEMA=$enableval ],
+      [ ELIBLDAPSCHEMA=$enableval ]
+   )
+
+   if test "x${ELIBLDAPSCHEMA}" != "xno";then
+      ELIBLDAPSCHEMA=yes
+   fi
+   LDAPUTILS_LIBLDAPSCHEMA=${ELIBLDAPSCHEMA}
+
+   AM_CONDITIONAL([LDAPUTILS_LIBLDAPSCHEMA], [test "x$LDAPUTILS_LIBLDAPSCHEMA" = "xyes"])
 ])dnl
 
 
