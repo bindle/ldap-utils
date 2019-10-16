@@ -4,10 +4,8 @@ Copyright (c) 2019 David M. Syzdek <david@syzdek.net>.
 All rights reserved.
 
    - [x] ldap2csv
-     -   [ ] write man page
 
    - [x] ldapdebug
-     - [ ] write man page
 
    - [ ] ldapdiff
      - [ ] write utility which compares results of two LDAP searches
@@ -29,7 +27,6 @@ All rights reserved.
      - [ ] write man page
 
    - [x] ldaptree
-     - [ ] write man page
      - [ ] add ability to display number of truncated entries
 
    - [ ] ldaplint
