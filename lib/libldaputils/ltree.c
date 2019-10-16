@@ -411,6 +411,7 @@ LDAPUtilsTree * ldaputils_tree_child_init(LDAPUtilsTree * tree, const char * rdn
    tree->children[tree->children_len+1] = NULL;
 
    // search for existing child
+   idx = 0;
    if ((child = ldaputils_tree_child_find(tree, rdn, &idx)) != NULL)
       return(child);
 
