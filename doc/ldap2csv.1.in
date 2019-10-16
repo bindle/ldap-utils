@@ -118,7 +118,85 @@ size limit for search
 .TP
 \fB-Z\fR[\fB-Z\fR]
 Issue  StartTLS before bind request. \fB-ZZ\fR requires TLS operations to be successful. 
+.TP
+\fIfilter\fR
+The search filter. If not provided, the default filter, \fB(objectclass=*)\fR,
+is used.
+.TP
+\fIattributes...\fR
+The list of \fIattributes\fR to include in CSV output.  The psuedo attributes
+\fBdn\fR, \fBrdn\fR, \fBufn\fR, \fBadc\fR, and \fBdce\fR are supported.
 
+.SH PSUEDO ATTRIBUTES
+.TP
+\fBdn\fR
+distinguished name of entry. The following are examples of distinguished name:
+.in +4n
+.nf
+
+uid=dnullman,ou=People,dc=example,dc=net,o=internet
+uid=jdough,ou=People,dc=example,dc=net,o=internet
+uid=syzdek,ou=People,dc=syzdek,dc=net,o=internet
+uid=administrator,ou=People,dc=foo,dc=org
+
+.fi
+.in
+.TP
+\fBrdn\fR
+relative distinguished name of entry. The following are examples of relative
+distinguished name:
+.in +4n
+.nf
+
+uid=dnullman
+uid=jdough
+uid=syzdek
+uid=administrator
+
+.fi
+.in
+.TP
+\fBufn\fR
+User Friendly Name of distinguished name. The following are examples of User
+Friendly Names:
+.in +4n
+.nf
+
+dnullman, People, syzdek, net, internet
+jdough, People, example, net, internet
+syzdek, People, example, net, internet
+administrator, People, foo.org
+
+.fi
+.in
+.TP
+\fBadc\fR
+Active Directory canonical name of entry. The following are examples of Active
+Directory canonical names:
+.in +4n
+.nf
+
+internet/net/example/People/dnullman/
+internet/net/example/People/jdough/
+internet/net/syzdek/People/syzdek/
+foo.org/People/administrator
+
+.fi
+.in
+.TP
+\fBdce\fR
+DCE-style of distinguished name. The following are examples of ADCE-style of
+distinguished names:
+.in +4n
+.nf
+
+/o=internet/dc=net/dc=example/ou=People/uid=dnullman
+/o=internet/dc=net/dc=example/ou=People/uid=jdough
+/o=internet/dc=net/dc=syzdek/ou=People/uid=syzdek
+/dc=org/dc=foo/ou=People/uid=administrator
+
+.fi
+.in
 
 .SH EXAMPLE
 The following command:
