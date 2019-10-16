@@ -38,19 +38,85 @@ ldapdebug \- LDAP displays values from ldap_get_option(3).
 
 .SH SYNOPSIS
 \fBldapdebug\fR
-[\fBFILL IN OPTIONS\fR]
+[\fB-b\fR \fIbasedn\fR]
+[\fB-c\fR]
+[\fB-d\fR \fIlevel\fR]
+[\fB-D\fR \fIbinddn\fR]
+[\fB-H\fR \fIURI\fR]
+[\fB-l\fR \fIlimit\fR]
+[\fB-L\fR[\fB-L\fR]]
+[\fB-n\fR]
+[\fB-v\fR | \fB--version\fR]
+[\fB-s\fR \fIscope\fR]
+[\fB-S\fR \fIattr\fR]
+[\fB-w\fR \fIpasswd\fR]
+[\fB-W\fR]
+[\fB-x\fR]
+[\fB-y\fR \fIfile\fR]
+[\fB-Y\fR \fImech\fR]
+[\fB-z\fR \fIlimit\fR]
+[\fB-Z\fR[\fB-Z\fR]]
 .sp
 \fBldapdebug\fR [ \fB-h\fR | \fB--help\fR ]
 .sp
 \fBldapdebug\fR [ \fB-V\fR | \fB--version\fR ]
 
 .SH DESCRIPTION
-
+\fBldapdebug\fR is a utility which initiates a connection the an LDAP server
+and optionally binds to the LDAP server.  Once the LDAP session has been
+established, the utility will display the values of various options
+available from \fBldap_get_option\fR(3).  This utility is useful for debugging
+\fIldap.conf\fR and \fI.ldaprc\fR files.
 
 .SH OPTIONS
-
-
-.SH EXAMPLE
+.TP
+\fB-c\fR
+do not stop if an error is encountered
+.TP
+\fB-d\fR
+set OpenLDAP debug level to `level'
+.TP
+\fB-D\fR \fIbinddn\fR
+bind DN used for simple bind
+.TP
+\fB-H\fR \fIURI\fR
+specifies list of LDAP Uniform Resource Identifier(s) used to connect to LDAP server
+.TP
+\fB-l\fR \fIlimit\fR
+time limit (in seconds) for search
+.TP
+\fB-L\fR
+two \fB-L\fR disables comments
+.TP
+\fB-v\fR   \fB--version\fR
+run in verbose mode
+.TP
+\fB-s\fR \fIscope\fR
+specifies search filter. Must be one of \fIbase\fR, \fIone\fR, \fIsub\fR, or \fIchild\fR
+.TP
+\fB-S\fR \fIattr\fR
+sort results by attribute \fIattr\fR
+.TP
+\fB-w\fR \fIpasswd\fR
+bind password used for simple bind
+.TP
+\fB-W\fR
+prompt for bind password used in simple bind
+.TP
+\fB-x\fR
+use simple authentication for bind
+.TP
+\fB-y\fR \fIfile\fR
+read bind password from file
+.TP
+\fB-Y\fR \fImech\fR
+SASL mechanism used during bind
+.TP
+\fB-z\fR \fIlimit\fR
+size limit for search
+.TP
+\fB-Z\fR[\fB-Z\fR]
+Issue  StartTLS before bind request. \fB-ZZ\fR requires TLS operations to be successful.
 
 
 .SH "SEE ALSO"
