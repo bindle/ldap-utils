@@ -38,20 +38,213 @@ ldaptree \- LDAP search tool which displays results in tree form
 
 .SH SYNOPSIS
 \fBldaptree\fR
-[\fBOPTIONS\fR]
+[\fB-b\fR \fIbasedn\fR]
+[\fB-c\fR]
+[\fB-d\fR \fIlevel\fR]
+[\fB-D\fR \fIbinddn\fR]
+[\fB-H\fR \fIURI\fR]
+[\fB-l\fR \fIlimit\fR]
+[\fB-L\fR[\fB-L\fR]]
+[\fB-n\fR]
+[\fB-v\fR | \fB--version\fR]
+[\fB-s\fR \fIscope\fR]
+[\fB-S\fR \fIattr\fR]
+[\fB-w\fR \fIpasswd\fR]
+[\fB-W\fR]
+[\fB-x\fR]
+[\fB-y\fR \fIfile\fR]
+[\fB-Y\fR \fImech\fR]
+[\fB-z\fR \fIlimit\fR]
+[\fB-Z\fR[\fB-Z\fR]]
+[\fIfilter\fR
+[\fIattributes...\fR]]
 .sp
 \fBldaptree\fR [ \fB-h\fR | \fB--help\fR ]
 .sp
 \fBldaptree\fR [ \fB-V\fR | \fB--version\fR ]
 
 .SH DESCRIPTION
-
+\fBldaptree\fR is a shell utilty which performs an LDAP search and prints the
+results as either an ASCII graph or a bulleted list. By default the utilty
+does not retrieve any attributes from LDAP servers, however if a \fIfilter\fR
+and \fIattributes\fR are provided as command line arguments, then the
+attribute values will be displayed inline with the results.
 
 .SH OPTIONS
-
+.TP
+\fB-c\fR
+do not stop if an error is encountered
+.TP
+\fB-d\fR
+set OpenLDAP debug level to `level'
+.TP
+\fB-D\fR \fIbinddn\fR
+bind DN used for simple bind
+.TP
+\fB-H\fR \fIURI\fR
+specifies list of LDAP Uniform Resource Identifier(s) used to connect to LDAP server
+.TP
+\fB-l\fR \fIlimit\fR
+time limit (in seconds) for search
+.TP
+\fB-L\fR
+two \fB-L\fR disables comments
+.TP
+\fB-v\fR   \fB--version\fR
+run in verbose mode
+.TP
+\fB-s\fR \fIscope\fR
+specifies search filter. Must be one of \fIbase\fR, \fIone\fR, \fIsub\fR, or \fIchild\fR
+.TP
+\fB-S\fR \fIattr\fR
+sort results by attribute \fIattr\fR
+.TP
+\fB-w\fR \fIpasswd\fR
+bind password used for simple bind
+.TP
+\fB-W\fR
+prompt for bind password used in simple bind
+.TP
+\fB-x\fR
+use simple authentication for bind
+.TP
+\fB-y\fR \fIfile\fR
+read bind password from file
+.TP
+\fB-Y\fR \fImech\fR
+SASL mechanism used during bind
+.TP
+\fB-z\fR \fIlimit\fR
+size limit for search
+.TP
+\fB-Z\fR[\fB-Z\fR]
+Issue  StartTLS before bind request. \fB-ZZ\fR requires TLS operations to be successful.
+.TP
+\fIfilter\fR
+The search filter. If not provided, the default filter, \fB(objectclass=*)\fR,
+is used.
+.TP
+\fIattributes...\fR
+The list of \fIattributes\fR to display within the graph.
 
 .SH EXAMPLE
+The following command:
+.in +4n
+.nf
 
+ldaptree -x -b o=internet --noleafs --compact
+
+.fi
+.in
+will perform search on the LDAP server.  The output might look something the following:
+.in +4n
+.nf
+
+#
+# base: o=internet with scope subtree
+# filter: (objectclass=*)
+#
++--dc=net, o=internet
+    +--dc=example
+    |  +--ou=Groups
+    |  \\--ou=People
+    \\--dc=syzdek
+       +--ou=Groups
+       \\--ou=People
+
+.fi
+.in
+The following command:
+.in +4n
+.nf
+
+ldaptree -LLL -x -b o=internet '(objectclass=*)' givenname sn mail member description
+
+.fi
+.in
+
+will perform search on the LDAP server.  The output might look something the following:
+.in +4n
+.nf
+
++--dc=net, o=internet
+   +--dc=example
+   |  +--ou=Groups
+   |  |  +--cn=lug
+   |  |  |     description: Linux Users' Group
+   |  |  |     member: uid=dnullman,ou=People,dc=example,dc=net,o=internet
+   |  |  |     member: uid=doughboy42,ou=People,dc=example,dc=net,o=internet
+   |  |  |
+   |  |  \\--cn=foodie
+   |  |        description: People obsessed with good food
+   |  |        member: uid=doughboy42,ou=People,dc=example,dc=net,o=internet
+   |  |
+   |  \\--ou=People
+   |     +--uid=dnullman
+   |     |     sn: Nullman
+   |     |     givenName: Devian
+   |     |     mail: noreply@example.com
+   |     |
+   |     \\--uid=jdough
+   |           sn: Dough
+   |           givenName: John
+   |           mail: doughboy42@example.com
+   |
+   \\--dc=syzdek
+      +--ou=Groups
+      \\--ou=People
+         \\--uid=syzdek
+               sn: Syzdek
+               givenName: David M.
+               mail: david@syzdek.net
+
+.fi
+.in
+The following command:
+.in +4n
+.nf
+
+ldaptree -x -b o=internet --style=bullets --compact '(objectclass=*)' givenname sn mail member description
+
+.fi
+.in
+will perform search on the LDAP server.  The output might look something the following:
+.in +4n
+.nf
+
+* dc=net, o=internet
+  * dc=example
+    * ou=Groups
+      * cn=lug
+        * Attributes
+          - description: Linux Users' Group
+          - member: uid=dnullman,ou=People,dc=example,dc=net,o=internet
+          - member: uid=doughboy42,ou=People,dc=example,dc=net,o=internet
+      * cn=foodie
+        * Attributes
+          - description: People obsessed with good food
+          - member: uid=doughboy42,ou=People,dc=example,dc=net,o=internet
+    * ou=People
+      * uid=dnullman
+        * Attributes
+          - sn: Nullman
+          - givenName: Devian
+          - mail: noreply@example.com
+      * uid=jdough
+          - sn: Dough
+          - givenName: John
+          - mail: doughboy42@example.com
+  * dc=syzdek
+    * ou=Groups
+    * ou=People
+      * uid=syzdek
+        * Attributes
+          - sn: Syzdek
+          - givenName: David M.
+          - mail: david@syzdek.net
+
+.fi
+.in
 
 .SH "SEE ALSO"
 .BR ldapsearch (1),
