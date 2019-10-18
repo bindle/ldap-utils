@@ -115,7 +115,7 @@
 #endif
 
 // result codes
-#define LDAPSCHEMA_SUCCESS                            0x00      ///< operation was successful
+#define LDAPSCHEMA_SUCCESS                            0x00     ///< operation was successful
 #define LDAPSCHEMA_NO_MEMORY                          (-10)    ///< an memory allocation failed
 
 
