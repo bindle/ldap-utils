@@ -193,13 +193,13 @@ include $(srcdir)/contrib/bindletools/build-aux/makefile-version.am
 .PHONY:
 
 doc/ldap2csv.1: Makefile $(srcdir)/doc/ldap2csv.1.in
-	$(do_subst_dt)
+	@$(do_subst_dt)
 
 doc/ldapdebug.1: Makefile $(srcdir)/doc/ldapdebug.1.in
-	$(do_subst_dt)
+	@$(do_subst_dt)
 
 doc/ldaptree.1: Makefile $(srcdir)/doc/ldaptree.1.in
-	$(do_subst_dt)
+	@$(do_subst_dt)
 
 
 # local targets
