@@ -95,9 +95,9 @@ void ldaputils_param_option_bool(LDAPUtils * lud, const char * key, int option);
 #endif
 
 /// parses LDAP command line arguments
-/// @param[in] lud
-/// @param[in] c
-/// @param[in] arg
+/// @param[in]  lud           reference to LDAP utiles descriptor
+/// @param[in]  c             getopt option
+/// @param[in]  arg           getopt argument
 int ldaputils_getopt(LDAPUtils * lud, int c, const char * arg)
 {
    int     rc;
@@ -262,7 +262,7 @@ int ldaputils_getopt(LDAPUtils * lud, int c, const char * arg)
       return(0);
 
       default:
-      return(c);
+      break;
    };
 
    /* ends function */

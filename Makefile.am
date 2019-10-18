@@ -91,6 +91,9 @@ EXTRA_DIST				= $(noinst_HEADERS) \
 					  README.md \
 					  TODO.md \
 					  lib/libldapschema/libldapschema.sym \
+					  $(srcdir)/doc/ldap2csv.1.in \
+					  $(srcdir)/doc/ldapdebug.1.in \
+					  $(srcdir)/doc/ldaptree.1.in \
 					  lib/libldaputils/libldaputils.sym
 EXTRA_LIBRARIES				=
 EXTRA_LTLIBRARIES			=
@@ -174,6 +177,7 @@ lib_libldaputils_a_SOURCES		= $(noinst_HEADERS) \
 # macros for ldap2csv
 if LDAPUTILS_LDAP2CSV
 bin_PROGRAMS                            += src/ldap2csv
+man_MANS				+= doc/ldap2csv.1
 endif
 src_ldap2csv_DEPENDENCIES		= Makefile lib/libldaputils.a
 src_ldap2csv_CPPFLAGS			= -DPROGRAM_NAME="\"ldap2csv\"" $(AM_CPPFLAGS)
@@ -199,6 +203,7 @@ src_ldapdn2str_SOURCES			= src/ldapdn2str.c
 # macros for ldaptree
 if LDAPUTILS_LDAPTREE
 bin_PROGRAMS                            += src/ldaptree
+man_MANS				+= doc/ldaptree.1
 endif
 src_ldaptree_DEPENDENCIES		= Makefile lib/libldaputils.a
 src_ldaptree_CPPFLAGS			= -DPROGRAM_NAME="\"ldaptree\"" $(AM_CPPFLAGS)
@@ -212,6 +217,7 @@ src_ldaptree_SOURCES			= \
 # macros for ldapdebug
 if LDAPUTILS_LDAPDEBUG
 bin_PROGRAMS                            += src/ldapdebug
+man_MANS				+= doc/ldapdebug.1
 endif
 src_ldapdebug_DEPENDENCIES		= Makefile lib/libldaputils.a
 src_ldapdebug_CPPFLAGS			= -DPROGRAM_NAME="\"ldapdebug\"" $(AM_CPPFLAGS)
@@ -245,6 +251,15 @@ include $(srcdir)/contrib/bindletools/build-aux/makefile-version.am
 
 # custom targets
 .PHONY:
+
+doc/ldap2csv.1: Makefile $(srcdir)/doc/ldap2csv.1.in
+	@$(do_subst_dt)
+
+doc/ldapdebug.1: Makefile $(srcdir)/doc/ldapdebug.1.in
+	@$(do_subst_dt)
+
+doc/ldaptree.1: Makefile $(srcdir)/doc/ldaptree.1.in
+	@$(do_subst_dt)
 
 
 # local targets

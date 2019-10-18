@@ -74,7 +74,6 @@
 #endif
 
 /// getpass() replacement -- SUSV 2 deprecated getpass()
-/// @param[in] prompt
 char * ldaputils_getpass(const char * prompt)
 {
    static char    buff[512];
@@ -101,7 +100,7 @@ char * ldaputils_getpass(const char * prompt)
       return(NULL);
    sig          = signal(SIGINT, SIG_IGN);
    new          = old;
-   new.c_lflag &= ~ECHO;
+   new.c_lflag &= ~((unsigned)ECHO);
    if(tcsetattr(fileno(fs), TCSANOW, &new))
       return(NULL);
 #else
@@ -129,9 +128,6 @@ char * ldaputils_getpass(const char * prompt)
 
 
 /// retrieves password
-/// @param[in] file  file containing the password
-/// @param[in] buff  pointer to buffer for password
-/// @param[in] len   length of the buffer
 int ldaputils_pass(LDAPUtils * lud)
 {
    char    * str;
@@ -169,9 +165,6 @@ int ldaputils_pass(LDAPUtils * lud)
 
 
 /// retrieves password from file
-/// @param[in] file  file containing the password
-/// @param[in] buff  pointer to buffer for password
-/// @param[in] len   length of the buffer
 int ldaputils_passfile(LDAPUtils * lud, const char * file, char ** valp, size_t * lenp)
 {
    int           fd;

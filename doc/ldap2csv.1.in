@@ -1,0 +1,273 @@
+.\"
+.\" LDAP Utilities
+.\" Copyright (C) 2019 David M. Syzdek <david@syzdek.net>.
+.\"
+.\" Redistribution and use in source and binary forms, with or without
+.\" modification, are permitted provided that the following conditions are
+.\" met:
+.\"
+.\"    1. Redistributions of source code must retain the above copyright
+.\"       notice, this list of conditions and the following disclaimer.
+.\"
+.\"    2. Redistributions in binary form must reproduce the above copyright
+.\"       notice, this list of conditions and the following disclaimer in the
+.\"       documentation and/or other materials provided with the distribution.
+.\"
+.\"    3. Neither the name of the copyright holder nor the names of its
+.\"       contributors may be used to endorse or promote products derived from
+.\"       this software without specific prior written permission.
+.\"
+.\" THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+.\" IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+.\" THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+.\" PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+.\" CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+.\" EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+.\" PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+.\" PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+.\" LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+.\" NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+.\" SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+.\"
+.\" doc/ldap2csv.1.in - man page for ldap2csv
+.\"
+.TH "LDAP2CSV" "1" "@RELEASE_MONTH@" "@PACKAGE_NAME@" "User Commands"
+.SH NAME
+ldap2csv \- LDAP search tool which outputs CSV
+
+
+.SH SYNOPSIS
+\fBldap2csv\fR
+[\fB-b\fR \fIbasedn\fR]
+[\fB-c\fR]
+[\fB-d\fR \fIlevel\fR]
+[\fB-D\fR \fIbinddn\fR]
+[\fB-H\fR \fIURI\fR]
+[\fB-l\fR \fIlimit\fR]
+[\fB-L\fR[\fB-L\fR]]
+[\fB-n\fR]
+[\fB-v\fR | \fB--version\fR]
+[\fB-s\fR \fIscope\fR]
+[\fB-S\fR \fIattr\fR]
+[\fB-w\fR \fIpasswd\fR]
+[\fB-W\fR]
+[\fB-x\fR]
+[\fB-y\fR \fIfile\fR]
+[\fB-Y\fR \fImech\fR]
+[\fB-z\fR \fIlimit\fR]
+[\fB-Z\fR[\fB-Z\fR]]
+\fIfilter\fR
+\fIattributes...\fR
+.sp
+\fBldap2csv\fR [ \fB-h\fR | \fB--help\fR ]
+.sp
+\fBldap2csv\fR [ \fB-V\fR | \fB--version\fR ]
+
+
+.SH DESCRIPTION
+ldap2csv is a shell utilty which performs an LDAP search and prints the results
+in CSV format. 
+
+
+.SH OPTIONS
+.TP
+\fB-c\fR
+do not stop if an error is encountered
+.TP
+\fB-d\fR
+set OpenLDAP debug level to `level'
+.TP
+\fB-D\fR \fIbinddn\fR
+bind DN used for simple bind
+.TP
+\fB-H\fR \fIURI\fR
+specifies list of LDAP Uniform Resource Identifier(s) used to connect to LDAP server
+.TP
+\fB-l\fR \fIlimit\fR
+time limit (in seconds) for search
+.TP
+\fB-L\fR
+two \fB-L\fR disables comments
+.TP
+\fB-v\fR   \fB--version\fR
+run in verbose mode
+.TP
+\fB-s\fR \fIscope\fR
+specifies search filter. Must be one of \fIbase\fR, \fIone\fR, \fIsub\fR, or \fIchild\fR
+.TP
+\fB-S\fR \fIattr\fR
+sort results by attribute \fIattr\fR
+.TP
+\fB-w\fR \fIpasswd\fR
+bind password used for simple bind
+.TP
+\fB-W\fR
+prompt for bind password used in simple bind
+.TP
+\fB-x\fR
+use simple authentication for bind
+.TP
+\fB-y\fR \fIfile\fR
+read bind password from file
+.TP
+\fB-Y\fR \fImech\fR
+SASL mechanism used during bind
+.TP
+\fB-z\fR \fIlimit\fR
+size limit for search
+.TP
+\fB-Z\fR[\fB-Z\fR]
+Issue  StartTLS before bind request. \fB-ZZ\fR requires TLS operations to be successful. 
+.TP
+\fIfilter\fR
+The search filter. If not provided, the default filter, \fB(objectclass=*)\fR,
+is used.
+.TP
+\fIattributes...\fR
+The list of \fIattributes\fR to include in CSV output.  The psuedo attributes
+\fBdn\fR, \fBrdn\fR, \fBufn\fR, \fBadc\fR, and \fBdce\fR are supported.
+
+.SH PSUEDO ATTRIBUTES
+.TP
+\fBdn\fR
+distinguished name of entry. The following are examples of distinguished name:
+.in +4n
+.nf
+
+uid=dnullman,ou=People,dc=example,dc=net,o=internet
+uid=jdough,ou=People,dc=example,dc=net,o=internet
+uid=syzdek,ou=People,dc=syzdek,dc=net,o=internet
+uid=administrator,ou=People,dc=foo,dc=org
+
+.fi
+.in
+.TP
+\fBrdn\fR
+relative distinguished name of entry. The following are examples of relative
+distinguished name:
+.in +4n
+.nf
+
+uid=dnullman
+uid=jdough
+uid=syzdek
+uid=administrator
+
+.fi
+.in
+.TP
+\fBufn\fR
+User Friendly Name of distinguished name. The following are examples of User
+Friendly Names:
+.in +4n
+.nf
+
+dnullman, People, syzdek, net, internet
+jdough, People, example, net, internet
+syzdek, People, example, net, internet
+administrator, People, foo.org
+
+.fi
+.in
+.TP
+\fBadc\fR
+Active Directory canonical name of entry. The following are examples of Active
+Directory canonical names:
+.in +4n
+.nf
+
+internet/net/example/People/dnullman/
+internet/net/example/People/jdough/
+internet/net/syzdek/People/syzdek/
+foo.org/People/administrator
+
+.fi
+.in
+.TP
+\fBdce\fR
+DCE-style of distinguished name. The following are examples of ADCE-style of
+distinguished names:
+.in +4n
+.nf
+
+/o=internet/dc=net/dc=example/ou=People/uid=dnullman
+/o=internet/dc=net/dc=example/ou=People/uid=jdough
+/o=internet/dc=net/dc=syzdek/ou=People/uid=syzdek
+/dc=org/dc=foo/ou=People/uid=administrator
+
+.fi
+.in
+
+.SH EXAMPLE
+The following command:
+.in +4n
+.nf
+
+ldap2csv -LLL -x -b o=internet -S sn '(uid=*)' uid givenname sn mail title rdn
+
+.fi
+.in
+
+will perform search on the LDAP server.  The output might look something the following:
+.in +4n
+.nf
+
+"uid","givenname","sn","mail","title","rdn"
+"jdough","John","Dough","doughboy42@example.com","'Dough' Master","uid=jdough"
+"dnullman","Devian","Nullman","noreply@example.com","Linux Device : /dev/null","uid=dnullman"
+"syzdek","David M.","Syzdek","david@syzdek.net","Slackware Linux Administrator","uid=syzdek"
+
+.fi
+.in
+
+Similar search performed with \fBldapsearch\fR might produce output which looks something like the following:
+
+.in +4n
+.nf
+
+dn: uid=jdough,ou=People,dc=example,dc=net,o=internet
+uid: jdough
+givenname: John
+sn: Dough 
+mail: doughboy42@example.com
+title: "Dough" Master
+
+dn: uid=dnullman,ou=People,dc=example,dc=net,o=internet
+uid: dnullman
+givenname: Devian
+sn: Nullman
+mail: noreply@example.com
+title: Linux Device | /dev/null
+
+dn: uid=syzdek,ou=People,dc=syzdek,dc=net,o=internet
+uid: syzdek
+givenname: David M.
+sn: Syzdek
+mail: david@syzdek.net
+title: Slackware Linux Administrator
+
+.fi
+.in
+
+
+.SH "SEE ALSO"
+.BR ldapsearch (1),
+.BR ldapdebug (1),
+.BR ldaptree (1),
+.BR ldap.conf (5)
+
+
+.SH AUTHOR
+David M. Syzdek <david@syzdek.net>
+
+
+.SH ACKNOWLEDGEMENTS
+\fB@PACKAGE_NAME@\fR is developed and maintained by David M. Syzdek
+<david@syzdek.net>. \fB@PACKAGE_NAME@\fR utilizes and is styled after the
+tools and libraries maintained by the \fBThe OpenLDAP Project\fR
+<http://www.openldap.org/>.
+
+
+.Sh CAVEATS
+
+.\" end of man page
