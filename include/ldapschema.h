@@ -151,12 +151,101 @@
 //  Datatypes  //
 //             //
 /////////////////
-#ifdef __LDAPSCHEMA_PMARK
 #pragma mark - Datatypes
-#endif
 
 /// LDAP schema descriptor state
 typedef struct ldap_schema LDAPSchema;
+
+/// LDAP schema base data model
+typedef struct ldap_schema_model LDAPSchemaModel;
+
+/// LDAP schema syntax
+typedef struct ldap_schema_syntax LDAPSchemaSyntax;
+
+typedef struct ldap_schema_objectclass LDAPSchemaObjectclass;
+
+typedef struct ldap_schema_attributetype LDAPSchemaAttributeType;
+
+typedef struct ldap_schema_matchingrule LDAPSchemaMatchingRule;
+
+enum ldap_schema_syntax_class
+{
+   LDAPSchemaSyntaxUnknown        = 0,
+   LDAPSchemaSyntaxASCII          = 1,
+   LDAPSchemaSyntaxUTF8           = 2,
+   LDAPSchemaSyntaxInteger        = 3,
+   LDAPSchemaSyntaxUnsigned       = 4,
+   LDAPSchemaSyntaxBoolean        = 5,
+   LDAPSchemaSyntaxData           = 6,
+   LDAPSchemaSyntaxImage          = 7,
+   LDAPSchemaSyntaxAudio          = 8,
+   LDAPSchemaSyntaxUTF8MultiLine  = 9
+};
+typedef enum ldap_schema_syntax_class LDAPSchemaSyntaxClass;
+
+/// LDAP schema base data model
+struct ldap_schema_model
+{
+   char             * definition;  ///< defintion of object
+   char             * oid;         ///< oid of object
+   char             * desc;        ///< description of object
+   int                type;        ///< LDAP schema data type
+   int                pad0;
+   size_t             size;        ///< size of data struct
+};
+
+/// LDAP schema syntax
+struct ldap_schema_syntax
+{
+   LDAPSchemaModel         model;
+   //LDAPSchemaSyntaxClass   data_class;
+   //int                     readable;
+   //int                     uses_abnf;
+   const char            * pattern;
+   const char            * source;
+   const char            * abnf;
+   regex_t                 re;
+};
+
+/// LDAP schema objectclass
+struct ldap_schema_objectclass
+{
+   LDAPSchemaModel              model;
+   //int                          kind;
+   //size_t                       obsolete;
+   size_t                       names_len;
+   size_t                       must_len;
+   size_t                       may_len;
+   size_t                       all_must_len;
+   size_t                       all_may_len;
+   LDAPSchemaObjectclass      * sup;
+   char                      ** names;
+   LDAPSchemaAttributeType   ** must;
+   LDAPSchemaAttributeType   ** may;
+   LDAPSchemaAttributeType   ** all_must;
+   LDAPSchemaAttributeType   ** all_may;
+};
+
+struct ldap_schema_attributetype
+{
+   LDAPSchemaModel                   model;
+   LDAPSchemaSyntax                * syntax;
+   uint64_t                          flags;
+   int                               usage;
+   int                               pad0;
+   //uint8_t                           obsolete;
+   //uint8_t                           single;
+   //uint8_t                           collective;
+   //uint8_t                           no_user_mod;
+   //uint8_t                           is_objectclass;
+   size_t                            names_len;
+   size_t                            allowed_by_len;
+   size_t                            required_by_len;
+   uintmax_t                         min_upper;
+   char                           ** names;
+   LDAPSchemaObjectclass          ** allowed_by;
+   LDAPSchemaObjectclass          ** required_by;
+};
 
 
 //////////////////
@@ -181,6 +270,22 @@ ldapschema_err2string(
 _LDAPSCHEMA_F int
 ldapschema_errno(
          LDAPSchema            * lsd );
+
+
+//-----------------//
+// lexer functions //
+//-----------------//
+#pragma mark lexer functions
+
+_LDAPSCHEMA_F LDAPSchemaAttributeType *
+ldapschema_parse_attributetype(
+         LDAPSchema            * lsd,
+         const struct berval   * def );
+
+_LDAPSCHEMA_F LDAPSchemaSyntax *
+ldapschema_parse_syntax(
+         LDAPSchema            * lsd,
+         const struct berval   * def );
 
 
 //------------------//

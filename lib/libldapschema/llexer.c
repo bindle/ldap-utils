@@ -1,0 +1,445 @@
+
+/*
+ *  LDAP Utilities
+ *  Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are
+ *  met:
+ *
+ *     1. Redistributions of source code must retain the above copyright
+ *        notice, this list of conditions and the following disclaimer.
+ *
+ *     2. Redistributions in binary form must reproduce the above copyright
+ *        notice, this list of conditions and the following disclaimer in the
+ *        documentation and/or other materials provided with the distribution.
+ *
+ *     3. Neither the name of the copyright holder nor the names of its
+ *        contributors may be used to endorse or promote products derived from
+ *        this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+ *  IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ *  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ *  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ *  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ *  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ *  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ *  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+/**
+ *   @file src/ldapschema/llexer.c  contains error functions and variables
+ */
+#define _LIB_LIBLDAPSCHEMA_LLEXER_C 1
+#include "llexer.h"
+
+//
+//  RFC 4512                      LDAP Models                      June 2006
+//
+//  4.1.  Schema Definitions
+//
+//     Schema definitions in this section are described using ABNF and rely
+//     on the common productions specified in Section 1.2 as well as these:
+//
+//        noidlen = numericoid [ LCURLY len RCURLY ]
+//        len = number
+//
+//        oids = oid / ( LPAREN WSP oidlist WSP RPAREN )
+//        oidlist = oid *( WSP DOLLAR WSP oid )
+//
+//        extensions = *( SP xstring SP qdstrings )
+//        xstring = "X" HYPHEN 1*( ALPHA / HYPHEN / USCORE )
+//
+//        qdescrs = qdescr / ( LPAREN WSP qdescrlist WSP RPAREN )
+//        qdescrlist = [ qdescr *( SP qdescr ) ]
+//        qdescr = SQUOTE descr SQUOTE
+//
+//        qdstrings = qdstring / ( LPAREN WSP qdstringlist WSP RPAREN )
+//        qdstringlist = [ qdstring *( SP qdstring ) ]
+//        qdstring = SQUOTE dstring SQUOTE
+//        dstring = 1*( QS / QQ / QUTF8 )   ; escaped UTF-8 string
+//
+//        QQ =  ESC %x32 %x37 ; "\27"
+//        QS =  ESC %x35 ( %x43 / %x63 ) ; "\5C" / "\5c"
+//
+//        ; Any UTF-8 encoded Unicode character
+//        ; except %x27 ("\'") and %x5C ("\")
+//        QUTF8    = QUTF1 / UTFMB
+//
+//        ; Any ASCII character except %x27 ("\'") and %x5C ("\")
+//        QUTF1    = %x00-26 / %x28-5B / %x5D-7F
+//
+//     Schema definitions in this section also share a number of common
+//     terms.
+//
+//     The NAME field provides a set of short names (descriptors) that are
+//     to be used as aliases for the OID.
+//
+//     The DESC field optionally allows a descriptive string to be provided
+//     by the directory administrator and/or implementor.  While
+//     specifications may suggest a descriptive string, there is no
+//     requirement that the suggested (or any) descriptive string be used.
+//
+//     The OBSOLETE field, if present, indicates the element is not active.
+//
+//     Implementors should note that future versions of this document may
+//     expand these definitions to include additional terms.  Terms whose
+//     identifier begins with "X-" are reserved for private experiments and
+//     are followed by <SP> and <qdstrings> tokens.
+//
+
+///////////////
+//           //
+//  Headers  //
+//           //
+///////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Headers
+#endif
+
+#include <errno.h>
+#include <stdio.h>
+#include <string.h>
+#include <strings.h>
+#include <ldap.h>
+#include <stdlib.h>
+#include <assert.h>
+
+
+/////////////////
+//             //
+//  Functions  //
+//             //
+/////////////////
+#ifdef __LDAPUTILS_PMARK
+#pragma mark - Functions
+#endif
+
+/// frees common config
+/// @param[in]  lsd    Reference to allocated ldap_schema struct
+/// @param[in]  def    contains the string representation of an LDAP defintion
+/// @param[out] argvp  stores the allocate array of definition arguments
+///
+/// @return    If successful, returns number of arguments stored in argvp. The
+///            result must be freed using ldapschema_value_free(). If an error
+///            is encounted, returns -1.  The error code can be retrieved
+///            using ldapschema_errno().
+/// @see       ldapschema_errno, ldapschema_value_free
+int ldapschema_definition_split(LDAPSchema * lsd, const struct berval * def,
+   char *** argvp)
+{
+   char        ** argv;
+   char         * line;
+   char           encap;   // encapsulating character for segments
+   int            argc;    // argument counts
+   size_t         bol;     // beginning of line index
+   size_t         bos;     // beginning of segment index
+   size_t         eol;     // end of line index
+   size_t         line_len;
+   //size_t         len;
+   size_t         pos;
+   size_t         margin;
+   void         * ptr;
+
+   assert(lsd     != NULL);
+   assert(def     != NULL);
+   assert(argvp   != NULL);
+
+   // finds opening and ending parentheses
+   for(bol = 0; ((bol < def->bv_len) && (def->bv_val[bol] != '(')); bol++);
+   for(eol = def->bv_len-1; ((eol > bol) && (def->bv_val[eol] != ')')); eol--);
+   if ( (def->bv_val[bol] != '(') || (eol <= bol) || (def->bv_val[eol] != ')') )
+   {
+      lsd->errcode = LDAPSCHEMA_INVALID_DEFINITION;
+      return(-1);
+   };
+
+   // allocates mutable string
+   line_len = (eol - bol - 1); // adjusts for beginning of line>
+   if ((line = malloc(line_len+1)) == NULL)
+   {
+      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+      return(-1);
+   };
+   strncpy(line, &def->bv_val[bol+1], line_len);
+   line[line_len] = '\0';
+
+   // initializes argument list
+   if ((argv = malloc(sizeof(char *))) == NULL)
+   {
+      free(line);
+      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+      return(-1);
+   };
+   argv[0]  = NULL;
+   argc     = 0;
+   margin   = 0;
+
+   // splits line into multiple line segments and adds to argument list
+   for(pos = 0; (pos < line_len); pos++)
+   {
+      switch(line[pos])
+      {
+         // skip white spaces
+         case '\t':
+            case ' ':
+            break;
+
+         // processes quoted and grouped arguments
+         case '\'':
+         case '(':
+            // stores beginning of segment
+            bos = pos;
+
+            // determines line segment terminating character
+            encap = '\'';
+            if (line[pos] == '(')
+               encap = ')';
+
+            // determines data margin
+            margin = 0;
+            if (line[pos] == '\'')
+               margin = 1;
+
+            // finds end of line segment
+            for(pos = pos+1; ((line[pos] != encap) && (line[pos] != '\0')); pos++);
+            if (line[pos] == '\0')
+            {
+               free(line);
+               ldapschema_value_free(argv);
+               lsd->errcode = LDAPSCHEMA_INVALID_DEFINITION;
+               return(-1);
+            };
+
+            // terminates line segment
+            pos++;
+            line[pos-margin] = '\0';
+
+            // adds argument to argv
+            if ((ptr = ldapschema_value_add(argv, &line[bos+margin], &argc)) == NULL)
+            {
+               free(line);
+               ldapschema_value_free(argv);
+               lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+               return(-1);
+            };
+            break;
+
+         // process unquoted ungrouped arguments
+         default:
+            // stores beginning of segment
+            bos = pos;
+
+            // finds end of line segment
+            for(pos = pos+1; ((line[pos] != ' ') && (line[pos] != '\0')); pos++);
+            if (line[pos] == '\0')
+            {
+               free(line);
+               ldapschema_value_free(argv);
+               lsd->errcode = LDAPSCHEMA_INVALID_DEFINITION;
+               return(-1);
+            };
+            line[pos] = '\0';
+
+            // adds argument to argv
+            if ((ptr = ldapschema_value_add(argv, &line[bos+margin], &argc)) == NULL)
+            {
+               free(line);
+               ldapschema_value_free(argv);
+               lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+               return(-1);
+            };
+            break;
+      };
+   };
+
+   // release resources
+   free(line);
+
+   return(argc);
+}
+
+
+/// parses an LDAP syntax definition string
+/// @param[in]    lsd         Reference to pointer used to store allocated ldap_schema struct.
+/// @param[in]    def         Reference to pointer used to store allocated ldap_schema struct.
+///
+/// @return    If the definition was successfully parsed, an LDAPSchemaAttributeType
+///            object is added to the schema returned. NULL is returned if
+///            an error was encountered.  Use ldapschema_errno() to obtain
+///            the error.
+/// @see       ldapschema_errno, ldapschema_attributetype_free
+LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const struct berval * def)
+{
+   //
+   //  RFC 4512                      LDAP Models                      June 2006
+   //
+   //  4.1.2.  Attribute Types
+   //
+   //     Attribute Type definitions are written according to the ABNF:
+   //
+   //       AttributeTypeDescription = LPAREN WSP
+   //           numericoid                    ; object identifier
+   //           [ SP "NAME" SP qdescrs ]      ; short names (descriptors)
+   //           [ SP "DESC" SP qdstring ]     ; description
+   //           [ SP "OBSOLETE" ]             ; not active
+   //           [ SP "SUP" SP oid ]           ; supertype
+   //           [ SP "EQUALITY" SP oid ]      ; equality matching rule
+   //           [ SP "ORDERING" SP oid ]      ; ordering matching rule
+   //           [ SP "SUBSTR" SP oid ]        ; substrings matching rule
+   //           [ SP "SYNTAX" SP noidlen ]    ; value syntax
+   //           [ SP "SINGLE-VALUE" ]         ; single-value
+   //           [ SP "COLLECTIVE" ]           ; collective
+   //           [ SP "NO-USER-MODIFICATION" ] ; not user modifiable
+   //           [ SP "USAGE" SP usage ]       ; usage
+   //           extensions WSP RPAREN         ; extensions
+   //
+   //       usage = "userApplications"     /  ; user
+   //               "directoryOperation"   /  ; directory operational
+   //               "distributedOperation" /  ; DSA-shared operational
+   //               "dSAOperation"            ; DSA-specific operational
+   //
+   //     where:
+   //       <numericoid> is object identifier assigned to this attribute type;
+   //       NAME <qdescrs> are short names (descriptors) identifying this
+   //           attribute type;
+   //       DESC <qdstring> is a short descriptive string;
+   //       OBSOLETE indicates this attribute type is not active;
+   //       SUP oid specifies the direct supertype of this type;
+   //       EQUALITY, ORDERING, and SUBSTR provide the oid of the equality,
+   //           ordering, and substrings matching rules, respectively;
+   //       SYNTAX identifies value syntax by object identifier and may suggest
+   //           a minimum upper bound;
+   //       SINGLE-VALUE indicates attributes of this type are restricted to a
+   //           single value;
+   //       COLLECTIVE indicates this attribute type is collective
+   //           [X.501][RFC3671];
+   //       NO-USER-MODIFICATION indicates this attribute type is not user
+   //           modifiable;
+   //       USAGE indicates the application of this attribute type; and
+   //       <extensions> describe extensions.
+   //
+   //     Each attribute type description must contain at least one of the SUP
+   //     or SYNTAX fields.  If no SYNTAX field is provided, the attribute type
+   //     description takes its value from the supertype.
+   //
+   //     If SUP field is provided, the EQUALITY, ORDERING, and SUBSTRING
+   //     fields, if not specified, take their value from the supertype.
+   //
+   //     Usage of userApplications, the default, indicates that attributes of
+   //     this type represent user information.  That is, they are user
+   //     attributes.
+   //
+   //     A usage of directoryOperation, distributedOperation, or dSAOperation
+   //     indicates that attributes of this type represent operational and/or
+   //     administrative information.  That is, they are operational
+   //     attributes.
+   //
+   //     directoryOperation usage indicates that the attribute of this type is
+   //     a directory operational attribute.  distributedOperation usage
+   //     indicates that the attribute of this type is a DSA-shared usage
+   //     operational attribute.  dSAOperation usage indicates that the
+   //     attribute of this type is a DSA-specific operational attribute.
+   //
+   //     COLLECTIVE requires usage userApplications.  Use of collective
+   //     attribute types in LDAP is discussed in [RFC3671].
+   //
+   //     NO-USER-MODIFICATION requires an operational usage.
+   //
+   //     Note that the <AttributeTypeDescription> does not list the matching
+   //     rules that can be used with that attribute type in an extensibleMatch
+   //     search filter [RFC4511].  This is done using the 'matchingRuleUse'
+   //     attribute described in Section 4.1.4.
+   //
+   //     This document refines the schema description of X.501 by requiring
+   //     that the SYNTAX field in an <AttributeTypeDescription> be a string
+   //     representation of an object identifier for the LDAP string syntax
+   //     definition, with an optional indication of the suggested minimum
+   //     bound of a value of this attribute.
+   //
+   //     A suggested minimum upper bound on the number of characters in a
+   //     value with a string-based syntax, or the number of bytes in a value
+   //     for all other syntaxes, may be indicated by appending this bound
+   //     count inside of curly braces following the syntax's OBJECT IDENTIFIER
+   //     in an Attribute Type Description.  This bound is not part of the
+   //     syntax name itself.  For instance, "1.3.6.4.1.1466.0{64}" suggests
+   //     that server implementations should allow a string to be 64 characters
+   //     long, although they may allow longer strings.  Note that a single
+   //     character of the Directory String syntax may be encoded in more than
+   //     one octet since UTF-8 [RFC3629] is a variable-length encoding.
+   //
+   assert(lsd != NULL);
+   assert(def != NULL);
+   return(NULL);
+}
+
+
+/// parses an LDAP syntax definition string
+/// @param[in]    lsd         Reference to pointer used to store allocated ldap_schema struct.
+/// @param[in]    def         Reference to pointer used to store allocated ldap_schema struct.
+///
+/// @return    If the definition was successfully parsed, an LDAPSchemaSyntax
+///            object is added to the schema returned. NULL is returned if
+///            an error was encountered.  Use ldapschema_errno() to obtain
+///            the error.
+/// @see       ldapschema_errno, ldapschema_syntax_free
+LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval * def)
+{
+   //
+   //  RFC 4512                      LDAP Models                      June 2006
+   //
+   //  4.1.5.  LDAP Syntaxes
+   //
+   //     LDAP Syntaxes of (attribute and assertion) values are described in
+   //     terms of ASN.1 [X.680] and, optionally, have an octet string encoding
+   //     known as the LDAP-specific encoding.  Commonly, the LDAP-specific
+   //     encoding is constrained to a string of Unicode [Unicode] characters
+   //     in UTF-8 [RFC3629] form.
+   //
+   //     Each LDAP syntax is identified by an object identifier (OID).
+   //
+   //     LDAP syntax definitions are written according to the ABNF:
+   //
+   //       SyntaxDescription = LPAREN WSP
+   //           numericoid                 ; object identifier
+   //           [ SP "DESC" SP qdstring ]  ; description
+   //           extensions WSP RPAREN      ; extensions
+   //
+   //     where:
+   //       <numericoid> is the object identifier assigned to this LDAP syntax;
+   //       DESC <qdstring> is a short descriptive string; and
+   //       <extensions> describe extensions.
+   //
+   char              ** argv;
+   //char              ** strs;
+   int                  argc;
+   LDAPSchemaSyntax   * syntax;
+
+   syntax   = NULL;
+   argv     = NULL;
+
+   // initialize syntax
+   if ((syntax = malloc(sizeof(LDAPSchemaSyntax))) == NULL)
+   {
+      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+      return(syntax);
+   };
+   bzero(syntax, sizeof(LDAPSchemaSyntax));
+   syntax->model.size = sizeof(LDAPSchemaSyntax);
+   syntax->model.type = LDAPSCHEMA_SYNTAX;
+
+   // parses definition
+   if ((argc = ldapschema_definition_split(lsd, def, &argv)) == -1)
+   {
+      ldapschema_syntax_free(syntax);
+      return(NULL);
+   };
+
+   return(syntax);
+}
+
+
+/* end of source file */

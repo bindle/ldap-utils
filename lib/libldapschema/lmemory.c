@@ -97,7 +97,17 @@ int ldap_count_values_len( struct berval ** vals )
 /// @see       ldapschema_initialize
 void ldapschema_free(LDAPSchema * lsd)
 {
+   int i;
+
    assert(lsd != NULL);
+
+   // frees syntaxes
+   if ((lsd->syntaxes))
+   {
+      for(i = 0; ((lsd->syntaxes[i])); i++)
+         ldapschema_syntax_free(lsd->syntaxes[i]);
+      free(lsd->syntaxes);
+   };
 
    free(lsd);
 
@@ -123,6 +133,21 @@ int ldapschema_initialize(LDAPSchema ** lsdp)
    bzero(lsd, sizeof(LDAPSchema));
 
    return(LDAP_SUCCESS);
+}
+
+
+void ldapschema_syntax_free(LDAPSchemaSyntax * syntax)
+{
+   assert(syntax != NULL);
+
+   if ((syntax->model.definition))
+      free(syntax->model.definition);
+   if ((syntax->model.desc))
+      free(syntax->model.desc);
+   if ((syntax->model.oid))
+      free(syntax->model.oid);
+
+   return;
 }
 
 

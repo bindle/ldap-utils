@@ -1,3 +1,4 @@
+
 /*
  *  LDAP Utilities
  *  Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>.
@@ -30,10 +31,10 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- *  @file src/ldaputils_ldap.c  contains shared functions and variables
+ *   @file src/ldapschema/llexer.h  contains error functions and variables
  */
-#ifndef _LIB_LIBLDAPSCHEMA_H
-#define _LIB_LIBLDAPSCHEMA_H 1
+#ifndef _LIB_LIBLDAPSCHEMA_LLEXER_H
+#define _LIB_LIBLDAPSCHEMA_LLEXER_H 1
 #undef __LDAPUTILS_PMARK
 
 
@@ -43,16 +44,10 @@
 //           //
 ///////////////
 #ifdef __LDAPUTILS_PMARK
-#pragma mark - Functions
+#pragma mark - Headers
 #endif
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#define LDAP_DEPRECATED 1
-#include <ldap.h>
-#include <ldapschema.h>
+#include "libldapschema.h"
 
 
 ///////////////////
@@ -65,25 +60,6 @@
 #endif
 
 
-/////////////////
-//             //
-//  Datatypes  //
-//             //
-/////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Datatypes
-#endif
-
-/// LDAP schema descriptor state
-struct ldap_schema
-{
-   int                  errcode;          ///< last error code
-   int                  pad0;
-   LDAPSchemaSyntax  ** syntaxes;         ///< array of syntaxes
-   size_t               syntaxes_len;     /// length of syntaxes array
-};
-
-
 //////////////////
 //              //
 //  Prototypes  //
@@ -92,31 +68,6 @@ struct ldap_schema
 #ifdef __LDAPUTILS_PMARK
 #pragma mark - Prototypes
 #endif
-
-//-----------------//
-// lexer functions //
-//-----------------//
-
-int
-ldapschema_definition_split(
-         LDAPSchema            * lsd,
-         const struct berval   * def,
-         char                *** argvp );
-
-
-//------------------//
-// memory functions //
-//-------=----------//
-
-void
-ldapschema_syntax_free(
-         LDAPSchemaSyntax      * syntax );
-
-char **
-ldapschema_value_add(
-         char                 ** vals,
-         const char            * val,
-         int                   * countp );
 
 
 #endif /* end of header file */
