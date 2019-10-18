@@ -57,6 +57,8 @@
 #endif
 
 #include <inttypes.h>
+#include <regex.h>
+#include <ldap.h>
 
 
 //////////////
