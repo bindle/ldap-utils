@@ -262,7 +262,7 @@ int ldaputils_getopt(LDAPUtils * lud, int c, const char * arg)
       return(0);
 
       default:
-      return(c);
+      break;
    };
 
    /* ends function */
