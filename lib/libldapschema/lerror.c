@@ -41,9 +41,7 @@
 //  Headers  //
 //           //
 ///////////////
-#ifdef __LDAPUTILS_PMARK
 #pragma mark - Headers
-#endif
 
 #include <errno.h>
 #include <stdio.h>
@@ -59,9 +57,7 @@
 //  Functions  //
 //             //
 /////////////////
-#ifdef __LDAPUTILS_PMARK
 #pragma mark - Functions
-#endif
 
 /// initializes LDAP schema
 /// @param[in]    err         Numeric error code

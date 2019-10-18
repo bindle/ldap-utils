@@ -96,9 +96,7 @@
 //  Headers  //
 //           //
 ///////////////
-#ifdef __LDAPUTILS_PMARK
 #pragma mark - Headers
-#endif
 
 #include <errno.h>
 #include <stdio.h>
@@ -114,9 +112,7 @@
 //  Functions  //
 //             //
 /////////////////
-#ifdef __LDAPUTILS_PMARK
 #pragma mark - Functions
-#endif
 
 /// frees common config
 /// @param[in]  lsd    Reference to allocated ldap_schema struct

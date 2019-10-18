@@ -34,16 +34,13 @@
  */
 #ifndef __LDAPSCHEMA_H
 #define __LDAPSCHEMA_H 1
-#undef  __LDAPSCHEMA_PMARK
 
 ///////////////
 //           //
 //  Headers  //
 //           //
 ///////////////
-#ifdef __LDAPSCHEMA_PMARK
 #pragma mark - Headers
-#endif
 
 #ifdef WIN32
 #include <windows.h>
@@ -66,9 +63,7 @@
 //  Macros  //
 //          //
 //////////////
-#ifdef __LDAPSCHEMA_PMARK
 #pragma mark - Macros
-#endif
 
 // Exports function type
 #undef LDAPSCHEMA_C_DECLS
@@ -112,9 +107,7 @@
 //  Definitions  //
 //               //
 ///////////////////
-#ifdef __LDAPSCHEMA_PMARK
 #pragma mark - Definitions
-#endif
 
 // result codes
 #define LDAPSCHEMA_SUCCESS                            0x00     ///< operation was successful
@@ -255,9 +248,7 @@ struct ldap_schema_attributetype
 //  Prototypes  //
 //              //
 //////////////////
-#ifdef __LDAPSCHEMA_PMARK
 #pragma mark - Prototypes
-#endif
 LDAPSCHEMA_BEGIN_C_DECLS
 
 //-----------------//

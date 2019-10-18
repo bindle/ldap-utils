@@ -34,7 +34,6 @@
  */
 #ifndef _LIB_LIBLDAPSCHEMA_H
 #define _LIB_LIBLDAPSCHEMA_H 1
-#undef __LDAPUTILS_PMARK
 
 
 ///////////////
@@ -42,9 +41,7 @@
 //  Headers  //
 //           //
 ///////////////
-#ifdef __LDAPUTILS_PMARK
 #pragma mark - Functions
-#endif
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -60,9 +57,7 @@
 //  Definitions  //
 //               //
 ///////////////////
-#ifdef __LDAPUTILS_PMARK
 #pragma mark - Definitions
-#endif
 
 
 /////////////////
@@ -70,9 +65,7 @@
 //  Datatypes  //
 //             //
 /////////////////
-#ifdef __LDAPUTILS_PMARK
 #pragma mark - Datatypes
-#endif
 
 /// LDAP schema descriptor state
 struct ldap_schema
@@ -89,9 +82,7 @@ struct ldap_schema
 //  Prototypes  //
 //              //
 //////////////////
-#ifdef __LDAPUTILS_PMARK
 #pragma mark - Prototypes
-#endif
 
 //-----------------//
 // lexer functions //

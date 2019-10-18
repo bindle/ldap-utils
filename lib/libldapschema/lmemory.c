@@ -41,9 +41,7 @@
 //  Headers  //
 //           //
 ///////////////
-#ifdef __LDAPUTILS_PMARK
 #pragma mark - Headers
-#endif
 
 #include <errno.h>
 #include <stdio.h>
@@ -59,9 +57,7 @@
 //  Functions  //
 //             //
 /////////////////
-#ifdef __LDAPUTILS_PMARK
 #pragma mark - Functions
-#endif
 
 /// counts number of values in list
 /// @param[in]  vals   Reference to allocated ldap_schema struct
