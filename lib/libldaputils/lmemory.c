@@ -63,7 +63,6 @@
 #endif
 
 /// removes newlines and carriage returns
-/// @param[in] str
 char * ldaputils_chomp(char * str)
 {
    char * idx;
@@ -123,7 +122,6 @@ int ldaputils_initialize(LDAPUtils ** ludp, const char * prog_name)
 
 
 /// frees common config
-/// @param[in] lud
 void ldaputils_unbind(LDAPUtils * lud)
 {
    if (!(lud))

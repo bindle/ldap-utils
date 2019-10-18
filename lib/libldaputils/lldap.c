@@ -89,8 +89,8 @@ int ldaputils_bind_s(LDAPUtils * lud)
 
 
 /// connects and binds to LDAP server
-/// @param[in] ld    refernce to LDAP socket data
-/// @param[in] lud   reference to LDAP utilities struct
+/// @param[in]  lud    reference to LDAP utilities struct
+/// @param[out] resp   reference for returned LDAPMessage
 int ldaputils_search(LDAPUtils * lud, LDAPMessage ** resp)
 {
    int    rc;
