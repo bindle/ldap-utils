@@ -98,16 +98,12 @@
 #pragma mark - Datatypes
 #endif
 
-enum my_format
-{
-   MY_FORMAT_DN     = 0x01,
-   MY_FORMAT_RDN    = 0x02,
-   MY_FORMAT_UFN    = 0x03,
-   MY_FORMAT_ADC    = 0x04,
-   MY_FORMAT_DCE    = 0x05,
-   MY_FORMAT_IDN    = 0x06,
-};
-typedef enum my_format MyFormat;
+#define MY_FORMAT_DN     0x01
+#define MY_FORMAT_RDN    0x02
+#define MY_FORMAT_UFN    0x03
+#define MY_FORMAT_ADC    0x04
+#define MY_FORMAT_DCE    0x05
+#define MY_FORMAT_IDN    0x06
 
 
 /* configuration union */
@@ -115,7 +111,7 @@ typedef struct my_config MyConfig;
 struct my_config
 {
    LDAPUtils          * lud;
-   MyFormat             type;
+   int                  type;
    LDAPDN               dn;
 };
 
