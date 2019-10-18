@@ -142,9 +142,18 @@ typedef struct ldap_schema LDAPSchema;
 #endif
 LDAPSCHEMA_BEGIN_C_DECLS
 
-// error functions
-_LDAPSCHEMA_F const char * ldapschema_err2string( int err );
-_LDAPSCHEMA_F int ldapschema_errno( LDAPSchema * lsd );
+//-----------------//
+// error functions //
+//-----------------//
+#pragma mark error functions
+
+_LDAPSCHEMA_F const char *
+ldapschema_err2string(
+         int                     err );
+
+_LDAPSCHEMA_F int
+ldapschema_errno(
+         LDAPSchema            * lsd );
 
 
 //------------------//
@@ -161,11 +170,17 @@ ldap_count_values_len(
          struct berval        ** vals );
 
 _LDAPSCHEMA_F void
+ldapschema_free(
+         LDAPSchema            * lsd );
+
+_LDAPSCHEMA_F int
+ldapschema_initialize(
+         LDAPSchema           ** lsdp );
+
+_LDAPSCHEMA_F void
 ldapschema_value_free(
          char                 ** vals );
 
-_LDAPSCHEMA_F void ldapschema_free( LDAPSchema * lsd) ;
-_LDAPSCHEMA_F int ldapschema_initialize( LDAPSchema ** lsdp );
 _LDAPSCHEMA_F void
 ldapschema_value_free_len(
          struct berval        ** vals );
