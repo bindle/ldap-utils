@@ -59,6 +59,10 @@
 ldapschema_err2string
 ldapschema_errno
 # memory functions
+ldap_count_values
+ldap_count_values_len
 ldapschema_free
 ldapschema_initialize
+ldapschema_value_free
+ldapschema_value_free_len
 # end of symbol export file
