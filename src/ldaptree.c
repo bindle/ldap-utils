@@ -113,6 +113,7 @@ struct my_config
 {
    LDAPUtils          * lud;
    int                  copy_entry;
+   int                  pad0;
    char               * basedn;
    LDAPUtilsTreeOpts    treeopts;
 };

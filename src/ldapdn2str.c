@@ -112,6 +112,7 @@ struct my_config
 {
    LDAPUtils          * lud;
    int                  type;
+   int                  pad0;
    LDAPDN               dn;
 };
 
