@@ -116,7 +116,34 @@
 
 // result codes
 #define LDAPSCHEMA_SUCCESS                            0x00     ///< operation was successful
+#define LDAPSCHEMA_INVALID_DEFINITION                 0x7001   ///< invalid defintion
 #define LDAPSCHEMA_NO_MEMORY                          (-10)    ///< an memory allocation failed
+
+// model flags
+#define LDAPSCHEMA_O_SINGLEVALUE                      0x0001   ///< attributeType: is single value
+#define LDAPSCHEMA_O_OBSOLETE                         0x0002
+#define LDAPSCHEMA_O_COLLECTIVE                       0x0004   ///< attributeType:
+#define LDAPSCHEMA_O_NO_USER_MOD                      0x0008   ///< attributeType: is readonly
+#define LDAPSCHEMA_O_OBJECTCLASS                      0x0010   ///< attributeType: is objectClass
+#define LDAPSCHEMA_O_READABLE                         0x0020   ///< ldapSyntax: is human readable
+#define LDAPSCHEMA_O_COMMON_ABNF                      0x0040   ///< ldapSyntax: uses common ABNF
+
+// objectclass types
+#define LDAPSCHEMA_STRUCTURAL                         0x0000
+#define LDAPSCHEMA_ABSTRACT                           0x0001
+#define LDAPSCHEMA_AUXILIARY                          0x0002
+
+// attribute type usage
+#define LDAPSCHEMA_USER_APP                           0x0000   ///< AttributeType usage User Applications
+#define LDAPSCHEMA_DIRECTORY_OP                       0x0001   ///< AttributeType usage Directory Operation
+#define LDAPSCHEMA_DISTRIBUTED_OP                     0x0002   ///< AttributeType usage Distributed Operation
+#define LDAPSCHEMA_DSA_OP                             0x0003   ///< AttributeType usage DSA Operation
+
+// LDAP schema data type
+#define LDAPSCHEMA_SYNTAX                             0x0001
+#define LDAPSCHEMA_MATCHINGRULE                       0x0002
+#define LDAPSCHEMA_ATTRIBUTETYPE                      0x0003
+#define LDAPSCHEMA_OBJECTCLASS                        0x0004
 
 
 /////////////////
