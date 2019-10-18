@@ -127,6 +127,7 @@ struct ldaputils_config_struct
    int               silent;       // -L
    int               verbose;      // -v verbose mode
    int               want_pass;    // -W prompt for passowrd
+   int               pad0;
    struct berval     passwd;       //    stores password from -y, -w, and -W
    char           ** attrs;        //    result attributes
    const char      * sasl_mech;    // -Y sasl mechanism
