@@ -146,9 +146,29 @@ LDAPSCHEMA_BEGIN_C_DECLS
 _LDAPSCHEMA_F const char * ldapschema_err2string( int err );
 _LDAPSCHEMA_F int ldapschema_errno( LDAPSchema * lsd );
 
-// memory functions
+
+//------------------//
+// memory functions //
+//-------=----------//
+#pragma mark memory functions
+
+_LDAPSCHEMA_F int
+ldap_count_values(
+         char ** vals );
+
+_LDAPSCHEMA_F int
+ldap_count_values_len(
+         struct berval        ** vals );
+
+_LDAPSCHEMA_F void
+ldapschema_value_free(
+         char                 ** vals );
+
 _LDAPSCHEMA_F void ldapschema_free( LDAPSchema * lsd) ;
 _LDAPSCHEMA_F int ldapschema_initialize( LDAPSchema ** lsdp );
+_LDAPSCHEMA_F void
+ldapschema_value_free_len(
+         struct berval        ** vals );
 
 
 LDAPSCHEMA_END_C_DECLS

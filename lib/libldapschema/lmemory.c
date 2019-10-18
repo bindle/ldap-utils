@@ -63,6 +63,34 @@
 #pragma mark - Functions
 #endif
 
+/// counts number of values in list
+/// @param[in]  vals   Reference to allocated ldap_schema struct
+///
+/// @return    returns number of values in array
+/// @see       ldapschema_initialize
+int ldap_count_values( char ** vals )
+{
+   int len;
+   assert(vals != NULL);
+   for(len = 0; ((vals[len])); len++);
+   return(len);
+}
+
+
+/// counts number of values in list
+/// @param[in]  vals   stores number of arguments parsed from definition
+///
+/// @return    returns number of values in array
+/// @see       ldapschema_initialize
+int ldap_count_values_len( struct berval ** vals )
+{
+   int len;
+   assert(vals != NULL);
+   for(len = 0; ((vals[len])); len++);
+   return(len);
+}
+
+
 /// frees common config
 /// @param[in]  lsd    Reference to allocated ldap_schema struct
 ///
@@ -95,6 +123,83 @@ int ldapschema_initialize(LDAPSchema ** lsdp)
    bzero(lsd, sizeof(LDAPSchema));
 
    return(LDAP_SUCCESS);
+}
+
+
+char ** ldapschema_value_add( char ** vals, const char * val, int * countp)
+{
+   int      count;
+   size_t   len;
+   void   * ptr;
+   char   * str;
+
+   if (!(vals))
+      return(vals);
+   if (!(val))
+      return(vals);
+
+   // determine number of values
+   if ((countp))
+      count = *countp;
+   else
+   count = ldap_count_values(vals);
+
+   // saves value to array
+   if ((str = strdup(val)) == NULL)
+      return(NULL);
+
+   // increase size of vals
+   len = sizeof(char *) * ((size_t)count+1);
+   if ((ptr = realloc(vals, len)) == NULL)
+   {
+      free(str);
+      return(NULL);
+   };
+   vals          = ptr;
+   vals[count+0] = str;
+   vals[count+1] = NULL;
+
+   // increments count
+   if ((countp))
+      *countp += 1;
+
+   return(vals);
+}
+
+
+/// frees list of values
+/// @param[in]    vals        array of values to be freed
+///
+/// @see       ldapschema_free
+void ldapschema_value_free( char ** vals )
+{
+   int len;
+   if (!(vals))
+      return;
+   for(len = 0; ((vals[len])); len++)
+      free(vals[len]);
+   free(vals);
+   return;
+}
+
+
+/// frees list of values
+/// @param[in]    vals        array of values to be freed
+///
+/// @see       ldapschema_free
+void ldapschema_value_free_len( struct berval ** vals )
+{
+   int len;
+   if (!(vals))
+      return;
+   for(len = 0; ((vals[len])); len++)
+   {
+      if ((vals[len]->bv_val))
+         free(vals[len]->bv_val);
+      free(vals[len]);
+   };
+   free(vals);
+   return;
 }
 
 /* end of source file */
