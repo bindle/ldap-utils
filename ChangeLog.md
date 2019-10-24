@@ -7,8 +7,10 @@ Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>
 0.4
 ---
   - libldaputils: fixing copyright notice in `ldaputils_version()` (syzdek)
+  - ldap2csv: adding ability to specify default values (syzdek)
   - ldaptree: fixing filter handling when specifing attributes (syzdek)
   - ldaptree: adding comments above graph (syzdek)
+  - ldaptree: fixing segfault when displaying linear tree (syzdek)
 
 0.3
 ---
