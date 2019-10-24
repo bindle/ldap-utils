@@ -57,7 +57,7 @@ ldap2csv \- LDAP search tool which outputs CSV
 [\fB-z\fR \fIlimit\fR]
 [\fB-Z\fR[\fB-Z\fR]]
 \fIfilter\fR
-\fIattributes...\fR
+\fIattributes[:value] ...\fR
 .sp
 \fBldap2csv\fR [ \fB-h\fR | \fB--help\fR ]
 .sp
@@ -123,10 +123,17 @@ Issue  StartTLS before bind request. \fB-ZZ\fR requires TLS operations to be suc
 The search filter. If not provided, the default filter, \fB(objectclass=*)\fR,
 is used.
 .TP
-\fIattributes...\fR
-The list of \fIattributes\fR to include in CSV output.  The psuedo attributes
+\fIattribute\fR
+The \fIattribute\fR to include in CSV output.  The psuedo attributes
 \fBdn\fR, \fBrdn\fR, \fBufn\fR, \fBadc\fR, and \fBdce\fR are supported.
-
+.TP
+\fIattribute:value\fR
+The \fIattribute\fR and default value to include in CSV output. The default
+value is displayed if the entry does not contain the specified attribute.
+Psuedo attributes cannot be used with default values.
+.TP
+\fI...\fR
+List of additional attribute and default values to include in CSV output.
 .SH PSUEDO ATTRIBUTES
 .TP
 \fBdn\fR

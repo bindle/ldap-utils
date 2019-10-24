@@ -115,6 +115,7 @@ struct my_config
    LDAPUtils   * lud;
    const char  * filter;
    const char  * prog_name;
+   const char ** defvals;
    char          output[LDAPUTILS_OPT_LEN];
 };
 
@@ -152,7 +153,7 @@ void my_unbind(MyConfig * cnf);
 /// prints program usage and exits
 void ldaputils_usage(void)
 {
-   printf("Usage: %s [options] filter attributes...\n", PROGRAM_NAME);
+   printf("Usage: %s [options] filter attributes[:values]...\n", PROGRAM_NAME);
    ldaputils_usage_search(MY_SHORT_OPTIONS);
    ldaputils_usage_common(MY_SHORT_OPTIONS);
    printf("Special Attributes:\n");
@@ -231,6 +232,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    int        c;
    int        err;
    int        option_index;
+   char     * str;
    MyConfig * cnf;
 
    static char   short_options[] = MY_SHORT_OPTIONS;
@@ -318,9 +320,24 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
       my_unbind(cnf);
       return(1);
    };
+   if (!(cnf->defvals = (const char **) malloc(sizeof(char *) * (size_t)(argc-optind))))
+   {
+      fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
+      my_unbind(cnf);
+      return(1);
+   };
    for(c = 0; c < (argc-optind-1); c++)
+   {
       cnf->lud->attrs[c] = argv[optind+1+c];
+      cnf->defvals[c]    = "";
+      if ((str = index(argv[optind+1+c], ':')) != NULL)
+      {
+         str[0] = '\0';
+         cnf->defvals[c] = &str[1];
+      };
+   };
    cnf->lud->attrs[c] = NULL;
+   cnf->defvals[c]    = NULL;
 
    // reads password
    if ((err = ldaputils_pass(cnf->lud)) != 0)
@@ -457,7 +474,10 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
 
          // retrieves values
          if ((vals = ldap_get_values_len(ld, msg, cnf->lud->attrs[x])) == NULL)
+         {
+            printf("%s", cnf->defvals[x]);
             continue;
+         };
 
          // processes values
          for(y = 0; (y < ldap_count_values_len(vals)); y++)
@@ -517,6 +537,9 @@ void my_unbind(MyConfig * cnf)
 
    if ((cnf->lud))
       ldaputils_unbind(cnf->lud);
+
+   if ((cnf->defvals))
+      free(cnf->defvals);
 
    free(cnf);
 
