@@ -112,6 +112,7 @@
 // result codes
 #define LDAPSCHEMA_SUCCESS                            0x00     ///< operation was successful
 #define LDAPSCHEMA_INVALID_DEFINITION                 0x7001   ///< invalid defintion
+#define LDAPSCHEMA_DUPLICATE                          0x7002   ///< duplicate defintion
 #define LDAPSCHEMA_NO_MEMORY                          (-10)    ///< an memory allocation failed
 
 // model flags
@@ -135,10 +136,16 @@
 #define LDAPSCHEMA_DSA_OP                             0x0003   ///< AttributeType usage DSA Operation
 
 // LDAP schema data type
-#define LDAPSCHEMA_SYNTAX                             0x0001
-#define LDAPSCHEMA_MATCHINGRULE                       0x0002
-#define LDAPSCHEMA_ATTRIBUTETYPE                      0x0003
-#define LDAPSCHEMA_OBJECTCLASS                        0x0004
+#define LDAPSCHEMA_TYPE_MASK                          0xF000
+#define LDAPSCHEMA_SUBTYPE_MASK                       0x000F
+#define LDAPSCHEMA_SYNTAX                             0x1000
+#define LDAPSCHEMA_MATCHINGRULE                       0x2000
+#define LDAPSCHEMA_ATTRIBUTETYPE                      0x3000
+#define LDAPSCHEMA_OBJECTCLASS                        0x4000
+#define LDAPSCHEMA_TYPE( val )                        (val & LDAPSCHEMA_TYPE_MASK )
+#define LDAPSCHEMA_SUBTYPE( val )                     (val & LDAPSCHEMA_SUBTYPE_MASK )
+#define LDAPSCHEMA_IS_TYPE( val, type )               ( LDAPSCHEMA_TYPE(val)         == type )
+#define LDAPSCHEMA_IS_SUBTYPE( val, type )            ( LDAPSCHEMA_SUBTYPE_MASK(val) == type )
 
 
 /////////////////
@@ -163,6 +170,9 @@ typedef struct ldap_schema_attributetype LDAPSchemaAttributeType;
 
 typedef struct ldap_schema_matchingrule LDAPSchemaMatchingRule;
 
+typedef struct ldap_schema_extension LDAPSchemaExtension;
+
+
 enum ldap_schema_syntax_class
 {
    LDAPSchemaSyntaxUnknown        = 0,
@@ -178,15 +188,26 @@ enum ldap_schema_syntax_class
 };
 typedef enum ldap_schema_syntax_class LDAPSchemaSyntaxClass;
 
+/// LDAP schema extension
+struct ldap_schema_extension
+{
+   char             * extension;
+   char            ** values;
+   size_t             values_len;
+};
+
+
 /// LDAP schema base data model
 struct ldap_schema_model
 {
+   size_t             size;        ///< size of data struct
+   uint32_t           type;        ///< LDAP schema data type
+   uint32_t           flags;
    char             * definition;  ///< defintion of object
    char             * oid;         ///< oid of object
-   char             * desc;        ///< description of object
-   int                type;        ///< LDAP schema data type
-   int                pad0;
-   size_t             size;        ///< size of data struct
+   char             * desc;        ///< description of object;
+   LDAPSchemaExtension  ** extensions;
+   size_t                  extensions_len;
 };
 
 /// LDAP schema syntax
@@ -266,6 +287,17 @@ ldapschema_errno(
 
 
 //-----------------//
+// LDAP functions //
+//-----------------//
+#pragma mark LDAP functions
+
+int
+ldapschema_fetch(
+         LDAPSchema            * lsd,
+         LDAP                  * ld );
+
+
+//-----------------//
 // lexer functions //
 //-----------------//
 #pragma mark lexer functions
@@ -283,7 +315,7 @@ ldapschema_parse_syntax(
 
 //------------------//
 // memory functions //
-//-------=----------//
+//------------------//
 #pragma mark memory functions
 
 _LDAPSCHEMA_F int
@@ -309,6 +341,22 @@ ldapschema_value_free(
 _LDAPSCHEMA_F void
 ldapschema_value_free_len(
          struct berval        ** vals );
+
+
+//----------------//
+// sort functions //
+//----------------//
+#pragma mark sort functions
+
+_LDAPSCHEMA_F int
+ldapschema_model_cmp(
+         const void            * m1,
+         const void            * m2 );
+
+_LDAPSCHEMA_F int
+ldapschema_syntax_cmp(
+         const LDAPSchemaSyntax * s1,
+         const LDAPSchemaSyntax * s2 );
 
 
 LDAPSCHEMA_END_C_DECLS

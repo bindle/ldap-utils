@@ -31,10 +31,11 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- *   @file src/ldapschema/lerror.c  contains error functions and variables
+ *   @file src/ldapschema/lerror.h  contains error functions and variables
  */
-#define _LIB_LIBLDAPSCHEMA_LERROR_C 1
-#include "lerror.h"
+#ifndef _LIB_LIBLDAPSCHEMA_LLDAP_H
+#define _LIB_LIBLDAPSCHEMA_LLDAP_H 1
+
 
 ///////////////
 //           //
@@ -43,47 +44,23 @@
 ///////////////
 #pragma mark - Headers
 
-#include <errno.h>
-#include <stdio.h>
-#include <string.h>
-#include <strings.h>
-#include <stdlib.h>
+#include "libldapschema.h"
 
 
-/////////////////
-//             //
-//  Functions  //
-//             //
-/////////////////
-#pragma mark - Functions
-
-/// initializes LDAP schema
-/// @param[in]    err         Numeric error code
-///
-/// @return    Returns a string representation of the error code.
-/// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
-const char * ldapschema_err2string( int err )
-{
-   switch(err)
-   {
-      case LDAPSCHEMA_SUCCESS:      return("success");
-      case LDAPSCHEMA_NO_MEMORY:    return("out of virtual memory");
-      default:                      return("unknown error");
-   };
-
-   return(LDAP_SUCCESS);
-}
+///////////////////
+//               //
+//  Definitions  //
+//               //
+///////////////////
+#pragma mark - Definitions
 
 
-/// initializes LDAP schema
-/// @param[in]  lsd    Reference to allocated ldap_schema struct
-///
-/// @return    Returns a numeric code of last error
-/// @see       ldapschema_free, ldapschema_initialize, ldapschema_err2string
-int ldapschema_errno( LDAPSchema * lsd )
-{
-   assert(lsd != NULL);
-   return(lsd->errcode);
-}
+//////////////////
+//              //
+//  Prototypes  //
+//              //
+//////////////////
+#pragma mark - Prototypes
 
-/* end of source file */
+
+#endif /* end of header file */

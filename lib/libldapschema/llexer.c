@@ -102,9 +102,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <strings.h>
-#include <ldap.h>
 #include <stdlib.h>
-#include <assert.h>
 
 
 /////////////////
@@ -114,9 +112,10 @@
 /////////////////
 #pragma mark - Functions
 
-/// frees common config
+/// splits string into arguments
 /// @param[in]  lsd    Reference to allocated ldap_schema struct
-/// @param[in]  def    contains the string representation of an LDAP defintion
+/// @param[in]  str    contains the string representation of an LDAP defintion
+/// @param[in]  strlen length of string
 /// @param[out] argvp  stores the allocate array of definition arguments
 ///
 /// @return    If successful, returns number of arguments stored in argvp. The
@@ -124,8 +123,8 @@
 ///            is encounted, returns -1.  The error code can be retrieved
 ///            using ldapschema_errno().
 /// @see       ldapschema_errno, ldapschema_value_free
-int ldapschema_definition_split(LDAPSchema * lsd, const struct berval * def,
-   char *** argvp)
+int ldapschema_definition_split(LDAPSchema * lsd, const char * str,
+   size_t strlen, char *** argvp)
 {
    char        ** argv;
    char         * line;
@@ -141,13 +140,13 @@ int ldapschema_definition_split(LDAPSchema * lsd, const struct berval * def,
    void         * ptr;
 
    assert(lsd     != NULL);
-   assert(def     != NULL);
+   assert(str     != NULL);
    assert(argvp   != NULL);
 
    // finds opening and ending parentheses
-   for(bol = 0; ((bol < def->bv_len) && (def->bv_val[bol] != '(')); bol++);
-   for(eol = def->bv_len-1; ((eol > bol) && (def->bv_val[eol] != ')')); eol--);
-   if ( (def->bv_val[bol] != '(') || (eol <= bol) || (def->bv_val[eol] != ')') )
+   for(bol = 0; ((bol < strlen) && (str[bol] != '(')); bol++);
+   for(eol = strlen-1; ((eol > bol) && (str[eol] != ')')); eol--);
+   if ( (str[bol] != '(') || (eol <= bol) || (str[eol] != ')') )
    {
       lsd->errcode = LDAPSCHEMA_INVALID_DEFINITION;
       return(-1);
@@ -160,7 +159,7 @@ int ldapschema_definition_split(LDAPSchema * lsd, const struct berval * def,
       lsd->errcode = LDAPSCHEMA_NO_MEMORY;
       return(-1);
    };
-   strncpy(line, &def->bv_val[bol+1], line_len);
+   strncpy(line, &str[bol+1], line_len);
    line[line_len] = '\0';
 
    // initializes argument list
@@ -256,6 +255,25 @@ int ldapschema_definition_split(LDAPSchema * lsd, const struct berval * def,
    free(line);
 
    return(argc);
+}
+
+
+/// splits string into arguments
+/// @param[in]  lsd    Reference to allocated ldap_schema struct
+/// @param[in]  def    contains the string representation of an LDAP defintion
+/// @param[out] argvp  stores the allocate array of definition arguments
+///
+/// @return    If successful, returns number of arguments stored in argvp. The
+///            result must be freed using ldapschema_value_free(). If an error
+///            is encounted, returns -1.  The error code can be retrieved
+///            using ldapschema_errno().
+/// @see       ldapschema_errno, ldapschema_value_free
+int ldapschema_definition_split_len(LDAPSchema * lsd, const struct berval * def, char *** argvp )
+{
+   assert(lsd   != NULL);
+   assert(def   != NULL);
+   assert(argvp != NULL);
+   return(ldapschema_definition_split(lsd, def->bv_val, def->bv_len, argvp));
 }
 
 
@@ -373,6 +391,55 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
 }
 
 
+/// parses extension
+/// @param[in]  lsd    Reference to allocated ldap_schema struct
+///
+/// @see       ldapschema_initialize
+int ldapschema_parse_ext(LDAPSchema * lsd, LDAPSchemaModel * model, const char * key, const char * valstr)
+{
+   int                        err;
+   LDAPSchemaExtension      * ext;
+
+   assert(lsd    != NULL);
+   assert(model  != NULL);
+   assert(key    != NULL);
+   assert(valstr != NULL);
+
+   // initialize extension
+   if ((ext = ldapschema_ext_initialize(lsd, key)) == NULL)
+      return(-1);
+
+   // copies values
+   if (valstr[0] == '(')
+   {
+      if ((ext->values = malloc(sizeof(LDAPSchemaExtension *)*2)) == NULL)
+      {
+         lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+         ldapschema_ext_free(ext);
+         return(-1);
+      };
+      if ((ext->values[0] = strdup(valstr)) == NULL)
+      {
+         free(ext->values);
+         lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+         ldapschema_ext_free(ext);
+         return(-1);
+      };
+      ext->values[1] = NULL;
+   }
+   else
+   {
+      if ((err = ldapschema_definition_split(lsd, valstr, strlen(valstr), &ext->values)) != LDAPSCHEMA_SUCCESS)
+      {
+         ldapschema_ext_free(ext);
+         return(-1);
+      };
+   };
+
+   return(0);
+}
+
+
 /// parses an LDAP syntax definition string
 /// @param[in]    lsd         Reference to pointer used to store allocated ldap_schema struct.
 /// @param[in]    def         Reference to pointer used to store allocated ldap_schema struct.
@@ -411,6 +478,7 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
    //
    char              ** argv;
    //char              ** strs;
+   int64_t              pos;
    int                  argc;
    LDAPSchemaSyntax   * syntax;
 
@@ -418,17 +486,85 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
    argv     = NULL;
 
    // initialize syntax
-   if ((syntax = malloc(sizeof(LDAPSchemaSyntax))) == NULL)
-   {
-      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+   if ((syntax = ldapschema_syntax_initialize(lsd)) == NULL)
       return(syntax);
-   };
-   bzero(syntax, sizeof(LDAPSchemaSyntax));
-   syntax->model.size = sizeof(LDAPSchemaSyntax);
-   syntax->model.type = LDAPSCHEMA_SYNTAX;
 
    // parses definition
-   if ((argc = ldapschema_definition_split(lsd, def, &argv)) == -1)
+   if ((argc = ldapschema_definition_split_len(lsd, def, &argv)) == -1)
+   {
+      ldapschema_syntax_free(syntax);
+      return(NULL);
+   };
+
+   // copy definition and oid into syntax
+   if ((syntax->model.oid = strdup(argv[0])) == NULL)
+   {
+      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+      ldapschema_value_free(argv);
+      ldapschema_syntax_free(syntax);
+      return(NULL);
+   };
+   if ((syntax->model.definition = malloc(def->bv_len+1)) == NULL)
+   {
+      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+      ldapschema_value_free(argv);
+      ldapschema_syntax_free(syntax);
+      return(NULL);
+   };
+   memcpy(syntax->model.definition, def->bv_val, def->bv_len);
+   syntax->model.definition[def->bv_len] = '\0';
+
+   // processes attribute definition
+   for(pos = 1; pos < argc; pos++)
+   {
+      // inteprets extensions
+      if (!(strncasecmp(argv[pos], "X-", 2)))
+      {
+         pos++;
+      }
+
+      // inteprets syntax DESC
+      else if (!(strcasecmp(argv[pos], "DESC")))
+      {
+         pos++;
+         if (pos >= argc)
+         {
+            lsd->errcode = LDAPSCHEMA_INVALID_DEFINITION;
+            ldapschema_value_free(argv);
+            ldapschema_syntax_free(syntax);
+            return(NULL);
+         };
+         if ((syntax->model.desc))
+            free(syntax->model.desc);
+         if ((syntax->model.desc = strdup(argv[pos])) == NULL)
+         {
+            lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+            ldapschema_value_free(argv);
+            ldapschema_syntax_free(syntax);
+            return(NULL);
+         };
+      }
+
+      // handle unknown parameters
+      else
+      {
+         lsd->errcode = LDAPSCHEMA_INVALID_DEFINITION;
+         ldapschema_value_free(argv);
+         ldapschema_syntax_free(syntax);
+         return(NULL);
+      };
+   };
+
+   // free resources
+   ldapschema_value_free(argv);
+
+   // adds syntax into OID list
+   if ((ldapschema_insert(lsd, &lsd->oids, &lsd->oids_len, syntax, ldapschema_model_cmp)) != LDAP_SUCCESS)
+   {
+      ldapschema_syntax_free(syntax);
+      return(NULL);
+   };
+   if ((ldapschema_insert(lsd, (void ***)&lsd->syntaxes, &lsd->syntaxes_len, syntax, ldapschema_model_cmp)) != LDAP_SUCCESS)
    {
       ldapschema_syntax_free(syntax);
       return(NULL);

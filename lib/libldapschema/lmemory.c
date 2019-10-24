@@ -47,9 +47,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <strings.h>
-#include <ldap.h>
 #include <stdlib.h>
-#include <assert.h>
 
 
 /////////////////
@@ -87,6 +85,46 @@ int ldap_count_values_len( struct berval ** vals )
 }
 
 
+void ldapschema_ext_free(LDAPSchemaExtension * ext)
+{
+   if (!(ext))
+      return;
+
+   if ((ext->extension))
+      free(ext->extension);
+
+   if ((ext->values))
+      ldapschema_value_free(ext->values);
+
+   return;
+}
+
+
+LDAPSchemaExtension * ldapschema_ext_initialize(LDAPSchema * lsd, const char * name)
+{
+   LDAPSchemaExtension   * ext;
+
+   assert(lsd  != NULL);
+   assert(name != NULL);
+
+   if ((ext = malloc(sizeof(LDAPSchemaExtension))) == NULL)
+   {
+      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+      return(NULL);
+   };
+   bzero(ext, sizeof(LDAPSchemaExtension));
+
+   if ((ext->extension = strdup(name)) == NULL)
+   {
+      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+      free(ext);
+      return(NULL);
+   };
+
+   return(ext);
+}
+
+
 /// frees common config
 /// @param[in]  lsd    Reference to allocated ldap_schema struct
 ///
@@ -101,8 +139,27 @@ void ldapschema_free(LDAPSchema * lsd)
    if ((lsd->syntaxes))
    {
       for(i = 0; ((lsd->syntaxes[i])); i++)
-         ldapschema_syntax_free(lsd->syntaxes[i]);
+         free(lsd->syntaxes[i]);
       free(lsd->syntaxes);
+   };
+
+   // frees oids
+   if ((lsd->oids))
+   {
+      for(i = 0; ((lsd->oids[i])); i++)
+      {
+         switch( ((LDAPSchemaModel *)lsd->oids[i])->type )
+         {
+            case LDAPSCHEMA_SYNTAX:
+            ldapschema_syntax_free(lsd->oids[i]);
+            break;
+
+            default:
+            free(lsd->oids[i]);
+            break;
+         };
+      };
+      free(lsd->oids);
    };
 
    free(lsd);
@@ -125,10 +182,139 @@ int ldapschema_initialize(LDAPSchema ** lsdp)
 
    // allocate initial memory
    if ((lsd = malloc(sizeof(LDAPSchema))) == NULL)
-      return(LDAP_NO_MEMORY);
+      return(LDAPSCHEMA_NO_MEMORY);
    bzero(lsd, sizeof(LDAPSchema));
 
+   // allocate array for OIDs
+   if ((lsd->oids = malloc(sizeof(void *))) == NULL)
+   {
+      ldapschema_free(lsd);
+      return(LDAPSCHEMA_NO_MEMORY);
+   };
+   bzero(lsd->oids, sizeof(void *));
+
+   // allocate array for OIDs
+   if ((lsd->syntaxes = malloc(sizeof(void *))) == NULL)
+   {
+      ldapschema_free(lsd);
+      return(LDAPSCHEMA_NO_MEMORY);
+   };
+   bzero(lsd->oids, sizeof(void *));
+
    return(LDAP_SUCCESS);
+}
+
+
+int ldapschema_insert(LDAPSchema * lsd, void *** listp, size_t * lenp, void * obj, int (*compar)(const void *, const void *))
+{
+   void        ** list;
+   //size_t         len;
+   size_t         size;
+   size_t         low;
+   size_t         mid;
+   size_t         high;
+   size_t         idx;
+   size_t         pos;
+   int            res;
+
+   assert(lsd    != NULL);
+   assert(listp  != NULL);
+   assert(lenp   != NULL);
+   assert(obj    != NULL);
+   assert(compar != NULL);
+
+   // increase size of array
+   size = sizeof(void *) * ((*lenp) + 1);
+   if ((list = realloc(*listp, size)) == NULL)
+   {
+      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+      return(-1);
+   };
+   *listp      = list;
+   list[*lenp] = NULL;
+
+   low   = 0;
+   high  = (*lenp) - 1;
+
+   // finds position in array
+   while ((high - low) > 1)
+   {
+      mid = (low + high) / 2;
+      res = compar(obj, list[mid]);
+      if (res < 0)
+         high = mid;
+      else if (res > 0)
+         low = mid;
+      else
+      {
+         lsd->errcode = LDAPSCHEMA_DUPLICATE;
+         return(-1);
+      };
+   };
+
+   // checks low value
+   idx = *lenp;
+   if ((res = compar(obj, list[low])) == 0)
+   {
+      lsd->errcode = LDAPSCHEMA_DUPLICATE;
+      return(-1);
+   }
+   else if (res < 0)
+      idx = low;
+   // checks high value
+   else if ((res = compar(obj, list[high])) == 0)
+   {
+      lsd->errcode = LDAPSCHEMA_DUPLICATE;
+      return(-1);
+   }
+   else if (res < 0)
+      idx = high;
+   else
+      idx = high+1;
+
+   // shift array members
+   for(pos = *lenp; pos > idx; pos--)
+      list[pos] = list[pos-1];
+
+   // stores object and increments length
+   list[pos] = obj;
+   (*lenp)++;
+
+   return(0);
+}
+
+
+void ldapschema_model_free(LDAPSchemaModel * model)
+{
+   size_t ext;
+
+   assert(model != NULL);
+
+   if ((model->definition))
+      free(model->definition);
+
+   if ((model->desc))
+      free(model->desc);
+
+   if ((model->oid))
+      free(model->oid);
+
+   if ((model->extensions))
+   {
+      for(ext = 0; ((model->extensions[ext])); ext++)
+      {
+         if ((model->extensions[ext]->extension))
+            free(model->extensions[ext]->extension);
+         if ((model->extensions[ext]->values))
+            ldapschema_value_free(model->extensions[ext]->values);
+         free(model->extensions[ext]);
+      };
+      free(model->extensions);
+   };
+
+   free(model);
+
+   return;
 }
 
 
@@ -136,14 +322,29 @@ void ldapschema_syntax_free(LDAPSchemaSyntax * syntax)
 {
    assert(syntax != NULL);
 
-   if ((syntax->model.definition))
-      free(syntax->model.definition);
-   if ((syntax->model.desc))
-      free(syntax->model.desc);
-   if ((syntax->model.oid))
-      free(syntax->model.oid);
+   ldapschema_model_free(&syntax->model);
 
    return;
+}
+
+
+LDAPSchemaSyntax * ldapschema_syntax_initialize(LDAPSchema * lsd)
+{
+   LDAPSchemaSyntax * syntax;
+
+   assert(lsd != NULL);
+
+   // initialize syntax
+   if ((syntax = malloc(sizeof(LDAPSchemaSyntax))) == NULL)
+   {
+      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+      return(syntax);
+   };
+   bzero(syntax, sizeof(LDAPSchemaSyntax));
+   syntax->model.size = sizeof(LDAPSchemaSyntax);
+   syntax->model.type = LDAPSCHEMA_SYNTAX;
+
+   return(syntax);
 }
 
 

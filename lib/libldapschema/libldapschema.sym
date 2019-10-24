@@ -65,4 +65,7 @@ ldapschema_free
 ldapschema_initialize
 ldapschema_value_free
 ldapschema_value_free_len
+# sort functions
+ldapschema_model_cmp
+ldapschema_syntax_cmp
 # end of symbol export file

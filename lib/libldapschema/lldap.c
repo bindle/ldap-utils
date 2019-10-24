@@ -33,8 +33,8 @@
 /**
  *   @file src/ldapschema/lerror.c  contains error functions and variables
  */
-#define _LIB_LIBLDAPSCHEMA_LERROR_C 1
-#include "lerror.h"
+#define _LIB_LIBLDAPSCHEMA_LLDAP_C 1
+#include "lldap.h"
 
 ///////////////
 //           //
@@ -57,33 +57,48 @@
 /////////////////
 #pragma mark - Functions
 
-/// initializes LDAP schema
-/// @param[in]    err         Numeric error code
-///
-/// @return    Returns a string representation of the error code.
-/// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
-const char * ldapschema_err2string( int err )
+int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
 {
-   switch(err)
+   int                  err;
+   char              ** attrs;
+   LDAPMessage        * res;
+   struct timeval       timeout;
+   LDAPMessage        * msg;
+   char              ** dns;
+
+   assert(lsd != NULL);
+   assert(ld  != NULL);
+
+   timeout.tv_sec    = 5;
+   timeout.tv_usec   = 0;
+
+   if ((err = ldapschema_definition_split(lsd, "+ *", 3, &attrs)) != LDAPSCHEMA_SUCCESS)
+      return(-1);
+
+   // searches for schema DN
+   if ((err = ldap_search_ext_s(ld, "", LDAP_SCOPE_BASE, "(objectclass=*)", attrs, 0, NULL, NULL, NULL, 0, &res)) != LDAP_SUCCESS)
    {
-      case LDAPSCHEMA_SUCCESS:      return("success");
-      case LDAPSCHEMA_NO_MEMORY:    return("out of virtual memory");
-      default:                      return("unknown error");
+      ldapschema_value_free(attrs);
+      return(-1);
    };
+   msg = ldap_first_entry(ld, res);
+   if ((dns = ldap_get_values(ld, msg, "subschemaSubentry")) != NULL)
+   {
+      ldap_value_free(dns);
+      return(-1);
+   };
+   ldap_msgfree(msg);
+
+   // retrieves schema
+   if ((err = ldap_search_ext_s(ld, dns[0], LDAP_SCOPE_BASE, "(objectclass=*)", attrs, 0, NULL, NULL, NULL, 0, &res)) != LDAP_SUCCESS)
+   {
+      ldap_value_free(dns);
+      ldapschema_value_free(attrs);
+      return(-1);
+   };
+   ldap_value_free(dns);
 
    return(LDAP_SUCCESS);
-}
-
-
-/// initializes LDAP schema
-/// @param[in]  lsd    Reference to allocated ldap_schema struct
-///
-/// @return    Returns a numeric code of last error
-/// @see       ldapschema_free, ldapschema_initialize, ldapschema_err2string
-int ldapschema_errno( LDAPSchema * lsd )
-{
-   assert(lsd != NULL);
-   return(lsd->errcode);
 }
 
 /* end of source file */

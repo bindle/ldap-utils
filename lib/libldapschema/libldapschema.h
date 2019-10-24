@@ -47,6 +47,8 @@
 #include <config.h>
 #endif
 
+#include <assert.h>
+
 #define LDAP_DEPRECATED 1
 #include <ldap.h>
 #include <ldapschema.h>
@@ -72,8 +74,18 @@ struct ldap_schema
 {
    int                  errcode;          ///< last error code
    int                  pad0;
+   void              ** oids;             ///< array of all known oids
+   size_t               oids_len;         ///< length of oids array
    LDAPSchemaSyntax  ** syntaxes;         ///< array of syntaxes
    size_t               syntaxes_len;     /// length of syntaxes array
+};
+
+
+/// LDAP schema descriptor state
+struct ldap_schema_link
+{
+   const char         * key;
+   void               * ptr;
 };
 
 
@@ -91,8 +103,22 @@ struct ldap_schema
 int
 ldapschema_definition_split(
          LDAPSchema            * lsd,
+         const char            * str,
+         size_t                  strlen,
+         char                *** argvp );
+
+int
+ldapschema_definition_split_len(
+         LDAPSchema            * lsd,
          const struct berval   * def,
          char                *** argvp );
+
+int
+ldapschema_parse_ext(
+         LDAPSchema            * lsd,
+         LDAPSchemaModel       * model,
+         const char            * key,
+         const char            * valstr );
 
 
 //------------------//
@@ -100,8 +126,33 @@ ldapschema_definition_split(
 //-------=----------//
 
 void
+ldapschema_ext_free(
+         LDAPSchemaExtension   * ext );
+
+LDAPSchemaExtension *
+ldapschema_ext_initialize(
+         LDAPSchema            * lsd,
+         const char            * name );
+
+int
+ldapschema_insert(
+         LDAPSchema            * lsd,
+         void                *** listp,
+         size_t                * lenp,
+         void                  * obj,
+         int (*compar)(const void *, const void *) );
+
+void
+ldapschema_model_free(
+         LDAPSchemaModel       * model );
+
+void
 ldapschema_syntax_free(
          LDAPSchemaSyntax      * syntax );
+
+LDAPSchemaSyntax *
+ldapschema_syntax_initialize(
+         LDAPSchema            * lsd );
 
 char **
 ldapschema_value_add(
