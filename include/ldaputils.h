@@ -112,6 +112,7 @@ struct ldap_utils_tree_opts
    size_t    maxchildren;
    size_t    style;
    size_t    compact;
+   size_t    expandall;
 };
 
 
@@ -262,7 +263,7 @@ void ldaputils_tree_free(LDAPUtilsTree * tree);
 
 LDAPUtilsTree * ldaputils_tree_initialize(LDAPUtilsEntries * entries, int copy);
 
-size_t ldaputils_tree_level_count(LDAPUtilsTree * tree);
+size_t ldaputils_tree_level_count(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts);
 
 void ldaputils_tree_print(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts);
 

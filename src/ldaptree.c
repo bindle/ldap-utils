@@ -160,6 +160,7 @@ void ldaputils_usage(void)
    printf("  --max-nodes=num           maximum branches and leafs on each node to display\n");
    printf("  --style=format            output format of bullets or hierarchy (default: hierarchy)\n");
    printf("  --compact                 remove white space used for styling\n");
+   printf("  --expand                  expand DN prefix\n");
    printf("\nReport bugs to <%s>.\n", PACKAGE_BUGREPORT);
    return;
 }
@@ -260,6 +261,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    static char   short_options[] = MY_SHORT_OPTIONS;
    static struct option long_options[] =
    {
+      {"expand",         no_argument,      0, '2'},
       {"compact",        no_argument,      0, '3'},
       {"style",         required_argument, 0, '4'},
       {"style",         required_argument, 0, '4'},
@@ -316,6 +318,10 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
          case 1:
          my_unbind(cnf);
          return(1);
+
+         case '2':
+         cnf->treeopts.expandall = 1;
+         break;
 
          case '3':
          cnf->treeopts.compact = 1;
