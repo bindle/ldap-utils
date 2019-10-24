@@ -534,7 +534,7 @@ size_t ldaputils_tree_level_count(LDAPUtilsTree * tree)
    for(x = 0; x < tree->children_len; x++)
    {
       child = tree->children[x];
-      while (child->children_len < 2)
+      while ( (child->children_len == 1) && (!(child->entry)) )
          child = child->children[0];
       ldaputils_tree_level_count_recursive(child, 1, &depth);
    };
@@ -566,7 +566,6 @@ void ldaputils_tree_print(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts)
 {
    size_t                    x;
    size_t                    depth;
-   size_t                    attrs_count;
    LDAPUtilsTree           * child;
    char                      dn[512];
    char                      tmp[512];
@@ -590,8 +589,7 @@ void ldaputils_tree_print(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts)
    {
       snprintf(dn, sizeof(dn), "%s", tree->children[x]->rdn);
       child = tree->children[x];
-      attrs_count = ((child->entry)) ? child->entry->attrs_count : 0;
-      while ((child->children_len < 2) && (attrs_count < 1) )
+      while ((child->children_len == 1) && (!(child->entry))  )
       {
          snprintf(tmp, sizeof(tmp), "%s, %s", child->children[0]->rdn, dn);
          strncpy(dn, tmp, sizeof(dn));
