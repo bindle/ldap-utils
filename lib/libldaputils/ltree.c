@@ -521,7 +521,7 @@ LDAPUtilsTree * ldaputils_tree_initialize(LDAPUtilsEntries * entries, int copy)
    return(tree);
 }
 
-size_t ldaputils_tree_level_count(LDAPUtilsTree * tree)
+size_t ldaputils_tree_level_count(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts)
 {
    size_t          x;
    LDAPUtilsTree * child;
@@ -534,9 +534,10 @@ size_t ldaputils_tree_level_count(LDAPUtilsTree * tree)
    for(x = 0; x < tree->children_len; x++)
    {
       child = tree->children[x];
-      while (child->children_len < 2)
-         child = child->children[0];
-      ldaputils_tree_level_count_recursive(child, 1, &depth);
+      if (!(opts->expandall))
+         while ( (child->children_len == 1) && (!(child->entry)) )
+            child = child->children[0];
+      ldaputils_tree_level_count_recursive(tree->children[x], 1, &depth);
    };
 
    return(depth);
@@ -566,7 +567,6 @@ void ldaputils_tree_print(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts)
 {
    size_t                    x;
    size_t                    depth;
-   size_t                    attrs_count;
    LDAPUtilsTree           * child;
    char                      dn[512];
    char                      tmp[512];
@@ -578,7 +578,7 @@ void ldaputils_tree_print(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts)
    recur.opts = opts;
 
    // initializes delmiter map
-   depth = ldaputils_tree_level_count(tree);
+   depth = ldaputils_tree_level_count(tree, opts);
    if ((recur.map = malloc(depth+1)) == NULL)
       return;
    for(x = 0; x < depth; x++)
@@ -590,12 +590,14 @@ void ldaputils_tree_print(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts)
    {
       snprintf(dn, sizeof(dn), "%s", tree->children[x]->rdn);
       child = tree->children[x];
-      attrs_count = ((child->entry)) ? child->entry->attrs_count : 0;
-      while ((child->children_len < 2) && (attrs_count < 1) )
+      if (!(opts->expandall))
       {
-         snprintf(tmp, sizeof(tmp), "%s, %s", child->children[0]->rdn, dn);
-         strncpy(dn, tmp, sizeof(dn));
-         child = child->children[0];
+         while ((child->children_len == 1) && (!(child->entry))  )
+         {
+            snprintf(tmp, sizeof(tmp), "%s, %s", child->children[0]->rdn, dn);
+            strncpy(dn, tmp, sizeof(dn));
+            child = child->children[0];
+         };
       };
       if (opts->style == LDAPUTILS_TREE_BULLETS)
          printf("* %s\n", dn);
