@@ -11,6 +11,7 @@ Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>
   - ldaptree: fixing filter handling when specifing attributes (syzdek)
   - ldaptree: adding comments above graph (syzdek)
   - ldaptree: fixing segfault when displaying linear tree (syzdek)
+  - ide: splitting IDE project files into separate project (syzdek)
 
 0.3
 ---
