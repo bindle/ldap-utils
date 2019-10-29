@@ -153,7 +153,7 @@ void my_unbind(MyConfig * cnf);
 /// prints program usage and exits
 void ldaputils_usage(void)
 {
-   printf("Usage: %s [options] filter attributes[:values]...\n", PROGRAM_NAME);
+   printf("Usage: %s [options] [filter] attributes[:values]...\n", PROGRAM_NAME);
    ldaputils_usage_search(MY_SHORT_OPTIONS);
    ldaputils_usage_common(MY_SHORT_OPTIONS);
    printf("Special Attributes:\n");
@@ -302,7 +302,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    cnf->prog_name = ldaputils_get_prog_name(cnf->lud);
 
    // checks for required arguments
-   if (argc < (optind+2))
+   if (argc < (optind+1))
    {
       fprintf(stderr, "%s: missing required arguments\n", cnf->prog_name);
       fprintf(stderr, "Try `%s --help' for more information.\n", cnf->prog_name);
@@ -311,26 +311,31 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    };
 
    // saves filter
-   cnf->lud->filter = argv[optind];
+   cnf->lud->filter = "(objectclass=*)";
+   if ((index(argv[optind], '=')) != NULL)
+   {
+      cnf->lud->filter = argv[optind];
+      optind++;
+   };
 
    // configures LDAP attributes to return in results
-   if (!(cnf->lud->attrs = (char **) malloc(sizeof(char *) * (size_t)(argc-optind))))
+   if (!(cnf->lud->attrs = (char **) malloc(sizeof(char *) * (size_t)(argc-optind+1))))
    {
       fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
       my_unbind(cnf);
       return(1);
    };
-   if (!(cnf->defvals = (const char **) malloc(sizeof(char *) * (size_t)(argc-optind))))
+   if (!(cnf->defvals = (const char **) malloc(sizeof(char *) * (size_t)(argc-optind+1))))
    {
       fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
       my_unbind(cnf);
       return(1);
    };
-   for(c = 0; c < (argc-optind-1); c++)
+   for(c = 0; c < (argc-optind); c++)
    {
-      cnf->lud->attrs[c] = argv[optind+1+c];
+      cnf->lud->attrs[c] = argv[optind+c];
       cnf->defvals[c]    = "";
-      if ((str = index(argv[optind+1+c], ':')) != NULL)
+      if ((str = index(argv[optind+c], ':')) != NULL)
       {
          str[0] = '\0';
          cnf->defvals[c] = &str[1];
