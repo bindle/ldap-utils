@@ -56,7 +56,7 @@ ldap2csv \- LDAP search tool which outputs CSV
 [\fB-Y\fR \fImech\fR]
 [\fB-z\fR \fIlimit\fR]
 [\fB-Z\fR[\fB-Z\fR]]
-\fIfilter\fR
+[\fIfilter\fR]
 \fIattributes[:value] ...\fR
 .sp
 \fBldap2csv\fR [ \fB-h\fR | \fB--help\fR ]
