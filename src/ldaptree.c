@@ -150,7 +150,7 @@ void my_unbind(MyConfig * cnf);
 /// prints program usage and exits
 void ldaputils_usage(void)
 {
-   printf("Usage: %s [options] [filter [attributes...]]\n", PROGRAM_NAME);
+   printf("Usage: %s [options] [filter] [attributes...]\n", PROGRAM_NAME);
    ldaputils_usage_search(MY_SHORT_OPTIONS);
    ldaputils_usage_common(MY_SHORT_OPTIONS);
    printf("Display Options:\n");
@@ -377,20 +377,26 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    // saves filter
    cnf->lud->filter = "(objectclass=*)";
    if (argc > (optind))
-      cnf->lud->filter = argv[optind];
+   {
+      if ((index(argv[optind], '=')) != NULL)
+      {
+         cnf->lud->filter = argv[optind];
+         optind++;
+      };
+   };
 
    // configures LDAP attributes to return in results
-   if (argc > (optind+1))
+   if (argc > optind)
    {
       cnf->copy_entry = 1;
-      if (!(cnf->lud->attrs = (char **) malloc(sizeof(char *) * (size_t)(argc-optind))))
+      if (!(cnf->lud->attrs = (char **) malloc(sizeof(char *) * (size_t)(argc-optind+1))))
       {
          fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
          my_unbind(cnf);
          return(1);
       };
-      for(c = 0; c < (argc-optind-1); c++)
-         cnf->lud->attrs[c] = argv[optind+1+c];
+      for(c = 0; c < (argc-optind); c++)
+         cnf->lud->attrs[c] = argv[optind+c];
       cnf->lud->attrs[c] = NULL;
    } else {
       if (!(cnf->lud->attrs = (char **) malloc(sizeof(char *) * 2)))
