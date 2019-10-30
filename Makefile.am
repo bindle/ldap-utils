@@ -115,10 +115,6 @@ DISTCHECK_CONFIGURE_FLAGS		= --enable-strictwarnings
 if LDAPUTILS_LIBLDAPSCHEMA
    lib_LIBRARIES			+= lib/libldapschema.a
    include_HEADERS			+= include/ldapschema.h
-else
-   if LDAPUTILS_LDAPSCHEMA
-      noinst_LIBRARIES			+= lib/libldapschema.a
-   endif
 endif
 lib_libldapschema_a_DEPENDENCIES	= Makefile lib/libldapschema/libldapschema.sym
 lib_libldapschema_a_CFLAGS		= $(AM_CFLAGS)
@@ -244,7 +240,7 @@ src_ldapdebug_SOURCES			= \
 if LDAPUTILS_LDAPSCHEMA
    bin_PROGRAMS                         += src/ldapschema
 endif
-src_ldapschema_DEPENDENCIES		= Makefile lib/libldapschema.a lib/libldaputils.a
+src_ldapschema_DEPENDENCIES		= Makefile lib/libldapschema.a lib/libldaputils.a lib/libldapschema.a
 src_ldapschema_CPPFLAGS			= -DPROGRAM_NAME="\"ldapschema\"" $(AM_CPPFLAGS)
 src_ldapschema_CFLAGS			= $(AM_CFLAGS)
 src_ldapschema_LDFLAGS			= $(AM_LDFLAGS)
