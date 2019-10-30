@@ -179,9 +179,7 @@ void ldapschema_print_model(LDAPSchema * lsd, LDAPSchemaModel * model)
 
 void ldapschema_print_model_def(LDAPSchema * lsd, LDAPSchemaModel * model)
 {
-   //size_t x;
    char      * str;
-   size_t      space;
    size_t      len;
    size_t      pos;
    size_t      bol;
@@ -190,7 +188,6 @@ void ldapschema_print_model_def(LDAPSchema * lsd, LDAPSchemaModel * model)
    assert(model != NULL);
 
    // initialize values
-   space    = 0;
    len      = strlen(model->definition) - 2;
    if ((str = strdup(&model->definition[1])) == NULL)
       return;
