@@ -136,6 +136,11 @@ void ldapschema_print_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeType *
    if ((attr->sup_name))
       printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "superior:", attr->sup_name);
 
+   if ((attr->syntax))
+   {
+      printf("%*s%-*s %s (%s)\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "syntax:", attr->syntax->model.oid, attr->syntax->model.desc);
+   };
+
    ldapschema_print_model_ext(lsd, &attr->model);
    ldapschema_print_model_def(lsd, &attr->model);
 

@@ -536,6 +536,7 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
       else if (!(strcasecmp(argv[pos], "SYNTAX")))
       {
          pos++;
+         attr->syntax = ldapschema_oid(lsd, argv[pos], LDAPSCHEMA_SYNTAX);
       }
 
       // inteprets attributeType SINGLE-VALUE
