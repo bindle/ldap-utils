@@ -374,6 +374,51 @@ void ldapschema_object_free(LDAPSchemaModel * obj)
 }
 
 
+void * ldapschema_oid(LDAPSchema * lsd, const char * oid, size_t type)
+{
+   size_t               low;
+   size_t               mid;
+   size_t               high;
+   int                  res;
+   LDAPSchemaModel   ** models;
+
+   assert(lsd  != NULL);
+   assert(oid  != NULL);
+
+   type     = LDAPSCHEMA_TYPE(type);
+   models   = (LDAPSchemaModel **)lsd->oids;
+   low      = 0;
+   high     = lsd->oids_len;
+
+   // finds position in array
+   while ((high - low) > 1)
+   {
+      mid = (low + high) / 2;
+      res = strcasecmp(oid, models[mid]->oid);
+      if (res < 0)
+         high = mid;
+      else if (res > 0)
+         low = mid;
+      else
+      {
+         if ( (LDAPSCHEMA_TYPE(models[mid]->type) == type) || (!(type)) )
+            return(models[mid]);
+         return(NULL);
+      };
+   };
+
+   // checks low value
+   if ((res = strcasecmp(oid, models[low]->oid)) == 0)
+      if ((models[low]->type == type) || (!(type)))
+         return(models[low]);
+   if ((res = strcasecmp(oid, models[high]->oid)) == 0)
+      if ((models[high]->type == type) || (!(type)))
+         return(models[high]);
+
+   return(NULL);
+}
+
+
 void ldapschema_syntax_free(LDAPSchemaSyntax * syntax)
 {
    assert(syntax != NULL);

@@ -166,6 +166,12 @@ void
 ldapschema_syntax_free(
          LDAPSchemaSyntax      * syntax );
 
+void *
+ldapschema_oid(
+         LDAPSchema            * lsd,
+         const char            * oid,
+         size_t                  type );
+
 LDAPSchemaSyntax *
 ldapschema_syntax_initialize(
          LDAPSchema            * lsd );
