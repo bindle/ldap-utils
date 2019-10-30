@@ -55,6 +55,12 @@
 #pragma mark - Inline Functions
 
 extern inline int
+ldapschema_extension_cmp(
+         const void * e1,
+         const void * e2 );
+
+
+extern inline int
 ldapschema_model_cmp(
          const void * m1,
          const void * m2 );

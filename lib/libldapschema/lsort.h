@@ -79,6 +79,38 @@
 ///            lexicographically greater than, equal to, or less than the OID
 ///            of `m2`.
 /// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
+_LDAPSCHEMA_I int ldapschema_extension_cmp( const void * p1, const void * p2 )
+{
+   const LDAPSchemaExtension * e1 = p1;
+   const LDAPSchemaExtension * e2 = p2;
+
+   if ( (!(e1)) && (!(e2)) )
+      return(0);
+   if (!(e1))
+      return(-1);
+   if (!(e2))
+      return(1);
+
+   if ( (!(e1->extension)) && (!(e2->extension)) )
+      return(0);
+   if (!(e1->extension))
+      return(-1);
+   if (!(e2->extension))
+      return(1);
+
+   return(strcasecmp(e1->extension, e2->extension));
+}
+
+
+/// compares the OIDs of `m1` and `m2`
+/// @param[in]    p1          reference to LDAP model
+/// @param[in]    p2          reference to LDAP model
+///
+/// @return    ldapschema_model_cmp() returns an integer greater than, equal
+///            to, or less than 0, according as the OID of `m1` is
+///            lexicographically greater than, equal to, or less than the OID
+///            of `m2`.
+/// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
 _LDAPSCHEMA_I int ldapschema_model_cmp( const void * p1, const void * p2 )
 {
    const LDAPSchemaModel * m1 = p1;

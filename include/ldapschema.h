@@ -349,6 +349,11 @@ ldapschema_value_free_len(
 #pragma mark sort functions
 
 _LDAPSCHEMA_F int
+ldapschema_extension_cmp(
+         const void            * e1,
+         const void            * e2 );
+
+_LDAPSCHEMA_F int
 ldapschema_model_cmp(
          const void            * m1,
          const void            * m2 );
