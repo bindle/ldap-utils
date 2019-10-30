@@ -171,7 +171,6 @@ int ldapschema_definition_split(LDAPSchema * lsd, const char * str,
    };
    argv[0]  = NULL;
    argc     = 0;
-   margin   = 0;
 
    // splits line into multiple line segments and adds to argument list
    for(pos = 0; (pos < line_len); pos++)
