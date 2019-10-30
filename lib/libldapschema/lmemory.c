@@ -299,7 +299,6 @@ int ldapschema_insert(LDAPSchema * lsd, void *** listp, size_t * lenp, void * ob
    };
 
    // checks low value
-   idx = *lenp;
    if ((res = compar(obj, list[low])) == 0)
    {
       lsd->errcode = LDAPSCHEMA_DUPLICATE;
