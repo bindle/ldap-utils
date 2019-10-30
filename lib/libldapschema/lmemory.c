@@ -354,9 +354,6 @@ void ldapschema_object_free(LDAPSchemaModel * obj)
    if ((obj->oid))
       free(obj->oid);
 
-   if ((obj->defargs))
-      ldapschema_value_free(obj->defargs);
-
    if ((obj->extensions))
    {
       for(ext = 0; ((obj->extensions[ext])); ext++)
