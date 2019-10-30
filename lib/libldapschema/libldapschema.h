@@ -78,6 +78,8 @@ struct ldap_schema
    size_t               oids_len;         ///< length of oids array
    LDAPSchemaSyntax  ** syntaxes;         ///< array of syntaxes
    size_t               syntaxes_len;     /// length of syntaxes array
+   LDAPSchemaAttributeType  ** attrs;     ///< array of attributeTypes
+   size_t               attrs_len;        /// length of attributeTypes array
 };
 
 
@@ -99,6 +101,7 @@ struct ldap_schema_link
 //-----------------//
 // lexer functions //
 //-----------------//
+#pragma mark lexer functions
 
 int
 ldapschema_definition_split(
@@ -124,6 +127,15 @@ ldapschema_parse_ext(
 //------------------//
 // memory functions //
 //-------=----------//
+#pragma mark memory functions
+
+void
+ldapschema_attributetype_free(
+         LDAPSchemaAttributeType  * attr );
+
+LDAPSchemaAttributeType *
+ldapschema_attributetype_initialize(
+         LDAPSchema            * lsd );
 
 void
 ldapschema_ext_free(
@@ -144,6 +156,10 @@ ldapschema_insert(
 
 void
 ldapschema_model_free(
+         LDAPSchemaModel       * model );
+
+void
+ldapschema_object_free(
          LDAPSchemaModel       * model );
 
 void

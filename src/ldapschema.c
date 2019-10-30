@@ -172,6 +172,17 @@ int main(int argc, char * argv[])
       return(1);
    };
 
+   // fetches schema
+   if ((err = ldapschema_fetch(cnf->lsd, cnf->lud->ld)) != LDAP_SUCCESS)
+   {
+      fprintf(stderr, "%s: ldapschema_fetch(): %s\n", cnf->lud->prog_name, ldapschema_err2string(err));
+      my_unbind(cnf);
+      return(1);
+   };
+
+   ldapschema_print_syntaxes(cnf->lsd);
+   ldapschema_print_attributetypes(cnf->lsd);
+
    // frees resources
    my_unbind(cnf);
 
@@ -222,6 +233,14 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    if ((err = ldaputils_initialize(&cnf->lud, PROGRAM_NAME)) != LDAP_SUCCESS)
    {
       fprintf(stderr, "%s: ldaputils_initialize(): %s\n", PROGRAM_NAME, ldap_err2string(err));
+      my_unbind(cnf);
+      return(1);
+   };
+
+   // initialize ldap schema
+   if ((err = ldapschema_initialize(&cnf->lsd)) != LDAP_SUCCESS)
+   {
+      fprintf(stderr, "%s: ldapschema_initialize(): %s\n", PROGRAM_NAME, ldapschema_err2string(err));
       my_unbind(cnf);
       return(1);
    };
@@ -285,6 +304,9 @@ void my_unbind(MyConfig * cnf)
 
    if ((cnf->lud))
       ldaputils_unbind(cnf->lud);
+
+   if ((cnf->lsd))
+      ldapschema_free(cnf->lsd);
 
    free(cnf);
 

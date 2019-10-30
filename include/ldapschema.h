@@ -200,12 +200,14 @@ struct ldap_schema_extension
 /// LDAP schema base data model
 struct ldap_schema_model
 {
-   size_t             size;        ///< size of data struct
-   uint32_t           type;        ///< LDAP schema data type
-   uint32_t           flags;
-   char             * definition;  ///< defintion of object
-   char             * oid;         ///< oid of object
-   char             * desc;        ///< description of object;
+   size_t                  size;        ///< size of data struct
+   uint32_t                type;        ///< LDAP schema data type
+   uint32_t                flags;
+   char                  * definition;  ///< defintion of object
+   char                  * oid;         ///< oid of object
+   char                  * desc;        ///< description of object;
+   char                 ** defargs;
+   size_t                  defargs_len;
    LDAPSchemaExtension  ** extensions;
    size_t                  extensions_len;
 };
@@ -246,18 +248,12 @@ struct ldap_schema_attributetype
 {
    LDAPSchemaModel                   model;
    LDAPSchemaSyntax                * syntax;
-   uint64_t                          flags;
-   int                               usage;
-   int                               pad0;
-   //uint8_t                           obsolete;
-   //uint8_t                           single;
-   //uint8_t                           collective;
-   //uint8_t                           no_user_mod;
-   //uint8_t                           is_objectclass;
+   uint64_t                          usage;
    size_t                            names_len;
    size_t                            allowed_by_len;
    size_t                            required_by_len;
-   uintmax_t                         min_upper;
+   uint64_t                          min_upper;
+   char                            * sup_name;
    char                           ** names;
    LDAPSchemaObjectclass          ** allowed_by;
    LDAPSchemaObjectclass          ** required_by;
@@ -319,11 +315,11 @@ ldapschema_parse_syntax(
 #pragma mark memory functions
 
 _LDAPSCHEMA_F int
-ldap_count_values(
+ldapschema_count_values(
          char ** vals );
 
 _LDAPSCHEMA_F int
-ldap_count_values_len(
+ldapschema_count_values_len(
          struct berval        ** vals );
 
 _LDAPSCHEMA_F void
@@ -341,6 +337,39 @@ ldapschema_value_free(
 _LDAPSCHEMA_F void
 ldapschema_value_free_len(
          struct berval        ** vals );
+
+
+//------------------//
+// output functions //
+//------------------//
+#pragma mark output functions
+
+_LDAPSCHEMA_F void
+ldapschema_print_attributetype(
+         LDAPSchema            * lsd,
+         LDAPSchemaAttributeType * attr );
+
+_LDAPSCHEMA_F void
+ldapschema_print_attributetypes(
+         LDAPSchema            * lsd );
+
+_LDAPSCHEMA_F void
+ldapschema_print_model(
+         LDAPSchema            * lsd,
+         LDAPSchemaModel       * model );
+
+_LDAPSCHEMA_F void
+ldapschema_print_models(
+         LDAPSchema            * lsd );
+
+_LDAPSCHEMA_F void
+ldapschema_print_syntax(
+         LDAPSchema            * lsd,
+         LDAPSchemaSyntax * syntax );
+
+_LDAPSCHEMA_F void
+ldapschema_print_syntaxes(
+         LDAPSchema            * lsd );
 
 
 //----------------//

@@ -60,11 +60,14 @@
 int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
 {
    int                  err;
-   char              ** attrs;
-   LDAPMessage        * res;
+   int                  x;
    struct timeval       timeout;
+   LDAPMessage        * res;
    LDAPMessage        * msg;
    char              ** dns;
+   char              ** attrs;
+   struct berval     ** vals;
+   void               * ptr;
 
    assert(lsd != NULL);
    assert(ld  != NULL);
@@ -72,24 +75,32 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
    timeout.tv_sec    = 5;
    timeout.tv_usec   = 0;
 
-   if ((err = ldapschema_definition_split(lsd, "+ *", 3, &attrs)) != LDAPSCHEMA_SUCCESS)
-      return(-1);
+   attrs = NULL;
+   if ((err = ldapschema_definition_split(lsd, "( + * )", 7, &attrs)) == -1)
+      return(lsd->errcode);
 
    // searches for schema DN
+   res = NULL;
    if ((err = ldap_search_ext_s(ld, "", LDAP_SCOPE_BASE, "(objectclass=*)", attrs, 0, NULL, NULL, NULL, 0, &res)) != LDAP_SUCCESS)
    {
       ldapschema_value_free(attrs);
+      return(err);
+   };
+   if ((msg = ldap_first_entry(ld, res)) == NULL)
+   {
+      ldap_msgfree(res);
       return(-1);
    };
-   msg = ldap_first_entry(ld, res);
-   if ((dns = ldap_get_values(ld, msg, "subschemaSubentry")) != NULL)
+   if ((dns = ldap_get_values(ld, msg, "subschemaSubentry")) == NULL)
    {
+      ldap_msgfree(res);
       ldap_value_free(dns);
       return(-1);
    };
-   ldap_msgfree(msg);
+   ldap_msgfree(res);
 
-   // retrieves schema
+   // searches for schema entry
+   res = NULL;
    if ((err = ldap_search_ext_s(ld, dns[0], LDAP_SCOPE_BASE, "(objectclass=*)", attrs, 0, NULL, NULL, NULL, 0, &res)) != LDAP_SUCCESS)
    {
       ldap_value_free(dns);
@@ -97,6 +108,46 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
       return(-1);
    };
    ldap_value_free(dns);
+   ldapschema_value_free(attrs);
+   dns   = NULL;
+   attrs = NULL;
+   if ((msg = ldap_first_entry(ld, res)) == NULL)
+   {
+      ldap_msgfree(res);
+      return(-1);
+   };
+
+   // process ldapSyntaxes
+   if ((vals = ldap_get_values_len(ld, msg, "ldapSyntaxes")) != NULL)
+   {
+      for(x = 0; ((vals[x])); x++)
+      {
+         if ((ptr = ldapschema_parse_syntax(lsd, vals[x])) == NULL)
+         {
+            ldap_value_free_len(vals);
+            ldap_msgfree(res);
+            return(-1);
+         };
+      };
+      ldap_value_free_len(vals);
+   };
+
+   // process attributeTypes
+   if ((vals = ldap_get_values_len(ld, msg, "attributeTypes")) != NULL)
+   {
+      for(x = 0; ((vals[x])); x++)
+      {
+         if ((ptr = ldapschema_parse_attributetype(lsd, vals[x])) == NULL)
+         {
+            ldap_value_free_len(vals);
+            ldap_msgfree(res);
+            return(-1);
+         };
+      };
+      ldap_value_free_len(vals);
+   };
+
+   ldap_msgfree(res);
 
    return(LDAP_SUCCESS);
 }

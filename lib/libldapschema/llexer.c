@@ -180,7 +180,7 @@ int ldapschema_definition_split(LDAPSchema * lsd, const char * str,
       {
          // skip white spaces
          case '\t':
-            case ' ':
+         case ' ':
             break;
 
          // processes quoted and grouped arguments
@@ -221,6 +221,7 @@ int ldapschema_definition_split(LDAPSchema * lsd, const char * str,
                lsd->errcode = LDAPSCHEMA_NO_MEMORY;
                return(-1);
             };
+            argv = ptr;
             break;
 
          // process unquoted ungrouped arguments
@@ -240,19 +241,22 @@ int ldapschema_definition_split(LDAPSchema * lsd, const char * str,
             line[pos] = '\0';
 
             // adds argument to argv
-            if ((ptr = ldapschema_value_add(argv, &line[bos+margin], &argc)) == NULL)
+            if ((ptr = ldapschema_value_add(argv, &line[bos], &argc)) == NULL)
             {
                free(line);
                ldapschema_value_free(argv);
                lsd->errcode = LDAPSCHEMA_NO_MEMORY;
                return(-1);
             };
+            argv = ptr;
             break;
       };
    };
 
    // release resources
    free(line);
+
+   *argvp = argv;
 
    return(argc);
 }
@@ -385,9 +389,217 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
    //     character of the Directory String syntax may be encoded in more than
    //     one octet since UTF-8 [RFC3629] is a variable-length encoding.
    //
-   assert(lsd != NULL);
-   assert(def != NULL);
-   return(NULL);
+   char                       ** argv;
+   //int                           i;
+   int64_t                       pos;
+   int                           argc;
+   int                           err;
+   LDAPSchemaAttributeType     * attr;
+
+   attr     = NULL;
+   argv     = NULL;
+
+   // initialize attributeType
+   if ((attr = ldapschema_attributetype_initialize(lsd)) == NULL)
+      return(NULL);
+
+   // parses definition
+   if ((argc = ldapschema_definition_split_len(lsd, def, &argv)) == -1)
+   {
+      ldapschema_attributetype_free(attr);
+      return(NULL);
+   };
+   attr->model.defargs     = argv;
+   attr->model.defargs_len = (size_t)argc;
+
+   // copy definition and oid into syntax
+   if ((attr->model.oid = strdup(argv[0])) == NULL)
+   {
+      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+      ldapschema_attributetype_free(attr);
+      return(NULL);
+   };
+   if ((attr->model.definition = malloc(def->bv_len+1)) == NULL)
+   {
+      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+      ldapschema_attributetype_free(attr);
+      return(NULL);
+   };
+   memcpy(attr->model.definition, def->bv_val, def->bv_len);
+   attr->model.definition[def->bv_len] = '\0';
+
+   // processes attribute definition
+   for(pos = 1; pos < argc; pos++)
+   {
+      // inteprets extensions
+      if (!(strncasecmp(argv[pos], "X-", 2)))
+      {
+         if ((err = ldapschema_parse_ext(lsd, &attr->model, argv[pos], argv[pos+1])))
+         {
+            ldapschema_attributetype_free(attr);
+            return(NULL);
+         };
+         pos++;
+      }
+
+      // inteprets attributeType NAME
+      else if (!(strcasecmp(argv[pos], "NAME")))
+      {
+         pos++;
+         if (argv[pos][0] == '(')
+         {
+            if ((err = ldapschema_definition_split(lsd, argv[pos], strlen(argv[pos]), &attr->names)) == -1)
+            {
+               ldapschema_attributetype_free(attr);
+               return(NULL);
+            };
+            attr->names_len = (size_t)ldapschema_count_values(attr->names);
+         }
+         else
+         {
+            if ((attr->names = malloc(sizeof(char *)*2)) == NULL)
+            {
+               lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+               ldapschema_attributetype_free(attr);
+               return(NULL);
+            };
+            attr->names[1]  = NULL;
+            attr->names_len = 1;
+            if ((attr->names[0] = strdup(argv[pos])) == NULL)
+            {
+               lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+               ldapschema_attributetype_free(attr);
+               return(NULL);
+            };
+         };
+      }
+
+      // inteprets attributeType DESC
+      else if (!(strcasecmp(argv[pos], "DESC")))
+      {
+         pos++;
+         if (pos >= argc)
+         {
+            lsd->errcode = LDAPSCHEMA_INVALID_DEFINITION;
+            ldapschema_attributetype_free(attr);
+            return(NULL);
+         };
+         if ((attr->model.desc))
+            free(attr->model.desc);
+         if ((attr->model.desc = strdup(argv[pos])) == NULL)
+         {
+            lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+            ldapschema_attributetype_free(attr);
+            return(NULL);
+         };
+      }
+
+      // inteprets attributeType OBSOLETE
+      else if (!(strcasecmp(argv[pos], "OBSOLETE")))
+      {
+         attr->model.flags |= LDAPSCHEMA_O_OBSOLETE;
+      }
+
+      // inteprets attributeType SUP
+      else if (!(strcasecmp(argv[pos], "SUP")))
+      {
+         pos++;
+         if ((attr->sup_name))
+            free(attr->sup_name);
+         if ((attr->sup_name = strdup(argv[pos])) == NULL)
+         {
+            lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+            ldapschema_attributetype_free(attr);
+            return(NULL);
+         };
+      }
+
+      // inteprets attributeType EQUALITY
+      else if (!(strcasecmp(argv[pos], "EQUALITY")))
+      {
+         pos++;
+      }
+
+      // inteprets attributeType ORDERING
+      else if (!(strcasecmp(argv[pos], "ORDERING")))
+      {
+         pos++;
+      }
+
+      // inteprets attributeType SUBSTR
+      else if (!(strcasecmp(argv[pos], "SUBSTR")))
+      {
+         pos++;
+      }
+
+      // inteprets attributeType SYNTAX
+      else if (!(strcasecmp(argv[pos], "SYNTAX")))
+      {
+         pos++;
+      }
+
+      // inteprets attributeType SINGLE-VALUE
+      else if (!(strcasecmp(argv[pos], "SINGLE-VALUE")))
+      {
+         attr->model.flags |= LDAPSCHEMA_O_SINGLEVALUE;
+      }
+
+      // inteprets attributeType COLLECTIVE
+      else if (!(strcasecmp(argv[pos], "COLLECTIVE")))
+      {
+         attr->model.flags |= LDAPSCHEMA_O_COLLECTIVE;
+      }
+
+      // inteprets attributeType NO-USER-MODIFICATION
+      else if (!(strcasecmp(argv[pos], "NO-USER-MODIFICATION")))
+      {
+         attr->model.flags |= LDAPSCHEMA_O_NO_USER_MOD;
+      }
+
+      // inteprets attributeType USAGE
+      else if (!(strcasecmp(argv[pos], "USAGE")))
+      {
+         pos++;
+         if (!(strcasecmp(argv[pos], "userApplications")))
+            attr->usage = LDAPSCHEMA_USER_APP;
+         else if (!(strcasecmp(argv[pos], "directoryOperation")))
+            attr->usage = LDAPSCHEMA_DIRECTORY_OP;
+         else if (!(strcasecmp(argv[pos], "distributedOperation")))
+            attr->usage = LDAPSCHEMA_DISTRIBUTED_OP;
+         else if (!(strcasecmp(argv[pos], "dSAOperation")))
+            attr->usage = LDAPSCHEMA_DSA_OP;
+         else
+         {
+            lsd->errcode = LDAPSCHEMA_INVALID_DEFINITION;
+            ldapschema_attributetype_free(attr);
+            return(NULL);
+         };
+      }
+
+      // handle unknown parameters
+      else
+      {
+         lsd->errcode = LDAPSCHEMA_INVALID_DEFINITION;
+         ldapschema_attributetype_free(attr);
+         return(NULL);
+      };
+   };
+
+   // adds syntax into OID list
+   if ((ldapschema_insert(lsd, &lsd->oids, &lsd->oids_len, attr, ldapschema_model_cmp)) != LDAP_SUCCESS)
+   {
+      ldapschema_attributetype_free(attr);
+      return(NULL);
+   };
+
+   // adds syntax into attributeType list
+   if ((ldapschema_insert(lsd, (void ***)&lsd->attrs, &lsd->attrs_len, attr, ldapschema_model_cmp)) != LDAP_SUCCESS)
+   {
+      ldapschema_attributetype_free(attr);
+      return(NULL);
+   };
+
+   return(attr);
 }
 
 
@@ -410,14 +622,15 @@ int ldapschema_parse_ext(LDAPSchema * lsd, LDAPSchemaModel * model, const char *
       return(-1);
 
    // copies values
-   if (valstr[0] == '(')
+   if (valstr[0] != '(')
    {
-      if ((ext->values = malloc(sizeof(LDAPSchemaExtension *)*2)) == NULL)
+      if ((ext->values = malloc(sizeof(char *)*2)) == NULL)
       {
          lsd->errcode = LDAPSCHEMA_NO_MEMORY;
          ldapschema_ext_free(ext);
          return(-1);
       };
+      ext->values[1] = NULL;
       if ((ext->values[0] = strdup(valstr)) == NULL)
       {
          free(ext->values);
@@ -425,7 +638,7 @@ int ldapschema_parse_ext(LDAPSchema * lsd, LDAPSchemaModel * model, const char *
          ldapschema_ext_free(ext);
          return(-1);
       };
-      ext->values[1] = NULL;
+      ext->values_len = 1;
    }
    else
    {
@@ -434,6 +647,12 @@ int ldapschema_parse_ext(LDAPSchema * lsd, LDAPSchemaModel * model, const char *
          ldapschema_ext_free(ext);
          return(-1);
       };
+   };
+
+   if ((err = ldapschema_insert(lsd, (void ***)&model->extensions, &model->extensions_len, ext, ldapschema_extension_cmp)) != LDAP_SUCCESS)
+   {
+      ldapschema_ext_free(ext);
+      return(-1);
    };
 
    return(0);
@@ -476,11 +695,11 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
    //       DESC <qdstring> is a short descriptive string; and
    //       <extensions> describe extensions.
    //
-   char              ** argv;
-   //char              ** strs;
-   int64_t              pos;
-   int                  argc;
-   LDAPSchemaSyntax   * syntax;
+   char                 ** argv;
+   int64_t                 pos;
+   int                     argc;
+   int                     err;
+   LDAPSchemaSyntax      * syntax;
 
    syntax   = NULL;
    argv     = NULL;
@@ -495,19 +714,19 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
       ldapschema_syntax_free(syntax);
       return(NULL);
    };
+   syntax->model.defargs     = argv;
+   syntax->model.defargs_len = (size_t)argc;
 
    // copy definition and oid into syntax
    if ((syntax->model.oid = strdup(argv[0])) == NULL)
    {
       lsd->errcode = LDAPSCHEMA_NO_MEMORY;
-      ldapschema_value_free(argv);
       ldapschema_syntax_free(syntax);
       return(NULL);
    };
    if ((syntax->model.definition = malloc(def->bv_len+1)) == NULL)
    {
       lsd->errcode = LDAPSCHEMA_NO_MEMORY;
-      ldapschema_value_free(argv);
       ldapschema_syntax_free(syntax);
       return(NULL);
    };
@@ -520,6 +739,11 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
       // inteprets extensions
       if (!(strncasecmp(argv[pos], "X-", 2)))
       {
+         if ((err = ldapschema_parse_ext(lsd, &syntax->model, argv[pos], argv[pos+1])))
+         {
+            ldapschema_syntax_free(syntax);
+            return(NULL);
+         };
          pos++;
       }
 
@@ -530,7 +754,6 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
          if (pos >= argc)
          {
             lsd->errcode = LDAPSCHEMA_INVALID_DEFINITION;
-            ldapschema_value_free(argv);
             ldapschema_syntax_free(syntax);
             return(NULL);
          };
@@ -539,7 +762,6 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
          if ((syntax->model.desc = strdup(argv[pos])) == NULL)
          {
             lsd->errcode = LDAPSCHEMA_NO_MEMORY;
-            ldapschema_value_free(argv);
             ldapschema_syntax_free(syntax);
             return(NULL);
          };
@@ -549,14 +771,10 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
       else
       {
          lsd->errcode = LDAPSCHEMA_INVALID_DEFINITION;
-         ldapschema_value_free(argv);
          ldapschema_syntax_free(syntax);
          return(NULL);
       };
    };
-
-   // free resources
-   ldapschema_value_free(argv);
 
    // adds syntax into OID list
    if ((ldapschema_insert(lsd, &lsd->oids, &lsd->oids_len, syntax, ldapschema_model_cmp)) != LDAP_SUCCESS)
@@ -564,11 +782,13 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
       ldapschema_syntax_free(syntax);
       return(NULL);
    };
+
    if ((ldapschema_insert(lsd, (void ***)&lsd->syntaxes, &lsd->syntaxes_len, syntax, ldapschema_model_cmp)) != LDAP_SUCCESS)
    {
       ldapschema_syntax_free(syntax);
       return(NULL);
    };
+
 
    return(syntax);
 }

@@ -57,12 +57,41 @@
 /////////////////
 #pragma mark - Functions
 
+void ldapschema_attributetype_free( LDAPSchemaAttributeType  * attr )
+{
+   assert(attr != NULL);
+
+   ldapschema_object_free(&attr->model);
+
+   return;
+}
+
+
+LDAPSchemaAttributeType * ldapschema_attributetype_initialize(LDAPSchema * lsd)
+{
+   LDAPSchemaAttributeType   * attr;
+
+   assert(lsd  != NULL);
+
+   if ((attr = malloc(sizeof(LDAPSchemaAttributeType))) == NULL)
+   {
+      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+      return(NULL);
+   };
+   bzero(attr, sizeof(LDAPSchemaAttributeType));
+   attr->model.size = sizeof(LDAPSchemaAttributeType);
+   attr->model.type = LDAPSCHEMA_ATTRIBUTETYPE;
+
+   return(attr);
+}
+
+
 /// counts number of values in list
 /// @param[in]  vals   Reference to allocated ldap_schema struct
 ///
 /// @return    returns number of values in array
 /// @see       ldapschema_initialize
-int ldap_count_values( char ** vals )
+int ldapschema_count_values( char ** vals )
 {
    int len;
    assert(vals != NULL);
@@ -76,7 +105,7 @@ int ldap_count_values( char ** vals )
 ///
 /// @return    returns number of values in array
 /// @see       ldapschema_initialize
-int ldap_count_values_len( struct berval ** vals )
+int ldapschema_count_values_len( struct berval ** vals )
 {
    int len;
    assert(vals != NULL);
@@ -117,9 +146,17 @@ LDAPSchemaExtension * ldapschema_ext_initialize(LDAPSchema * lsd, const char * n
    if ((ext->extension = strdup(name)) == NULL)
    {
       lsd->errcode = LDAPSCHEMA_NO_MEMORY;
-      free(ext);
+      ldapschema_ext_free(ext);
       return(NULL);
    };
+
+   if ((ext->values = malloc(sizeof(void *))) == NULL)
+   {
+      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+      ldapschema_ext_free(ext);
+      return(NULL);
+   };
+   ext->values[0] = NULL;
 
    return(ext);
 }
@@ -137,11 +174,8 @@ void ldapschema_free(LDAPSchema * lsd)
 
    // frees syntaxes
    if ((lsd->syntaxes))
-   {
-      for(i = 0; ((lsd->syntaxes[i])); i++)
-         free(lsd->syntaxes[i]);
       free(lsd->syntaxes);
-   };
+   lsd->syntaxes = NULL;
 
    // frees oids
    if ((lsd->oids))
@@ -160,6 +194,7 @@ void ldapschema_free(LDAPSchema * lsd)
          };
       };
       free(lsd->oids);
+      lsd->oids = NULL;
    };
 
    free(lsd);
@@ -201,6 +236,9 @@ int ldapschema_initialize(LDAPSchema ** lsdp)
    };
    bzero(lsd->oids, sizeof(void *));
 
+   // saves structure
+   *lsdp = lsd;
+
    return(LDAP_SUCCESS);
 }
 
@@ -224,14 +262,22 @@ int ldapschema_insert(LDAPSchema * lsd, void *** listp, size_t * lenp, void * ob
    assert(compar != NULL);
 
    // increase size of array
-   size = sizeof(void *) * ((*lenp) + 1);
+   size = sizeof(void *) * ((*lenp) + 2);
    if ((list = realloc(*listp, size)) == NULL)
    {
       lsd->errcode = LDAPSCHEMA_NO_MEMORY;
       return(-1);
    };
-   *listp      = list;
-   list[*lenp] = NULL;
+   *listp        = list;
+   list[*lenp+0] = NULL;
+   list[*lenp+1] = NULL;
+
+   if ((*lenp) == 0)
+   {
+      list[*lenp] = obj;
+      (*lenp)++;
+      return(0);
+   };
 
    low   = 0;
    high  = (*lenp) - 1;
@@ -286,33 +332,43 @@ int ldapschema_insert(LDAPSchema * lsd, void *** listp, size_t * lenp, void * ob
 
 void ldapschema_model_free(LDAPSchemaModel * model)
 {
+   assert(model != NULL);
+   ldapschema_object_free(model);
+   free(model);
+   return;
+}
+
+
+void ldapschema_object_free(LDAPSchemaModel * obj)
+{
    size_t ext;
 
-   assert(model != NULL);
+   assert(obj != NULL);
 
-   if ((model->definition))
-      free(model->definition);
+   if ((obj->definition))
+      free(obj->definition);
 
-   if ((model->desc))
-      free(model->desc);
+   if ((obj->desc))
+      free(obj->desc);
 
-   if ((model->oid))
-      free(model->oid);
+   if ((obj->oid))
+      free(obj->oid);
 
-   if ((model->extensions))
+   if ((obj->defargs))
+      ldapschema_value_free(obj->defargs);
+
+   if ((obj->extensions))
    {
-      for(ext = 0; ((model->extensions[ext])); ext++)
+      for(ext = 0; ((obj->extensions[ext])); ext++)
       {
-         if ((model->extensions[ext]->extension))
-            free(model->extensions[ext]->extension);
-         if ((model->extensions[ext]->values))
-            ldapschema_value_free(model->extensions[ext]->values);
-         free(model->extensions[ext]);
+         if ((obj->extensions[ext]->extension))
+            free(obj->extensions[ext]->extension);
+         if ((obj->extensions[ext]->values))
+            ldapschema_value_free(obj->extensions[ext]->values);
+         free(obj->extensions[ext]);
       };
-      free(model->extensions);
+      free(obj->extensions);
    };
-
-   free(model);
 
    return;
 }
@@ -322,7 +378,9 @@ void ldapschema_syntax_free(LDAPSchemaSyntax * syntax)
 {
    assert(syntax != NULL);
 
-   ldapschema_model_free(&syntax->model);
+   ldapschema_object_free(&syntax->model);
+
+   free(syntax);
 
    return;
 }
@@ -355,35 +413,38 @@ char ** ldapschema_value_add( char ** vals, const char * val, int * countp)
    void   * ptr;
    char   * str;
 
-   if (!(vals))
-      return(vals);
-   if (!(val))
-      return(vals);
+   assert(vals != NULL);
+   assert(val  != NULL);
+   //if (!(vals))
+   //   return(NULL);
+   //if (!(val))
+   //   return(vals);
 
    // determine number of values
    if ((countp))
       count = *countp;
    else
-   count = ldap_count_values(vals);
+      count = ldap_count_values(vals);
 
    // saves value to array
    if ((str = strdup(val)) == NULL)
       return(NULL);
 
    // increase size of vals
-   len = sizeof(char *) * ((size_t)count+1);
+   len = sizeof(char *) * (((size_t)count)+2);
    if ((ptr = realloc(vals, len)) == NULL)
    {
       free(str);
       return(NULL);
    };
-   vals          = ptr;
-   vals[count+0] = str;
-   vals[count+1] = NULL;
+   vals        = ptr;
+   vals[count] = str;
+   count++;
+   vals[count] = NULL;
 
    // increments count
    if ((countp))
-      *countp += 1;
+      *countp = count;
 
    return(vals);
 }
