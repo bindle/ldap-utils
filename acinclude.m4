@@ -42,7 +42,7 @@ AC_DEFUN([AC_LDAP_UTILS_LDAP2CSV],[dnl
    enableval=""
    AC_ARG_ENABLE(
       ldap2csv,
-      [AS_HELP_STRING([--disable-ldap2csv], [disable building ldap2csv utility])],
+      [AS_HELP_STRING([   --disable-ldap2csv], [disable building ldap2csv utility])],
       [ ELDAP2CSV=$enableval ],
       [ ELDAP2CSV=$enableval ]
    )
@@ -66,7 +66,7 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPDEBUG],[dnl
    enableval=""
    AC_ARG_ENABLE(
       ldapdebug,
-      [AS_HELP_STRING([--enable-ldapdebug], [enable building ldapdebug utility])],
+      [AS_HELP_STRING([   --enable-ldapdebug], [enable building ldapdebug utility])],
       [ ELDAPDEBUG=$enableval ],
       [ ELDAPDEBUG=$enableval ]
    )
@@ -114,7 +114,7 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPTREE],[dnl
    enableval=""
    AC_ARG_ENABLE(
       ldaptree,
-      [AS_HELP_STRING([--disable-ldaptree], [disable building ldaptree utility])],
+      [AS_HELP_STRING([   --disable-ldaptree], [disable building ldaptree utility])],
       [ ELDAPTREE=$enableval ],
       [ ELDAPTREE=$enableval ]
    )
