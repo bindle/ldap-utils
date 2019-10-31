@@ -128,6 +128,30 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPTREE],[dnl
 ])dnl
 
 
+# AC_LDAP_UTILS_LIBRARIES
+# ______________________________________________________________________________
+AC_DEFUN([AC_LDAP_UTILS_LIBRARIES],[dnl
+
+   enableval=""
+   AC_ARG_ENABLE(
+      libraries,
+      [AS_HELP_STRING([--disable-libraries], [disable libraries])],
+      [ ELDAPLIBRARIES=$enableval ],
+      [ ELDAPLIBRARIES=$enableval ]
+   )
+
+   if test "x${ELDAPLIBRARIES}" != "xno";then
+      ELDAPLIBRARIES=yes
+      LDAPUTILS_LIBRARIES=yes
+      LDAPUTILS_LIBRARIES_ALT=no
+   else
+      LDAPUTILS_LIBRARIES=no
+      LDAPUTILS_LIBRARIES_ALT=yes
+   fi
+
+])dnl
+
+
 # AC_LDAP_UTILS_UTILITIES
 # ______________________________________________________________________________
 AC_DEFUN([AC_LDAP_UTILS_UTILITIES],[dnl
