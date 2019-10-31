@@ -36,6 +36,9 @@
 # ______________________________________________________________________________
 AC_DEFUN([AC_LDAP_UTILS_LDAP2CSV],[dnl
 
+   # prerequists
+   AC_REQUIRE([AC_LDAP_UTILS_UTILITIES])
+
    enableval=""
    AC_ARG_ENABLE(
       ldap2csv,
@@ -44,8 +47,8 @@ AC_DEFUN([AC_LDAP_UTILS_LDAP2CSV],[dnl
       [ ELDAP2CSV=$enableval ]
    )
 
-   if test "x${ELDAP2CSV}" != "xno";then
-      ELDAP2CSV=yes
+   if test "x${ELDAP2CSV}" != "x${LDAPUTILS_UTILITIES_ALT}";then
+      ELDAP2CSV=${LDAPUTILS_UTILITIES}
    fi
    LDAPUTILS_LDAP2CSV=${ELDAP2CSV}
 
@@ -56,6 +59,9 @@ AC_DEFUN([AC_LDAP_UTILS_LDAP2CSV],[dnl
 # AC_LDAP_UTILS_LDAPDEBUG
 # ______________________________________________________________________________
 AC_DEFUN([AC_LDAP_UTILS_LDAPDEBUG],[dnl
+
+   # prerequists
+   AC_REQUIRE([AC_LDAP_UTILS_UTILITIES])
 
    enableval=""
    AC_ARG_ENABLE(
@@ -78,16 +84,19 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPDEBUG],[dnl
 # ______________________________________________________________________________
 AC_DEFUN([AC_LDAP_UTILS_LDAPDN2STR],[dnl
 
+   # prerequists
+   AC_REQUIRE([AC_LDAP_UTILS_UTILITIES])
+
    enableval=""
    AC_ARG_ENABLE(
       ldapdn2str,
-      [AS_HELP_STRING([--disable-ldapdn2str], [disable building ldapdn2str utility])],
+      [AS_HELP_STRING([   --disable-ldapdn2str], [disable building ldapdn2str utility])],
       [ ELDAPDN2STR=$enableval ],
       [ ELDAPDN2STR=$enableval ]
    )
 
-   if test "x${ELDAPDN2STR}" != "xno";then
-      ELDAPDN2STR=yes
+   if test "x${ELDAPDN2STR}" != "x${LDAPUTILS_UTILITIES_ALT}";then
+      ELDAPDN2STR=${LDAPUTILS_UTILITIES}
    fi
    LDAPUTILS_LDAPDN2STR=${ELDAPDN2STR}
 
@@ -99,6 +108,9 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPDN2STR],[dnl
 # ______________________________________________________________________________
 AC_DEFUN([AC_LDAP_UTILS_LDAPTREE],[dnl
 
+   # prerequists
+   AC_REQUIRE([AC_LDAP_UTILS_UTILITIES])
+
    enableval=""
    AC_ARG_ENABLE(
       ldaptree,
@@ -107,14 +119,37 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPTREE],[dnl
       [ ELDAPTREE=$enableval ]
    )
 
-   if test "x${ELDAPTREE}" != "xno";then
-      ELDAPTREE=yes
+   if test "x${ELDAPTREE}" != "x${LDAPUTILS_UTILITIES_ALT}";then
+      ELDAPTREE=${LDAPUTILS_UTILITIES}
    fi
    LDAPUTILS_LDAPTREE=${ELDAPTREE}
 
    AM_CONDITIONAL([LDAPUTILS_LDAPTREE], [test "x$LDAPUTILS_LDAPTREE" = "xyes"])
 ])dnl
 
+
+# AC_LDAP_UTILS_UTILITIES
+# ______________________________________________________________________________
+AC_DEFUN([AC_LDAP_UTILS_UTILITIES],[dnl
+
+   enableval=""
+   AC_ARG_ENABLE(
+      utilities,
+      [AS_HELP_STRING([--disable-utilities], [disable utilities])],
+      [ ELDAPUTILITIES=$enableval ],
+      [ ELDAPUTILITIES=$enableval ]
+   )
+
+   if test "x${ELDAPUTILITIES}" != "xno";then
+      ELDAPUTILITIES=yes
+      LDAPUTILS_UTILITIES=yes
+      LDAPUTILS_UTILITIES_ALT=no
+   else
+      LDAPUTILS_UTILITIES=no
+      LDAPUTILS_UTILITIES_ALT=yes
+   fi
+
+])dnl
 
 
 # end of M4 file
