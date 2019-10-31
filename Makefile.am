@@ -136,8 +136,7 @@ src_ldap2csv_CPPFLAGS			= -DPROGRAM_NAME="\"ldap2csv\"" $(AM_CPPFLAGS)
 src_ldap2csv_CFLAGS			= $(AM_CFLAGS)
 src_ldap2csv_LDFLAGS			= $(AM_LDFLAGS)
 src_ldap2csv_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
-src_ldap2csv_SOURCES			= \
-					  src/ldap2csv.c
+src_ldap2csv_SOURCES			= src/ldap2csv.c
 
 
 # macros for ldapdn2str
@@ -162,8 +161,7 @@ src_ldaptree_CPPFLAGS			= -DPROGRAM_NAME="\"ldaptree\"" $(AM_CPPFLAGS)
 src_ldaptree_CFLAGS			= $(AM_CFLAGS)
 src_ldaptree_LDFLAGS			= $(AM_LDFLAGS)
 src_ldaptree_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
-src_ldaptree_SOURCES			= \
-					  src/ldaptree.c
+src_ldaptree_SOURCES			= src/ldaptree.c
 
 
 # macros for ldapdebug
@@ -176,8 +174,7 @@ src_ldapdebug_CPPFLAGS			= -DPROGRAM_NAME="\"ldapdebug\"" $(AM_CPPFLAGS)
 src_ldapdebug_CFLAGS			= $(AM_CFLAGS)
 src_ldapdebug_LDFLAGS			= $(AM_LDFLAGS)
 src_ldapdebug_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
-src_ldapdebug_SOURCES			= \
-					  src/ldapdebug.c
+src_ldapdebug_SOURCES			= src/ldapdebug.c
 
 
 # Makefile includes
