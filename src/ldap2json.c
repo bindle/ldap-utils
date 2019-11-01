@@ -138,7 +138,7 @@ void my_unbind(MyConfig * cnf);
 /// prints program usage and exits
 void ldaputils_usage(void)
 {
-   printf("Usage: %s [options] [filter] attributes[:values]...\n", PROGRAM_NAME);
+   printf("Usage: %s [options] [filter] [attributes[:values]...]\n", PROGRAM_NAME);
    ldaputils_usage_search(MY_SHORT_OPTIONS);
    ldaputils_usage_common(MY_SHORT_OPTIONS);
    printf("Special Attributes:\n");
@@ -277,50 +277,47 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
 
    cnf->prog_name = ldaputils_get_prog_name(cnf->lud);
 
-   // checks for required arguments
-   if (argc < (optind+1))
-   {
-      fprintf(stderr, "%s: missing required arguments\n", cnf->prog_name);
-      fprintf(stderr, "Try `%s --help' for more information.\n", cnf->prog_name);
-      my_unbind(cnf);
-      return(1);
-   };
-
    // saves filter
    cnf->lud->filter = "(objectclass=*)";
-   if ((index(argv[optind], '=')) != NULL)
+   if (argc > optind)
    {
-      cnf->lud->filter = argv[optind];
-      optind++;
+      if ((index(argv[optind], '=')) != NULL)
+      {
+         cnf->lud->filter = argv[optind];
+         optind++;
+      };
    };
 
    // configures LDAP attributes to return in results
-   cnf->attrs_len = (size_t)(argc-optind);
-   if (!(cnf->lud->attrs = (char **) malloc(sizeof(char *) * (cnf->attrs_len+1))))
+   if ((cnf->attrs_len = (size_t)(argc-optind)))
    {
-      fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
-      my_unbind(cnf);
-      return(1);
-   };
-   bzero(cnf->lud->attrs, sizeof(char *) * (cnf->attrs_len+1));
-   if (!(cnf->defvals = (const char **) malloc(sizeof(char *) * (cnf->attrs_len+1))))
-   {
-      fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
-      my_unbind(cnf);
-      return(1);
-   };
-   bzero(cnf->defvals, sizeof(char *) * (cnf->attrs_len+1));
-   for(c = 0; c < (argc-optind); c++)
-   {
-      cnf->lud->attrs[c] = argv[optind+c];
-      if ((str = index(argv[optind+c], ':')) != NULL)
+      if (!(cnf->lud->attrs = (char **) malloc(sizeof(char *) * (cnf->attrs_len+1))))
       {
-         str[0] = '\0';
-         cnf->defvals[c] = &str[1];
+         fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
+         my_unbind(cnf);
+         return(1);
       };
+      bzero(cnf->lud->attrs, sizeof(char *) * (cnf->attrs_len+1));
+      if (!(cnf->defvals = (const char **) malloc(sizeof(char *) * (cnf->attrs_len+1))))
+      {
+         fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
+         my_unbind(cnf);
+         return(1);
+      };
+      bzero(cnf->defvals, sizeof(char *) * (cnf->attrs_len+1));
+      for(c = 0; c < (argc-optind); c++)
+      {
+         cnf->lud->attrs[c] = argv[optind+c];
+         if ((str = index(argv[optind+c], ':')) != NULL)
+         {
+            str[0] = '\0';
+            cnf->defvals[c] = &str[1];
+         };
+      };
+      cnf->lud->attrs[c] = NULL;
+      cnf->defvals[c]    = NULL;
    };
-   cnf->lud->attrs[c] = NULL;
-   cnf->defvals[c]    = NULL;
+
 
    // reads password
    if ((err = ldaputils_pass(cnf->lud)) != 0)
@@ -388,7 +385,7 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
       printf("   {\n");
 
       // loop through psuedo attributes
-      for(x = 0; (cnf->lud->attrs[x] != NULL); x++)
+      for(x = 0; (((cnf->lud->attrs)) && ((cnf->lud->attrs[x]))); x++)
       {
          if (strcasecmp("dn", cnf->lud->attrs[x]) == 0)
             printf("      \"dn\": \"%s\"", dn);

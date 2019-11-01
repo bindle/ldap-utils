@@ -57,7 +57,7 @@ ldap2json \- LDAP search tool which outputs JSON
 [\fB-z\fR \fIlimit\fR]
 [\fB-Z\fR[\fB-Z\fR]]
 [\fIfilter\fR]
-\fIattributes[:value] ...\fR
+[\fIattributes[:value] ...]\fR
 .sp
 \fBldap2json\fR [ \fB-h\fR | \fB--help\fR ]
 .sp
