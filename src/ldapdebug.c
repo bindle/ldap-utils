@@ -36,23 +36,16 @@
  *  Simple Build:
  *     export CFLAGS='-DPROGRAM_NAME="ldapdebug" -Wall -I../include'
  *     gcc ${CFLAGS} -c ldapdebug.c
- *     gcc ${CFLAGS} -c ldaputils_config.c
- *     gcc ${CFLAGS} -c ldaputils_config_opts.c
- *     gcc ${CFLAGS} -o ldapdebug ldapdebug.o ldaputils_config.o \
- *             ldaputils_config_opts.o -lldap
+ *     gcc ${CFLAGS} -lldap -o ldapdebug ldapdebug.o ../lib/libldaputils.a
  *
  *  Libtool Build:
  *     export CFLAGS='-DPROGRAM_NAME="ldapdebug" -Wall -I../include'
  *     libtool --mode=compile --tag=CC gcc ${CFLAGS} -c ldapdebug.c
- *     libtool --mode=compile --tag=CC gcc ${CFLAGS} -c ldaputils_config.c
- *     libtool --mode=compile --tag=CC gcc ${CFLAGS} -c ldaputils_config_opts.c
- *     libtool --mode=link    --tag=CC gcc ${CFLAGS} -o ldapdebug \
- *             ldapdebug.o ldaputils_config.o ldaputils_config_opts.o \
- *             -lldap
+ *     libtool --mode=link    --tag=CC gcc ${CFLAGS} -lldap -o ldapdebug \
+ *             ldapdebug.o ../lib/libldaputils.a
  *
  *  Libtool Clean:
- *     libtool --mode=clean rm -f ldapdebug.lo ldaputils_config.lo \
- *             ldaputils_config_opts.lo ldapdebug
+ *     libtool --mode=clean rm -f ldapdebug.lo ldapdebug
  */
 #define _LDAP_UTILS_SRC_LDAPDEBUG 1
 #undef __LDAPUTILS_PMARK
