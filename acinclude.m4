@@ -111,7 +111,7 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPSCHEMA],[dnl
    enableval=""
    AC_ARG_ENABLE(
       ldapschema,
-      [AS_HELP_STRING([--enable-ldapschema], [enable ldapschema utility (experimental)])],
+      [AS_HELP_STRING([   --enable-ldapschema], [enable ldapschema utility (experimental)])],
       [ ELDAPSCHEMA=$enableval ],
       [ ELDAPSCHEMA=$enableval ]
    )
@@ -156,13 +156,13 @@ AC_DEFUN([AC_LDAP_UTILS_LIBLDAPSCHEMA],[dnl
    enableval=""
    AC_ARG_ENABLE(
       libldapschema,
-      [AS_HELP_STRING([--enable-libldapschema], [enable ldapschema library (experimental)])],
+      [AS_HELP_STRING([   --enable-libldapschema], [enable ldapschema library (experimental)])],
       [ ELIBLDAPSCHEMA=$enableval ],
       [ ELIBLDAPSCHEMA=$enableval ]
    )
 
-   if test "x${ELIBLDAPSCHEMA}" != "xyes";then
-      ELIBLDAPSCHEMA=no
+   if test "x${ELIBLDAPSCHEMA}" != "x${LDAPUTILS_LIBRARIES_ALT}";then
+      ELIBLDAPSCHEMA=${LDAPUTILS_LIBRARIES}
    fi
    LDAPUTILS_LIBLDAPSCHEMA=${ELIBLDAPSCHEMA}
 
