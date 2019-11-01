@@ -224,6 +224,18 @@ src_ldapdn2str_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
 src_ldapdn2str_SOURCES			= src/ldapdn2str.c
 
 
+# macros for ldapschema
+if LDAPUTILS_LDAPSCHEMA
+   bin_PROGRAMS                         += src/ldapschema
+endif
+src_ldapschema_DEPENDENCIES		= Makefile lib/libldapschema.a lib/libldaputils.a lib/libldapschema.a
+src_ldapschema_CPPFLAGS			= -DPROGRAM_NAME="\"ldapschema\"" $(AM_CPPFLAGS)
+src_ldapschema_CFLAGS			= $(AM_CFLAGS)
+src_ldapschema_LDFLAGS			= $(AM_LDFLAGS)
+src_ldapschema_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a lib/libldapschema.a
+src_ldapschema_SOURCES			= src/ldapschema.c
+
+
 # macros for ldaptree
 if LDAPUTILS_LDAPTREE
 bin_PROGRAMS                            += src/ldaptree
@@ -235,18 +247,6 @@ src_ldaptree_CFLAGS			= $(AM_CFLAGS)
 src_ldaptree_LDFLAGS			= $(AM_LDFLAGS)
 src_ldaptree_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
 src_ldaptree_SOURCES			= src/ldaptree.c
-
-
-# macros for ldapschema
-if LDAPUTILS_LDAPSCHEMA
-   bin_PROGRAMS                         += src/ldapschema
-endif
-src_ldapschema_DEPENDENCIES		= Makefile lib/libldapschema.a lib/libldaputils.a lib/libldapschema.a
-src_ldapschema_CPPFLAGS			= -DPROGRAM_NAME="\"ldapschema\"" $(AM_CPPFLAGS)
-src_ldapschema_CFLAGS			= $(AM_CFLAGS)
-src_ldapschema_LDFLAGS			= $(AM_LDFLAGS)
-src_ldapschema_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a lib/libldapschema.a
-src_ldapschema_SOURCES			= src/ldapschema.c
 
 
 # Makefile includes
