@@ -69,13 +69,13 @@ doc_DATA				=
 EXTRA_PROGRAMS				=
 include_HEADERS				=
 info_TEXINFOS				=
-EXTRA_LIBRARIES				= lib/libldaputils.a
+EXTRA_LIBRARIES				=
 EXTRA_LTLIBRARIES			=
 man_MANS				=
 noinst_HEADERS				= include/ldaputils.h \
 					  include/ldaputils_cdefs.h
 noinst_PROGRAMS				=
-noinst_LIBRARIES			=
+noinst_LIBRARIES			= lib/libldaputils.a
 
 
 # lists
