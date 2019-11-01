@@ -174,6 +174,8 @@ AC_BINDLE_GIT_PACKAGE_VERSION([contrib/bindletools/build-aux/git-package-version
 
 # custom configure options
 AC_BINDLE_ENABLE_WARNINGS([-Wno-padded], [-Wpadded])
+AC_LDAP_UTILS_LIBRARIES
+AC_LDAP_UTILS_UTILITIES
 AC_LDAP_UTILS_LDAP2CSV
 AC_LDAP_UTILS_LDAPDEBUG
 AC_LDAP_UTILS_LDAPDN2STR
@@ -192,11 +194,14 @@ AC_MSG_NOTICE([ ])
 AC_MSG_NOTICE([   Use Warnings                  $USE_WARNINGS])
 AC_MSG_NOTICE([   Use Strict Warnings           $USE_STRICTWARNINGS])
 AC_MSG_NOTICE([ ])
-AC_MSG_NOTICE([   Build ldap2csv                $LDAPUTILS_LDAP2CSV])
-AC_MSG_NOTICE([   Build ldapdebug               $LDAPUTILS_LDAPDEBUG])
-AC_MSG_NOTICE([   Build ldapdn2str              $LDAPUTILS_LDAPDN2STR])
-AC_MSG_NOTICE([   Build ldapschema              $LDAPUTILS_LDAPSCHEMA])
-AC_MSG_NOTICE([   Build ldaptree                $LDAPUTILS_LDAPTREE])
+AC_MSG_NOTICE([   Libraries:])
+AC_MSG_NOTICE([ ])
+AC_MSG_NOTICE([   Utilities:])
+AC_MSG_NOTICE([      Build ldap2csv             $LDAPUTILS_LDAP2CSV])
+AC_MSG_NOTICE([      Build ldapdebug            $LDAPUTILS_LDAPDEBUG])
+AC_MSG_NOTICE([      Build ldapdn2str           $LDAPUTILS_LDAPDN2STR])
+AC_MSG_NOTICE([      Build ldapschema           $LDAPUTILS_LDAPSCHEMA])
+AC_MSG_NOTICE([      Build ldaptree             $LDAPUTILS_LDAPTREE])
 AC_MSG_NOTICE([ ])
 AC_MSG_NOTICE([   Install libldapschema.la      $LDAPUTILS_LIBLDAPSCHEMA])
 AC_MSG_NOTICE([ ])

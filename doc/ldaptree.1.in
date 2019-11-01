@@ -56,8 +56,8 @@ ldaptree \- LDAP search tool which displays results in tree form
 [\fB-Y\fR \fImech\fR]
 [\fB-z\fR \fIlimit\fR]
 [\fB-Z\fR[\fB-Z\fR]]
-[\fIfilter\fR
-[\fIattributes...\fR]]
+[\fIfilter\fR]
+[\fIattributes...\fR]
 .sp
 \fBldaptree\fR [ \fB-h\fR | \fB--help\fR ]
 .sp

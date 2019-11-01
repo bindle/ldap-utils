@@ -71,12 +71,14 @@ include_HEADERS				=
 info_TEXINFOS				=
 lib_LIBRARIES				=
 lib_LTLIBRARIES				=
+EXTRA_LIBRARIES				= lib/libldaputils.a
+EXTRA_LTLIBRARIES			=
 man_MANS				=
 noinst_HEADERS				= include/ldapschema.h \
 					  include/ldaputils.h \
 					  include/ldaputils_cdefs.h
 noinst_PROGRAMS				=
-noinst_LIBRARIES			= lib/libldaputils.a
+noinst_LIBRARIES			=
 
 
 # lists
@@ -95,8 +97,6 @@ EXTRA_DIST				= $(noinst_HEADERS) \
 					  $(srcdir)/doc/ldapdebug.1.in \
 					  $(srcdir)/doc/ldaptree.1.in \
 					  lib/libldaputils/libldaputils.sym
-EXTRA_LIBRARIES				=
-EXTRA_LTLIBRARIES			=
 CLEANFILES				= \
 					  $(builddir)/a.out   $(srcdir)/a.out \
 					  $(builddir)/*/a.out $(srcdir)/*/a.out \
@@ -196,8 +196,20 @@ src_ldap2csv_CPPFLAGS			= -DPROGRAM_NAME="\"ldap2csv\"" $(AM_CPPFLAGS)
 src_ldap2csv_CFLAGS			= $(AM_CFLAGS)
 src_ldap2csv_LDFLAGS			= $(AM_LDFLAGS)
 src_ldap2csv_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
-src_ldap2csv_SOURCES			= \
-					  src/ldap2csv.c
+src_ldap2csv_SOURCES			= src/ldap2csv.c
+
+
+# macros for ldapdebug
+if LDAPUTILS_LDAPDEBUG
+bin_PROGRAMS                            += src/ldapdebug
+man_MANS				+= doc/ldapdebug.1
+endif
+src_ldapdebug_DEPENDENCIES		= Makefile lib/libldaputils.a
+src_ldapdebug_CPPFLAGS			= -DPROGRAM_NAME="\"ldapdebug\"" $(AM_CPPFLAGS)
+src_ldapdebug_CFLAGS			= $(AM_CFLAGS)
+src_ldapdebug_LDFLAGS			= $(AM_LDFLAGS)
+src_ldapdebug_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
+src_ldapdebug_SOURCES			= src/ldapdebug.c
 
 
 # macros for ldapdn2str
@@ -222,22 +234,7 @@ src_ldaptree_CPPFLAGS			= -DPROGRAM_NAME="\"ldaptree\"" $(AM_CPPFLAGS)
 src_ldaptree_CFLAGS			= $(AM_CFLAGS)
 src_ldaptree_LDFLAGS			= $(AM_LDFLAGS)
 src_ldaptree_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
-src_ldaptree_SOURCES			= \
-					  src/ldaptree.c
-
-
-# macros for ldapdebug
-if LDAPUTILS_LDAPDEBUG
-bin_PROGRAMS                            += src/ldapdebug
-man_MANS				+= doc/ldapdebug.1
-endif
-src_ldapdebug_DEPENDENCIES		= Makefile lib/libldaputils.a
-src_ldapdebug_CPPFLAGS			= -DPROGRAM_NAME="\"ldapdebug\"" $(AM_CPPFLAGS)
-src_ldapdebug_CFLAGS			= $(AM_CFLAGS)
-src_ldapdebug_LDFLAGS			= $(AM_LDFLAGS)
-src_ldapdebug_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
-src_ldapdebug_SOURCES			= \
-					  src/ldapdebug.c
+src_ldaptree_SOURCES			= src/ldaptree.c
 
 
 # macros for ldapschema

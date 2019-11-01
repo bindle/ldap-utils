@@ -293,14 +293,18 @@ source code from the git repository.
 Browse Source:
 
    * https://github.com/bindle/ldap-utils
+   * https://github.com/bindle/ldap-utils.xcodeproj
 
 Git URLs:
 
    * https://github.com/bindle/ldap-utils.git
+   * https://github.com/bindle/ldap-utils.xcodeproj.git
 
 Downloading Source:
 
       $ git clone git://github.com/bindle/ldap-utils.git
+      $ git clone git://github.com/bindle/ldap-utils.xcodeproj.git \
+                  ldap-utils/ldap-utils.xcodeproj
 
 Preparing Source:
 
