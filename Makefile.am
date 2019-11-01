@@ -94,6 +94,7 @@ EXTRA_DIST				= $(noinst_HEADERS) \
 					  TODO.md \
 					  lib/libldapschema/libldapschema.sym \
 					  $(srcdir)/doc/ldap2csv.1.in \
+					  $(srcdir)/doc/ldap2json.1.in \
 					  $(srcdir)/doc/ldapdebug.1.in \
 					  $(srcdir)/doc/ldaptree.1.in \
 					  lib/libldaputils/libldaputils.sym
@@ -199,6 +200,19 @@ src_ldap2csv_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
 src_ldap2csv_SOURCES			= src/ldap2csv.c
 
 
+# macros for ldap2json
+if LDAPUTILS_LDAP2JSON
+bin_PROGRAMS                            += src/ldap2json
+man_MANS				+= doc/ldap2json.1
+endif
+src_ldap2json_DEPENDENCIES		= Makefile lib/libldaputils.a
+src_ldap2json_CPPFLAGS			= -DPROGRAM_NAME="\"ldap2json\"" $(AM_CPPFLAGS)
+src_ldap2json_CFLAGS			= $(AM_CFLAGS)
+src_ldap2json_LDFLAGS			= $(AM_LDFLAGS)
+src_ldap2json_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
+src_ldap2json_SOURCES			= src/ldap2json.c
+
+
 # macros for ldapdebug
 if LDAPUTILS_LDAPDEBUG
 bin_PROGRAMS                            += src/ldapdebug
@@ -262,6 +276,9 @@ include $(srcdir)/contrib/bindletools/build-aux/makefile-version.am
 .PHONY:
 
 doc/ldap2csv.1: Makefile $(srcdir)/doc/ldap2csv.1.in
+	@$(do_subst_dt)
+
+doc/ldap2json.1: Makefile $(srcdir)/doc/ldap2json.1.in
 	@$(do_subst_dt)
 
 doc/ldapdebug.1: Makefile $(srcdir)/doc/ldapdebug.1.in

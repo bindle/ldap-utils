@@ -1,6 +1,6 @@
 /*
  *  LDAP Utilities
- *  Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>.
+ *  Copyright (C) 2019 David M. Syzdek <david@syzdek.net>.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are
@@ -30,25 +30,24 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- *  @file src/ldap2csv.c export LDAP data to CSV file
+ *  @file src/ldap2json.c export LDAP data to JSON format
  */
 /*
  *  Simple Build:
- *     export CFLAGS='-DPROGRAM_NAME="ldap2csv" -Wall -I../include'
- *     gcc ${CFLAGS} -c ldap2csv.c
- *     gcc ${CFLAGS} -lldap -o ldap2csv ldap2csv.o ../lib/libldaputils.a
+ *     export CFLAGS='-DPROGRAM_NAME="ldap2json" -Wall -I../include'
+ *     gcc ${CFLAGS} -c ldap2json.c
+ *     gcc ${CFLAGS} -lldap -o ldap2json ldap2json.o ../lib/libldaputils.a
  *
  *  Libtool Build:
- *     export CFLAGS='-DPROGRAM_NAME="ldap2csv" -Wall -I../include'
- *     libtool --mode=compile --tag=CC gcc ${CFLAGS} -c ldap2csv.c
- *     libtool --mode=link    --tag=CC gcc ${CFLAGS} -lldap -o ldap2csv \
- *             ldap2csv.lo ../lib/libldaputils.a
+ *     export CFLAGS='-DPROGRAM_NAME="ldap2json" -Wall -I../include'
+ *     libtool --mode=compile --tag=CC gcc ${CFLAGS} -c ldap2json.c
+ *     libtool --mode=link    --tag=CC gcc ${CFLAGS} -lldap -o ldap2json \
+ *             ldap2json.lo ../lib/libldaputils.a
  *
  *  Libtool Clean:
- *     libtool --mode=clean rm -f ldap2csv.lo ldap2csv
+ *     libtool --mode=clean rm -f ldap2json.lo ldap2json
  */
-#define _LDAP_UTILS_SRC_LDAP2CSV 1
-#undef __LDAPUTILS_PMARK
+#define _LDAP_UTILS_SRC_LDAP2JSON 1
 
 
 ///////////////
@@ -56,9 +55,7 @@
 //  Headers  //
 //           //
 ///////////////
-#ifdef __LDAPUTILS_PMARK
 #pragma mark - Headers
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -79,12 +76,10 @@
 //  Definitions  //
 //               //
 ///////////////////
-#ifdef __LDAPUTILS_PMARK
 #pragma mark - Definitions
-#endif
 
 #ifndef PROGRAM_NAME
-#define PROGRAM_NAME "ldap2csv"
+#define PROGRAM_NAME "ldap2json"
 #endif
 
 #define MY_SHORT_OPTIONS LDAPUTILS_OPTIONS_COMMON LDAPUTILS_OPTIONS_SEARCH "o:"
@@ -95,14 +90,13 @@
 //  Datatypes  //
 //             //
 /////////////////
-#ifdef __LDAPUTILS_PMARK
 #pragma mark - Datatypes
-#endif
 
-/* configuration union */
+// configuration union
 typedef struct my_config MyConfig;
 struct my_config
 {
+   size_t        attrs_len;
    LDAPUtils   * lud;
    const char  * filter;
    const char  * prog_name;
@@ -144,7 +138,7 @@ void my_unbind(MyConfig * cnf);
 /// prints program usage and exits
 void ldaputils_usage(void)
 {
-   printf("Usage: %s [options] [filter] attributes[:values]...\n", PROGRAM_NAME);
+   printf("Usage: %s [options] [filter] [attributes[:values]...]\n", PROGRAM_NAME);
    ldaputils_usage_search(MY_SHORT_OPTIONS);
    ldaputils_usage_common(MY_SHORT_OPTIONS);
    printf("Special Attributes:\n");
@@ -163,11 +157,9 @@ void ldaputils_usage(void)
 /// @param[in] argv   array of arguments
 int main(int argc, char * argv[])
 {
-   int                    x;
    int                    err;
    MyConfig             * cnf;
    LDAPMessage          * res;
-   const char * const   * attrs;
 
    cnf = NULL;
 
@@ -192,13 +184,6 @@ int main(int argc, char * argv[])
       my_unbind(cnf);
       return(1);
    };
-
-   // prints attribute names
-   attrs = ldaputils_get_attribute_list(cnf->lud);
-   printf("\"%s\"", attrs[0]);
-   for(x = 1; attrs[x]; x++)
-      printf(",\"%s\"", attrs[x]);
-   printf("\n");
 
    // prints values
    if ((err = my_results(cnf, res)) != LDAP_SUCCESS)
@@ -292,48 +277,47 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
 
    cnf->prog_name = ldaputils_get_prog_name(cnf->lud);
 
-   // checks for required arguments
-   if (argc < (optind+1))
-   {
-      fprintf(stderr, "%s: missing required arguments\n", cnf->prog_name);
-      fprintf(stderr, "Try `%s --help' for more information.\n", cnf->prog_name);
-      my_unbind(cnf);
-      return(1);
-   };
-
    // saves filter
    cnf->lud->filter = "(objectclass=*)";
-   if ((index(argv[optind], '=')) != NULL)
+   if (argc > optind)
    {
-      cnf->lud->filter = argv[optind];
-      optind++;
+      if ((index(argv[optind], '=')) != NULL)
+      {
+         cnf->lud->filter = argv[optind];
+         optind++;
+      };
    };
 
    // configures LDAP attributes to return in results
-   if (!(cnf->lud->attrs = (char **) malloc(sizeof(char *) * (size_t)(argc-optind+1))))
+   if ((cnf->attrs_len = (size_t)(argc-optind)))
    {
-      fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
-      my_unbind(cnf);
-      return(1);
-   };
-   if (!(cnf->defvals = (const char **) malloc(sizeof(char *) * (size_t)(argc-optind+1))))
-   {
-      fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
-      my_unbind(cnf);
-      return(1);
-   };
-   for(c = 0; c < (argc-optind); c++)
-   {
-      cnf->lud->attrs[c] = argv[optind+c];
-      cnf->defvals[c]    = "";
-      if ((str = index(argv[optind+c], ':')) != NULL)
+      if (!(cnf->lud->attrs = (char **) malloc(sizeof(char *) * (cnf->attrs_len+1))))
       {
-         str[0] = '\0';
-         cnf->defvals[c] = &str[1];
+         fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
+         my_unbind(cnf);
+         return(1);
       };
+      bzero(cnf->lud->attrs, sizeof(char *) * (cnf->attrs_len+1));
+      if (!(cnf->defvals = (const char **) malloc(sizeof(char *) * (cnf->attrs_len+1))))
+      {
+         fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
+         my_unbind(cnf);
+         return(1);
+      };
+      bzero(cnf->defvals, sizeof(char *) * (cnf->attrs_len+1));
+      for(c = 0; c < (argc-optind); c++)
+      {
+         cnf->lud->attrs[c] = argv[optind+c];
+         if ((str = index(argv[optind+c], ':')) != NULL)
+         {
+            str[0] = '\0';
+            cnf->defvals[c] = &str[1];
+         };
+      };
+      cnf->lud->attrs[c] = NULL;
+      cnf->defvals[c]    = NULL;
    };
-   cnf->lud->attrs[c] = NULL;
-   cnf->defvals[c]    = NULL;
+
 
    // reads password
    if ((err = ldaputils_pass(cnf->lud)) != 0)
@@ -353,174 +337,156 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
 {
    int               x;
    int               y;
-   void            * ptr;
-   char            * buff;
-   size_t            bufflen;
+   char            * dnstr;
    char            * dn;
    char           ** dns;
-   char            * dnstr;
    char            * delim;
    LDAPMessage     * msg;
-   struct berval  ** vals;
+   char           ** vals;
    LDAP            * ld;
+   BerElement      * ber;
+   char            * attr;
 
    assert(cnf != NULL);
    assert(res != NULL);
 
    ld      = ldaputils_get_ld(cnf->lud);
 
-   // initialize buffer
-   bufflen = 32;
-   if ((buff = malloc(bufflen)) == NULL)
-   {
-      fprintf(stderr, "%s: malloc(): out of virtual memory\n", cnf->prog_name);
-      return(LDAP_NO_MEMORY);
-   };
-
    // sorts entries
    if ((cnf->lud->sortattr))
       ldap_sort_entries(ld, &res, cnf->lud->sortattr, strcasecmp);
+
+   // print header
+   printf("[\n");
 
    // loops through entries
    msg = ldap_first_entry(ld, res);
    while ((msg))
    {
-      printf("\"");
+      // retrieve first attribute
+      attr = ldap_first_attribute(ld, msg, &ber);
 
       // retrieve DN and make CSV safe
       if ((dn = ldap_get_dn(ld, msg)) == NULL)
       {
          fprintf(stderr, "%s: malloc(): out of virtual memory\n", cnf->prog_name);
-         free(buff);
          return(LDAP_NO_MEMORY);
       };
       delim = dn;
       while((delim = index(delim, '"')) != NULL)
          delim[0] = '\'';
 
-      // loop through attributes
-      for(x = 0; (cnf->lud->attrs[x] != NULL); x++)
+      // start entry
+      if ((dns = ldap_explode_dn(dn, 0)) == NULL)
       {
-         // print delimiter
-         if (x > 0)
-            printf("\",\"");
+         fprintf(stderr, "%s: ldap_explode_dn(): out of virtual memory\n", cnf->prog_name);
+         return(LDAP_NO_MEMORY);
+      };
+      printf("   {\n");
 
-         // prints dn if specified
+      // loop through psuedo attributes
+      for(x = 0; (((cnf->lud->attrs)) && ((cnf->lud->attrs[x]))); x++)
+      {
          if (strcasecmp("dn", cnf->lud->attrs[x]) == 0)
-         {
-            printf("%s", dn);
-            continue;
-         };
-
-         // print RDN
-         if (strcasecmp("rdn", cnf->lud->attrs[x]) == 0)
-         {
-            if ((dns = ldap_explode_dn(dn, 0)) == NULL)
-            {
-               fprintf(stderr, "%s: ldap_explode_dn(): out of virtual memory\n", cnf->prog_name);
-               free(buff);
-               return(LDAP_NO_MEMORY);
-            };
-            printf("%s", dns[0]);
-            ldap_value_free(dns);
-            continue;
-         };
-
-         // print DN in UFN format
-         if (strcasecmp("ufn", cnf->lud->attrs[x]) == 0)
+            printf("      \"dn\": \"%s\"", dn);
+         else if (strcasecmp("rdn", cnf->lud->attrs[x]) == 0)
+            printf("      \"rdn\": \"%s\"", dns[0]);
+         else if (strcasecmp("ufn", cnf->lud->attrs[x]) == 0)
          {
             if ((dnstr = ldap_dn2ufn(dn)) == NULL)
             {
                fprintf(stderr, "%s: ldap_dn2ufn(): out of virtual memory\n", cnf->prog_name);
-               free(buff);
                return(LDAP_NO_MEMORY);
             };
-            printf("%s", dnstr);
+            printf("      \"ufn\": \"%s\"", dnstr);
             ldap_memfree(dnstr);
-            continue;
-         };
-
-         // print DN in DCE format
-         if (strcasecmp("dce", cnf->lud->attrs[x]) == 0)
+         }
+         else if (strcasecmp("dce", cnf->lud->attrs[x]) == 0)
          {
             if ((dnstr = ldap_dn2dcedn(dn)) == NULL)
             {
                fprintf(stderr, "%s: ldap_dn2dcedn(): out of virtual memory\n", cnf->prog_name);
-               free(buff);
                return(LDAP_NO_MEMORY);
             };
-            printf("%s", dnstr);
+            printf("      \"dce\": \"%s\"", dnstr);
             ldap_memfree(dnstr);
-            continue;
-         };
-
-         // print DN in AD canonical format
-         if (strcasecmp("adc", cnf->lud->attrs[x]) == 0)
+         }
+         else if (strcasecmp("adc", cnf->lud->attrs[x]) == 0)
          {
             if ((dnstr = ldap_dn2ad_canonical(dn)) == NULL)
             {
                fprintf(stderr, "%s: ldap_dn2ad_canonical(): out of virtual memory\n", cnf->prog_name);
-               free(buff);
                return(LDAP_NO_MEMORY);
             };
-            printf("%s", dnstr);
+            printf("      \"adc\": \"%s\"", dnstr);
             ldap_memfree(dnstr);
-            continue;
-         };
-
-         // retrieves values
-         if ((vals = ldap_get_values_len(ld, msg, cnf->lud->attrs[x])) == NULL)
+         }
+         else
          {
-            printf("%s", cnf->defvals[x]);
-            continue;
-         };
-
-         // processes values
-         for(y = 0; (y < ldap_count_values_len(vals)); y++)
-         {
-            // adjusts size of buffer
-            if (bufflen < (vals[y]->bv_len + 1))
+            if ((vals = ldap_get_values(ld, msg, cnf->lud->attrs[x])) != NULL)
             {
-               bufflen = vals[y]->bv_len + 1;
-               if ((ptr = realloc(buff, bufflen)) == NULL)
-               {
-                  fprintf(stderr, "%s: realloc(): out of virtual memory\n", cnf->prog_name);
-                  free(buff);
-                  return(LDAP_NO_MEMORY);
-               };
-               buff = ptr;
+               ldap_value_free(vals);
+               continue;
             };
-
-            // copies value into buffer
-            memcpy(buff, vals[y]->bv_val, vals[y]->bv_len);
-            buff[vals[y]->bv_len] = '\0';
-
-            // replace double quotation character with single quotation character
-            delim = buff;
-            while((delim = index(delim, '"')) != NULL)
-               delim[0] = '\'';
-            delim = buff;
-            while((delim = index(delim, '|')) != NULL)
-               delim[0] = ':';
-
-            // print value
-            if (y > 0)
-               printf("|%s", buff);
-            else
-               printf("%s", buff);
+            if (cnf->defvals[x] == NULL)
+               continue;
+            printf("      \"%s\": \"%s\"", cnf->lud->attrs[x], cnf->defvals[x]);
          };
-         ldap_value_free_len(vals);
-      };
-      printf("\"\n");
 
-      // frees DN
+         if ( ((cnf->lud->attrs[x+1])) || ((attr)) )
+            printf(",\n");
+         else
+            printf("\n");
+      };
+
+      ldap_value_free(dns);
       ldap_memfree(dn);
 
+      // loop through attributes
+      while ((attr))
+      {
+         // retrieves values
+         if ((vals = ldap_get_values(ld, msg, attr)) == NULL)
+         {
+            for(x = 0; ( ((cnf->lud->attrs[x])) && (!(strcasecmp(attr, cnf->lud->attrs[x])))); x++);
+            if ((cnf->defvals[x]))
+                printf("      \"%s\": \"%s\"", attr, cnf->defvals[x]);
+            else
+               printf("      \"%s\": null", attr);
+         }
+         else if (vals[1] == NULL)
+         {
+            printf("      \"%s\": \"%s\"", attr, vals[0]);
+            ldap_value_free(vals);
+         }
+         else
+         {
+            printf("      \"%s\": [", attr);
+            for(y = 0; (y < ldap_count_values(vals)); y++)
+            {
+               if (y > 0)
+                  printf(", \"%s\"", vals[y]);
+               else
+                  printf(" \"%s\"", vals[y]);
+            };
+            printf(" ]");
+            ldap_value_free(vals);
+         };
+         if ((attr = ldap_next_attribute(ld, msg, ber)) == NULL)
+            printf("\n");
+         else
+            printf(",\n");
+      };
+      ber_free(ber, 0);
+
       // retrieves next entry
-      msg = ldap_next_entry(ld, msg);
+      if ((msg = ldap_next_entry(ld, msg)) == NULL)
+         printf("   }\n");
+      else
+         printf("   },\n");
    };
 
-   free(buff);
+   printf("]\n");
 
    return(LDAP_SUCCESS);
 }

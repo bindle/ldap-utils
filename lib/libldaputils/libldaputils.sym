@@ -31,23 +31,39 @@
 #
 #   lib/libldaputils.sym - list of symbols to export in libldaputils.la
 #
-#   Build:
+#   Simple Build:
 #      CFLAGS="-g -O2 -W -Wall -Werror -I../include"
-#      LDFLAGS="-g -O2 -export-symbols libldaputils.sym -rpath /usr/local/lib"
-#      export CFLAGS LDFLAGS
+#      gcc ${CFLAGS} -c lconfig.c
+#      gcc ${CFLAGS} -c lentry.c
+#      gcc ${CFLAGS} -c lldap.c
+#      gcc ${CFLAGS} -c lmemory.c
+#      gcc ${CFLAGS} -c lpasswd.c
+#      gcc ${CFLAGS} -c ltree.c
+#      ar rcs libldaputils.a \
+#             lconfig.o lentry.o lldap.o lmemory.o lpasswd.o ltree.o
+#      ranlib libldaputils.a
 #
-#      libtool --mode=compile gcc ${CFLAGS}  -c otadm_config.c
-#      libtool --mode=link    gcc ${LDFLAGS} -o libldaputils.la otadm_config.lo
+#   Libtool Build:
+#      CFLAGS="-g -O2 -W -Wall -Werror -I../../include"
+#      LDFLAGS="-g -O2 -static"
+#      libtool --mode=compile --tag=CC gcc ${CFLAGS}  -c lconfig.c
+#      libtool --mode=compile --tag=CC gcc ${CFLAGS}  -c lentry.c
+#      libtool --mode=compile --tag=CC gcc ${CFLAGS}  -c lldap.c
+#      libtool --mode=compile --tag=CC gcc ${CFLAGS}  -c lmemory.c
+#      libtool --mode=compile --tag=CC gcc ${CFLAGS}  -c lpasswd.c
+#      libtool --mode=compile --tag=CC gcc ${CFLAGS}  -c ltree.c
+#      libtool --mode=link    --tag=CC gcc ${LDFLAGS} -o libldaputils.a \
+#             lconfig.lo lentry.lo lldap.lo lmemory.lo lpasswd.lo ltree.lo
 #
 #   Install:
-#      libtool --mode=install install -c libldaputils.la /usr/local/lib/libacs-utils.la
+#      libtool --mode=install install -c libldaputils.a /usr/local/lib/
 #
 #   Uninstall:
-#      libtool --mode=uninstall rm -f /usr/local/lib/libldaputils.la
+#      libtool --mode=uninstall rm -f /usr/local/lib/libldaputils.a
 #
 #   Clean:
-#      libtool --mode=clean rm -f libldaputils.la otadm_config.lo
-#
+#      libtool --mode=clean rm -f libldaputils.la libldaputils.a \
+#             lconfig.lo lentry.lo lldap.lo lmemory.lo lpasswd.lo ltree.lo
 #
 ldaputils_chomp
 ldaputils_cmdargs
