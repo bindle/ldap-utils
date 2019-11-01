@@ -15,6 +15,7 @@ Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>
   - ldaptree: adding --expand option (syzdek)
   - ldaptree: making search filter optional when listing attributes (syzdek)
   - ide: splitting IDE project files into separate project (syzdek)
+  - autotools: adding ability to disable all utilities (syzdek)
 
 0.3
 ---

@@ -71,14 +71,14 @@ include_HEADERS				=
 info_TEXINFOS				=
 lib_LIBRARIES				=
 lib_LTLIBRARIES				=
-EXTRA_LIBRARIES				= lib/libldaputils.a
+EXTRA_LIBRARIES				=
 EXTRA_LTLIBRARIES			=
 man_MANS				=
 noinst_HEADERS				= include/ldapschema.h \
 					  include/ldaputils.h \
 					  include/ldaputils_cdefs.h
 noinst_PROGRAMS				=
-noinst_LIBRARIES			=
+noinst_LIBRARIES			= lib/libldaputils.a
 
 
 # lists
