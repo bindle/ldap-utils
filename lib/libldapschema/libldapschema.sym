@@ -32,19 +32,31 @@
 #   lib/libldapschema.sym - list of symbols to export in libldapschema.la
 #
 #   Simple Build:
-#      gcc -g -O2 -W -Wall -Werror -I../include -c lerror.c
-#      gcc -g -O2 -W -Wall -Werror -I../include -c lmemory.c
-#      ar rcs libldapschema.a lerror.o lmemory.o
+#      CFLAGS="-g -O2 -W -Wall -Werror -I../include"
+#      gcc ${CFLAGS} -c lerror.c
+#      gcc ${CFLAGS} -c lldap.c
+#      gcc ${CFLAGS} -c llexer.c
+#      gcc ${CFLAGS} -c lmemory.c
+#      gcc ${CFLAGS} -c loutput.c
+#      gcc ${CFLAGS} -c lspec.c
+#      gcc ${CFLAGS} -c lsort.c
+#      ar rcs libldapschema.a \
+#             lerror.o lldap.o llexer.o lmemory.o loutput.o lspec.o lsort.o
+#      ranlib libldapschema.a
 #
 #   Libtool Build:
 #      CFLAGS="-g -O2 -W -Wall -Werror -I../include"
 #      LDFLAGS="-g -O2 -export-symbols libldapschema.sym -rpath /usr/local/lib"
-#      export CFLAGS LDFLAGS
-#
-#      libtool --mode=compile gcc ${CFLAGS}  -c lerror.c
-#      libtool --mode=compile gcc ${CFLAGS}  -c lmemory.c
-#      libtool --mode=link    gcc ${LDFLAGS} -o libldaputils.la \
-#              lerror.lo lmemory.lo
+#      libtool --mode=compile --tag=CC gcc ${CFLAGS}  -c lerror.c
+#      libtool --mode=compile --tag=CC gcc ${CFLAGS}  -c lldap.c
+#      libtool --mode=compile --tag=CC gcc ${CFLAGS}  -c llexer.c
+#      libtool --mode=compile --tag=CC gcc ${CFLAGS}  -c lmemory.c
+#      libtool --mode=compile --tag=CC gcc ${CFLAGS}  -c loutput.c
+#      libtool --mode=compile --tag=CC gcc ${CFLAGS}  -c lspec.c
+#      libtool --mode=compile --tag=CC gcc ${CFLAGS}  -c lsort.c
+#      libtool --mode=link    --tag=CC gcc ${LDFLAGS} -o libldapschema.la \
+#              lerror.lo lldap.lo llexer.lo lmemory.lo loutput.lo lspec.lo \
+#              lsort.lo
 #
 #   Libtool Install:
 #      libtool --mode=install install -c libldapschema.la /usr/local/lib/libldapschema.la
@@ -53,7 +65,9 @@
 #      libtool --mode=uninstall rm -f /usr/local/lib/libldapschema.la
 #
 #   Libtool Clean:
-#      libtool --mode=clean rm -f libldapschema.la lsversion.lo
+#      libtool --mode=clean rm -f libldapschema.la \
+#              lerror.lo lldap.lo llexer.lo lmemory.lo loutput.lo lspec.lo \
+#              lsort.lo
 #
 # error functions
 ldapschema_err2string
