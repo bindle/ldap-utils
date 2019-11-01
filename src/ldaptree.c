@@ -36,25 +36,16 @@
  *  Simple Build:
  *     export CFLAGS='-DPROGRAM_NAME="ldaptree" -Wall -I../include'
  *     gcc ${CFLAGS} -c ldaptree.c
- *     gcc ${CFLAGS} -c ldaputils_config.c
- *     gcc ${CFLAGS} -c ldaputils_config_opts.c
- *     gcc ${CFLAGS} -c ldaputils_ldap.c
- *     gcc ${CFLAGS} -lldap -o ldaptree ldaptree.o ldaputils_config.o \
- *             ldaputils_config_opts.o ldaputils_ldap.o
+ *     gcc ${CFLAGS} -lldap -o ldaptree ldaptree.o ../lib/libldaputils.a
  *
  *  Libtool Build:
  *     export CFLAGS='-DPROGRAM_NAME="ldaptree" -Wall -I../include'
  *     libtool --mode=compile --tag=CC gcc ${CFLAGS} -c ldaptree.c
- *     libtool --mode=compile --tag=CC gcc ${CFLAGS} -c ldaputils_config.c
- *     libtool --mode=compile --tag=CC gcc ${CFLAGS} -c ldaputils_config_opts.c
- *     libtool --mode=compile --tag=CC gcc ${CFLAGS} -c ldaputils_ldap.c
  *     libtool --mode=link    --tag=CC gcc ${CFLAGS} -lldap -o ldaptree \
- *             ldaptree.lo ldaputils_config.lo ldaputils_config_opts.lo \
- *             ldaputils_ldap.lo
+ *             ldaptree.lo ../lib/libldaputils.a
  *
  *  Libtool Clean:
- *     libtool --mode=clean rm -f ldaptree.lo ldaputils_config.lo \
- *             ldaputils_config_opts.lo ldaputils_ldap.lo ldaptree
+ *     libtool --mode=clean rm -f ldaptree.lo ldaptree
  */
 #define _LDAP_UTILS_SRC_LDAP2CSV 1
 
