@@ -123,6 +123,7 @@
 #define LDAPSCHEMA_O_OBJECTCLASS                      0x0010   ///< attributeType: is objectClass
 #define LDAPSCHEMA_O_READABLE                         0x0020   ///< ldapSyntax: is human readable
 #define LDAPSCHEMA_O_COMMON_ABNF                      0x0040   ///< ldapSyntax: uses common ABNF
+#define LDAPSCHEMA_O_DEPRECATED                       0x0080   ///< object deprecated or removed by RFC
 
 // objectclass types
 #define LDAPSCHEMA_STRUCTURAL                         0x0000
@@ -146,6 +147,21 @@
 #define LDAPSCHEMA_SUBTYPE( val )                     (val & LDAPSCHEMA_SUBTYPE_MASK )
 #define LDAPSCHEMA_IS_TYPE( val, type )               ( LDAPSCHEMA_TYPE(val)         == type )
 #define LDAPSCHEMA_IS_SUBTYPE( val, type )            ( LDAPSCHEMA_SUBTYPE_MASK(val) == type )
+
+// specification types
+#define LDAPSCHEMA_SPEC_RFC                           1
+
+// specification classes
+#define LDAPSCHEMA_CLASS_UNKNOWN                      0
+#define LDAPSCHEMA_CLASS_ASCII                        1
+#define LDAPSCHEMA_CLASS_UTF8                         2
+#define LDAPSCHEMA_CLASS_INTEGER                      3
+#define LDAPSCHEMA_CLASS_UNSIGNED                     4
+#define LDAPSCHEMA_CLASS_BOOLEAN                      5
+#define LDAPSCHEMA_CLASS_DATA                         6
+#define LDAPSCHEMA_CLASS_IMAGE                        7
+#define LDAPSCHEMA_CLASS_AUDIO                        8
+#define LDAPSCHEMA_CLASS_UTF8_MULTILINE               9
 
 
 /////////////////

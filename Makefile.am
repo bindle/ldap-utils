@@ -131,6 +131,8 @@ lib_libldapschema_a_SOURCES		= $(noinst_HEADERS) \
 					  lib/libldapschema/lmemory.h \
 					  lib/libldapschema/loutput.c \
 					  lib/libldapschema/loutput.h \
+					  lib/libldapschema/lspec.c \
+					  lib/libldapschema/lspec.h \
 					  lib/libldapschema/lsort.c \
 					  lib/libldapschema/lsort.h
 
@@ -158,6 +160,8 @@ lib_libldapschema_la_SOURCES		= $(noinst_HEADERS) \
 					  lib/libldapschema/lmemory.h \
 					  lib/libldapschema/loutput.c \
 					  lib/libldapschema/loutput.h \
+					  lib/libldapschema/lspec.c \
+					  lib/libldapschema/lspec.h \
 					  lib/libldapschema/lsort.c \
 					  lib/libldapschema/lsort.h
 
