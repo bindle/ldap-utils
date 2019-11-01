@@ -40,6 +40,7 @@ Contents
    * Software Requirements
    * Utilities
      - ldap2csv
+     - ldap2json
      - ldapdebug
      - ldapdn2str
      - ldaptree
@@ -118,6 +119,78 @@ Example of the same search using `ldapsearch`:
       mail: doughboy42@example.com
       title: "Dough" Master
       
+      dn: uid=syzdek,ou=People,dc=syzdek,dc=net,o=internet
+      uid: syzdek
+      givenname: David M.
+      sn: Syzdek
+      mail: david@syzdek.net
+      title: Slackware Linux Administrator
+
+
+ldap2json
+---------
+
+ldap2json is a shell utilty which performs an LDAP search and prints the results
+in JSON format.  
+
+ldap2json supports psuedo attributes which return the DN of returned entries in
+various formats.  The following are the supported psuedo attributes and examples
+of their format:
+
+   * `dn` (distinguished name of entry)
+   * `dce` (DCE-style distinguished name)
+   * `adc` (Active Directory canonical name)
+   * `rdn` (relative distinguished name of entry)
+   * `ufn` (User Friendly Name of DN)
+
+Example usage:
+
+      $ ldap2json -LLL -x -b o=internet -S sn '(uid=*)' uid givenname sn mail title rdn
+      [
+         {
+            "uid": "jdough",
+            "givenname": "John",
+            "sn": "Dough",
+            "mail": "doughboy42@example.com",
+            "title": "'Dough' Master",
+            "rdn": "uid=jdough"
+         },
+         {
+            "uid": "dnullman",
+            "givenname": "Devian",
+            "sn": "Nullman",
+            "mail": "noreply@example.com",
+            "title": "Linux Device : /dev/null",
+            "rdn": "uid=dnullman"
+         },
+         {
+            "uid": "syzdek",
+            "givenname": "David M.",
+            "sn": "Syzdek",
+            "mail": "david@syzdek.net",
+            "title": "Slackware Linux Administrator",
+            "rdn": "uid=syzdek"
+         }
+      ]
+      $
+
+Example of the same search using `ldapsearch`:
+
+      $ ldapsearch -LLL -x -b o=internet -S sn '(uid=*)' uid givenname sn mail title
+      dn: uid=dnullman,ou=People,dc=example,dc=net,o=internet
+      uid: dnullman
+      givenname: Devian
+      sn: Nullman
+      mail: noreply@example.com
+      title: Linux Device | /dev/null
+
+      dn: uid=jdough,ou=People,dc=example,dc=net,o=internet
+      uid: jdough
+      givenname: John
+      sn: Dough
+      mail: doughboy42@example.com
+      title: "Dough" Master
+
       dn: uid=syzdek,ou=People,dc=syzdek,dc=net,o=internet
       uid: syzdek
       givenname: David M.

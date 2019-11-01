@@ -56,6 +56,30 @@ AC_DEFUN([AC_LDAP_UTILS_LDAP2CSV],[dnl
 ])dnl
 
 
+# AC_LDAP_UTILS_LDAP2JSON
+# ______________________________________________________________________________
+AC_DEFUN([AC_LDAP_UTILS_LDAP2JSON],[dnl
+
+   # prerequists
+   AC_REQUIRE([AC_LDAP_UTILS_UTILITIES])
+
+   enableval=""
+   AC_ARG_ENABLE(
+      ldap2csv,
+      [AS_HELP_STRING([   --disable-ldap2json], [disable building ldap2json utility])],
+      [ ELDAP2JSON=$enableval ],
+      [ ELDAP2JSON=$enableval ]
+   )
+
+   if test "x${ELDAP2JSON}" != "x${LDAPUTILS_UTILITIES_ALT}";then
+      ELDAP2JSON=${LDAPUTILS_UTILITIES}
+   fi
+   LDAPUTILS_LDAP2JSON=${ELDAP2CSV}
+
+   AM_CONDITIONAL([LDAPUTILS_LDAP2JSON], [test "x$LDAPUTILS_LDAP2JSON" = "xyes"])
+])dnl
+
+
 # AC_LDAP_UTILS_LDAPDEBUG
 # ______________________________________________________________________________
 AC_DEFUN([AC_LDAP_UTILS_LDAPDEBUG],[dnl
