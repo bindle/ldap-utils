@@ -91,6 +91,7 @@ EXTRA_DIST				= $(noinst_HEADERS) \
 					  TODO.md \
 					  $(srcdir)/doc/ldap2csv.1.in \
 					  $(srcdir)/doc/ldap2json.1.in \
+					  $(srcdir)/doc/ldapinfo.1.in \
 					  $(srcdir)/doc/ldapdebug.1.in \
 					  $(srcdir)/doc/ldaptree.1.in \
 					  lib/libldaputils/libldaputils.sym
@@ -179,6 +180,19 @@ src_ldapdn2str_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
 src_ldapdn2str_SOURCES			= src/ldapdn2str.c
 
 
+# macros for ldapinfo
+if LDAPUTILS_LDAPINFO
+   bin_PROGRAMS				+= src/ldapinfo
+   man_MANS				+= doc/ldapinfo.1
+endif
+src_ldapinfo_DEPENDENCIES		= Makefile lib/libldaputils.a
+src_ldapinfo_CPPFLAGS			= -DPROGRAM_NAME="\"ldapinfo\"" $(AM_CPPFLAGS)
+src_ldapinfo_CFLAGS			= $(AM_CFLAGS)
+src_ldapinfo_LDFLAGS			= $(AM_LDFLAGS)
+src_ldapinfo_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
+src_ldapinfo_SOURCES			= src/ldapinfo.c
+
+
 # macros for ldaptree
 if LDAPUTILS_LDAPTREE
 bin_PROGRAMS                            += src/ldaptree
@@ -211,6 +225,9 @@ doc/ldap2json.1: Makefile $(srcdir)/doc/ldap2json.1.in
 	@$(do_subst_dt)
 
 doc/ldapdebug.1: Makefile $(srcdir)/doc/ldapdebug.1.in
+	@$(do_subst_dt)
+
+doc/ldapinfo.1: Makefile $(srcdir)/doc/ldapinfo.1.in
 	@$(do_subst_dt)
 
 doc/ldaptree.1: Makefile $(srcdir)/doc/ldaptree.1.in

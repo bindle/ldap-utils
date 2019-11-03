@@ -180,6 +180,7 @@ AC_LDAP_UTILS_LDAP2CSV
 AC_LDAP_UTILS_LDAP2JSON
 AC_LDAP_UTILS_LDAPDEBUG
 AC_LDAP_UTILS_LDAPDN2STR
+AC_LDAP_UTILS_LDAPINFO
 AC_LDAP_UTILS_LDAPTREE
 
 # Creates outputs
@@ -200,6 +201,7 @@ AC_MSG_NOTICE([      Build ldap2csv             $LDAPUTILS_LDAP2CSV])
 AC_MSG_NOTICE([      Build ldap2json            $LDAPUTILS_LDAP2JSON])
 AC_MSG_NOTICE([      Build ldapdebug            $LDAPUTILS_LDAPDEBUG])
 AC_MSG_NOTICE([      Build ldapdn2str           $LDAPUTILS_LDAPDN2STR])
+AC_MSG_NOTICE([      Build ldapinfo             $LDAPUTILS_LDAPINFO])
 AC_MSG_NOTICE([      Build ldaptree             $LDAPUTILS_LDAPTREE])
 AC_MSG_NOTICE([ ])
 AC_MSG_NOTICE([   Please send suggestions to:   $PACKAGE_BUGREPORT])

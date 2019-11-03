@@ -43,6 +43,7 @@ Contents
      - ldap2json
      - ldapdebug
      - ldapdn2str
+     - ldapinfo
      - ldaptree
    * Source Code
    * Package Maintence Notes
@@ -259,6 +260,13 @@ The following are example of the output presentations available:
      - `o=internet,dc=net,dc=example,ou=People,uid=jdough`
      - `o=internet,dc=net,dc=syzdek,ou=People,uid=syzdek`
      - `dc=org,dc=foo,ou=People,uid=administrator`
+
+
+ldapinfo
+--------
+
+ldapinfo is a shell utilty which queries the LDAP server for server information and
+displays the information in human readble form.
 
 
 ldaptree

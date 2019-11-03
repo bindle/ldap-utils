@@ -128,6 +128,30 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPDN2STR],[dnl
 ])dnl
 
 
+# AC_LDAP_UTILS_LDAPINFO
+# ______________________________________________________________________________
+AC_DEFUN([AC_LDAP_UTILS_LDAPINFO],[dnl
+
+   # prerequists
+   AC_REQUIRE([AC_LDAP_UTILS_UTILITIES])
+
+   enableval=""
+   AC_ARG_ENABLE(
+      ldapinfo,
+      [AS_HELP_STRING([   --disable-ldapinfo], [disable building ldapinfo utility])],
+      [ ELDAPINFO=$enableval ],
+      [ ELDAPINFO=$enableval ]
+   )
+
+   if test "x${ELDAPINFO}" != "x${LDAPUTILS_UTILITIES_ALT}";then
+      ELDAPINFO=${LDAPUTILS_UTILITIES}
+   fi
+   LDAPUTILS_LDAPINFO=${ELDAPINFO}
+
+   AM_CONDITIONAL([LDAPUTILS_LDAPINFO], [test "x$LDAPUTILS_LDAPINFO" = "xyes"])
+])dnl
+
+
 # AC_LDAP_UTILS_LDAPTREE
 # ______________________________________________________________________________
 AC_DEFUN([AC_LDAP_UTILS_LDAPTREE],[dnl
