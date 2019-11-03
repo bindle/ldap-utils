@@ -54,7 +54,7 @@
 /////////////////
 #pragma mark - Datatypes
 
-struct ldapschema_syntax_spec
+struct ldapschema_spec
 {
    const char      * oid;
    const char      * name;
@@ -88,7 +88,7 @@ struct ldapschema_syntax_spec
 /////////////////
 #pragma mark - Variables
 
-extern const struct ldapschema_syntax_spec syntax_spec[];
+extern const struct ldapschema_spec syntax_spec[];
 
 
 //////////////////
