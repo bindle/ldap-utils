@@ -112,6 +112,14 @@ struct my_config
 
 static const char * ldapinfo_attrs[] =
 {
+   "attributeTypes",
+   "ldapSyntaxes",
+   "matchingRuleUse",
+   "matchingRules",
+   "objectClasses",
+   "dITContentRules",
+   "dITStructureRules",
+   "nameForms",
    "cn",
    "objectclass",
    "configContext",
@@ -161,6 +169,8 @@ int my_monitor_database(MyConfig * cnf, const char * base);
 int my_rootdse(MyConfig * cnf);
 
 int my_results(MyConfig * cnf, LDAPMessage * res);
+
+int my_schema(MyConfig * cnf, const char * base);
 
 // fress resources
 void my_unbind(MyConfig * cnf);
@@ -535,6 +545,7 @@ int my_rootdse(MyConfig * cnf)
    int               msgid;
    size_t            s;
    char           ** monitor;
+   char           ** schema;
    char           ** vals;
    char            * errmsg;
    LDAP            * ld;
@@ -616,11 +627,8 @@ int my_rootdse(MyConfig * cnf)
    };
 
    // DNs
-   if ((vals = ldap_get_values(ld, msg, "subschemaSubentry")) != NULL)
-   {
-      my_fields("Subschema Subentry:", vals);
-      ldap_value_free(vals);
-   };
+   if ((schema = ldap_get_values(ld, msg, "subschemaSubentry")) != NULL)
+      my_fields("Subschema Subentry:", schema);
    if ((vals = ldap_get_values(ld, msg, "configContext")) != NULL)
    {
       my_fields("Configuration context:", vals);
@@ -629,6 +637,9 @@ int my_rootdse(MyConfig * cnf)
    if ((monitor = ldap_get_values(ld, msg, "monitorContext")) != NULL)
       my_fields("Monitoring context:", monitor);
    printf("\n");
+
+   if ((schema))
+      my_schema(cnf, schema[0]);
 
    // connection stats
    if ((monitor))
@@ -648,6 +659,8 @@ int my_rootdse(MyConfig * cnf)
       printf("\n");
    };
 
+   if ((schema))
+      ldap_value_free(schema);
    if ((monitor))
       ldap_value_free(monitor);
 
@@ -685,6 +698,134 @@ int my_rootdse(MyConfig * cnf)
 
    // frees response
    ldap_msgfree(res);
+
+   return(0);
+}
+
+
+int my_schema(MyConfig * cnf, const char * base)
+{
+   int               rc;
+   int               err;
+   int               msgid;
+   int               i;
+   char           ** vals;
+   char              buff[256];
+   LDAP            * ld;
+   LDAPMessage     * res;
+   LDAPMessage     * msg;
+   struct timeval    timeout;
+
+   ld  = cnf->lud->ld;
+
+   // searches for cn=Connections,<monitor>
+   timeout.tv_sec  = 5;
+   timeout.tv_usec = 0;
+   if ((err = ldap_search_ext(ld, base, LDAP_SCOPE_BASE, "(objectclass=*)", cnf->lud->attrs, 0, NULL, NULL, &timeout, -1, &msgid)) != LDAP_SUCCESS)
+      return(-1);
+   if ((err = ldap_result(ld, msgid, LDAP_MSG_ALL, NULL, &res)) < 1)
+      return(-1);
+
+   // parses result
+   rc = ldap_parse_result(ld, res, &err, NULL, NULL, NULL, NULL, 0);
+   if ((rc != LDAP_SUCCESS) || (err != LDAP_SUCCESS))
+   {
+      ldap_msgfree(res);
+      return(-1);
+   };
+
+   // retrieves entry
+   msg   = ldap_first_entry(ld, res);
+
+   if ((vals = ldap_get_values(ld, msg, "ldapSyntaxes")) != NULL)
+   {
+      for(i = 0; ((vals[i])); i++);
+      if (i > 0)
+      {
+         snprintf(buff, sizeof(buff), "%i", i);
+         my_field("Schema ldapSyntaxes:",  buff);
+      };
+      ldap_value_free(vals);
+   };
+
+   if ((vals = ldap_get_values(ld, msg, "matchingRules")) != NULL)
+   {
+      for(i = 0; ((vals[i])); i++);
+      if (i > 0)
+      {
+         snprintf(buff, sizeof(buff), "%i", i);
+         my_field("Schema matchingRules:",  buff);
+      };
+      ldap_value_free(vals);
+   };
+
+   if ((vals = ldap_get_values(ld, msg, "matchingRuleUse")) != NULL)
+   {
+      for(i = 0; ((vals[i])); i++);
+      if (i > 0)
+      {
+         snprintf(buff, sizeof(buff), "%i", i);
+         my_field("Schema matchingRuleUse:",  buff);
+      };
+      ldap_value_free(vals);
+   };
+
+   if ((vals = ldap_get_values(ld, msg, "attributeTypes")) != NULL)
+   {
+      for(i = 0; ((vals[i])); i++);
+      if (i > 0)
+      {
+         snprintf(buff, sizeof(buff), "%i", i);
+         my_field("Schema attributeTypes:",  buff);
+      };
+      ldap_value_free(vals);
+   };
+
+   if ((vals = ldap_get_values(ld, msg, "objectClasses")) != NULL)
+   {
+      for(i = 0; ((vals[i])); i++);
+      if (i > 0)
+      {
+         snprintf(buff, sizeof(buff), "%i", i);
+         my_field("Schema objectClasses:",  buff);
+      };
+      ldap_value_free(vals);
+   };
+
+   if ((vals = ldap_get_values(ld, msg, "dITContentRules")) != NULL)
+   {
+      for(i = 0; ((vals[i])); i++);
+      if (i > 0)
+      {
+         snprintf(buff, sizeof(buff), "%i", i);
+         my_field("Schema dITContentRules:",  buff);
+      };
+      ldap_value_free(vals);
+   };
+
+   if ((vals = ldap_get_values(ld, msg, "dITStructureRules")) != NULL)
+   {
+      for(i = 0; ((vals[i])); i++);
+      if (i > 0)
+      {
+         snprintf(buff, sizeof(buff), "%i", i);
+         my_field("Schema dITStructureRules:",  buff);
+      };
+      ldap_value_free(vals);
+   };
+
+   if ((vals = ldap_get_values(ld, msg, "nameForms")) != NULL)
+   {
+      for(i = 0; ((vals[i])); i++);
+      if (i > 0)
+      {
+         snprintf(buff, sizeof(buff), "%i", i);
+         my_field("Schema nameForms:",  buff);
+      };
+      ldap_value_free(vals);
+   };
+
+   printf("\n");
 
    return(0);
 }
