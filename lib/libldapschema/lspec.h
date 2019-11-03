@@ -88,7 +88,7 @@ struct ldapschema_spec
 /////////////////
 #pragma mark - Variables
 
-extern const struct ldapschema_spec syntax_spec[];
+extern const struct ldapschema_spec ldapschema_spec[];
 
 
 //////////////////

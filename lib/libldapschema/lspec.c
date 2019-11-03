@@ -155,7 +155,7 @@
 //    one byte since UTF-8 is a variable-length encoding.
 //
 #pragma mark const struct ldapschema_syntax_spec syntax_spec
-const struct ldapschema_spec syntax_spec[] =
+const struct ldapschema_spec ldapschema_spec[] =
 {
    {
       // RFC 4523                   LDAP X.509 Schema                   June 2006
