@@ -193,7 +193,7 @@ const struct ldapschema_syntax_spec syntax_spec[] =
       .name          =  "AlgorithmIdentifier",
       .desc          =  "X.509 Algorithm Identifier",
       .flags         =  LDAPSCHEMA_O_READABLE,
-      .data_class    =  LDAPSCHEMA_CLASS_ASCII,
+      .type          =  LDAPSCHEMA_SYNTAX | LDAPSCHEMA_CLASS_ASCII,
       .def           =  "( 1.3.6.1.1.15.7 DESC 'X.509 Algorithm Identifier' )",
       .abfn          =  "AlgorithmIdentifier = \"{\" sp ai-algorithm\n"
                         "     [ \",\" sp ai-parameters ] sp \"}\"\n"
@@ -235,7 +235,7 @@ const struct ldapschema_syntax_spec syntax_spec[] =
       .name          =  NULL,
       .desc          =  "UUID",
       .flags         =  LDAPSCHEMA_O_READABLE,
-      .data_class    =  LDAPSCHEMA_CLASS_ASCII,
+      .type          =  LDAPSCHEMA_SYNTAX | LDAPSCHEMA_CLASS_ASCII,
       .def           =  "( 1.3.6.1.1.16.1 DESC 'UUID' )",
       .abfn          =  "UUID               = time-low \"-\"\n"
                         "                     time-mid \"-\"\n"
@@ -267,7 +267,7 @@ const struct ldapschema_syntax_spec syntax_spec[] =
       .name          =  NULL,
       .desc          =  "ACI Item",
       .flags         =  LDAPSCHEMA_O_DEPRECATED,
-      .data_class    =  LDAPSCHEMA_CLASS_UNKNOWN,
+      .type          =  LDAPSCHEMA_SYNTAX | LDAPSCHEMA_CLASS_UNKNOWN,
       .def           =  NULL,
       .abfn          =  NULL,
       .re_posix      =  NULL,
@@ -284,7 +284,7 @@ const struct ldapschema_syntax_spec syntax_spec[] =
       .name          =  NULL,
       .desc          =  "Access Point",
       .flags         =  LDAPSCHEMA_O_READABLE | LDAPSCHEMA_O_DEPRECATED,
-      .data_class    =  LDAPSCHEMA_CLASS_ASCII,
+      .type          =  LDAPSCHEMA_SYNTAX | LDAPSCHEMA_CLASS_ASCII,
       .def           =  NULL,
       .abfn          =  NULL,
       .re_posix      =  NULL,
@@ -424,7 +424,7 @@ const struct ldapschema_syntax_spec syntax_spec[] =
       .name          =  NULL,
       .desc          =  "Attribute Type Description",
       .flags         =  LDAPSCHEMA_O_READABLE | LDAPSCHEMA_O_COMMON_ABNF,
-      .data_class    =  LDAPSCHEMA_CLASS_ASCII,
+      .type          =  LDAPSCHEMA_SYNTAX | LDAPSCHEMA_CLASS_ASCII,
       .def           =  "( 1.3.6.1.4.1.1466.115.121.1.3 DESC 'Attribute Type Description' )",
       .abfn          =  "AttributeTypeDescription = LPAREN WSP\n"
                         "    numericoid                    ; object identifier\n"

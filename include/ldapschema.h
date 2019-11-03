@@ -137,16 +137,23 @@
 #define LDAPSCHEMA_DSA_OP                             0x0003   ///< AttributeType usage DSA Operation
 
 // LDAP schema data type
-#define LDAPSCHEMA_TYPE_MASK                          0xF000
-#define LDAPSCHEMA_SUBTYPE_MASK                       0x000F
-#define LDAPSCHEMA_SYNTAX                             0x1000
-#define LDAPSCHEMA_MATCHINGRULE                       0x2000
-#define LDAPSCHEMA_ATTRIBUTETYPE                      0x3000
-#define LDAPSCHEMA_OBJECTCLASS                        0x4000
+#define LDAPSCHEMA_TYPE_MASK                          0xFF000000
+#define LDAPSCHEMA_SUBTYPE_MASK                       0x000000FF
+#define LDAPSCHEMA_SYNTAX                             0x01000000
+#define LDAPSCHEMA_MATCHINGRULE                       0x02000000
+#define LDAPSCHEMA_MATCHINGRULES                      0x02000000
+#define LDAPSCHEMA_ATTRIBUTETYPE                      0x03000000
+#define LDAPSCHEMA_OBJECTCLASS                        0x04000000
+#define LDAPSCHEMA_DITCONTENTRULE                     0x05000000
+#define LDAPSCHEMA_DITSTRUCTURERULE                   0x06000000
+#define LDAPSCHEMA_NAMEFORM                           0x07000000
+#define LDAPSCHEMA_FEATURE                            0x41000000
+#define LDAPSCHEMA_CONTROL                            0x42000000
+#define LDAPSCHEMA_EXTENSION                          0x43000000
 #define LDAPSCHEMA_TYPE( val )                        (val & LDAPSCHEMA_TYPE_MASK )
 #define LDAPSCHEMA_SUBTYPE( val )                     (val & LDAPSCHEMA_SUBTYPE_MASK )
-#define LDAPSCHEMA_IS_TYPE( val, type )               ( LDAPSCHEMA_TYPE(val)         == type )
-#define LDAPSCHEMA_IS_SUBTYPE( val, type )            ( LDAPSCHEMA_SUBTYPE_MASK(val) == type )
+#define LDAPSCHEMA_IS_TYPE( val, type )               ( LDAPSCHEMA_TYPE(val)    == type )
+#define LDAPSCHEMA_IS_SUBTYPE( val, type )            ( LDAPSCHEMA_SUBTYPE(val) == type )
 
 // specification types
 #define LDAPSCHEMA_SPEC_RFC                           1

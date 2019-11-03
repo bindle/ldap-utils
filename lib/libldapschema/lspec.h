@@ -69,7 +69,7 @@ struct ldapschema_syntax_spec
    const char      * spec_section;
    uint64_t          spec_type;
    uint64_t          flags;
-   uint64_t          data_class;
+   uint64_t          type;
 };
 
 
