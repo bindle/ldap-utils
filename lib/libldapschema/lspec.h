@@ -47,6 +47,14 @@
 #include "libldapschema.h"
 
 
+///////////////////
+//               //
+//  Definitions  //
+//               //
+///////////////////
+#pragma mark - Definitions
+
+
 /////////////////
 //             //
 //  Datatypes  //
@@ -71,14 +79,6 @@ struct ldapschema_spec
    uint64_t          flags;
    uint64_t          type;
 };
-
-
-///////////////////
-//               //
-//  Definitions  //
-//               //
-///////////////////
-#pragma mark - Definitions
 
 
 /////////////////
