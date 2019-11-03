@@ -72,14 +72,14 @@
 /// LDAP schema descriptor state
 struct ldap_schema
 {
-   int                  errcode;          ///< last error code
-   int                  pad0;
+   int32_t              errcode;          ///< last error code
+   int32_t              pad0;
    void              ** oids;             ///< array of all known oids
    size_t               oids_len;         ///< length of oids array
    LDAPSchemaSyntax  ** syntaxes;         ///< array of syntaxes
-   size_t               syntaxes_len;     /// length of syntaxes array
+   size_t               syntaxes_len;     ///< length of syntaxes array
    LDAPSchemaAttributeType  ** attrs;     ///< array of attributeTypes
-   size_t               attrs_len;        /// length of attributeTypes array
+   size_t               attrs_len;        ///< length of attributeTypes array
 };
 
 
