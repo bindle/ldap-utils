@@ -392,6 +392,7 @@ int my_monitor_connections(MyConfig * cnf, const char * base)
    int               count;
    char           ** name;
    char           ** vals;
+   char              buff[256];
    char              dn[256];
    LDAP            * ld;
    LDAPMessage     * res;
@@ -435,14 +436,26 @@ int my_monitor_connections(MyConfig * cnf, const char * base)
          continue;
       };
 
-      vals = ldap_get_values(ld, msg, "monitorCounter");
+      if ((vals = ldap_get_values(ld, msg, "monitorCounter")) == NULL)
+      {
+         ldap_value_free(name);
+         msg = ldap_next_entry(ld, msg);
+         continue;
+      };
+      if (!(name[0][0]))
+      {
+         ldap_value_free(name);
+         ldap_value_free(vals);
+         msg = ldap_next_entry(ld, msg);
+         continue;
+      };
 
-      if (!(strcasecmp(name[0], "Current")))
-         my_field("Current connections:", vals[0]);
-      else if (!(strcasecmp(name[0], "Total")))
-         my_field("Total connections:", vals[0]);
-      else if (!(strcasecmp(name[0], "Max File Descriptors")))
-         my_field("Max File Descriptors:", vals[0]);
+      snprintf(buff, sizeof(buff), "%s: %s", name[0], vals[0]);
+      if (!(count))
+         my_field("Connections:", buff);
+      else
+         my_field(NULL, buff);
+      count++;
 
       if ((name))
          ldap_value_free(name);
