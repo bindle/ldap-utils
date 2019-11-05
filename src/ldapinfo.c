@@ -961,8 +961,8 @@ int my_schema(MyConfig * cnf, const char * base)
       for(i = 0; ((vals[i])); i++);
       if (i > 0)
       {
-         snprintf(buff, sizeof(buff), "%i", i);
-         my_field("Schema ldapSyntaxes:",  buff);
+         snprintf(buff, sizeof(buff), "ldapSyntaxes: %i", i);
+         my_field("Schema:",  buff);
       };
       ldap_value_free(vals);
    };
@@ -972,8 +972,8 @@ int my_schema(MyConfig * cnf, const char * base)
       for(i = 0; ((vals[i])); i++);
       if (i > 0)
       {
-         snprintf(buff, sizeof(buff), "%i", i);
-         my_field("Schema matchingRules:",  buff);
+         snprintf(buff, sizeof(buff), "matchingRules: %i", i);
+         my_field(NULL,  buff);
       };
       ldap_value_free(vals);
    };
@@ -983,8 +983,8 @@ int my_schema(MyConfig * cnf, const char * base)
       for(i = 0; ((vals[i])); i++);
       if (i > 0)
       {
-         snprintf(buff, sizeof(buff), "%i", i);
-         my_field("Schema matchingRuleUse:",  buff);
+         snprintf(buff, sizeof(buff), "matchingRuleUse: %i", i);
+         my_field(NULL,  buff);
       };
       ldap_value_free(vals);
    };
@@ -994,8 +994,8 @@ int my_schema(MyConfig * cnf, const char * base)
       for(i = 0; ((vals[i])); i++);
       if (i > 0)
       {
-         snprintf(buff, sizeof(buff), "%i", i);
-         my_field("Schema attributeTypes:",  buff);
+         snprintf(buff, sizeof(buff), "attributeTypes: %i", i);
+         my_field(NULL,  buff);
       };
       ldap_value_free(vals);
    };
@@ -1005,8 +1005,8 @@ int my_schema(MyConfig * cnf, const char * base)
       for(i = 0; ((vals[i])); i++);
       if (i > 0)
       {
-         snprintf(buff, sizeof(buff), "%i", i);
-         my_field("Schema objectClasses:",  buff);
+         snprintf(buff, sizeof(buff), "objectClasses: %i", i);
+         my_field(NULL,  buff);
       };
       ldap_value_free(vals);
    };
@@ -1016,8 +1016,8 @@ int my_schema(MyConfig * cnf, const char * base)
       for(i = 0; ((vals[i])); i++);
       if (i > 0)
       {
-         snprintf(buff, sizeof(buff), "%i", i);
-         my_field("Schema dITContentRules:",  buff);
+         snprintf(buff, sizeof(buff), "dITContentRules: %i", i);
+         my_field(NULL,  buff);
       };
       ldap_value_free(vals);
    };
@@ -1027,8 +1027,8 @@ int my_schema(MyConfig * cnf, const char * base)
       for(i = 0; ((vals[i])); i++);
       if (i > 0)
       {
-         snprintf(buff, sizeof(buff), "%i", i);
-         my_field("Schema dITStructureRules:",  buff);
+         snprintf(buff, sizeof(buff), "dITStructureRules: %i", i);
+         my_field(NULL,  buff);
       };
       ldap_value_free(vals);
    };
@@ -1038,8 +1038,8 @@ int my_schema(MyConfig * cnf, const char * base)
       for(i = 0; ((vals[i])); i++);
       if (i > 0)
       {
-         snprintf(buff, sizeof(buff), "%i", i);
-         my_field("Schema nameForms:",  buff);
+         snprintf(buff, sizeof(buff), "nameForms: %i", i);
+         my_field(NULL,  buff);
       };
       ldap_value_free(vals);
    };
