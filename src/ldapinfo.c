@@ -163,6 +163,8 @@ void my_field(const char * name, const char * val);
 
 void my_fields(const char * name, char ** vals);
 
+char * my_monitor(MyConfig * cnf, const char * base);
+
 int my_monitor_connections(MyConfig * cnf, const char * base);
 
 int my_monitor_database(MyConfig * cnf, const char * base);
@@ -381,6 +383,70 @@ void my_fields(const char * name, char ** vals)
    for(x = 1; ((vals[x])); x++)
       my_field(NULL, vals[x]);
    return;
+}
+
+
+char * my_monitor(MyConfig * cnf, const char * base)
+{
+   int               rc;
+   int               err;
+   int               msgid;
+   int               count;
+   char            * str;
+   char            * vers;
+   char           ** vars;
+   LDAP            * ld;
+   LDAPMessage     * res;
+   LDAPMessage     * msg;
+   struct timeval    timeout;
+
+   ld  = cnf->lud->ld;
+
+   // searches for cn=Connections,<monitor>
+   timeout.tv_sec  = 5;
+   timeout.tv_usec = 0;
+   if ((err = ldap_search_ext(ld, base, LDAP_SCOPE_BASE, "(objectclass=*)", cnf->lud->attrs, 0, NULL, NULL, &timeout, -1, &msgid)) != LDAP_SUCCESS)
+      return(NULL);
+   if ((err = ldap_result(ld, msgid, LDAP_MSG_ALL, NULL, &res)) < 1)
+      return(NULL);
+
+   // parses result
+   rc = ldap_parse_result(ld, res, &err, NULL, NULL, NULL, NULL, 0);
+   if ((rc != LDAP_SUCCESS) || (err != LDAP_SUCCESS))
+   {
+      ldap_msgfree(res);
+      return(NULL);
+   };
+
+   // retrieves entry
+   count = 0;
+   msg   = ldap_first_entry(ld, res);
+
+   if ((vars = ldap_get_values(ld, msg, "monitoredInfo")) == NULL)
+   {
+      ldap_msgfree(res);
+      return(NULL);
+   };
+   if (!(vars[0][0]))
+   {
+      ldap_value_free(vars);
+      ldap_msgfree(res);
+      return(NULL);
+   };
+   ldap_msgfree(res);
+
+   if (!(strcasestr(vars[0], "OpenLDAP: ")))
+   {
+      ldap_value_free(vars);
+      return(NULL);
+   };
+   str = index(vars[0], ' ');
+   str = &str[1];
+
+   vers = strdup(str);
+   ldap_value_free(vars);
+
+   return(vers);
 }
 
 
@@ -770,6 +836,7 @@ int my_rootdse(MyConfig * cnf)
    int               err;
    int               msgid;
    size_t            s;
+   char            * vers;
    char           ** monitor;
    char           ** schema;
    char           ** vals;
@@ -823,6 +890,13 @@ int my_rootdse(MyConfig * cnf)
    // retrieves entry
    msg = ldap_first_entry(ld, res);
 
+   // retrieve DNs
+   schema   = ldap_get_values(ld, msg, "subschemaSubentry");
+   monitor  = ldap_get_values(ld, msg, "monitorContext");
+   vers     = NULL;
+   if ((monitor))
+      vers  = my_monitor(cnf, monitor[0]);
+
    // obtain vendor name and version
    if ((vals = ldap_get_values(ld, msg, "vendorName")) != NULL)
    {
@@ -845,7 +919,9 @@ int my_rootdse(MyConfig * cnf)
    {
       my_fields("Vendor version:", vals);
       ldap_value_free(vals);
-   };
+   }
+   else if ((vers))
+      my_field("Vendor version:", vers);
    if ((vals = ldap_get_values(ld, msg, "supportedLDAPVersion")) != NULL)
    {
       my_fields("LDAP version:", vals);
@@ -853,17 +929,18 @@ int my_rootdse(MyConfig * cnf)
    };
 
    // DNs
-   if ((schema = ldap_get_values(ld, msg, "subschemaSubentry")) != NULL)
+   if ((schema))
       my_fields("Subschema Subentry:", schema);
    if ((vals = ldap_get_values(ld, msg, "configContext")) != NULL)
    {
       my_fields("Configuration context:", vals);
       ldap_value_free(vals);
    };
-   if ((monitor = ldap_get_values(ld, msg, "monitorContext")) != NULL)
+   if ((monitor))
       my_fields("Monitoring context:", monitor);
    printf("\n");
 
+   // print schema
    if ((schema))
       my_schema(cnf, schema[0]);
 
@@ -895,6 +972,8 @@ int my_rootdse(MyConfig * cnf)
       ldap_value_free(schema);
    if ((monitor))
       ldap_value_free(monitor);
+   if ((vers))
+      free(vers);
 
    // obtain supported controls
    if ((vals = ldap_get_values(ld, msg, "supportedControl")) != NULL)
