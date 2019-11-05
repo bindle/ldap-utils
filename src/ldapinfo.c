@@ -140,6 +140,8 @@ static const char * ldapinfo_attrs[] =
    "supportedSASLMechanisms",
    "vendorVersion",
    "vendorName",
+   "monitorConnectionLocalAddress",
+   "labeledURI",
    NULL
 };
 
@@ -164,6 +166,8 @@ void my_fields(const char * name, char ** vals);
 int my_monitor_connections(MyConfig * cnf, const char * base);
 
 int my_monitor_database(MyConfig * cnf, const char * base);
+
+int my_monitor_listeners(MyConfig * cnf, const char * base);
 
 // parses RootDSE
 int my_rootdse(MyConfig * cnf);
@@ -537,6 +541,110 @@ int my_monitor_database(MyConfig * cnf, const char * base)
 }
 
 
+int my_monitor_listeners(MyConfig * cnf, const char * base)
+{
+   int               rc;
+   int               err;
+   int               msgid;
+   int               count;
+   char            * uri;
+   char           ** uris;
+   char            * addr;
+   char           ** addrs;
+   char              dn[256];
+   char              buff[256];
+   LDAP            * ld;
+   LDAPMessage     * res;
+   LDAPMessage     * msg;
+   struct timeval    timeout;
+
+   ld  = cnf->lud->ld;
+
+   // searches for cn=Connections,<monitor>
+   timeout.tv_sec  = 5;
+   timeout.tv_usec = 0;
+   strncpy(dn, "cn=Listeners,", sizeof(dn));
+   strncat(dn, base, (sizeof(dn)-strlen(dn)-1));
+   if ((err = ldap_search_ext(ld, dn, LDAP_SCOPE_ONE, "(objectclass=*)", cnf->lud->attrs, 0, NULL, NULL, &timeout, -1, &msgid)) != LDAP_SUCCESS)
+      return(-1);
+   if ((err = ldap_result(ld, msgid, LDAP_MSG_ALL, NULL, &res)) < 1)
+      return(-1);
+
+   // parses result
+   rc = ldap_parse_result(ld, res, &err, NULL, NULL, NULL, NULL, 0);
+   if ((rc != LDAP_SUCCESS) || (err != LDAP_SUCCESS))
+   {
+      ldap_msgfree(res);
+      return(-1);
+   };
+
+   // retrieves entry
+   count = 0;
+   msg   = ldap_first_entry(ld, res);
+   while ((msg))
+   {
+      if ((uris = ldap_get_values(ld, msg, "labeledURI")) == NULL)
+      {
+         msg = ldap_next_entry(ld, msg);
+         continue;
+      };
+      if (!(uris[0][0]))
+      {
+         ldap_value_free(uris);
+         msg = ldap_next_entry(ld, msg);
+         continue;
+      };
+
+      if ((addrs = ldap_get_values(ld, msg, "monitorConnectionLocalAddress")) == NULL)
+      {
+         ldap_value_free(uris);
+         msg = ldap_next_entry(ld, msg);
+         continue;
+      };
+      if (!(addrs[0][0]))
+      {
+         ldap_value_free(addrs);
+         ldap_value_free(uris);
+         msg = ldap_next_entry(ld, msg);
+         continue;
+      };
+
+      if ((addr = rindex(addrs[0], '=')) == NULL)
+      {
+         ldap_value_free(addrs);
+         ldap_value_free(uris);
+         msg = ldap_next_entry(ld, msg);
+         continue;
+      };
+      addr++;
+      uri = index(uris[0], '/');
+      if ((uri != NULL))
+         uri = &uri[2];
+      if ((uri))
+      {
+         uri[0] = '\0';
+         snprintf(buff, sizeof(buff), "%s%s", uris[0], addr);
+         if (!(count))
+            my_field("Listeners:", buff);
+         else
+            my_field(NULL, buff);
+         count++;
+      };
+
+      ldap_value_free(addrs);
+      ldap_value_free(uris);
+
+      // retrieves next entry
+      msg = ldap_next_entry(ld, msg);
+   };
+
+   printf("\n");
+
+   return(0);
+}
+
+
+
 // parses RootDSE
 int my_rootdse(MyConfig * cnf)
 {
@@ -641,9 +749,15 @@ int my_rootdse(MyConfig * cnf)
    if ((schema))
       my_schema(cnf, schema[0]);
 
-   // connection stats
+   // display monitoring information
    if ((monitor))
+   {
+      // listeners
+      my_monitor_listeners(cnf, monitor[0]);
+
+      // connection stats
       my_monitor_connections(cnf, monitor[0]);
+   };
 
    // obtain naming contexts
    vals = ldap_get_values(ld, msg, "namingContexts");
