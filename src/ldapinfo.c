@@ -169,6 +169,8 @@ int my_monitor_database(MyConfig * cnf, const char * base);
 
 int my_monitor_listeners(MyConfig * cnf, const char * base);
 
+int my_monitor_operations(MyConfig * cnf, const char * base);
+
 // parses RootDSE
 int my_rootdse(MyConfig * cnf);
 
@@ -547,6 +549,110 @@ int my_monitor_listeners(MyConfig * cnf, const char * base)
    int               err;
    int               msgid;
    int               count;
+   char           ** cn;
+   char           ** initiated;
+   char           ** completed;
+   char              dn[256];
+   char              buff[256];
+   LDAP            * ld;
+   LDAPMessage     * res;
+   LDAPMessage     * msg;
+   struct timeval    timeout;
+
+   ld  = cnf->lud->ld;
+
+   // searches for cn=Connections,<monitor>
+   timeout.tv_sec  = 5;
+   timeout.tv_usec = 0;
+   strncpy(dn, "cn=Operations,", sizeof(dn));
+   strncat(dn, base, (sizeof(dn)-strlen(dn)-1));
+   if ((err = ldap_search_ext(ld, dn, LDAP_SCOPE_ONE, "(objectclass=*)", cnf->lud->attrs, 0, NULL, NULL, &timeout, -1, &msgid)) != LDAP_SUCCESS)
+      return(-1);
+   if ((err = ldap_result(ld, msgid, LDAP_MSG_ALL, NULL, &res)) < 1)
+      return(-1);
+
+   // parses result
+   rc = ldap_parse_result(ld, res, &err, NULL, NULL, NULL, NULL, 0);
+   if ((rc != LDAP_SUCCESS) || (err != LDAP_SUCCESS))
+   {
+      ldap_msgfree(res);
+      return(-1);
+   };
+
+   // retrieves entry
+   count = 0;
+   msg   = ldap_first_entry(ld, res);
+   while ((msg))
+   {
+      if ((cn = ldap_get_values(ld, msg, "cn")) == NULL)
+      {
+         msg = ldap_next_entry(ld, msg);
+         continue;
+      };
+      if (!(cn[0][0]))
+      {
+         ldap_value_free(cn);
+         msg = ldap_next_entry(ld, msg);
+         continue;
+      };
+
+      if ((initiated = ldap_get_values(ld, msg, "monitorOpInitiated")) == NULL)
+      {
+         ldap_value_free(cn);
+         msg = ldap_next_entry(ld, msg);
+         continue;
+      };
+      if (!(initiated[0][0]))
+      {
+         ldap_value_free(cn);
+         ldap_value_free(initiated);
+         msg = ldap_next_entry(ld, msg);
+         continue;
+      };
+
+      if ((completed = ldap_get_values(ld, msg, "monitorOpCompleted")) == NULL)
+      {
+         ldap_value_free(cn);
+         ldap_value_free(initiated);
+         msg = ldap_next_entry(ld, msg);
+         continue;
+      };
+      if (!(completed[0][0]))
+      {
+         ldap_value_free(cn);
+         ldap_value_free(completed);
+         ldap_value_free(initiated);
+         msg = ldap_next_entry(ld, msg);
+         continue;
+      };
+
+      snprintf(buff, sizeof(buff), "%s initiated: %s; completed %s", cn[0], initiated[0], completed[0]);
+      if (!(count))
+         my_field("Operations:", buff);
+      else
+         my_field(NULL, buff);
+      count++;
+
+      ldap_value_free(cn);
+      ldap_value_free(initiated);
+      ldap_value_free(completed);
+
+      // retrieves next entry
+      msg = ldap_next_entry(ld, msg);
+   };
+
+   printf("\n");
+
+   return(0);
+}
+
+
+int my_monitor_operations(MyConfig * cnf, const char * base)
+{
+   int               rc;
+   int               err;
+   int               msgid;
+   int               count;
    char            * uri;
    char           ** uris;
    char            * addr;
@@ -563,7 +669,7 @@ int my_monitor_listeners(MyConfig * cnf, const char * base)
    // searches for cn=Connections,<monitor>
    timeout.tv_sec  = 5;
    timeout.tv_usec = 0;
-   strncpy(dn, "cn=Listeners,", sizeof(dn));
+   strncpy(dn, "cn=Operations,", sizeof(dn));
    strncat(dn, base, (sizeof(dn)-strlen(dn)-1));
    if ((err = ldap_search_ext(ld, dn, LDAP_SCOPE_ONE, "(objectclass=*)", cnf->lud->attrs, 0, NULL, NULL, &timeout, -1, &msgid)) != LDAP_SUCCESS)
       return(-1);
@@ -642,7 +748,6 @@ int my_monitor_listeners(MyConfig * cnf, const char * base)
 
    return(0);
 }
-
 
 
 // parses RootDSE
