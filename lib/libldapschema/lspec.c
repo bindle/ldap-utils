@@ -427,7 +427,7 @@ const struct ldapschema_spec ldapschema_spec[] =
       .type          =  LDAPSCHEMA_SYNTAX | LDAPSCHEMA_CLASS_ASCII,
       .def           =  "( 1.3.6.1.4.1.1466.115.121.1.3 DESC 'Attribute Type Description' )",
       .abfn          =  "AttributeTypeDescription = LPAREN WSP\n"
-                        "    numericoid                    ; object identifier\n"
+                        "    numericoid                      ; object identifier\n"
                         "    [ SP \"NAME\" SP qdescrs ]      ; short names (descriptors)\n"
                         "    [ SP \"DESC\" SP qdstring ]     ; description\n"
                         "    [ SP \"OBSOLETE\" ]             ; not active\n"
@@ -440,7 +440,7 @@ const struct ldapschema_spec ldapschema_spec[] =
                         "    [ SP \"COLLECTIVE\" ]           ; collective\n"
                         "    [ SP \"NO-USER-MODIFICATION\" ] ; not user modifiable\n"
                         "    [ SP \"USAGE\" SP usage ]       ; usage\n"
-                        "    extensions WSP RPAREN         ; extensions\n"
+                        "    extensions WSP RPAREN           ; extensions\n"
                         "\n"
                         "usage = \"userApplications\"     /  ; user\n"
                         "        \"directoryOperation\"   /  ; directory operational\n"
