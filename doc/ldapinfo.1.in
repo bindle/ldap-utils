@@ -1,0 +1,137 @@
+.\"
+.\" LDAP Utilities
+.\" Copyright (C) 2019 David M. Syzdek <david@syzdek.net>.
+.\"
+.\" Redistribution and use in source and binary forms, with or without
+.\" modification, are permitted provided that the following conditions are
+.\" met:
+.\"
+.\"    1. Redistributions of source code must retain the above copyright
+.\"       notice, this list of conditions and the following disclaimer.
+.\"
+.\"    2. Redistributions in binary form must reproduce the above copyright
+.\"       notice, this list of conditions and the following disclaimer in the
+.\"       documentation and/or other materials provided with the distribution.
+.\"
+.\"    3. Neither the name of the copyright holder nor the names of its
+.\"       contributors may be used to endorse or promote products derived from
+.\"       this software without specific prior written permission.
+.\"
+.\" THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+.\" IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+.\" THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+.\" PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+.\" CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+.\" EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+.\" PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+.\" PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+.\" LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+.\" NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+.\" SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+.\"
+.\" doc/ldap2csv.1.in - man page for ldap2csv
+.\"
+.TH "LDAPINFO" "1" "@RELEASE_MONTH@" "@PACKAGE_NAME@" "User Commands"
+.SH NAME
+ldapinfo \- Retrieve LDAP server information
+
+
+.SH SYNOPSIS
+\fBldap2csv\fR
+[\fB-b\fR \fIbasedn\fR]
+[\fB-c\fR]
+[\fB-d\fR \fIlevel\fR]
+[\fB-D\fR \fIbinddn\fR]
+[\fB-H\fR \fIURI\fR]
+[\fB-l\fR \fIlimit\fR]
+[\fB-L\fR[\fB-L\fR]]
+[\fB-n\fR]
+[\fB-v\fR | \fB--version\fR]
+[\fB-s\fR \fIscope\fR]
+[\fB-w\fR \fIpasswd\fR]
+[\fB-W\fR]
+[\fB-x\fR]
+[\fB-y\fR \fIfile\fR]
+[\fB-Y\fR \fImech\fR]
+[\fB-z\fR \fIlimit\fR]
+[\fB-Z\fR[\fB-Z\fR]]
+.sp
+\fBldap2csv\fR [ \fB-h\fR | \fB--help\fR ]
+.sp
+\fBldap2csv\fR [ \fB-V\fR | \fB--version\fR ]
+
+
+.SH DESCRIPTION
+ldapinfo is a shell utilty which connects to an LDAP server and displays
+server information.
+
+
+.SH OPTIONS
+.TP
+\fB-c\fR
+do not stop if an error is encountered
+.TP
+\fB-d\fR
+set OpenLDAP debug level to `level'
+.TP
+\fB-D\fR \fIbinddn\fR
+bind DN used for simple bind
+.TP
+\fB-H\fR \fIURI\fR
+specifies list of LDAP Uniform Resource Identifier(s) used to connect to LDAP server
+.TP
+\fB-l\fR \fIlimit\fR
+time limit (in seconds) for search
+.TP
+\fB-L\fR
+two \fB-L\fR disables comments
+.TP
+\fB-v\fR   \fB--version\fR
+run in verbose mode
+.TP
+\fB-s\fR \fIscope\fR
+specifies search filter. Must be one of \fIbase\fR, \fIone\fR, \fIsub\fR, or \fIchild\fR
+.TP
+\fB-w\fR \fIpasswd\fR
+bind password used for simple bind
+.TP
+\fB-W\fR
+prompt for bind password used in simple bind
+.TP
+\fB-x\fR
+use simple authentication for bind
+.TP
+\fB-y\fR \fIfile\fR
+read bind password from file
+.TP
+\fB-Y\fR \fImech\fR
+SASL mechanism used during bind
+.TP
+\fB-z\fR \fIlimit\fR
+size limit for search
+.TP
+\fB-Z\fR[\fB-Z\fR]
+Issue  StartTLS before bind request. \fB-ZZ\fR requires TLS operations to be successful.
+
+
+.SH "SEE ALSO"
+.BR ldapsearch (1),
+.BR ldapdebug (1),
+.BR ldaptree (1),
+.BR ldap.conf (5)
+
+
+.SH AUTHOR
+David M. Syzdek <david@syzdek.net>
+
+
+.SH ACKNOWLEDGEMENTS
+\fB@PACKAGE_NAME@\fR is developed and maintained by David M. Syzdek
+<david@syzdek.net>. \fB@PACKAGE_NAME@\fR utilizes and is styled after the
+tools and libraries maintained by the \fBThe OpenLDAP Project\fR
+<http://www.openldap.org/>.
+
+
+.Sh CAVEATS
+
+.\" end of man page
