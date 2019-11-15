@@ -49,6 +49,8 @@
 #include <strings.h>
 #include <stdlib.h>
 
+#include "lspec.h"
+
 
 /////////////////
 //             //
@@ -211,6 +213,7 @@ void ldapschema_free(LDAPSchema * lsd)
 /// @see       ldapschema_free
 int ldapschema_initialize(LDAPSchema ** lsdp)
 {
+   size_t       size;
    LDAPSchema * lsd;
 
    assert(lsdp != NULL);
@@ -235,6 +238,17 @@ int ldapschema_initialize(LDAPSchema ** lsdp)
       return(LDAPSCHEMA_NO_MEMORY);
    };
    bzero(lsd->oids, sizeof(void *));
+
+   // allocate array of specs
+   for(lsd->specs_len = 0; ((ldapschema_spec[lsd->specs_len].oid)); lsd->specs_len++);
+   size = sizeof(LDAPSchemaSpec *) * (lsd->specs_len + 1);
+   if ((lsd->specs = malloc(size)) == NULL)
+   {
+      ldapschema_free(lsd);
+      return(LDAPSCHEMA_NO_MEMORY);
+   };
+   bzero(lsd->specs, size)
+   ;
 
    // saves structure
    *lsdp = lsd;

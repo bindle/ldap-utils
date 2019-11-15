@@ -80,6 +80,8 @@ struct ldap_schema
    size_t               syntaxes_len;     ///< length of syntaxes array
    LDAPSchemaAttributeType  ** attrs;     ///< array of attributeTypes
    size_t               attrs_len;        ///< length of attributeTypes array
+   LDAPSchemaSpec    ** specs;            ///< sorted list of specifications
+   size_t               specs_len;        ///< length of sorted list of specifications
 };
 
 

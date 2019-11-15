@@ -195,6 +195,7 @@ typedef struct ldap_schema_matchingrule LDAPSchemaMatchingRule;
 
 typedef struct ldap_schema_extension LDAPSchemaExtension;
 
+typedef struct ldapschema_spec LDAPSchemaSpec;
 
 enum ldap_schema_syntax_class
 {
