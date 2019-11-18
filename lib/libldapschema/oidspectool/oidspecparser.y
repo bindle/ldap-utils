@@ -43,6 +43,8 @@ int yylex(void);
 void yyerror(char *s);
 
 int my_append(const char * str);
+int my_commit(enum yytokentype type);
+int my_commit_str(enum yytokentype type, const char * str);
 
 %}
 
@@ -96,22 +98,22 @@ fields			:
 			;
 
 field			:
-			| FLD_ABFN      '=' strings 	{ printf("   .abfn         =\n"); }
-			| FLD_CLASS     '=' CLASS 	{ printf("   .class        = %s\n", $3); }
-			| FLD_DESC      '=' CSTRING 	{ printf("   .desc         = %s\n", $3); }
-			| FLD_DEF       '=' CSTRING 	{ printf("   .def          = %s\n", $3); }
-			| FLD_FLAGS     '=' flags	{ printf("   .flags        =\n"); }
-			| FLD_NAME      '=' CSTRING 	{ printf("   .name         = %s\n", $3); }
-			| FLD_OID       '=' CSTRING 	{ printf("   .oid          = %s\n", $3); }
-			| FLD_RE_PCRE   '=' strings 	{ printf("   .re_pcre      =\n"); }
-			| FLD_RE_POSIX  '=' strings 	{ printf("   .re_posix     =\n"); }
-			| FLD_SPEC      '=' CSTRING 	{ printf("   .spec         = %s\n", $3); }
-			| FLD_SPEC_NAME '=' CSTRING 	{ printf("   .spec_name    = %s\n", $3); }
-			| FLD_SPEC_SECTION '=' CSTRING 	{ printf("   .spec_section = %s\n", $3); }
-			| FLD_SPEC_SOURCE '=' strings	{ printf("   .spec_source  =\n"); }
-			| FLD_SPEC_VENDOR '=' string 	{ printf("   .spec_vendor  =\n"); }
-			| FLD_SPEC_TYPE '=' SPEC_TYPE 	{ printf("   .spec_type    = %s\n", $3); }
-			| FLD_TYPE      '=' TYPE	{ printf("   .type         = %s\n", $3); }
+			| FLD_ABFN      '=' strings 	{ my_commit(FLD_ABFN); }
+			| FLD_CLASS     '=' CLASS 	{ my_commit_str(FLD_CLASS, $3); }
+			| FLD_DESC      '=' CSTRING 	{ my_commit_str(FLD_DESC, $3); }
+			| FLD_DEF       '=' CSTRING 	{ my_commit_str(FLD_DEF, $3); }
+			| FLD_FLAGS     '=' flags	{ my_commit(FLD_FLAGS); }
+			| FLD_NAME      '=' CSTRING 	{ my_commit_str(FLD_NAME, $3); }
+			| FLD_OID       '=' CSTRING 	{ my_commit_str(FLD_OID, $3); }
+			| FLD_RE_PCRE   '=' strings 	{ my_commit(FLD_RE_PCRE); }
+			| FLD_RE_POSIX  '=' strings 	{ my_commit(FLD_RE_POSIX); }
+			| FLD_SPEC      '=' CSTRING 	{ my_commit_str(FLD_SPEC, $3); }
+			| FLD_SPEC_NAME '=' CSTRING 	{ my_commit_str(FLD_SPEC_NAME, $3); }
+			| FLD_SPEC_SECTION '=' CSTRING 	{ my_commit_str(FLD_SPEC_SECTION, $3); }
+			| FLD_SPEC_SOURCE '=' strings	{ my_commit(FLD_SPEC_SOURCE); }
+			| FLD_SPEC_VENDOR '=' string 	{ my_commit(FLD_SPEC_VENDOR); }
+			| FLD_SPEC_TYPE '=' SPEC_TYPE 	{ my_commit_str(FLD_SPEC_TYPE, $3); }
+			| FLD_TYPE      '=' TYPE	{ my_commit_str(FLD_TYPE, $3); }
 			;
 
 string			:

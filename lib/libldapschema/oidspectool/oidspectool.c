@@ -172,6 +172,8 @@ void yyrestart (FILE *input_file);
 void yyerror(char *s);
 
 int my_append(const char * str);
+int my_commit(enum yytokentype type);
+int my_commit_str(enum yytokentype type, const char * str);
 
 
 /////////////////
@@ -203,6 +205,7 @@ int main(int argc, char * argv[])
    };
 
    bzero(&config, sizeof(config));
+   my_state_str = NULL;
 
    // loops through args
    while((c = getopt_long(argc, argv, short_options, long_options, &opt_index)) != -1)
@@ -272,30 +275,100 @@ int main(int argc, char * argv[])
 
 int my_append(const char * str)
 {
+   size_t      len;
    void      * ptr;
 
    assert(str != NULL);
 
    // increase size of array
-   if ((ptr = realloc(my_state_str, (sizeof(char *) * (my_state_strlen+2)))) == NULL)
+   if ((my_state_str))
    {
-      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
-      exit(EXIT_FAILURE);
+      for(len = 0; ((my_state_str[len])); len++);
+      if ((ptr = realloc(my_state_str, (sizeof(char *) * (len+2)))) == NULL)
+      {
+         fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
+         exit(EXIT_FAILURE);
+      };
+   } else
+   {
+      len = 0;
+      if ((ptr = malloc((sizeof(char *) * 2))) == NULL)
+      {
+         fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
+         exit(EXIT_FAILURE);
+      };
    };
-   my_state_str                     = ptr;
-   my_state_str[my_state_strlen+0]  = NULL;
-   my_state_str[my_state_strlen+1]  = NULL;
+   my_state_str         = ptr;
+   my_state_str[len+0]  = NULL;
+   my_state_str[len+1]  = NULL;
 
    // duplicate string
-   if ((my_state_str[my_state_strlen] = strdup(str)) == NULL)
+   if ((my_state_str[len] = strdup(str)) == NULL)
    {
       fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
       exit(EXIT_FAILURE);
    };
 
    my_state_strlen++;
-printf("                %s\n", str);
+
    return(0);
+}
+
+
+int my_commit(enum yytokentype type)
+{
+   size_t            pos;
+   const char      * name;
+
+   switch(type)
+   {
+      case FLD_ABFN:             name = ".abnf";            break;
+      case FLD_CLASS:            name = ".class";           break;
+      case FLD_DEF:              name = ".def";             break;
+      case FLD_DESC:             name = ".desc";            break;
+      case FLD_FLAGS:            name = ".flags";           break;
+      case FLD_NAME:             name = ".name";            break;
+      case FLD_OID:              name = ".oid";             break;
+      case FLD_RE_POSIX:         name = ".re_posix";        break;
+      case FLD_RE_PCRE:          name = ".re_pcre";         break;
+      case FLD_SPEC:             name = ".spec";            break;
+      case FLD_SPEC_NAME:        name = ".spec_name";       break;
+      case FLD_SPEC_SECTION:     name = ".spec_section";    break;
+      case FLD_SPEC_SOURCE:      name = ".spec_source";     break;
+      case FLD_SPEC_TYPE:        name = ".spec_type";       break;
+      case FLD_SPEC_VENDOR:      name = ".spec_vendor";     break;
+      case FLD_TYPE:             name = ".type";            break;
+      default:                   name = "UNKNOWN";          break;
+   };
+
+printf("   %-15s =", name);
+
+   // free staged strings
+   if (!(my_state_str))
+   {
+      printf("\n");
+      return(0);
+   };
+
+   // print results
+   printf(" %s\n", my_state_str[0]);
+   for(pos = 1; ((my_state_str[pos])); pos++)
+      printf("%20s %s\n", "", my_state_str[pos]);
+
+   // free result
+   for(pos = 0; ((my_state_str[pos])); pos++)
+      free(my_state_str[pos]);
+   free(my_state_str);
+   my_state_str = NULL;
+
+   return(0);
+}
+
+
+int my_commit_str(enum yytokentype type, const char * str)
+{
+   my_append(str);
+   return(my_commit(type));
 }
 
 
