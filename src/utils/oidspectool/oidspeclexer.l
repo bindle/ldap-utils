@@ -43,67 +43,67 @@ int yylex();
 
 %%
 
-"//"[^\n]*[\n]				;
-"/*".*"*/"				;
-[ \t\n]					;
+"//"[^\n]*[\n]                      ; /* ignore comments */
+"/*".*"*/"                          ; /* ignore comments */
+[ \t\n]                             ; /* ignore whitespace */
 
-["].*[^\\]["]				{ yylval.str = yytext; return(CSTRING); }
-["]["]					{ yylval.str = yytext; return(CSTRING); }
-"NULL"					{ yylval.str = yytext; return(NULLSTR); }
+["].*[^\\]["]                       { yylval.str = yytext; return(CSTRING); }
+["]["]                              { yylval.str = yytext; return(CSTRING); }
+"NULL"                              { yylval.str = yytext; return(NULLSTR); }
 
-"LDAPSCHEMA_O_SINGLEVALUE"		{ yylval.str = yytext; return(FLAG); }
-"LDAPSCHEMA_O_OBSOLETE"			{ yylval.str = yytext; return(FLAG); }
-"LDAPSCHEMA_O_COLLECTIVE"		{ yylval.str = yytext; return(FLAG); }
-"LDAPSCHEMA_O_NO_USER_MOD"		{ yylval.str = yytext; return(FLAG); }
-"LDAPSCHEMA_O_OBJECTCLASS"		{ yylval.str = yytext; return(FLAG); }
-"LDAPSCHEMA_O_READABLE"			{ yylval.str = yytext; return(FLAG); }
-"LDAPSCHEMA_O_COMMON_ABNF"		{ yylval.str = yytext; return(FLAG); }
-"LDAPSCHEMA_O_DEPRECATED"		{ yylval.str = yytext; return(FLAG); }
+"LDAPSCHEMA_O_SINGLEVALUE"          { yylval.str = yytext; return(FLAG); }
+"LDAPSCHEMA_O_OBSOLETE"             { yylval.str = yytext; return(FLAG); }
+"LDAPSCHEMA_O_COLLECTIVE"           { yylval.str = yytext; return(FLAG); }
+"LDAPSCHEMA_O_NO_USER_MOD"          { yylval.str = yytext; return(FLAG); }
+"LDAPSCHEMA_O_OBJECTCLASS"          { yylval.str = yytext; return(FLAG); }
+"LDAPSCHEMA_O_READABLE"             { yylval.str = yytext; return(FLAG); }
+"LDAPSCHEMA_O_COMMON_ABNF"          { yylval.str = yytext; return(FLAG); }
+"LDAPSCHEMA_O_DEPRECATED"           { yylval.str = yytext; return(FLAG); }
 
-"LDAPSCHEMA_SYNTAX"			{ yylval.str = yytext; return(TYPE); }
-"LDAPSCHEMA_MATCHINGRULES"		{ yylval.str = yytext; return(TYPE); }
-"LDAPSCHEMA_MATCHINGRULE"		{ yylval.str = yytext; return(TYPE); }
-"LDAPSCHEMA_ATTRIBUTETYPE"		{ yylval.str = yytext; return(TYPE); }
-"LDAPSCHEMA_OBJECTCLASS"		{ yylval.str = yytext; return(TYPE); }
-"LDAPSCHEMA_DITCONTENTRULE"		{ yylval.str = yytext; return(TYPE); }
-"LDAPSCHEMA_DITSTRUCTURERULE"		{ yylval.str = yytext; return(TYPE); }
-"LDAPSCHEMA_NAMEFORM"			{ yylval.str = yytext; return(TYPE); }
-"LDAPSCHEMA_FEATURE"			{ yylval.str = yytext; return(TYPE); }
-"LDAPSCHEMA_CONTROL"			{ yylval.str = yytext; return(TYPE); }
-"LDAPSCHEMA_EXTENSION"			{ yylval.str = yytext; return(TYPE); }
+"LDAPSCHEMA_SYNTAX"                 { yylval.str = yytext; return(TYPE); }
+"LDAPSCHEMA_MATCHINGRULES"          { yylval.str = yytext; return(TYPE); }
+"LDAPSCHEMA_MATCHINGRULE"           { yylval.str = yytext; return(TYPE); }
+"LDAPSCHEMA_ATTRIBUTETYPE"          { yylval.str = yytext; return(TYPE); }
+"LDAPSCHEMA_OBJECTCLASS"            { yylval.str = yytext; return(TYPE); }
+"LDAPSCHEMA_DITCONTENTRULE"         { yylval.str = yytext; return(TYPE); }
+"LDAPSCHEMA_DITSTRUCTURERULE"       { yylval.str = yytext; return(TYPE); }
+"LDAPSCHEMA_NAMEFORM"               { yylval.str = yytext; return(TYPE); }
+"LDAPSCHEMA_FEATURE"                { yylval.str = yytext; return(TYPE); }
+"LDAPSCHEMA_CONTROL"                { yylval.str = yytext; return(TYPE); }
+"LDAPSCHEMA_EXTENSION"              { yylval.str = yytext; return(TYPE); }
 
-"LDAPSCHEMA_CLASS_UNKNOWN"		{ yylval.str = yytext; return(CLASS); }
-"LDAPSCHEMA_CLASS_ASCII"		{ yylval.str = yytext; return(CLASS); }
-"LDAPSCHEMA_CLASS_UTF8"			{ yylval.str = yytext; return(CLASS); }
-"LDAPSCHEMA_CLASS_INTEGER"		{ yylval.str = yytext; return(CLASS); }
-"LDAPSCHEMA_CLASS_UNSIGNED"		{ yylval.str = yytext; return(CLASS); }
-"LDAPSCHEMA_CLASS_BOOLEAN"		{ yylval.str = yytext; return(CLASS); }
-"LDAPSCHEMA_CLASS_DATA"			{ yylval.str = yytext; return(CLASS); }
-"LDAPSCHEMA_CLASS_IMAGE"		{ yylval.str = yytext; return(CLASS); }
-"LDAPSCHEMA_CLASS_AUDIO"		{ yylval.str = yytext; return(CLASS); }
-"LDAPSCHEMA_CLASS_UTF8_MULTILINE"	{ yylval.str = yytext; return(CLASS); }
+"LDAPSCHEMA_CLASS_UNKNOWN"          { yylval.str = yytext; return(CLASS); }
+"LDAPSCHEMA_CLASS_ASCII"            { yylval.str = yytext; return(CLASS); }
+"LDAPSCHEMA_CLASS_UTF8"             { yylval.str = yytext; return(CLASS); }
+"LDAPSCHEMA_CLASS_INTEGER"          { yylval.str = yytext; return(CLASS); }
+"LDAPSCHEMA_CLASS_UNSIGNED"         { yylval.str = yytext; return(CLASS); }
+"LDAPSCHEMA_CLASS_BOOLEAN"          { yylval.str = yytext; return(CLASS); }
+"LDAPSCHEMA_CLASS_DATA"             { yylval.str = yytext; return(CLASS); }
+"LDAPSCHEMA_CLASS_IMAGE"            { yylval.str = yytext; return(CLASS); }
+"LDAPSCHEMA_CLASS_AUDIO"            { yylval.str = yytext; return(CLASS); }
+"LDAPSCHEMA_CLASS_UTF8_MULTILINE"   { yylval.str = yytext; return(CLASS); }
 
-"LDAPSCHEMA_SPEC_RFC"			{ yylval.str = yytext; return(SPEC_TYPE); }
-"LDAPSCHEMA_SPEC_URL"			{ yylval.str = yytext; return(SPEC_TYPE); }
+"LDAPSCHEMA_SPEC_RFC"               { yylval.str = yytext; return(SPEC_TYPE); }
+"LDAPSCHEMA_SPEC_URL"               { yylval.str = yytext; return(SPEC_TYPE); }
 
-".abfn"					{ return(FLD_ABFN); }
-".class"				{ return(FLD_CLASS); }
-".def"					{ return(FLD_DEF); }
-".desc"					{ return(FLD_DESC); }
-".flags"				{ return(FLD_FLAGS); }
-".name"					{ return(FLD_NAME); }
-".oid"					{ return(FLD_OID); }
-".re_posix"				{ return(FLD_RE_POSIX); }
-".re_pcre"				{ return(FLD_RE_PCRE); }
-".spec_name"				{ return(FLD_SPEC_NAME); }
-".spec_section"				{ return(FLD_SPEC_SECTION); }
-".spec_source"				{ return(FLD_SPEC_SOURCE); }
-".spec_type"				{ return(FLD_SPEC_TYPE); }
-".spec_vendor"				{ return(FLD_SPEC_VENDOR); }
-".spec"					{ return(FLD_SPEC); }
-".type"					{ return(FLD_TYPE); }
+".abfn"                             { return(FLD_ABFN); }
+".class"                            { return(FLD_CLASS); }
+".def"                              { return(FLD_DEF); }
+".desc"                             { return(FLD_DESC); }
+".flags"                            { return(FLD_FLAGS); }
+".name"                             { return(FLD_NAME); }
+".oid"                              { return(FLD_OID); }
+".re_posix"                         { return(FLD_RE_POSIX); }
+".re_pcre"                          { return(FLD_RE_PCRE); }
+".spec_name"                        { return(FLD_SPEC_NAME); }
+".spec_section"                     { return(FLD_SPEC_SECTION); }
+".spec_source"                      { return(FLD_SPEC_SOURCE); }
+".spec_type"                        { return(FLD_SPEC_TYPE); }
+".spec_vendor"                      { return(FLD_SPEC_VENDOR); }
+".spec"                             { return(FLD_SPEC); }
+".type"                             { return(FLD_TYPE); }
 
-.					{ return((int) yytext[0]); }
+.                                   { return((int) yytext[0]); } /* treat remaining as single character tokens */
 
 
 %%

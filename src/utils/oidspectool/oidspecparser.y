@@ -45,7 +45,7 @@ void yyerror(char *s);
 int my_add_oidspec(void);
 int my_append(const char * str);
 int my_commit(enum yytokentype type);
-int my_commit_str(enum yytokentype type, const char * str);
+int my_submit(enum yytokentype type, const char * str);
 
 %}
 
@@ -86,51 +86,51 @@ int my_commit_str(enum yytokentype type, const char * str);
 %%
 
 
-stanzas			: /* empty */
-			| stanzas stanza ';'
-			;
+stanzas           : /* empty */
+                  | stanzas stanza ';'
+                  ;
 
-stanza			:
-			| '{' fields '}' 		{ my_add_oidspec(); }
-			;
+stanza            :
+                  | '{' fields '}'                    { my_add_oidspec(); }
+                  ;
 
-fields			:
-			| fields field ','
-			;
+fields            :
+                  | fields field ','
+                  ;
 
-field			:
-			| FLD_ABFN      '=' strings 	{ my_commit(FLD_ABFN); }
-			| FLD_CLASS     '=' CLASS 	{ my_commit_str(FLD_CLASS, $3); }
-			| FLD_DESC      '=' CSTRING 	{ my_commit_str(FLD_DESC, $3); }
-			| FLD_DEF       '=' CSTRING 	{ my_commit_str(FLD_DEF, $3); }
-			| FLD_FLAGS     '=' flags	{ my_commit(FLD_FLAGS); }
-			| FLD_NAME      '=' CSTRING 	{ my_commit_str(FLD_NAME, $3); }
-			| FLD_OID       '=' CSTRING 	{ my_commit_str(FLD_OID, $3); }
-			| FLD_RE_PCRE   '=' strings 	{ my_commit(FLD_RE_PCRE); }
-			| FLD_RE_POSIX  '=' strings 	{ my_commit(FLD_RE_POSIX); }
-			| FLD_SPEC      '=' CSTRING 	{ my_commit_str(FLD_SPEC, $3); }
-			| FLD_SPEC_NAME '=' CSTRING 	{ my_commit_str(FLD_SPEC_NAME, $3); }
-			| FLD_SPEC_SECTION '=' CSTRING 	{ my_commit_str(FLD_SPEC_SECTION, $3); }
-			| FLD_SPEC_SOURCE '=' strings	{ my_commit(FLD_SPEC_SOURCE); }
-			| FLD_SPEC_VENDOR '=' string 	{ my_commit(FLD_SPEC_VENDOR); }
-			| FLD_SPEC_TYPE '=' SPEC_TYPE 	{ my_commit_str(FLD_SPEC_TYPE, $3); }
-			| FLD_TYPE      '=' TYPE	{ my_commit_str(FLD_TYPE, $3); }
-			;
+field             :
+                  | FLD_ABFN         '=' strings      { my_commit( FLD_ABFN             ); }
+                  | FLD_CLASS        '=' CLASS        { my_submit( FLD_CLASS,        $3 ); }
+                  | FLD_DESC         '=' CSTRING      { my_submit( FLD_DESC,         $3 ); }
+                  | FLD_DEF          '=' CSTRING      { my_submit( FLD_DEF,          $3 ); }
+                  | FLD_FLAGS        '=' flags        { my_commit( FLD_FLAGS            ); }
+                  | FLD_NAME         '=' CSTRING      { my_submit( FLD_NAME,         $3 ); }
+                  | FLD_OID          '=' CSTRING      { my_submit( FLD_OID,          $3 ); }
+                  | FLD_RE_PCRE      '=' strings      { my_commit( FLD_RE_PCRE          ); }
+                  | FLD_RE_POSIX     '=' strings      { my_commit( FLD_RE_POSIX         ); }
+                  | FLD_SPEC         '=' CSTRING      { my_submit( FLD_SPEC,         $3 ); }
+                  | FLD_SPEC_NAME    '=' CSTRING      { my_submit( FLD_SPEC_NAME,    $3 ); }
+                  | FLD_SPEC_SECTION '=' CSTRING      { my_submit( FLD_SPEC_SECTION, $3 ); }
+                  | FLD_SPEC_SOURCE  '=' strings      { my_commit( FLD_SPEC_SOURCE      ); }
+                  | FLD_SPEC_VENDOR  '=' string       { my_commit( FLD_SPEC_VENDOR      ); }
+                  | FLD_SPEC_TYPE    '=' SPEC_TYPE    { my_submit( FLD_SPEC_TYPE,    $3 ); }
+                  | FLD_TYPE         '=' TYPE         { my_submit( FLD_TYPE,         $3 ); }
+                  ;
 
-string			:
-			| NULLSTR			{ my_append("NULL"); }
-			| CSTRING			{ my_append($1); }
-			;
+string            :
+                  | NULLSTR                           { my_append( "NULL" ); }
+                  | CSTRING                           { my_append( $1     ); }
+                  ;
 
-strings			:
-			| NULLSTR			{ my_append("NULL"); }
-			| strings CSTRING		{ my_append($2); }
-			;
+strings           :
+                  | NULLSTR                           { my_append( "NULL" ); }
+                  | strings CSTRING                   { my_append( $2     ); }
+                  ;
 
-flags			:
-			| FLAG 				{ my_append($1); }
-			| flags '|' FLAG 		{ my_append($3); }
-			;
+flags             :
+                  | FLAG                              { my_append( $1 ); }
+                  | flags '|' FLAG                    { my_append( $3 ); }
+                  ;
 
 
 %%

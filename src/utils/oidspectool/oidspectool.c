@@ -185,7 +185,7 @@ int main(int argc, char * argv[]);
 int my_add_oidspec(void);
 int my_append(const char * str);
 int my_commit(enum yytokentype type);
-int my_commit_str(enum yytokentype type, const char * str);
+int my_submit(enum yytokentype type, const char * str);
 int my_extensions(const char * nam, const char * ext);
 
 void my_oidspec_free(OIDSpec * oidspec);
@@ -473,7 +473,7 @@ int my_commit(enum yytokentype type)
 }
 
 
-int my_commit_str(enum yytokentype type, const char * str)
+int my_submit(enum yytokentype type, const char * str)
 {
    my_append(str);
    return(my_commit(type));
