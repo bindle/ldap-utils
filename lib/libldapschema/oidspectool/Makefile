@@ -60,6 +60,6 @@ clean:
 	rm -f oidspectool
 	rm -f oidspecparser.c oidspecparser.h oidspeclexer.c
 	rm -f lex.yy.c y.tab.h y.tab.c
-	rm -f *.o
+	rm -f *.o a.out
 
 # end of makefile

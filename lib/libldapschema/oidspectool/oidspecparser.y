@@ -42,6 +42,7 @@ extern const char * my_filename;
 int yylex(void);
 void yyerror(char *s);
 
+int my_add_oidspec(void);
 int my_append(const char * str);
 int my_commit(enum yytokentype type);
 int my_commit_str(enum yytokentype type, const char * str);
@@ -90,7 +91,7 @@ stanzas			: /* empty */
 			;
 
 stanza			:
-			| '{' fields '}' 		{ printf("%s: %i: stanza complete\n", my_filename, yylineno); }
+			| '{' fields '}' 		{ my_add_oidspec(); }
 			;
 
 fields			:
@@ -133,13 +134,6 @@ flags			:
 
 
 %%
-
-void yyerror (char *s)
-{
-   fprintf(stderr, "%s: %i: %s\n", my_filename, yylineno, s);
-   fprintf(stderr, "string: %s\n", yytext);
-   return;
-}
 
 
 /* end of yacc */
