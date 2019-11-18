@@ -142,7 +142,7 @@ typedef struct my_oidspec OIDSpec;
 #pragma mark - Variables
 
 const char      * my_filename;
-char           ** my_state_str;
+char           ** string_queue;
 OIDSpec         * current_oidspec;
 OIDSpec        ** list;
 size_t            list_len;
@@ -287,7 +287,7 @@ int main(int argc, char * argv[])
    };
 
    // initialize global variables
-   my_state_str   = NULL;
+   string_queue   = NULL;
    list           = NULL;
    list_len       = 0;
    if ((current_oidspec = my_oidspec_alloc()) == NULL)
@@ -675,10 +675,10 @@ int my_yyappend(const char * str)
    assert(str != NULL);
 
    // increase size of array
-   if ((my_state_str))
+   if ((string_queue))
    {
-      for(len = 0; ((my_state_str[len])); len++);
-      if ((ptr = realloc(my_state_str, (sizeof(char *) * (len+2)))) == NULL)
+      for(len = 0; ((string_queue[len])); len++);
+      if ((ptr = realloc(string_queue, (sizeof(char *) * (len+2)))) == NULL)
       {
          fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
          exit(EXIT_FAILURE);
@@ -692,12 +692,12 @@ int my_yyappend(const char * str)
          exit(EXIT_FAILURE);
       };
    };
-   my_state_str         = ptr;
-   my_state_str[len+0]  = NULL;
-   my_state_str[len+1]  = NULL;
+   string_queue         = ptr;
+   string_queue[len+0]  = NULL;
+   string_queue[len+1]  = NULL;
 
    // duplicate string
-   if ((my_state_str[len] = strdup(str)) == NULL)
+   if ((string_queue[len] = strdup(str)) == NULL)
    {
       fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
       exit(EXIT_FAILURE);
@@ -745,8 +745,8 @@ int my_yycommit(enum yytokentype type)
       fprintf(stderr, "%s: %s: %i: duplicate %s field in spec\n", PROGRAM_NAME, my_filename, yylineno, name);
       exit(1);
    };
-   *vals = my_state_str;
-   my_state_str = NULL;
+   *vals = string_queue;
+   string_queue = NULL;
 
    return(0);
 }
