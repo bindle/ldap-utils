@@ -144,8 +144,8 @@ typedef struct my_oidspec OIDSpec;
 char           ** string_queue;
 const char      * cur_filename;
 OIDSpec         * cur_oidspec;
-OIDSpec        ** list;
-size_t            list_len;
+OIDSpec        ** oidspeclist;
+size_t            oidspeclist_len;
 
 
 //////////////////
@@ -287,14 +287,14 @@ int main(int argc, char * argv[])
    };
 
    // initialize global variables
-   string_queue   = NULL;
-   list           = NULL;
-   list_len       = 0;
+   string_queue      = NULL;
+   oidspeclist       = NULL;
+   oidspeclist_len   = 0;
    if ((cur_oidspec = my_oidspec_alloc()) == NULL)
       return(2);
-   if ((list = malloc(sizeof(OIDSpec *))) == NULL)
+   if ((oidspeclist = malloc(sizeof(OIDSpec *))) == NULL)
       return(2);
-   list[0] = NULL;
+   oidspeclist[0] = NULL;
 
 
    // loops through files
@@ -533,18 +533,18 @@ int my_save(MyConfig * cnf, int argc, char **argv)
    fprintf(fs, "\n");
 
    // sort OIDs
-   qsort(list, list_len, sizeof(OIDSpec *), oidspec_cmp);
+   qsort(oidspeclist, oidspeclist_len, sizeof(OIDSpec *), oidspec_cmp);
 
    // save OID specs
-   for(pos = 0; pos < list_len; pos++)
-      my_save_oidspec(stdout, list[pos], pos);
+   for(pos = 0; pos < oidspeclist_len; pos++)
+      my_save_oidspec(stdout, oidspeclist[pos], pos);
 
    // generate array
-   fprintf(fs, "const size_t ldapschema_oidspecs_len = %zu;\n", list_len);
+   fprintf(fs, "const size_t ldapschema_oidspecs_len = %zu;\n", oidspeclist_len);
    fprintf(fs, "const struct ldapschema_spec * ldapschema_oidspecs[] =\n");
    fprintf(fs, "{\n");
-   for(pos = 0; pos < list_len; pos++)
-      fprintf(fs, "  &oidspec%zu, // %s\n", pos, list[pos]->oid[0]);
+   for(pos = 0; pos < oidspeclist_len; pos++)
+      fprintf(fs, "  &oidspec%zu, // %s\n", pos, oidspeclist[pos]->oid[0]);
    fprintf(fs, "  NULL\n");
    fprintf(fs, "};\n");
 
@@ -771,12 +771,12 @@ int my_yyoidspec(void)
    };
 
    // searches for duplicate (I know, I know, I am being lazy)
-   for(pos = 0; pos < list_len; pos++)
+   for(pos = 0; pos < oidspeclist_len; pos++)
    {
-      if (!(strcasecmp(list[pos]->oid[0], cur_oidspec->oid[0])))
+      if (!(strcasecmp(oidspeclist[pos]->oid[0], cur_oidspec->oid[0])))
       {
-         fprintf(stderr, "%s: %s: %i: duplicate entry for %s\n", PROGRAM_NAME, cur_filename, yylineno, list[pos]->oid[0]);
-         fprintf(stderr, "%s: %s: %i: duplicate entry for %s\n", PROGRAM_NAME, list[pos]->filename, list[pos]->lineno, cur_oidspec->oid[0]);
+         fprintf(stderr, "%s: %s: %i: duplicate entry for %s\n", PROGRAM_NAME, cur_filename, yylineno, oidspeclist[pos]->oid[0]);
+         fprintf(stderr, "%s: %s: %i: duplicate entry for %s\n", PROGRAM_NAME, oidspeclist[pos]->filename, oidspeclist[pos]->lineno, cur_oidspec->oid[0]);
          exit(1);
       };
    };
@@ -790,15 +790,15 @@ int my_yyoidspec(void)
    };
 
    // increase size of OID spec list
-   if ((ptr = realloc(list, (sizeof(OIDSpec *)*(list_len+2)))) == NULL)
+   if ((ptr = realloc(oidspeclist, (sizeof(OIDSpec *)*(oidspeclist_len+2)))) == NULL)
    {
       fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
       exit(EXIT_FAILURE);
    };
-   list = ptr;
-   list[list_len+0] = cur_oidspec;
-   list[list_len+1] = NULL;
-   list_len++;
+   oidspeclist = ptr;
+   oidspeclist[oidspeclist_len+0] = cur_oidspec;
+   oidspeclist[oidspeclist_len+1] = NULL;
+   oidspeclist_len++;
 
    // allocates next OID spec
    if ((cur_oidspec = my_oidspec_alloc()) == NULL)
