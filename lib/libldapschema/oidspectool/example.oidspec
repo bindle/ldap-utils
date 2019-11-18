@@ -1,0 +1,59 @@
+{
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 2.11.  AlgorithmIdentifier
+   //
+   //       ( 1.3.6.1.1.15.7 DESC 'X.509 Algorithm Identifier' )
+   //
+   //    A value of this syntax is an X.509 AlgorithmIdentifier [X.509, Clause
+   //    7].  Values of this syntax MUST be encoded using GSER [RFC3641].
+   //
+   //    Appendix A.7 provides an equivalent ABNF [RFC4234] grammar for this
+   //    syntax.
+   //
+   // Appendix A.
+   //
+   //    This appendix is informative.
+   //
+   //    This appendix provides ABNF [RFC4234] grammars for GSER-based
+   //    [RFC3641] LDAP-specific encodings specified in this document.  These
+   //    grammars where produced using, and relying on, Common Elements for
+   //    GSER Encodings [RFC3642].
+   //
+   // A.7.  AlgorithmIdentifier
+   //
+   //    AlgorithmIdentifier = "{" sp ai-algorithm
+   //         [ "," sp ai-parameters ] sp "}"
+   //
+   //    ai-algorithm = id-algorithm msp OBJECT-IDENTIFIER
+   //    ai-parameters = id-parameters msp Value
+   //    id-algorithm = %x61.6C.67.6F.72.69.74.68.6D ; 'algorithm'
+   //    id-parameters = %x70.61.72.61.6D.65.74.65.72.73 ; 'parameters'
+   //
+   .oid           =  "1.3.6.1.1.15.8",
+   .name          =  "AlgorithmIdentifier",
+   .desc          =  "X.509 Algorithm Identifier",
+   .flags         =  LDAPSCHEMA_O_READABLE,
+   .type          =  LDAPSCHEMA_SYNTAX,
+   .class         =  LDAPSCHEMA_CLASS_ASCII,
+   .def           =  "( 1.3.6.1.1.15.7 DESC 'X.509 Algorithm Identifier' )",
+   .abfn          =  "AlgorithmIdentifier = \"{\" sp ai-algorithm\n"
+                     "     [ \",\" sp ai-parameters ] sp \"}\"\n"
+                     "\n"
+                     "ai-algorithm = id-algorithm msp OBJECT-IDENTIFIER\n"
+                     "ai-parameters = id-parameters msp Value\n"
+                     "id-algorithm = %x61.6C.67.6F.72.69.74.68.6D ; 'algorithm'\n"
+                     "id-parameters = %x70.61.72.61.6D.65.74.65.72.73 ; 'parameters'\n",
+   .re_posix      =  NULL,
+   .re_pcre       =  NULL,
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "2.11",
+   .spec_source   =  NULL,
+   .spec_vendor   =  NULL,
+//   .examples      =  NULL,
+};
+
+
+
