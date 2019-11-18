@@ -56,7 +56,13 @@ AM_CPPFLAGS				= -O2 \
 					  -DSYSCONFDIR=\"$(sysconfdir)\"
 ACLOCAL_AMFLAGS				= -I m4 -W all -W error
 AM_MAKEINFOFLAGS                        = --no-split
-AM_DISTCHECK_CONFIGURE_FLAGS		= CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)"
+AM_DISTCHECK_CONFIGURE_FLAGS		= --enable-strictwarnings \
+					  --enable-libldapschema \
+					  --enable-maintainer \
+					  CFLAGS="$(CFLAGS)" \
+					  CPPFLAGS="$(CPPFLAGS)" \
+					  LDFLAGS="$(LDFLAGS)"
+AM_YFLAGS				= -d
 DEFS					=
 LDADD					= $(lib_LTLIBRARIES) \
 					  $(noinst_LTLIBRARIES)
@@ -83,7 +89,7 @@ noinst_LIBRARIES			= lib/libldaputils.a
 
 # lists
 AM_INSTALLCHECK_STD_OPTIONS_EXEMPT	=
-BUILT_SOURCES				=
+BUILT_SOURCES				= src/utils/oidspectool/oidspecparser.h
 TESTS					=
 XFAIL_TESTS				=
 EXTRA_MANS				=
@@ -275,6 +281,22 @@ src_ldaptree_CFLAGS			= $(AM_CFLAGS)
 src_ldaptree_LDFLAGS			= $(AM_LDFLAGS)
 src_ldaptree_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
 src_ldaptree_SOURCES			= src/ldaptree.c
+
+
+# macros for oidspectool
+if LDAPUTILS_MAINTAINER
+   noinst_PROGRAMS			+= src/oidspectool
+endif
+src_oidspectool_DEPENDENCIES		= Makefile
+src_oidspectool_CPPFLAGS		= -DPROGRAM_NAME="\"oidspectool\"" -Isrc/utils/oidspectool -DHAVE_CONFIG_H=1
+src_oidspectool_CFLAGS			= -O2 -W
+src_oidspectool_YFLAGS			= $(AM_YFLAGS)
+src_oidspectool_LDFLAGS			= $(AM_LDFLAGS)
+src_oidspectool_LDADD			= $(AM_LDADD)
+src_oidspectool_SOURCES			= src/utils/oidspectool/oidspeclexer.l \
+					  src/utils/oidspectool/oidspecparser.h \
+					  src/utils/oidspectool/oidspecparser.y \
+					  src/utils/oidspectool/oidspectool.c
 
 
 # Makefile includes

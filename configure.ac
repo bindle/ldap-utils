@@ -71,6 +71,8 @@ AC_PROG_CC
 #AC_PROG_OBJC
 AC_PROG_CXX
 AM_PROG_CC_C_O
+AC_PROG_LEX
+AC_PROG_YACC
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 AC_USE_SYSTEM_EXTENSIONS # replaces AC_AIX AC_GNU_SOURCE AC_MINIX
@@ -174,6 +176,7 @@ AC_BINDLE_GIT_PACKAGE_VERSION([contrib/bindletools/build-aux/git-package-version
 
 # custom configure options
 AC_BINDLE_ENABLE_WARNINGS([-Wno-padded], [-Wpadded])
+AC_LDAP_UTILS_MAINTAINER
 AC_LDAP_UTILS_LIBRARIES
 AC_LDAP_UTILS_LIBLDAPSCHEMA
 AC_LDAP_UTILS_UTILITIES
@@ -207,6 +210,7 @@ AC_MSG_NOTICE([      Build ldapdn2str           $LDAPUTILS_LDAPDN2STR])
 AC_MSG_NOTICE([      Build ldapinfo             $LDAPUTILS_LDAPINFO])
 AC_MSG_NOTICE([      Build ldapschema           $LDAPUTILS_LDAPSCHEMA])
 AC_MSG_NOTICE([      Build ldaptree             $LDAPUTILS_LDAPTREE])
+AC_MSG_NOTICE([      Build maintainer tools     $LDAPUTILS_MAINTAINER])
 AC_MSG_NOTICE([ ])
 AC_MSG_NOTICE([   Please send suggestions to:   $PACKAGE_BUGREPORT])
 AC_MSG_NOTICE([ ])

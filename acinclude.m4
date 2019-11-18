@@ -245,6 +245,27 @@ AC_DEFUN([AC_LDAP_UTILS_LIBRARIES],[dnl
 ])dnl
 
 
+# AC_LDAP_UTILS_MAINTAINER
+# ______________________________________________________________________________
+AC_DEFUN([AC_LDAP_UTILS_MAINTAINER],[dnl
+
+   enableval=""
+   AC_ARG_ENABLE(
+      maintainer,
+      [AS_HELP_STRING([--enable-maintainer], [enable maintainer tools])],
+      [ EMAINTAINER=$enableval ],
+      [ EMAINTAINER=$enableval ]
+   )
+
+   if test "x${EMAINTAINER}" != "xyes";then
+      EMAINTAINER=no
+   fi
+   LDAPUTILS_MAINTAINER=${EMAINTAINER}
+
+   AM_CONDITIONAL([LDAPUTILS_MAINTAINER], [test "x$LDAPUTILS_MAINTAINER" = "xyes"])
+])dnl
+
+
 # AC_LDAP_UTILS_UTILITIES
 # ______________________________________________________________________________
 AC_DEFUN([AC_LDAP_UTILS_UTILITIES],[dnl
