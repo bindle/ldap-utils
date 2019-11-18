@@ -141,8 +141,8 @@ typedef struct my_oidspec OIDSpec;
 /////////////////
 #pragma mark - Variables
 
-const char      * my_filename;
 char           ** string_queue;
+const char      * cur_filename;
 OIDSpec         * current_oidspec;
 OIDSpec        ** list;
 size_t            list_len;
@@ -344,7 +344,7 @@ int my_fs_parsefile(MyConfig * cnf, const char * file)
       return(1);
    };
 
-   my_filename = file;
+   cur_filename = file;
 
    yyrestart(fs);
    err = yyparse();
@@ -734,7 +734,7 @@ int my_yycommit(enum yytokentype type)
       case FLD_SPEC_VENDOR:    name = ".spec_vendor";   vals = &current_oidspec->spec_vendor;  break;
       case FLD_TYPE:           name = ".type";          vals = &current_oidspec->type;         break;
       default:
-      fprintf(stderr, "%s: %s: %i: encountered unknown token\n", PROGRAM_NAME, my_filename, yylineno);
+      fprintf(stderr, "%s: %s: %i: encountered unknown token\n", PROGRAM_NAME, cur_filename, yylineno);
       exit(1);
       break;
    };
@@ -742,7 +742,7 @@ int my_yycommit(enum yytokentype type)
    // saves values
    if ((*vals))
    {
-      fprintf(stderr, "%s: %s: %i: duplicate %s field in spec\n", PROGRAM_NAME, my_filename, yylineno, name);
+      fprintf(stderr, "%s: %s: %i: duplicate %s field in spec\n", PROGRAM_NAME, cur_filename, yylineno, name);
       exit(1);
    };
    *vals = string_queue;
@@ -761,12 +761,12 @@ int my_yyoidspec(void)
    // checks current OID spec
    if (!(current_oidspec->oid))
    {
-      fprintf(stderr, "%s: %s: %i: spec missing .oid field\n", PROGRAM_NAME, my_filename, yylineno);
+      fprintf(stderr, "%s: %s: %i: spec missing .oid field\n", PROGRAM_NAME, cur_filename, yylineno);
       return(1);
    };
    if (!(current_oidspec->type))
    {
-      fprintf(stderr, "%s: %s: %i: spec missing .type field\n", PROGRAM_NAME, my_filename, yylineno);
+      fprintf(stderr, "%s: %s: %i: spec missing .type field\n", PROGRAM_NAME, cur_filename, yylineno);
       return(1);
    };
 
@@ -775,7 +775,7 @@ int my_yyoidspec(void)
    {
       if (!(strcasecmp(list[pos]->oid[0], current_oidspec->oid[0])))
       {
-         fprintf(stderr, "%s: %s: %i: duplicate entry for %s\n", PROGRAM_NAME, my_filename, yylineno, list[pos]->oid[0]);
+         fprintf(stderr, "%s: %s: %i: duplicate entry for %s\n", PROGRAM_NAME, cur_filename, yylineno, list[pos]->oid[0]);
          fprintf(stderr, "%s: %s: %i: duplicate entry for %s\n", PROGRAM_NAME, list[pos]->filename, list[pos]->lineno, current_oidspec->oid[0]);
          exit(1);
       };
@@ -783,7 +783,7 @@ int my_yyoidspec(void)
 
    // saves file information
    current_oidspec->lineno = yylineno;
-   if ((current_oidspec->filename = strdup(my_filename)) == NULL)
+   if ((current_oidspec->filename = strdup(cur_filename)) == NULL)
    {
       fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
       exit(EXIT_FAILURE);
@@ -834,7 +834,7 @@ int oidspec_cmp( const void * p1, const void * p2 )
 
 void yyerror (char *s)
 {
-   fprintf(stderr, "%s: %s: %i: %s\n", PROGRAM_NAME, my_filename, yylineno, s);
+   fprintf(stderr, "%s: %s: %i: %s\n", PROGRAM_NAME, cur_filename, yylineno, s);
    return;
 }
 
