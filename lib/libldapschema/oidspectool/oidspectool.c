@@ -138,7 +138,6 @@ typedef struct my_config MyConfig;
 extern int errno;
 
 const char      * my_filename;
-size_t            my_state_strlen;
 char           ** my_state_str;
 
 
@@ -308,8 +307,6 @@ int my_append(const char * str)
       fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
       exit(EXIT_FAILURE);
    };
-
-   my_state_strlen++;
 
    return(0);
 }
