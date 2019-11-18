@@ -143,7 +143,7 @@ typedef struct my_oidspec OIDSpec;
 
 char           ** string_queue;
 const char      * cur_filename;
-OIDSpec         * current_oidspec;
+OIDSpec         * cur_oidspec;
 OIDSpec        ** list;
 size_t            list_len;
 
@@ -290,7 +290,7 @@ int main(int argc, char * argv[])
    string_queue   = NULL;
    list           = NULL;
    list_len       = 0;
-   if ((current_oidspec = my_oidspec_alloc()) == NULL)
+   if ((cur_oidspec = my_oidspec_alloc()) == NULL)
       return(2);
    if ((list = malloc(sizeof(OIDSpec *))) == NULL)
       return(2);
@@ -717,22 +717,22 @@ int my_yycommit(enum yytokentype type)
    vals = NULL;
    switch(type)
    {
-      case FLD_ABFN:           name = ".abnf";          vals = &current_oidspec->abfn;         break;
-      case FLD_CLASS:          name = ".class";         vals = &current_oidspec->class;        break;
-      case FLD_DEF:            name = ".def";           vals = &current_oidspec->def;          break;
-      case FLD_DESC:           name = ".desc";          vals = &current_oidspec->desc;         break;
-      case FLD_FLAGS:          name = ".flags";         vals = &current_oidspec->flags;        break;
-      case FLD_NAME:           name = ".name";          vals = &current_oidspec->name;         break;
-      case FLD_OID:            name = ".oid";           vals = &current_oidspec->oid;          break;
-      case FLD_RE_POSIX:       name = ".re_posix";      vals = &current_oidspec->re_posix;     break;
-      case FLD_RE_PCRE:        name = ".re_pcre";       vals = &current_oidspec->re_pcre;      break;
-      case FLD_SPEC:           name = ".spec";          vals = &current_oidspec->spec;         break;
-      case FLD_SPEC_NAME:      name = ".spec_name";     vals = &current_oidspec->spec_name;    break;
-      case FLD_SPEC_SECTION:   name = ".spec_section";  vals = &current_oidspec->spec_section; break;
-      case FLD_SPEC_SOURCE:    name = ".spec_source";   vals = &current_oidspec->spec_source;  break;
-      case FLD_SPEC_TYPE:      name = ".spec_type";     vals = &current_oidspec->spec_type;    break;
-      case FLD_SPEC_VENDOR:    name = ".spec_vendor";   vals = &current_oidspec->spec_vendor;  break;
-      case FLD_TYPE:           name = ".type";          vals = &current_oidspec->type;         break;
+      case FLD_ABFN:           name = ".abnf";          vals = &cur_oidspec->abfn;         break;
+      case FLD_CLASS:          name = ".class";         vals = &cur_oidspec->class;        break;
+      case FLD_DEF:            name = ".def";           vals = &cur_oidspec->def;          break;
+      case FLD_DESC:           name = ".desc";          vals = &cur_oidspec->desc;         break;
+      case FLD_FLAGS:          name = ".flags";         vals = &cur_oidspec->flags;        break;
+      case FLD_NAME:           name = ".name";          vals = &cur_oidspec->name;         break;
+      case FLD_OID:            name = ".oid";           vals = &cur_oidspec->oid;          break;
+      case FLD_RE_POSIX:       name = ".re_posix";      vals = &cur_oidspec->re_posix;     break;
+      case FLD_RE_PCRE:        name = ".re_pcre";       vals = &cur_oidspec->re_pcre;      break;
+      case FLD_SPEC:           name = ".spec";          vals = &cur_oidspec->spec;         break;
+      case FLD_SPEC_NAME:      name = ".spec_name";     vals = &cur_oidspec->spec_name;    break;
+      case FLD_SPEC_SECTION:   name = ".spec_section";  vals = &cur_oidspec->spec_section; break;
+      case FLD_SPEC_SOURCE:    name = ".spec_source";   vals = &cur_oidspec->spec_source;  break;
+      case FLD_SPEC_TYPE:      name = ".spec_type";     vals = &cur_oidspec->spec_type;    break;
+      case FLD_SPEC_VENDOR:    name = ".spec_vendor";   vals = &cur_oidspec->spec_vendor;  break;
+      case FLD_TYPE:           name = ".type";          vals = &cur_oidspec->type;         break;
       default:
       fprintf(stderr, "%s: %s: %i: encountered unknown token\n", PROGRAM_NAME, cur_filename, yylineno);
       exit(1);
@@ -759,12 +759,12 @@ int my_yyoidspec(void)
    void         * ptr;
 
    // checks current OID spec
-   if (!(current_oidspec->oid))
+   if (!(cur_oidspec->oid))
    {
       fprintf(stderr, "%s: %s: %i: spec missing .oid field\n", PROGRAM_NAME, cur_filename, yylineno);
       return(1);
    };
-   if (!(current_oidspec->type))
+   if (!(cur_oidspec->type))
    {
       fprintf(stderr, "%s: %s: %i: spec missing .type field\n", PROGRAM_NAME, cur_filename, yylineno);
       return(1);
@@ -773,17 +773,17 @@ int my_yyoidspec(void)
    // searches for duplicate (I know, I know, I am being lazy)
    for(pos = 0; pos < list_len; pos++)
    {
-      if (!(strcasecmp(list[pos]->oid[0], current_oidspec->oid[0])))
+      if (!(strcasecmp(list[pos]->oid[0], cur_oidspec->oid[0])))
       {
          fprintf(stderr, "%s: %s: %i: duplicate entry for %s\n", PROGRAM_NAME, cur_filename, yylineno, list[pos]->oid[0]);
-         fprintf(stderr, "%s: %s: %i: duplicate entry for %s\n", PROGRAM_NAME, list[pos]->filename, list[pos]->lineno, current_oidspec->oid[0]);
+         fprintf(stderr, "%s: %s: %i: duplicate entry for %s\n", PROGRAM_NAME, list[pos]->filename, list[pos]->lineno, cur_oidspec->oid[0]);
          exit(1);
       };
    };
 
    // saves file information
-   current_oidspec->lineno = yylineno;
-   if ((current_oidspec->filename = strdup(cur_filename)) == NULL)
+   cur_oidspec->lineno = yylineno;
+   if ((cur_oidspec->filename = strdup(cur_filename)) == NULL)
    {
       fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
       exit(EXIT_FAILURE);
@@ -796,12 +796,12 @@ int my_yyoidspec(void)
       exit(EXIT_FAILURE);
    };
    list = ptr;
-   list[list_len+0] = current_oidspec;
+   list[list_len+0] = cur_oidspec;
    list[list_len+1] = NULL;
    list_len++;
 
    // allocates next OID spec
-   if ((current_oidspec = my_oidspec_alloc()) == NULL)
+   if ((cur_oidspec = my_oidspec_alloc()) == NULL)
    {
       fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
       exit(EXIT_FAILURE);
