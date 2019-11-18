@@ -182,20 +182,41 @@ size_t            list_len;
 // main statement
 int main(int argc, char * argv[]);
 
+// validates OID spec and appends to list of OID specs
 int my_add_oidspec(void);
+
+// append string to array of queued strings
 int my_append(const char * str);
+
+// commits queued strings to field
 int my_commit(enum yytokentype type);
+
+// appends string to array of queued strings then commits queue to field
 int my_submit(enum yytokentype type, const char * str);
+
+// tests filename string for specified extension
 int my_extensions(const char * nam, const char * ext);
 
+// free memory from OID specification
 void my_oidspec_free(OIDSpec * oidspec);
-void my_oidspec_free_strs(char ** strs);
-OIDSpec * my_oidspec_init(void);
-int my_save(MyConfig * cnf, int argc, char **argv);
-int my_save_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx);
-int my_save_oidspec_flgs(FILE * fs, const char * fld, char ** vals);
-int my_save_oidspec_strs(FILE * fs, const char * fld, char ** vals);
 
+// free array of strings
+void my_oidspec_free_strs(char ** strs);
+
+// allocate memory for OID specifications and initialize values
+OIDSpec * my_oidspec_init(void);
+
+// save list of OID specifications as C source file
+int my_save(MyConfig * cnf, int argc, char **argv);
+
+// save individual OID specification
+int my_save_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx);
+
+// save OID specification field as bit flags
+int my_save_oidspec_flgs(FILE * fs, const char * fld, char ** vals);
+
+// save OID specification field as const strings
+int my_save_oidspec_strs(FILE * fs, const char * fld, char ** vals);
 
 // process spec files
 int my_process_file(MyConfig * cnf, const char * file);
@@ -209,6 +230,7 @@ void my_usage(void);
 // displays version information
 void my_version(void);
 
+// compares two OID specifications for sort order
 int oidspec_cmp( const void * p1, const void * p2 );
 
 int yyparse (void);
@@ -332,6 +354,7 @@ int main(int argc, char * argv[])
 }
 
 
+/// validates OID spec and appends to list of OID specs
 int my_add_oidspec(void)
 {
    size_t         pos;
@@ -390,6 +413,8 @@ int my_add_oidspec(void)
 }
 
 
+/// append string to array of queued strings
+/// @param[in] str     C string to append to queue
 int my_append(const char * str)
 {
    size_t      len;
@@ -430,6 +455,8 @@ int my_append(const char * str)
 }
 
 
+/// commits queued strings to field
+/// @param[in] type    Yacc token of field
 int my_commit(enum yytokentype type)
 {
    const char      * name;
@@ -473,6 +500,9 @@ int my_commit(enum yytokentype type)
 }
 
 
+/// appends string to array of queued strings then commits queue to field
+/// @param[in] type    Yacc token of field
+/// @param[in] str     C string to append to queue
 int my_submit(enum yytokentype type, const char * str)
 {
    my_append(str);
@@ -480,6 +510,9 @@ int my_submit(enum yytokentype type, const char * str)
 }
 
 
+/// tests filename string for specified extension
+/// @param[in] nam     file name
+/// @param[in] ext     file extension
 int my_extensions(const char * nam, const char * ext)
 {
    size_t namlen = strlen(nam);
@@ -490,6 +523,8 @@ int my_extensions(const char * nam, const char * ext)
 }
 
 
+/// free memory from OID specification
+/// @param[in] oidspec    reference to OID specification memory
 void my_oidspec_free(OIDSpec * oidspec)
 {
    if (!(oidspec))
@@ -521,6 +556,8 @@ void my_oidspec_free(OIDSpec * oidspec)
 }
 
 
+/// free array of strings
+/// @param[in] strs    reference to array of strings
 void my_oidspec_free_strs(char ** strs)
 {
    size_t pos;
@@ -534,6 +571,7 @@ void my_oidspec_free_strs(char ** strs)
 
 
 
+/// allocate memory for OID specifications and initialize values
 OIDSpec * my_oidspec_init(void)
 {
    OIDSpec * oidspec;
@@ -548,6 +586,11 @@ OIDSpec * my_oidspec_init(void)
    return(oidspec);
 }
 
+
+/// save list of OID specifications as C source file
+/// @param[in] cnf    configuration information
+/// @param[in] argc   number of arguments
+/// @param[in] argv   array of arguments
 int my_save(MyConfig * cnf, int argc, char **argv)
 {
    FILE         * fs;
@@ -610,6 +653,10 @@ int my_save(MyConfig * cnf, int argc, char **argv)
 }
 
 
+/// save individual OID specification
+/// @param[in] fs         FILE stream of output file
+/// @param[in] oidspec    OID specification to save
+/// @param[in] idx        index or ID of OID specification
 int my_save_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx)
 {
    fprintf(fs, "// %s\n", oidspec->oid[0]);
@@ -639,6 +686,10 @@ int my_save_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx)
 }
 
 
+/// save OID specification field as bit flags
+/// @param[in] fs     FILE stream of output file
+/// @param[in] fld    name of field
+/// @param[in] vals   array of values
 int my_save_oidspec_flgs(FILE * fs, const char * fld, char ** vals)
 {
    size_t pos;
@@ -659,6 +710,10 @@ int my_save_oidspec_flgs(FILE * fs, const char * fld, char ** vals)
 }
 
 
+/// save OID specification field as const strings
+/// @param[in] fs     FILE stream of output file
+/// @param[in] fld    name of field
+/// @param[in] vals   array of values
 int my_save_oidspec_strs(FILE * fs, const char * fld, char ** vals)
 {
    size_t pos;
@@ -680,6 +735,8 @@ int my_save_oidspec_strs(FILE * fs, const char * fld, char ** vals)
 
 
 /// process spec files
+/// @param[in] cnf    configuration information
+/// @param[in] file   OID specification file to process
 int my_process_file(MyConfig * cnf, const char * file)
 {
    FILE   * fs;
@@ -707,6 +764,8 @@ int my_process_file(MyConfig * cnf, const char * file)
 
 
 /// process path for spec files
+/// @param[in] cnf    configuration information
+/// @param[in] path   file system path to process for OID specification files
 int my_process_path(MyConfig * cnf, const char * path)
 {
    DIR                * dir;
@@ -801,6 +860,9 @@ void my_version(void)
 }
 
 
+/// compares two OID specifications for sort order
+/// @param[in] p1   reference to first OID specification
+/// @param[in] p2   reference to second OID specification
 int oidspec_cmp( const void * p1, const void * p2 )
 {
    const OIDSpec * const * o1 = p1;
