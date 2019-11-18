@@ -159,7 +159,13 @@ size_t            list_len;
 int main(int argc, char * argv[]);
 
 // tests filename string for specified extension
-int my_extensions(const char * nam, const char * ext);
+int my_fs_filename_ext(const char * nam, const char * ext);
+
+// process individual OID spec file
+int my_fs_parsefile(MyConfig * cnf, const char * file);
+
+// process path for OID spec files
+int my_fs_scanpath(MyConfig * cnf, const char * path);
 
 // free memory from OID specification
 void my_oidspec_free(OIDSpec * oidspec);
@@ -181,12 +187,6 @@ int my_save_oidspec_flgs(FILE * fs, const char * fld, char ** vals);
 
 // save OID specification field as const strings
 int my_save_oidspec_strs(FILE * fs, const char * fld, char ** vals);
-
-// process spec files
-int my_process_file(MyConfig * cnf, const char * file);
-
-// process path for spec files
-int my_process_path(MyConfig * cnf, const char * path);
 
 // prints program usage and exits
 void my_usage(void);
@@ -300,7 +300,7 @@ int main(int argc, char * argv[])
    // loops through files
    while ((argc - optind))
    {
-      if ((err = my_process_path(&config, argv[optind])) != 0)
+      if ((err = my_fs_scanpath(&config, argv[optind])) != 0)
          return(err);
       optind++;
    };
@@ -317,7 +317,7 @@ int main(int argc, char * argv[])
 /// tests filename string for specified extension
 /// @param[in] nam     file name
 /// @param[in] ext     file extension
-int my_extensions(const char * nam, const char * ext)
+int my_fs_filename_ext(const char * nam, const char * ext)
 {
    size_t namlen = strlen(nam);
    size_t extlen = strlen(ext);
@@ -325,6 +325,106 @@ int my_extensions(const char * nam, const char * ext)
       return(1);
    return(strcasecmp(ext, &nam[namlen-extlen]));
 }
+
+
+/// process individual OID spec file
+/// @param[in] cnf    configuration information
+/// @param[in] file   OID specification file to process
+int my_fs_parsefile(MyConfig * cnf, const char * file)
+{
+   FILE   * fs;
+   int      err;
+
+   // open file for parsing
+   if ((cnf->verbose))
+      printf("opening %s ...\n", file);
+   if ((fs = fopen(file, "r")) == NULL)
+   {
+      fprintf(stderr, "%s: %s: %s\n", PROGRAM_NAME, file, strerror(errno));
+      return(1);
+   };
+
+   my_filename = file;
+
+   yyrestart(fs);
+   err = yyparse();
+
+   // close file
+   fclose(fs);
+
+   return(err);
+}
+
+
+/// process path for spec files
+/// @param[in] cnf    configuration information
+/// @param[in] path   file system path to process for OID specification files
+int my_fs_scanpath(MyConfig * cnf, const char * path)
+{
+   DIR                * dir;
+   struct dirent      * dp;
+   struct stat          sb;
+   int                  err;
+   char                 filename[512];
+
+   // check type of file
+   if ((err = stat(path, &sb)) == -1)
+   {
+      fprintf(stderr, "%s: %s: %s\n", PROGRAM_NAME, path, strerror(errno));
+      return(1);
+   };
+   switch(sb.st_mode & S_IFMT)
+   {
+      case S_IFREG: return(my_fs_parsefile(cnf, path));
+      case S_IFDIR: break;
+      default:
+      fprintf(stderr, "%s: %s: not a regular file or directory\n", PROGRAM_NAME, path);
+      return(1);
+      break;
+   };
+
+   // open directory
+   if ((dir = opendir(path)) == NULL)
+   {
+      fprintf(stderr, "%s: %s: %s\n", PROGRAM_NAME, path, strerror(errno));
+      return(1);
+   };
+
+   // read directory
+   while((dp = readdir(dir)) != NULL)
+   {
+      // skip hidden files
+      if (dp->d_name[0] == '.')
+         continue;
+
+      // build path
+      snprintf(filename, sizeof(filename), "%s/%s", path, dp->d_name);
+
+      // stat files
+      if ((err = stat(filename, &sb)) == -1)
+      {
+         fprintf(stderr, "%s: %s: %s\n", PROGRAM_NAME, filename, strerror(errno));
+         return(1);
+      };
+      if ((sb.st_mode & S_IFMT) != S_IFREG)
+         continue;
+
+      // check for supported file extensions
+      if ( ((my_fs_filename_ext(filename, ".oidspec"))) &&
+           ((my_fs_filename_ext(filename, ".oidspec.c"))) )
+         continue;
+
+      // parse file
+      if ((err = my_fs_parsefile(cnf, filename)) != 0)
+         return(err);
+   };
+
+   // close directory
+   closedir(dir);
+
+   return(0);
+}
+
 
 
 /// allocate memory for OID specifications and initialize values
@@ -532,104 +632,6 @@ int my_save_oidspec_strs(FILE * fs, const char * fld, char ** vals)
    for(pos = 1; ((vals[pos])); pos++)
       fprintf(fs, "\n%20s %s", "", vals[pos]);
    fprintf(fs, ",\n");
-
-   return(0);
-}
-
-
-/// process spec files
-/// @param[in] cnf    configuration information
-/// @param[in] file   OID specification file to process
-int my_process_file(MyConfig * cnf, const char * file)
-{
-   FILE   * fs;
-   int      err;
-
-   // open file for parsing
-   if ((cnf->verbose))
-      printf("opening %s ...\n", file);
-   if ((fs = fopen(file, "r")) == NULL)
-   {
-      fprintf(stderr, "%s: %s: %s\n", PROGRAM_NAME, file, strerror(errno));
-      return(1);
-   };
-
-   my_filename = file;
-
-   yyrestart(fs);
-   err = yyparse();
-
-   // close file
-   fclose(fs);
-
-   return(err);
-}
-
-
-/// process path for spec files
-/// @param[in] cnf    configuration information
-/// @param[in] path   file system path to process for OID specification files
-int my_process_path(MyConfig * cnf, const char * path)
-{
-   DIR                * dir;
-   struct dirent      * dp;
-   struct stat          sb;
-   int                  err;
-   char                 filename[512];
-
-   // check type of file
-   if ((err = stat(path, &sb)) == -1)
-   {
-      fprintf(stderr, "%s: %s: %s\n", PROGRAM_NAME, path, strerror(errno));
-      return(1);
-   };
-   switch(sb.st_mode & S_IFMT)
-   {
-      case S_IFREG: return(my_process_file(cnf, path));
-      case S_IFDIR: break;
-      default:
-      fprintf(stderr, "%s: %s: not a regular file or directory\n", PROGRAM_NAME, path);
-      return(1);
-      break;
-   };
-
-   // open directory
-   if ((dir = opendir(path)) == NULL)
-   {
-      fprintf(stderr, "%s: %s: %s\n", PROGRAM_NAME, path, strerror(errno));
-      return(1);
-   };
-
-   // read directory
-   while((dp = readdir(dir)) != NULL)
-   {
-      // skip hidden files
-      if (dp->d_name[0] == '.')
-         continue;
-
-      // build path
-      snprintf(filename, sizeof(filename), "%s/%s", path, dp->d_name);
-
-      // stat files
-      if ((err = stat(filename, &sb)) == -1)
-      {
-         fprintf(stderr, "%s: %s: %s\n", PROGRAM_NAME, filename, strerror(errno));
-         return(1);
-      };
-      if ((sb.st_mode & S_IFMT) != S_IFREG)
-         continue;
-
-      // check for supported file extensions
-      if ( ((my_extensions(filename, ".oidspec"))) && ((my_extensions(filename, ".oidspec.c"))) )
-         continue;
-
-      // parse file
-      if ((err = my_process_file(cnf, filename)) != 0)
-         return(err);
-   };
-
-   // close directory
-   closedir(dir);
 
    return(0);
 }
