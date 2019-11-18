@@ -168,7 +168,7 @@ void my_oidspec_free(OIDSpec * oidspec);
 void my_oidspec_free_strs(char ** strs);
 
 // allocate memory for OID specifications and initialize values
-OIDSpec * my_oidspec_init(void);
+OIDSpec * my_oidspec_alloc(void);
 
 // save list of OID specifications as C source file
 int my_save(MyConfig * cnf, int argc, char **argv);
@@ -290,7 +290,7 @@ int main(int argc, char * argv[])
    my_state_str   = NULL;
    list           = NULL;
    list_len       = 0;
-   if ((current_oidspec = my_oidspec_init()) == NULL)
+   if ((current_oidspec = my_oidspec_alloc()) == NULL)
       return(2);
    if ((list = malloc(sizeof(OIDSpec *))) == NULL)
       return(2);
@@ -324,6 +324,22 @@ int my_extensions(const char * nam, const char * ext)
    if (namlen < extlen)
       return(1);
    return(strcasecmp(ext, &nam[namlen-extlen]));
+}
+
+
+/// allocate memory for OID specifications and initialize values
+OIDSpec * my_oidspec_alloc(void)
+{
+   OIDSpec * oidspec;
+
+   if ((oidspec = malloc(sizeof(OIDSpec))) == NULL)
+   {
+      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
+      return(NULL);
+   };
+   bzero(oidspec, sizeof(OIDSpec));
+
+   return(oidspec);
 }
 
 
@@ -371,23 +387,6 @@ void my_oidspec_free_strs(char ** strs)
       free(strs[pos]);
    free(strs);
    return;
-}
-
-
-
-/// allocate memory for OID specifications and initialize values
-OIDSpec * my_oidspec_init(void)
-{
-   OIDSpec * oidspec;
-
-   if ((oidspec = malloc(sizeof(OIDSpec))) == NULL)
-   {
-      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
-      return(NULL);
-   };
-   bzero(oidspec, sizeof(OIDSpec));
-
-   return(oidspec);
 }
 
 
@@ -789,7 +788,7 @@ int my_yyoidspec(void)
    list_len++;
 
    // allocates next OID spec
-   if ((current_oidspec = my_oidspec_init()) == NULL)
+   if ((current_oidspec = my_oidspec_alloc()) == NULL)
    {
       fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
       exit(EXIT_FAILURE);
