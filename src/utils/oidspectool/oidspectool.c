@@ -314,162 +314,6 @@ int main(int argc, char * argv[])
 }
 
 
-/// validates OID spec and appends to list of OID specs
-int my_add_oidspec(void)
-{
-   size_t         pos;
-   void         * ptr;
-
-   // checks current OID spec
-   if (!(current_oidspec->oid))
-   {
-      fprintf(stderr, "%s: %s: %i: spec missing .oid field\n", PROGRAM_NAME, my_filename, yylineno);
-      return(1);
-   };
-   if (!(current_oidspec->type))
-   {
-      fprintf(stderr, "%s: %s: %i: spec missing .type field\n", PROGRAM_NAME, my_filename, yylineno);
-      return(1);
-   };
-
-   // searches for duplicate (I know, I know, I am being lazy)
-   for(pos = 0; pos < list_len; pos++)
-   {
-      if (!(strcasecmp(list[pos]->oid[0], current_oidspec->oid[0])))
-      {
-         fprintf(stderr, "%s: %s: %i: duplicate entry for %s\n", PROGRAM_NAME, my_filename, yylineno, list[pos]->oid[0]);
-         fprintf(stderr, "%s: %s: %i: duplicate entry for %s\n", PROGRAM_NAME, list[pos]->filename, list[pos]->lineno, current_oidspec->oid[0]);
-         exit(1);
-      };
-   };
-
-   // saves file information
-   current_oidspec->lineno = yylineno;
-   if ((current_oidspec->filename = strdup(my_filename)) == NULL)
-   {
-      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
-      exit(EXIT_FAILURE);
-   };
-
-   // increase size of OID spec list
-   if ((ptr = realloc(list, (sizeof(OIDSpec *)*(list_len+2)))) == NULL)
-   {
-      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
-      exit(EXIT_FAILURE);
-   };
-   list = ptr;
-   list[list_len+0] = current_oidspec;
-   list[list_len+1] = NULL;
-   list_len++;
-
-   // allocates next OID spec
-   if ((current_oidspec = my_oidspec_init()) == NULL)
-   {
-      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
-      exit(EXIT_FAILURE);
-   };
-
-   return(0);
-}
-
-
-/// append string to array of queued strings
-/// @param[in] str     C string to append to queue
-int my_append(const char * str)
-{
-   size_t      len;
-   void      * ptr;
-
-   assert(str != NULL);
-
-   // increase size of array
-   if ((my_state_str))
-   {
-      for(len = 0; ((my_state_str[len])); len++);
-      if ((ptr = realloc(my_state_str, (sizeof(char *) * (len+2)))) == NULL)
-      {
-         fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
-         exit(EXIT_FAILURE);
-      };
-   } else
-   {
-      len = 0;
-      if ((ptr = malloc((sizeof(char *) * 2))) == NULL)
-      {
-         fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
-         exit(EXIT_FAILURE);
-      };
-   };
-   my_state_str         = ptr;
-   my_state_str[len+0]  = NULL;
-   my_state_str[len+1]  = NULL;
-
-   // duplicate string
-   if ((my_state_str[len] = strdup(str)) == NULL)
-   {
-      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
-      exit(EXIT_FAILURE);
-   };
-
-   return(0);
-}
-
-
-/// commits queued strings to field
-/// @param[in] type    Yacc token of field
-int my_commit(enum yytokentype type)
-{
-   const char      * name;
-   char          *** vals;
-
-   vals = NULL;
-   switch(type)
-   {
-      case FLD_ABFN:           name = ".abnf";          vals = &current_oidspec->abfn;         break;
-      case FLD_CLASS:          name = ".class";         vals = &current_oidspec->class;        break;
-      case FLD_DEF:            name = ".def";           vals = &current_oidspec->def;          break;
-      case FLD_DESC:           name = ".desc";          vals = &current_oidspec->desc;         break;
-      case FLD_FLAGS:          name = ".flags";         vals = &current_oidspec->flags;        break;
-      case FLD_NAME:           name = ".name";          vals = &current_oidspec->name;         break;
-      case FLD_OID:            name = ".oid";           vals = &current_oidspec->oid;          break;
-      case FLD_RE_POSIX:       name = ".re_posix";      vals = &current_oidspec->re_posix;     break;
-      case FLD_RE_PCRE:        name = ".re_pcre";       vals = &current_oidspec->re_pcre;      break;
-      case FLD_SPEC:           name = ".spec";          vals = &current_oidspec->spec;         break;
-      case FLD_SPEC_NAME:      name = ".spec_name";     vals = &current_oidspec->spec_name;    break;
-      case FLD_SPEC_SECTION:   name = ".spec_section";  vals = &current_oidspec->spec_section; break;
-      case FLD_SPEC_SOURCE:    name = ".spec_source";   vals = &current_oidspec->spec_source;  break;
-      case FLD_SPEC_TYPE:      name = ".spec_type";     vals = &current_oidspec->spec_type;    break;
-      case FLD_SPEC_VENDOR:    name = ".spec_vendor";   vals = &current_oidspec->spec_vendor;  break;
-      case FLD_TYPE:           name = ".type";          vals = &current_oidspec->type;         break;
-      default:
-      fprintf(stderr, "%s: %s: %i: encountered unknown token\n", PROGRAM_NAME, my_filename, yylineno);
-      exit(1);
-      break;
-   };
-
-   // saves values
-   if ((*vals))
-   {
-      fprintf(stderr, "%s: %s: %i: duplicate %s field in spec\n", PROGRAM_NAME, my_filename, yylineno, name);
-      exit(1);
-   };
-   *vals = my_state_str;
-   my_state_str = NULL;
-
-   return(0);
-}
-
-
-/// appends string to array of queued strings then commits queue to field
-/// @param[in] type    Yacc token of field
-/// @param[in] str     C string to append to queue
-int my_submit(enum yytokentype type, const char * str)
-{
-   my_append(str);
-   return(my_commit(type));
-}
-
-
 /// tests filename string for specified extension
 /// @param[in] nam     file name
 /// @param[in] ext     file extension
@@ -806,6 +650,162 @@ void my_usage(void)
    printf("  -V, --version             print version number and exit\n");
    printf("\n");
    return;
+}
+
+
+/// append string to array of queued strings
+/// @param[in] str     C string to append to queue
+int my_yyappend(const char * str)
+{
+   size_t      len;
+   void      * ptr;
+
+   assert(str != NULL);
+
+   // increase size of array
+   if ((my_state_str))
+   {
+      for(len = 0; ((my_state_str[len])); len++);
+      if ((ptr = realloc(my_state_str, (sizeof(char *) * (len+2)))) == NULL)
+      {
+         fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
+         exit(EXIT_FAILURE);
+      };
+   } else
+   {
+      len = 0;
+      if ((ptr = malloc((sizeof(char *) * 2))) == NULL)
+      {
+         fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
+         exit(EXIT_FAILURE);
+      };
+   };
+   my_state_str         = ptr;
+   my_state_str[len+0]  = NULL;
+   my_state_str[len+1]  = NULL;
+
+   // duplicate string
+   if ((my_state_str[len] = strdup(str)) == NULL)
+   {
+      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
+      exit(EXIT_FAILURE);
+   };
+
+   return(0);
+}
+
+
+/// commits queued strings to field
+/// @param[in] type    Yacc token of field
+int my_yycommit(enum yytokentype type)
+{
+   const char      * name;
+   char          *** vals;
+
+   vals = NULL;
+   switch(type)
+   {
+      case FLD_ABFN:           name = ".abnf";          vals = &current_oidspec->abfn;         break;
+      case FLD_CLASS:          name = ".class";         vals = &current_oidspec->class;        break;
+      case FLD_DEF:            name = ".def";           vals = &current_oidspec->def;          break;
+      case FLD_DESC:           name = ".desc";          vals = &current_oidspec->desc;         break;
+      case FLD_FLAGS:          name = ".flags";         vals = &current_oidspec->flags;        break;
+      case FLD_NAME:           name = ".name";          vals = &current_oidspec->name;         break;
+      case FLD_OID:            name = ".oid";           vals = &current_oidspec->oid;          break;
+      case FLD_RE_POSIX:       name = ".re_posix";      vals = &current_oidspec->re_posix;     break;
+      case FLD_RE_PCRE:        name = ".re_pcre";       vals = &current_oidspec->re_pcre;      break;
+      case FLD_SPEC:           name = ".spec";          vals = &current_oidspec->spec;         break;
+      case FLD_SPEC_NAME:      name = ".spec_name";     vals = &current_oidspec->spec_name;    break;
+      case FLD_SPEC_SECTION:   name = ".spec_section";  vals = &current_oidspec->spec_section; break;
+      case FLD_SPEC_SOURCE:    name = ".spec_source";   vals = &current_oidspec->spec_source;  break;
+      case FLD_SPEC_TYPE:      name = ".spec_type";     vals = &current_oidspec->spec_type;    break;
+      case FLD_SPEC_VENDOR:    name = ".spec_vendor";   vals = &current_oidspec->spec_vendor;  break;
+      case FLD_TYPE:           name = ".type";          vals = &current_oidspec->type;         break;
+      default:
+      fprintf(stderr, "%s: %s: %i: encountered unknown token\n", PROGRAM_NAME, my_filename, yylineno);
+      exit(1);
+      break;
+   };
+
+   // saves values
+   if ((*vals))
+   {
+      fprintf(stderr, "%s: %s: %i: duplicate %s field in spec\n", PROGRAM_NAME, my_filename, yylineno, name);
+      exit(1);
+   };
+   *vals = my_state_str;
+   my_state_str = NULL;
+
+   return(0);
+}
+
+
+/// validates OID spec and appends to list of OID specs
+int my_yyoidspec(void)
+{
+   size_t         pos;
+   void         * ptr;
+
+   // checks current OID spec
+   if (!(current_oidspec->oid))
+   {
+      fprintf(stderr, "%s: %s: %i: spec missing .oid field\n", PROGRAM_NAME, my_filename, yylineno);
+      return(1);
+   };
+   if (!(current_oidspec->type))
+   {
+      fprintf(stderr, "%s: %s: %i: spec missing .type field\n", PROGRAM_NAME, my_filename, yylineno);
+      return(1);
+   };
+
+   // searches for duplicate (I know, I know, I am being lazy)
+   for(pos = 0; pos < list_len; pos++)
+   {
+      if (!(strcasecmp(list[pos]->oid[0], current_oidspec->oid[0])))
+      {
+         fprintf(stderr, "%s: %s: %i: duplicate entry for %s\n", PROGRAM_NAME, my_filename, yylineno, list[pos]->oid[0]);
+         fprintf(stderr, "%s: %s: %i: duplicate entry for %s\n", PROGRAM_NAME, list[pos]->filename, list[pos]->lineno, current_oidspec->oid[0]);
+         exit(1);
+      };
+   };
+
+   // saves file information
+   current_oidspec->lineno = yylineno;
+   if ((current_oidspec->filename = strdup(my_filename)) == NULL)
+   {
+      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
+      exit(EXIT_FAILURE);
+   };
+
+   // increase size of OID spec list
+   if ((ptr = realloc(list, (sizeof(OIDSpec *)*(list_len+2)))) == NULL)
+   {
+      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
+      exit(EXIT_FAILURE);
+   };
+   list = ptr;
+   list[list_len+0] = current_oidspec;
+   list[list_len+1] = NULL;
+   list_len++;
+
+   // allocates next OID spec
+   if ((current_oidspec = my_oidspec_init()) == NULL)
+   {
+      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
+      exit(EXIT_FAILURE);
+   };
+
+   return(0);
+}
+
+
+/// appends string to array of queued strings then commits queue to field
+/// @param[in] type    Yacc token of field
+/// @param[in] str     C string to append to queue
+int my_yysubmit(enum yytokentype type, const char * str)
+{
+   my_yyappend(str);
+   return(my_yycommit(type));
 }
 
 

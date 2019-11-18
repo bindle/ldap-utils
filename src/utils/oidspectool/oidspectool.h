@@ -100,17 +100,17 @@ extern const char * my_filename;
 //////////////////
 #pragma mark - Prototypes
 
-// validates OID spec and appends to list of OID specs
-int my_add_oidspec(void);
-
 // append string to array of queued strings
-int my_append(const char * str);
+int my_yyappend(const char * str);
 
 // commits queued strings to field
-int my_commit(enum yytokentype type);
+int my_yycommit(enum yytokentype type);
+
+// validates OID spec and appends to list of OID specs
+int my_yyoidspec(void);
 
 // appends string to array of queued strings then commits queue to field
-int my_submit(enum yytokentype type, const char * str);
+int my_yysubmit(enum yytokentype type, const char * str);
 
 
 int yyparse (void);
