@@ -652,6 +652,17 @@ void my_usage(void)
 }
 
 
+/// displays version information
+void my_version(void)
+{
+   printf("%s (%s) %s\n", PROGRAM_NAME, PACKAGE_NAME, PACKAGE_VERSION);
+#ifdef PACKAGE_COPYRIGHT
+   printf("%s\n", PACKAGE_COPYRIGHT);
+#endif
+   return;
+}
+
+
 /// append string to array of queued strings
 /// @param[in] str     C string to append to queue
 int my_yyappend(const char * str)
@@ -805,17 +816,6 @@ int my_yysubmit(enum yytokentype type, const char * str)
 {
    my_yyappend(str);
    return(my_yycommit(type));
-}
-
-
-/// displays version information
-void my_version(void)
-{
-   printf("%s (%s) %s\n", PROGRAM_NAME, PACKAGE_NAME, PACKAGE_VERSION);
-#ifdef PACKAGE_COPYRIGHT
-   printf("%s\n", PACKAGE_COPYRIGHT);
-#endif
-   return;
 }
 
 
