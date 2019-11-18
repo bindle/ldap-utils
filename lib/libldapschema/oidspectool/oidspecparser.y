@@ -37,9 +37,12 @@
 
 extern int    yylineno;
 extern char * yytext;
+extern const char * my_filename;
 
 int yylex(void);
 void yyerror(char *s);
+
+int my_append(const char * str);
 
 %}
 
@@ -85,7 +88,7 @@ stanzas			: /* empty */
 			;
 
 stanza			:
-			| '{' fields '}' 		{ printf("stanza complete\n"); }
+			| '{' fields '}' 		{ printf("%s: %i: stanza complete\n", my_filename, yylineno); }
 			;
 
 fields			:
@@ -93,37 +96,37 @@ fields			:
 			;
 
 field			:
-			| FLD_ABFN      '=' strings 	{ printf("   .abfn      =\n"); }
-			| FLD_CLASS     '=' CLASS 	{ printf("   .class     = %s\n", $3); }
-			| FLD_DESC      '=' CSTRING 	{ printf("   .desc      = %s\n", $3); }
-			| FLD_DEF       '=' CSTRING 	{ printf("   .def       = %s\n", $3); }
-			| FLD_FLAGS     '=' flags	{ printf("   .flags     =\n"); }
-			| FLD_NAME      '=' CSTRING 	{ printf("   .name      = %s\n", $3); }
-			| FLD_OID       '=' CSTRING 	{ printf("   .oid       = %s\n", $3); }
-			| FLD_RE_PCRE   '=' strings 	{ printf("   .re_pcre   =\n"); }
-			| FLD_RE_POSIX  '=' strings 	{ printf("   .re_posix  =\n"); }
-			| FLD_SPEC      '=' CSTRING 	{ printf("   .spec      = %s\n", $3); }
-			| FLD_SPEC_NAME '=' CSTRING 	{ printf("   .spec_name = %s\n", $3); }
+			| FLD_ABFN      '=' strings 	{ printf("   .abfn         =\n"); }
+			| FLD_CLASS     '=' CLASS 	{ printf("   .class        = %s\n", $3); }
+			| FLD_DESC      '=' CSTRING 	{ printf("   .desc         = %s\n", $3); }
+			| FLD_DEF       '=' CSTRING 	{ printf("   .def          = %s\n", $3); }
+			| FLD_FLAGS     '=' flags	{ printf("   .flags        =\n"); }
+			| FLD_NAME      '=' CSTRING 	{ printf("   .name         = %s\n", $3); }
+			| FLD_OID       '=' CSTRING 	{ printf("   .oid          = %s\n", $3); }
+			| FLD_RE_PCRE   '=' strings 	{ printf("   .re_pcre      =\n"); }
+			| FLD_RE_POSIX  '=' strings 	{ printf("   .re_posix     =\n"); }
+			| FLD_SPEC      '=' CSTRING 	{ printf("   .spec         = %s\n", $3); }
+			| FLD_SPEC_NAME '=' CSTRING 	{ printf("   .spec_name    = %s\n", $3); }
 			| FLD_SPEC_SECTION '=' CSTRING 	{ printf("   .spec_section = %s\n", $3); }
-			| FLD_SPEC_SOURCE '=' strings	{ printf("   .spec_source =\n"); }
-			| FLD_SPEC_VENDOR '=' string 	{ printf("   .spec_vendor =\n"); }
-			| FLD_SPEC_TYPE '=' SPEC_TYPE 	{ printf("   .spec_type = %s\n", $3); }
-			| FLD_TYPE      '=' TYPE	{ printf("   .type      = %s\n", $3); }
+			| FLD_SPEC_SOURCE '=' strings	{ printf("   .spec_source  =\n"); }
+			| FLD_SPEC_VENDOR '=' string 	{ printf("   .spec_vendor  =\n"); }
+			| FLD_SPEC_TYPE '=' SPEC_TYPE 	{ printf("   .spec_type    = %s\n", $3); }
+			| FLD_TYPE      '=' TYPE	{ printf("   .type         = %s\n", $3); }
 			;
 
 string			:
-			| NULLSTR			{ printf("                NULL\n"); }
-			| CSTRING			{ printf("                %s\n", $1); }
+			| NULLSTR			{ my_append("NULL"); }
+			| CSTRING			{ my_append($1); }
 			;
 
 strings			:
-			| NULLSTR			{ printf("                NULL\n"); }
-			| strings CSTRING		{ printf("                %s\n", $2); }
+			| NULLSTR			{ my_append("NULL"); }
+			| strings CSTRING		{ my_append($2); }
 			;
 
 flags			:
-			| FLAG 				{ printf("                %s\n", $1); }
-			| flags '|' FLAG 		{ printf("                | %s\n", $3); }
+			| FLAG 				{ my_append($1); }
+			| flags '|' FLAG 		{ my_append($3); }
 			;
 
 
@@ -131,7 +134,7 @@ flags			:
 
 void yyerror (char *s)
 {
-   fprintf(stderr, "line %i: %s\n", yylineno, s);
+   fprintf(stderr, "%s: %i: %s\n", my_filename, yylineno, s);
    fprintf(stderr, "string: %s\n", yytext);
    return;
 }

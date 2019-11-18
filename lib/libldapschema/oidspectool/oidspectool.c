@@ -137,6 +137,10 @@ typedef struct my_config MyConfig;
 
 extern int errno;
 
+const char      * my_filename;
+size_t            my_state_strlen;
+char           ** my_state_str;
+
 
 //////////////////
 //              //
@@ -165,6 +169,9 @@ void my_version(void);
 int oidspectool_parse(FILE *);
 int yyparse (void);
 void yyrestart (FILE *input_file);
+void yyerror(char *s);
+
+int my_append(const char * str);
 
 
 /////////////////
@@ -259,7 +266,36 @@ int main(int argc, char * argv[])
    };
 
 
-   return(err);
+   return(0);
+}
+
+
+int my_append(const char * str)
+{
+   void      * ptr;
+
+   assert(str != NULL);
+
+   // increase size of array
+   if ((ptr = realloc(my_state_str, (sizeof(char *) * (my_state_strlen+2)))) == NULL)
+   {
+      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
+      exit(EXIT_FAILURE);
+   };
+   my_state_str                     = ptr;
+   my_state_str[my_state_strlen+0]  = NULL;
+   my_state_str[my_state_strlen+1]  = NULL;
+
+   // duplicate string
+   if ((my_state_str[my_state_strlen] = strdup(str)) == NULL)
+   {
+      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
+      exit(EXIT_FAILURE);
+   };
+
+   my_state_strlen++;
+printf("                %s\n", str);
+   return(0);
 }
 
 
@@ -287,6 +323,8 @@ int my_process_file(MyConfig * cnf, const char * file)
       fprintf(stderr, "%s: %s: %s\n", PROGRAM_NAME, file, strerror(errno));
       return(1);
    };
+
+   my_filename = file;
 
    yyrestart(fs);
    err = yyparse();
