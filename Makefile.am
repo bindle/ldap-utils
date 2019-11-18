@@ -296,7 +296,8 @@ src_oidspectool_LDADD			= $(AM_LDADD)
 src_oidspectool_SOURCES			= src/utils/oidspectool/oidspeclexer.l \
 					  src/utils/oidspectool/oidspecparser.h \
 					  src/utils/oidspectool/oidspecparser.y \
-					  src/utils/oidspectool/oidspectool.c
+					  src/utils/oidspectool/oidspectool.c \
+					  src/utils/oidspectool/oidspectool.h
 
 
 # Makefile includes

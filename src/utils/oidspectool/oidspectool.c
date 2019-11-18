@@ -62,7 +62,8 @@
  *     libtool --mode=clean rm -f oidspectool.lo oidspecparser.lo \
  *         oidspeclexer.lo oidspectool
  */
-#define _LDAP_UTILS_LIB_LIBLDAPSCHEMA_OIDSPECTOOL 1
+#define _LDAP_UTILS_SRC_OIDSPECTOOL 1
+#include "oidspectool.h"
 
 ///////////////
 //           //
@@ -70,10 +71,6 @@
 //           //
 ///////////////
 #pragma mark - Headers
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #define _GNU_SOURCE 1
 #include <stdio.h>
@@ -87,11 +84,6 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-#define LDAP_DEPRECATED 1
-#include <ldap.h>
-
-#include "oidspecparser.h"
-
 
 ///////////////////
 //               //
@@ -99,19 +91,6 @@
 //               //
 ///////////////////
 #pragma mark - Definitions
-
-#ifndef PROGRAM_NAME
-#define PROGRAM_NAME "oidspectool"
-#endif
-#ifndef PACKAGE_NAME
-#define PACKAGE_NAME "LDAP Utilities"
-#endif
-#ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION ""
-#endif
-#ifndef PACKAGE_NAME
-#define PACKAGE_NAME "LDAP Utilities"
-#endif
 
 
 /////////////////
@@ -162,9 +141,6 @@ typedef struct my_oidspec OIDSpec;
 /////////////////
 #pragma mark - Variables
 
-extern int errno;
-extern int yylineno;
-
 const char      * my_filename;
 char           ** my_state_str;
 OIDSpec         * current_oidspec;
@@ -181,18 +157,6 @@ size_t            list_len;
 
 // main statement
 int main(int argc, char * argv[]);
-
-// validates OID spec and appends to list of OID specs
-int my_add_oidspec(void);
-
-// append string to array of queued strings
-int my_append(const char * str);
-
-// commits queued strings to field
-int my_commit(enum yytokentype type);
-
-// appends string to array of queued strings then commits queue to field
-int my_submit(enum yytokentype type, const char * str);
 
 // tests filename string for specified extension
 int my_extensions(const char * nam, const char * ext);
@@ -232,10 +196,6 @@ void my_version(void);
 
 // compares two OID specifications for sort order
 int oidspec_cmp( const void * p1, const void * p2 );
-
-int yyparse (void);
-void yyrestart (FILE *input_file);
-void yyerror(char *s);
 
 
 /////////////////

@@ -32,20 +32,9 @@
 %{
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
-
-extern int    yylineno;
-extern char * yytext;
-extern const char * my_filename;
+#include "oidspectool.h"
 
 int yylex(void);
-void yyerror(char *s);
-
-int my_add_oidspec(void);
-int my_append(const char * str);
-int my_commit(enum yytokentype type);
-int my_submit(enum yytokentype type, const char * str);
 
 %}
 
