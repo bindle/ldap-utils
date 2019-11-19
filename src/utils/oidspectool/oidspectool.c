@@ -105,6 +105,7 @@ struct my_config
    int            dryrun;
    int            format;
    const char   * output;
+   const char   * prune;
    int            verbose;
 };
 
@@ -168,6 +169,9 @@ int my_fs_filename_ext(const char * nam, const char * ext);
 // process individual OID spec file
 int my_fs_parsefile(MyConfig * cnf, const char * file);
 
+// prunes string from path names
+const char * my_fs_prunepath(const char * path);
+
 // process path for OID spec files
 int my_fs_scanpath(MyConfig * cnf, const char * path);
 
@@ -227,13 +231,14 @@ int main(int argc, char * argv[])
    int            err;
    int            opt_index;
 
-   static char          short_options[]   = "hHmno:vV";
+   static char          short_options[]   = "hHmno:p:vV";
    static struct option long_options[]    =
    {
       {"help",          no_argument, 0, 'h'},
       {"header",        no_argument, 0, 'H'},
       {"makefile",      no_argument, 0, 'm'},
       {"dryrun",        no_argument, 0, 'n'},
+      {"prune",   required_argument, 0, 'p'},
       {"verbose",       no_argument, 0, 'v'},
       {"version",       no_argument, 0, 'V'},
       {NULL,            0,           0, 0  }
@@ -269,6 +274,10 @@ int main(int argc, char * argv[])
 
          case 'o':
          config.output = optarg;
+         break;
+
+         case 'p':
+         config.prune = optarg;
          break;
 
          case 'V':
@@ -399,6 +408,23 @@ int my_fs_parsefile(MyConfig * cnf, const char * file)
    fclose(fs);
 
    return(err);
+}
+
+
+/// prunes string from path names
+/// @param[in] path   file system path to process for OID specification files
+const char * my_fs_prunepath(const char * path)
+{
+   size_t len;
+
+   if (!(config.prune))
+      return(path);
+
+   len = strlen(config.prune);
+   if (!(strncmp(config.prune, path, len)))
+      return(&path[len]);
+
+   return(path);
 }
 
 
@@ -641,7 +667,7 @@ int my_save_c_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx)
    size_t pos;
 
    fprintf(fs, "// %s\n", oidspec->oid[0]);
-   fprintf(fs, "// %s:%i\n", oidspec->filename, oidspec->lineno);
+   fprintf(fs, "// %s:%i\n", my_fs_prunepath(oidspec->filename), oidspec->lineno);
    fprintf(fs, "const struct ldapschema_spec oidspec%zu =\n", idx);
    fprintf(fs, "{\n");
    my_save_c_oidspec_strs(fs, ".oid",            oidspec->oid);
@@ -796,9 +822,8 @@ int my_save_makefile(MyConfig * cnf, int argc, char **argv, FILE * fs)
    fprintf(fs, "\n");
 
    // save file list
-   fprintf(fs, "OIDSPEC_FILES =\n");
    for(pos = 0; pos < filelist_len; pos++)
-      fprintf(fs, "OIDSPEC_FILES += %s\n", filelist[pos]);
+      fprintf(fs, "OIDSPEC_FILES += %s\n", my_fs_prunepath(filelist[pos]));
 
    return(0);
 }
@@ -816,6 +841,7 @@ void my_usage(void)
    printf("  -m, --makefile            output makefile include instead of C source\n");
    printf("  -n, --dryrun              show what would be done, but do nothing\n");
    printf("  -o file                   output file\n");
+   printf("  -p str, --prune=str       prune string from recorded filenames\n");
    printf("  -v, --verbose             run in verbose mode\n");
    printf("  -V, --version             print version number and exit\n");
    printf("\n");
