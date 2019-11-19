@@ -140,17 +140,17 @@
 // LDAP schema data type
 #define LDAPSCHEMA_TYPE_MASK                          0xFF000000
 #define LDAPSCHEMA_SUBTYPE_MASK                       0x000000FF
-#define LDAPSCHEMA_SYNTAX                             0x01000000
-#define LDAPSCHEMA_MATCHINGRULE                       0x02000000
-#define LDAPSCHEMA_MATCHINGRULES                      0x02000000
-#define LDAPSCHEMA_ATTRIBUTETYPE                      0x03000000
-#define LDAPSCHEMA_OBJECTCLASS                        0x04000000
-#define LDAPSCHEMA_DITCONTENTRULE                     0x05000000
-#define LDAPSCHEMA_DITSTRUCTURERULE                   0x06000000
-#define LDAPSCHEMA_NAMEFORM                           0x07000000
-#define LDAPSCHEMA_FEATURE                            0x41000000
-#define LDAPSCHEMA_CONTROL                            0x42000000
-#define LDAPSCHEMA_EXTENSION                          0x43000000
+#define LDAPSCHEMA_SYNTAX                             0x01
+#define LDAPSCHEMA_MATCHINGRULE                       0x02
+#define LDAPSCHEMA_MATCHINGRULES                      0x02
+#define LDAPSCHEMA_ATTRIBUTETYPE                      0x03
+#define LDAPSCHEMA_OBJECTCLASS                        0x04
+#define LDAPSCHEMA_DITCONTENTRULE                     0x05
+#define LDAPSCHEMA_DITSTRUCTURERULE                   0x06
+#define LDAPSCHEMA_NAMEFORM                           0x07
+#define LDAPSCHEMA_FEATURE                            0x41
+#define LDAPSCHEMA_CONTROL                            0x42
+#define LDAPSCHEMA_EXTENSION                          0x43
 #define LDAPSCHEMA_TYPE( val )                        (val & LDAPSCHEMA_TYPE_MASK )
 #define LDAPSCHEMA_SUBTYPE( val )                     (val & LDAPSCHEMA_SUBTYPE_MASK )
 #define LDAPSCHEMA_IS_TYPE( val, type )               ( LDAPSCHEMA_TYPE(val)    == type )

@@ -69,15 +69,20 @@ struct ldapschema_spec
    const char      * desc;
    const char      * def;
    const char      * source;
-   const char      * abfn;
+   const char      * abnf;
    const char      * re_posix;
    const char      * re_pcre;
    const char     ** examples;
-   const char      * spec_title;
+   const char      * spec;
    const char      * spec_section;
-   uint64_t          spec_type;
-   uint64_t          flags;
-   uint64_t          type;
+   const char      * spec_name;
+   const char      * spec_source;
+   const char      * spec_vendor;
+   uint8_t           type;
+   uint8_t           subtype;
+   uint8_t           class;
+   uint8_t           spec_type;
+   uint32_t          flags;
 };
 
 

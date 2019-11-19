@@ -195,7 +195,7 @@ const struct ldapschema_spec ldapschema_spec[] =
       .flags         =  LDAPSCHEMA_O_READABLE,
       .type          =  LDAPSCHEMA_SYNTAX | LDAPSCHEMA_CLASS_ASCII,
       .def           =  "( 1.3.6.1.1.15.7 DESC 'X.509 Algorithm Identifier' )",
-      .abfn          =  "AlgorithmIdentifier = \"{\" sp ai-algorithm\n"
+      .abnf          =  "AlgorithmIdentifier = \"{\" sp ai-algorithm\n"
                         "     [ \",\" sp ai-parameters ] sp \"}\"\n"
                         "\n"
                         "ai-algorithm = id-algorithm msp OBJECT-IDENTIFIER\n"
@@ -206,7 +206,7 @@ const struct ldapschema_spec ldapschema_spec[] =
       .re_pcre       =  NULL,
       .source        =  "RFC 4523 Section 2.11",
       .spec_type     =  LDAPSCHEMA_SPEC_RFC,
-      .spec_title    =  "4523",
+      .spec_name     =  "4523",
       .spec_section  =  "2.11",
       .examples      =  NULL,
    },
@@ -237,7 +237,7 @@ const struct ldapschema_spec ldapschema_spec[] =
       .flags         =  LDAPSCHEMA_O_READABLE,
       .type          =  LDAPSCHEMA_SYNTAX | LDAPSCHEMA_CLASS_ASCII,
       .def           =  "( 1.3.6.1.1.16.1 DESC 'UUID' )",
-      .abfn          =  "UUID               = time-low \"-\"\n"
+      .abnf          =  "UUID               = time-low \"-\"\n"
                         "                     time-mid \"-\"\n"
                         "                     time-high-and-version \"-\"\n"
                         "                     clock-seq-and-reserved\n"
@@ -257,7 +257,7 @@ const struct ldapschema_spec ldapschema_spec[] =
       .re_pcre       =  NULL,
       .source        =  "RFC 4530 Section 2.1",
       .spec_type     =  LDAPSCHEMA_SPEC_RFC,
-      .spec_title    =  "4530",
+      .spec_name     =  "4530",
       .spec_section  =  "2.1",
       .examples      =  (const char *[]){ "597ae2f6-16a6-1027-98f4-d28b5365dc14", NULL },
    },
@@ -269,12 +269,12 @@ const struct ldapschema_spec ldapschema_spec[] =
       .flags         =  LDAPSCHEMA_O_DEPRECATED,
       .type          =  LDAPSCHEMA_SYNTAX | LDAPSCHEMA_CLASS_UNKNOWN,
       .def           =  NULL,
-      .abfn          =  NULL,
+      .abnf          =  NULL,
       .re_posix      =  NULL,
       .re_pcre       =  NULL,
       .source        =  "RFC 2252 Section 4.3.2",
       .spec_type     =  LDAPSCHEMA_SPEC_RFC,
-      .spec_title    =  "2252",
+      .spec_name     =  "2252",
       .spec_section  =  "4.3.2",
       .examples      =  NULL,
    },
@@ -286,12 +286,12 @@ const struct ldapschema_spec ldapschema_spec[] =
       .flags         =  LDAPSCHEMA_O_READABLE | LDAPSCHEMA_O_DEPRECATED,
       .type          =  LDAPSCHEMA_SYNTAX | LDAPSCHEMA_CLASS_ASCII,
       .def           =  NULL,
-      .abfn          =  NULL,
+      .abnf          =  NULL,
       .re_posix      =  NULL,
       .re_pcre       =  NULL,
       .source        =  "RFC 2252 Section 4.3.2",
       .spec_type     =  LDAPSCHEMA_SPEC_RFC,
-      .spec_title    =  "2252",
+      .spec_name    =  "2252",
       .spec_section  =  "4.3.2",
       .examples      =  NULL,
    },
@@ -426,7 +426,7 @@ const struct ldapschema_spec ldapschema_spec[] =
       .flags         =  LDAPSCHEMA_O_READABLE | LDAPSCHEMA_O_COMMON_ABNF,
       .type          =  LDAPSCHEMA_SYNTAX | LDAPSCHEMA_CLASS_ASCII,
       .def           =  "( 1.3.6.1.4.1.1466.115.121.1.3 DESC 'Attribute Type Description' )",
-      .abfn          =  "AttributeTypeDescription = LPAREN WSP\n"
+      .abnf          =  "AttributeTypeDescription = LPAREN WSP\n"
                         "    numericoid                      ; object identifier\n"
                         "    [ SP \"NAME\" SP qdescrs ]      ; short names (descriptors)\n"
                         "    [ SP \"DESC\" SP qdstring ]     ; description\n"
@@ -450,7 +450,7 @@ const struct ldapschema_spec ldapschema_spec[] =
       .re_pcre       =  NULL,
       .source        =  "RFC 4517 Section 3.3.1",
       .spec_type     =  LDAPSCHEMA_SPEC_RFC,
-      .spec_title    =  "4517",
+      .spec_name     =  "4517",
       .spec_section  =  "3.3.1",
       .examples      =  (const char *[]){
                            "( 2.5.18.1 NAME 'createTimestamp'"
@@ -467,12 +467,12 @@ const struct ldapschema_spec ldapschema_spec[] =
       .desc          =  NULL,
       .flags         =  0,
       .def           =  NULL,
-      .abfn          =  NULL,
+      .abnf          =  NULL,
       .re_posix      =  NULL,
       .re_pcre       =  NULL,
       .source        =  NULL,
       .spec_type     =  0,
-      .spec_title    =  NULL,
+      .spec_name     =  NULL,
       .spec_section  =  NULL,
       .examples      =  NULL,
    },
