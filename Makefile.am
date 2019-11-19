@@ -288,7 +288,7 @@ if LDAPUTILS_MAINTAINER
    noinst_PROGRAMS			+= src/oidspectool
 endif
 src_oidspectool_DEPENDENCIES		= Makefile
-src_oidspectool_CPPFLAGS		= -DPROGRAM_NAME="\"oidspectool\"" -Isrc/utils/oidspectool -DHAVE_CONFIG_H=1
+src_oidspectool_CPPFLAGS		= -DPROGRAM_NAME="\"oidspectool\"" -Isrc/utils/oidspectool -I$(srcdir)/src/utils/oidspectool -DHAVE_CONFIG_H=1
 src_oidspectool_CFLAGS			= -O2 -W
 src_oidspectool_YFLAGS			= $(AM_YFLAGS)
 src_oidspectool_LDFLAGS			= $(AM_LDFLAGS)
