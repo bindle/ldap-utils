@@ -77,6 +77,7 @@ AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 AC_USE_SYSTEM_EXTENSIONS # replaces AC_AIX AC_GNU_SOURCE AC_MINIX
 AC_C_BIGENDIAN
+AC_C_INLINE
 
 # Version Info:
 #    Current    -- the current version number of this API
@@ -107,6 +108,7 @@ AC_PROG_LN_S
 LT_INIT(dlopen disable-fast-install win32-dll)
 
 # check for common functions
+AC_FUNC_ALLOCA
 AC_FUNC_FORK
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
@@ -166,7 +168,10 @@ AC_CHECK_HEADERS([termios.h],,         [AC_MSG_ERROR([missing required header])]
 AC_CHECK_HEADERS([ldap.h],,            [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([getopt.h],,          [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([signal.h],,          [AC_MSG_ERROR([missing required header])])
+AC_CHECK_HEADERS([libintl.h])
+AC_CHECK_HEADERS([malloc.h])
 AC_CHECK_HEADERS([sgtty.h])
+AC_CHECK_HEADERS([stddef.h])
 
 # initiates bindle tools macros
 AC_BINDLE(contrib/bindletools)
