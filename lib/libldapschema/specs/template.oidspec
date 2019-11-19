@@ -1,0 +1,31 @@
+{
+   // Documentation regarding OID described in OID specification (i.e. copy
+   // of relevent documentation) which should not be compiled into
+   // libldapschema.la.  Comments are cheap, please be detailed.
+   //
+   .oid           =  "1.3.6.1.4.1.1466.115.121.1.6",                        // OID being described
+   .name          =  "BitString",                                           // One work name of OID
+   .desc          =  "Bit String",                                          // short description of OID
+   .flags         =  LDAPSCHEMA_O_READABLE,                                 // relevant ldapschema flags from ldapschema.h 
+   .type          =  LDAPSCHEMA_SYNTAX,                                     // OID type (i.e. syntax, matching rule, etc)
+   .class         =  LDAPSCHEMA_CLASS_ASCII,                                // data class (i.e. utf8, integer, image, etc)
+   .def           =  "( 1.3.6.1.4.1.1466.115.121.1.6 DESC 'Bit String' )",  // official definition of OID
+   .abnf          =  "BitString    = SQUOTE *binary-digit SQUOTE \"B\"\n"   // if a syntax, the syntax's ABNF
+                     "SQUOTE  = %x27 ; single quote (\"'\")\n"
+                     "binary-digit = \"0\" / \"1\"\n",
+   .re_posix      =  "^('[01]{1,}'B)$",                                     // POSIX regex equivalent of ABNF
+   .re_pcre       =  "^('[01]+'B)$",                                        // PCRE equivalent of ABNF
+   .spec          =  "RFC 4517: LDAP: Syntaxes and Matching Rules",         // name of specification which defines/declares OID
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,                                   // type of specification
+   .spec_name     =  "4517",                                                // short name of specification
+   .spec_section  =  "3.3.2",                                               // section of specification which defines/declares OID
+   .spec_source   =  NULL,                                                  // URL of specification if not derivable from .spec_type
+   .spec_vendor   =  "IETF",                                                // Vendor/author of spec
+   .examples      =  (const char *[])
+                     {
+                        "'0101111101'B",
+                        NULL,
+                     },
+};
+
+
