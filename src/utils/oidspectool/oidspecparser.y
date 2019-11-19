@@ -121,6 +121,7 @@ strings           :
                   ;
 
 flags             :
+                  | '0'
                   | FLAG                              { my_yyappend( $1 ); }
                   | flags '|' FLAG                    { my_yyappend( $3 ); }
                   ;
