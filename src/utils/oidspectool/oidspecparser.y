@@ -46,7 +46,7 @@ int yylex(void);
 } 
 
 %token NULLSTR
-%token FLD_ABFN
+%token FLD_ABNF
 %token FLD_CLASS
 %token FLD_DEF
 %token FLD_DESC
@@ -90,7 +90,7 @@ fields            :
                   ;
 
 field             :
-                  | FLD_ABFN         '=' strings      { my_yycommit( FLD_ABFN             ); }
+                  | FLD_ABNF         '=' strings      { my_yycommit( FLD_ABNF             ); }
                   | FLD_CLASS        '=' CLASS        { my_yysubmit( FLD_CLASS,        $3 ); }
                   | FLD_DESC         '=' CSTRING      { my_yysubmit( FLD_DESC,         $3 ); }
                   | FLD_DEF          '=' CSTRING      { my_yysubmit( FLD_DEF,          $3 ); }

@@ -89,7 +89,7 @@ int yylex();
 "LDAPSCHEMA_SPEC_RFC"               { yylval.str = yytext; return(SPEC_TYPE); }
 "LDAPSCHEMA_SPEC_URL"               { yylval.str = yytext; return(SPEC_TYPE); }
 
-".abfn"                             { return(FLD_ABFN); }
+".abnf"                             { return(FLD_ABNF); }
 ".class"                            { return(FLD_CLASS); }
 ".def"                              { return(FLD_DEF); }
 ".desc"                             { return(FLD_DESC); }

@@ -37,7 +37,7 @@
    .type          =  LDAPSCHEMA_SYNTAX,
    .class         =  LDAPSCHEMA_CLASS_ASCII,
    .def           =  "( 1.3.6.1.1.15.7 DESC 'X.509 Algorithm Identifier' )",
-   .abfn          =  "AlgorithmIdentifier = \"{\" sp ai-algorithm\n"
+   .abnf          =  "AlgorithmIdentifier = \"{\" sp ai-algorithm\n"
                      "     [ \",\" sp ai-parameters ] sp \"}\"\n"
                      "\n"
                      "ai-algorithm = id-algorithm msp OBJECT-IDENTIFIER\n"
