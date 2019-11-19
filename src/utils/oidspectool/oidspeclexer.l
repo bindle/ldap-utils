@@ -51,8 +51,7 @@ int yylex();
 "const "[^\n]+"="[^\n]*[\n]         ; /* ignore non-code blocks (allows oidspectool to process its own output) */
 "&"[_a-zA-Z0-9]+","                 ; /* ignore pointer references (allows oidspectool to process its own output) */
 
-["].*[^\\]["]                       { yylval.str = yytext; return(CSTRING); }
-["]["]                              { yylval.str = yytext; return(CSTRING); }
+["]([^"]|[\\]["])*["]               { yylval.str = yytext; return(CSTRING); }
 "NULL"                              { yylval.str = yytext; return(NULLSTR); }
 
 "LDAPSCHEMA_O_SINGLEVALUE"          { yylval.str = yytext; return(FLAG); }
