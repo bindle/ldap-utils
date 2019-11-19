@@ -106,7 +106,6 @@ struct my_config
    int            makefile;
    const char   * output;
    int            verbose;
-   int            sparse;
 };
 
 typedef struct my_config MyConfig;
@@ -225,13 +224,12 @@ int main(int argc, char * argv[])
    int            opt_index;
    MyConfig       config;
 
-   static char          short_options[]   = "hmno:svV";
+   static char          short_options[]   = "hmno:vV";
    static struct option long_options[]    =
    {
       {"help",          no_argument, 0, 'h'},
       {"makefile",      no_argument, 0, 'm'},
       {"dryrun",        no_argument, 0, 'n'},
-      {"sparse",        no_argument, 0, 's'},
       {"verbose",       no_argument, 0, 'v'},
       {"version",       no_argument, 0, 'V'},
       {NULL,            0,           0, 0  }
@@ -262,10 +260,6 @@ int main(int argc, char * argv[])
 
          case 'o':
          config.output = optarg;
-         break;
-
-         case 's':
-         config.sparse++;
          break;
 
          case 'V':
@@ -576,6 +570,8 @@ int my_save_c(MyConfig * cnf, int argc, char **argv, FILE * fs)
    time_t         timer;
    struct tm    * tm_info;
 
+   assert(cnf != NULL);
+
    // print header
    fprintf(fs, "//\n");
    time(&timer);
@@ -600,8 +596,6 @@ int my_save_c(MyConfig * cnf, int argc, char **argv, FILE * fs)
       my_save_c_oidspec(stdout, oidspeclist[pos], pos);
 
    // generate array
-   if ((cnf->sparse))
-      return(0);
    fprintf(fs, "const size_t ldapschema_oidspecs_len = %zu;\n", oidspeclist_len);
    fprintf(fs, "const struct ldapschema_spec * ldapschema_oidspecs[] =\n");
    fprintf(fs, "{\n");
@@ -708,6 +702,8 @@ int my_save_makefile(MyConfig * cnf, int argc, char **argv, FILE * fs)
    time_t         timer;
    struct tm    * tm_info;
 
+   assert(cnf != NULL);
+
    // print header
    fprintf(fs, "#\n");
    time(&timer);
@@ -726,10 +722,6 @@ int my_save_makefile(MyConfig * cnf, int argc, char **argv, FILE * fs)
    for(pos = 0; pos < filelist_len; pos++)
       fprintf(fs, "OIDSPEC_FILES += %s\n", filelist[pos]);
 
-   // generate array
-   if ((cnf->sparse))
-      return(0);
-
    return(0);
 }
 
@@ -745,7 +737,6 @@ void my_usage(void)
    printf("  -m, --makefile            output makefile include instead of C source\n");
    printf("  -n, --dryrun              show what would be done, but do nothing\n");
    printf("  -o file                   output file\n");
-   printf("  -s, --sparse              sparse output, exclude sorted array in C source\n");
    printf("  -v, --verbose             run in verbose mode\n");
    printf("  -V, --version             print version number and exit\n");
    printf("\n");
