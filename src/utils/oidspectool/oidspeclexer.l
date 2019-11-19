@@ -63,6 +63,7 @@ int yylex();
 "LDAPSCHEMA_O_OBJECTCLASS"          { yylval.str = yytext; return(FLAG); }
 "LDAPSCHEMA_O_READABLE"             { yylval.str = yytext; return(FLAG); }
 "LDAPSCHEMA_O_COMMON_ABNF"          { yylval.str = yytext; return(FLAG); }
+"LDAPSCHEMA_O_SCHEMA_ABNF"          { yylval.str = yytext; return(FLAG); }
 "LDAPSCHEMA_O_DEPRECATED"           { yylval.str = yytext; return(FLAG); }
 
 "LDAPSCHEMA_SYNTAX"                 { yylval.str = yytext; return(TYPE); }
