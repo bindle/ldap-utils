@@ -602,6 +602,11 @@ int my_save_c(MyConfig * cnf, int argc, char **argv, FILE * fs)
 
    // save OID specs
    for(pos = 0; pos < oidspeclist_len; pos++)
+      fprintf(fs, "extern const struct ldapschema_spec oidspec%zu;\n", pos);
+   fprintf(fs, "extern const size_t ldapschema_oidspecs_len;\n");
+   fprintf(fs, "extern const struct ldapschema_spec * ldapschema_oidspecs[];\n");
+   fprintf(fs, "\n\n");
+   for(pos = 0; pos < oidspeclist_len; pos++)
       my_save_c_oidspec(fs, oidspeclist[pos], pos);
 
    // generate array
