@@ -2047,7 +2047,7 @@
                      "line-char     = %x00-23\n"
                      "                / (%x5C \"24\")  ; escaped \"$\"\n"
                      "                / %x25-5B\n"
-                     "                / (%x5C \"5C\")  ; escaped \"\\"\n"
+                     "                / (%x5C \"5C\")  ; escaped \"\\\"\n"
                      "                / %x5D-7F\n"
                      "                / UTFMB\n"
                      "\n"
@@ -2344,7 +2344,7 @@
                      "ttx-value-octet = %x00-23\n"
                      "                  / (%x5C \"24\")  ; escaped \"$\"\n"
                      "                  / %x25-5B\n"
-                     "                  / (%x5C \"5C\")  ; escaped \"\\"\n"
+                     "                  / (%x5C \"5C\")  ; escaped \"\\\"\n"
                      "                  / %x5D-FF\n",
    .re_posix      =  NULL,
    .re_pcre       =  NULL,
