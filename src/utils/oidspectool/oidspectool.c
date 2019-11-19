@@ -106,6 +106,8 @@ struct my_config
    int            format;
    const char   * output;
    const char   * prune;
+   const char   * name;
+   char           NAME[256];
    int            verbose;
 };
 
@@ -230,6 +232,7 @@ int main(int argc, char * argv[])
    int            c;
    int            err;
    int            opt_index;
+   size_t         pos;
 
    static char          short_options[]   = "hHmno:p:vV";
    static struct option long_options[]    =
@@ -238,6 +241,7 @@ int main(int argc, char * argv[])
       {"header",        no_argument, 0, 'H'},
       {"makefile",      no_argument, 0, 'm'},
       {"dryrun",        no_argument, 0, 'n'},
+      {"name",    required_argument, 0, 'N'},
       {"prune",   required_argument, 0, 'p'},
       {"verbose",       no_argument, 0, 'v'},
       {"version",       no_argument, 0, 'V'},
@@ -245,7 +249,9 @@ int main(int argc, char * argv[])
    };
 
    bzero(&config, sizeof(config));
-   config.format = 'c';
+   config.format  = 'c';
+   config.name    = "ldapschema_oidspecs";
+   config.output  = "-";
 
    // loops through args
    while((c = getopt_long(argc, argv, short_options, long_options, &opt_index)) != -1)
@@ -270,6 +276,10 @@ int main(int argc, char * argv[])
 
          case 'n':
          config.dryrun++;
+         break;
+
+         case 'N':
+         config.name = optarg;
          break;
 
          case 'o':
@@ -327,7 +337,10 @@ int main(int argc, char * argv[])
    if ((filelist = malloc(sizeof(char *))) == NULL)
       return(2);
    filelist[0] = NULL;
-
+   strncpy(config.NAME, config.name, sizeof(config.NAME));
+   for(pos = 0; ((config.NAME[pos])); pos++)
+      if ( (config.NAME[pos] >= 'a') && (config.NAME[pos] <= 'z') )
+         config.NAME[pos] = config.NAME[pos] - 'a' + 'A';
 
    // loops through files
    while ((argc - optind))
@@ -629,6 +642,7 @@ int my_save_c(MyConfig * cnf, int argc, char **argv, FILE * fs)
       fprintf(fs, " %s", argv[pos]);
    fprintf(fs, "\n");
    fprintf(fs, "//\n");
+   fprintf(fs, "#define _%s 1\n", config.NAME);
    fprintf(fs, "\n");
    fprintf(fs, "#include <stdio.h>\n");
    fprintf(fs, "#include \"lspecdata.h\"\n");
@@ -642,11 +656,11 @@ int my_save_c(MyConfig * cnf, int argc, char **argv, FILE * fs)
       my_save_c_oidspec(fs, oidspeclist[pos], pos);
 
    // generate array
-   fprintf(fs, "const size_t ldapschema_oidspecs_len = %zu;\n", oidspeclist_len);
-   fprintf(fs, "const struct ldapschema_spec * ldapschema_oidspecs[] =\n");
+   fprintf(fs, "const size_t %s_len = %zu;\n", config.name, oidspeclist_len);
+   fprintf(fs, "const struct ldapschema_spec * %s[] =\n", config.name);
    fprintf(fs, "{\n");
    for(pos = 0; pos < oidspeclist_len; pos++)
-      fprintf(fs, "  &oidspec%zu, // %s\n", pos, oidspeclist[pos]->oid[0]);
+      fprintf(fs, "  &%s%zu, // %s\n", config.name, pos, oidspeclist[pos]->oid[0]);
    fprintf(fs, "  NULL\n");
    fprintf(fs, "};\n");
    fprintf(fs, "\n");
@@ -668,7 +682,7 @@ int my_save_c_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx)
 
    fprintf(fs, "// %s\n", oidspec->oid[0]);
    fprintf(fs, "// %s:%i\n", my_fs_prunepath(oidspec->filename), oidspec->lineno);
-   fprintf(fs, "const struct ldapschema_spec oidspec%zu =\n", idx);
+   fprintf(fs, "const struct ldapschema_spec %s%zu =\n", config.name, idx);
    fprintf(fs, "{\n");
    my_save_c_oidspec_strs(fs, ".oid",            oidspec->oid);
    my_save_c_oidspec_strs(fs, ".name",           oidspec->name);
@@ -778,6 +792,8 @@ int my_save_h(MyConfig * cnf, int argc, char **argv, FILE * fs)
       fprintf(fs, " %s", argv[pos]);
    fprintf(fs, "\n");
    fprintf(fs, "//\n");
+   fprintf(fs, "#ifndef _%s_H\n", config.NAME);
+   fprintf(fs, "#define _%s_H 1\n", config.NAME);
    fprintf(fs, "\n");
    fprintf(fs, "#include <stdio.h>\n");
    fprintf(fs, "#include \"lspec.h\"\n");
@@ -785,10 +801,11 @@ int my_save_h(MyConfig * cnf, int argc, char **argv, FILE * fs)
 
    // save OID specs
    for(pos = 0; pos < oidspeclist_len; pos++)
-      fprintf(fs, "extern const struct ldapschema_spec oidspec%zu;\n", pos);
-   fprintf(fs, "extern const size_t ldapschema_oidspecs_len;\n");
-   fprintf(fs, "extern const struct ldapschema_spec * ldapschema_oidspecs[];\n");
-   fprintf(fs, "/* end of header */\n");
+      fprintf(fs, "extern const struct ldapschema_spec %s%zu;\n", config.name, pos);
+   fprintf(fs, "\n");
+   fprintf(fs, "extern const size_t %s_len;\n", config.name);
+   fprintf(fs, "extern const struct ldapschema_spec * %s[];\n", config.name);
+   fprintf(fs, "\n\n#endif /* end of header */\n");
 
    return(0);
 }
@@ -823,7 +840,8 @@ int my_save_makefile(MyConfig * cnf, int argc, char **argv, FILE * fs)
 
    // save file list
    for(pos = 0; pos < filelist_len; pos++)
-      fprintf(fs, "OIDSPEC_FILES += %s\n", my_fs_prunepath(filelist[pos]));
+      fprintf(fs, "%s += %s\n", config.NAME, my_fs_prunepath(filelist[pos]));
+   fprintf(fs, "\n\n# end of makefile include\n");
 
    return(0);
 }
@@ -840,6 +858,7 @@ void my_usage(void)
    printf("  -H, --header              output C header instead of C source\n");
    printf("  -m, --makefile            output makefile include instead of C source\n");
    printf("  -n, --dryrun              show what would be done, but do nothing\n");
+   printf("  -N name, --name=name      name of output variable(default: \"%s\")\n", config.name);
    printf("  -o file                   output file\n");
    printf("  -p str, --prune=str       prune string from recorded filenames\n");
    printf("  -v, --verbose             run in verbose mode\n");
