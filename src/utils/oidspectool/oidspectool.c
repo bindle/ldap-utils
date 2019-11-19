@@ -881,6 +881,11 @@ int my_yyoidspec(void)
       fprintf(stderr, "%s: %s: %i: spec missing .type field\n", PROGRAM_NAME, cur_filename, yylineno);
       return(1);
    };
+   if (!(cur_oidspec->desc))
+   {
+      fprintf(stderr, "%s: %s: %i: spec missing .desc field\n", PROGRAM_NAME, cur_filename, yylineno);
+      return(1);
+   };
    if ((config.verbose))
       printf("adding %s (%s) ...\n", cur_oidspec->oid[0], cur_oidspec->desc[0]);
 
