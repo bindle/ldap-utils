@@ -105,6 +105,7 @@ enum my_format
    OidSpecFormatHeader,
    OidSpecFormatMakefile,
    OidSpecFormatSource,
+   OidSpecFormatUnknown,
 };
 typedef enum my_format MyFormat;
 
@@ -116,6 +117,8 @@ struct my_config
    const char   * output;
    const char   * prune;
    const char   * name;
+   const char   * type;
+   const char  ** includes;
    char           NAME[256];
    int            verbose;
 };
@@ -154,23 +157,24 @@ typedef struct my_oidspec OIDSpec;
 /////////////////
 #pragma mark - Variables
 
-char           ** string_queue;
-const char      * cur_filename;
-OIDSpec         * cur_oidspec;
-OIDSpec        ** oidspeclist;
-size_t            oidspeclist_len;
-char           ** filelist;
-size_t            filelist_len;
+char           ** string_queue      = NULL;
+const char      * cur_filename      = NULL;
+OIDSpec         * cur_oidspec       = NULL;
+OIDSpec        ** oidspeclist       = NULL;
+size_t            oidspeclist_len   = 0;
+char           ** filelist          = NULL;
+size_t            filelist_len      = 0;
 
 
 MyConfig cfg =
 {
    .dryrun        = 0,
    .verbose       = 0,
-   .format        = OidSpecFormatSource,
+   .format        = OidSpecFormatUnknown,
    .output        = "-",
    .prune         = NULL,
    .name          = "ldapschema_oidspecs",
+   .type          = "const struct ldapschema_spec",
 };
 
 
@@ -209,13 +213,13 @@ OIDSpec * my_oidspec_alloc(void);
 int my_save(int argc, char **argv);
 
 // save list of OID specifications as C header file
-int my_save_header(int argc, char **argv, FILE * fs);
+int my_save_header(FILE * fs);
 
 // save list of OID spec files as Makefile include
-int my_save_makefile(int argc, char **argv, FILE * fs);
+int my_save_makefile(FILE * fs);
 
 // save list of OID specifications as C source file
-int my_save_source(int argc, char **argv, FILE * fs);
+int my_save_source(FILE * fs);
 
 // save individual OID specification
 int my_save_source_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx);
@@ -252,20 +256,24 @@ int main(int argc, char * argv[])
    int            err;
    int            opt_index;
    size_t         pos;
+   void         * ptr;
 
-   static char          short_options[]   = "hHmno:p:vV";
+   static char          short_options[]   = "C:hHMnN:o:p:ST:vV";
    static struct option long_options[]    =
    {
-      {"help",          no_argument, 0, 'h'},
-      {"header",        no_argument, 0, 'H'},
-      {"makefile",      no_argument, 0, 'm'},
-      {"dryrun",        no_argument, 0, 'n'},
-      {"name",    required_argument, 0, 'N'},
-      {"prune",   required_argument, 0, 'p'},
-      {"source",        no_argument, 0, 's'},
-      {"verbose",       no_argument, 0, 'v'},
-      {"version",       no_argument, 0, 'V'},
-      {NULL,            0,           0, 0  }
+      {"include",       required_argument, 0, 'I'},
+      {"name",          required_argument, 0, 'N'},
+      {"output",        required_argument, 0, 'o'},
+      {"prune",         required_argument, 0, 'p'},
+      {"type",          required_argument, 0, 'T'},
+      {"help",          no_argument,       0, 'h'},
+      {"header",        no_argument,       0, 'H'},
+      {"makefile",      no_argument,       0, 'M'},
+      {"dryrun",        no_argument,       0, 'n'},
+      {"source",        no_argument,       0, 'S'},
+      {"verbose",       no_argument,       0, 'v'},
+      {"version",       no_argument,       0, 'V'},
+      {NULL,            0,                 0, 0  }
    };
 
    // loops through args
@@ -285,7 +293,23 @@ int main(int argc, char * argv[])
          cfg.format = OidSpecFormatHeader;
          break;
 
-         case 'm':
+         case 'I':
+         for(pos = 0; ( ((cfg.includes)) && ((cfg.includes[pos])) ); pos++);
+         if ((ptr = realloc(cfg.includes, (sizeof(char *)*(pos+2)))) == NULL)
+         {
+            fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
+            return(1);
+         };
+         cfg.includes = ptr;
+         if ((cfg.includes[pos] = strdup(optarg)) == NULL)
+         {
+            fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
+            return(1);
+         };
+         cfg.includes[pos+1] = NULL;
+         break;
+
+         case 'M':
          cfg.format = OidSpecFormatMakefile;
          break;
 
@@ -305,8 +329,12 @@ int main(int argc, char * argv[])
          cfg.prune = optarg;
          break;
 
-         case 's':
+         case 'S':
          cfg.format = OidSpecFormatSource;
+         break;
+
+         case 'T':
+         cfg.type = optarg;
          break;
 
          case 'V':
@@ -341,13 +369,14 @@ int main(int argc, char * argv[])
       fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
       return(1);
    };
+   if ( (!(cfg.dryrun)) && (cfg.format == OidSpecFormatUnknown) )
+   {
+      fprintf(stderr, "%s: missing output format\n", PROGRAM_NAME);
+      fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
+      return(1);
+   };
 
    // initialize global variables
-   string_queue      = NULL;
-   oidspeclist       = NULL;
-   oidspeclist_len   = 0;
-   filelist          = NULL;
-   filelist_len      = 0;
    if ((cur_oidspec = my_oidspec_alloc()) == NULL)
       return(2);
    if ((oidspeclist = malloc(sizeof(OIDSpec *))) == NULL)
@@ -601,6 +630,11 @@ void my_oidspec_free_strs(char ** strs)
 int my_save(int argc, char **argv)
 {
    FILE         * fs;
+   size_t         pos;
+   const char   * comment;
+   char           buff[256];
+   time_t         timer;
+   struct tm    * tm_info;
 
    if ((cfg.dryrun))
       return(0);
@@ -618,18 +652,35 @@ int my_save(int argc, char **argv)
       };
    };
 
+   // prints file header
+   if (cfg.format == OidSpecFormatMakefile)
+      comment = "#";
+   else
+      comment = "//";
+   fprintf(fs, "%s\n", comment);
+   time(&timer);
+   tm_info = localtime(&timer);
+   strftime(buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", tm_info);
+   fprintf(fs, "%s Generated on:   %s\n", comment, buff);
+   fprintf(fs, "%s Generated with: %s \\\n", comment, argv[0]);
+   for(pos = 1; pos < ((size_t)(argc-1)); pos++)
+      fprintf(fs, "%s                    %s \\\n", comment, argv[pos]);
+   fprintf(fs, "%s                    %s\n", comment, argv[pos]);
+   fprintf(fs, "\n");
+   fprintf(fs, "%s\n", comment);
+
    switch(cfg.format)
    {
          case OidSpecFormatHeader:
-         my_save_header(argc, argv, fs);
+         my_save_header(fs);
          break;
 
          case OidSpecFormatMakefile:
-         my_save_makefile(argc, argv, fs);
+         my_save_makefile(fs);
          break;
 
          default:
-         my_save_source(argc, argv, fs);
+         my_save_source(fs);
          break;
    };
 
@@ -642,40 +693,26 @@ int my_save(int argc, char **argv)
 
 
 /// save list of OID specifications as C header file
-/// @param[in] argc   number of arguments
-/// @param[in] argv   array of arguments
 /// @param[in] fs     FILE stream of output file
-int my_save_header(int argc, char **argv, FILE * fs)
+int my_save_header(FILE * fs)
 {
    size_t         pos;
-   char           buff[256];
-   time_t         timer;
-   struct tm    * tm_info;
 
    // print header
-   fprintf(fs, "//\n");
-   time(&timer);
-   tm_info = localtime(&timer);
-   strftime(buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", tm_info);
-   fprintf(fs, "// Generated on:   %s\n", buff);
-   fprintf(fs, "// Generated with:");
-   for(pos = 0; pos < (size_t)argc; pos++)
-      fprintf(fs, " %s", argv[pos]);
-   fprintf(fs, "\n");
-   fprintf(fs, "//\n");
    fprintf(fs, "#ifndef _%s_H\n", cfg.NAME);
    fprintf(fs, "#define _%s_H 1\n", cfg.NAME);
    fprintf(fs, "\n");
    fprintf(fs, "#include <stdio.h>\n");
-   fprintf(fs, "#include \"lspec.h\"\n");
+   for(pos = 0; ( ((cfg.includes)) && ((cfg.includes[pos])) ); pos++)
+      fprintf(fs, "#include <%s>\n", cfg.includes[pos]);
    fprintf(fs, "\n");
 
    // save OID specs
    for(pos = 0; pos < oidspeclist_len; pos++)
-      fprintf(fs, "extern const struct ldapschema_spec %s%zu;\n", cfg.name, pos);
+      fprintf(fs, "extern %s %s%zu;\n", cfg.type, cfg.name, pos);
    fprintf(fs, "\n");
    fprintf(fs, "extern const size_t %s_len;\n", cfg.name);
-   fprintf(fs, "extern const struct ldapschema_spec * %s[];\n", cfg.name);
+   fprintf(fs, "extern %s * %s[];\n", cfg.type, cfg.name);
    fprintf(fs, "\n\n#endif /* end of header */\n");
 
    return(0);
@@ -683,30 +720,13 @@ int my_save_header(int argc, char **argv, FILE * fs)
 
 
 /// save list of OID spec files as Makefile include
-/// @param[in] argc   number of arguments
-/// @param[in] argv   array of arguments
 /// @param[in] fs     FILE stream of output file
-int my_save_makefile(int argc, char **argv, FILE * fs)
+int my_save_makefile(FILE * fs)
 {
    size_t         pos;
-   char           buff[256];
-   time_t         timer;
-   struct tm    * tm_info;
-
-   // print header
-   fprintf(fs, "#\n");
-   time(&timer);
-   tm_info = localtime(&timer);
-   strftime(buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", tm_info);
-   fprintf(fs, "# Generated on:   %s\n", buff);
-   fprintf(fs, "# Generated with:");
-   for(pos = 0; pos < (size_t)argc; pos++)
-      fprintf(fs, " %s", argv[pos]);
-   fprintf(fs, "\n");
-   fprintf(fs, "#\n");
-   fprintf(fs, "\n");
 
    // save file list
+   fprintf(fs, "\n");
    for(pos = 0; pos < filelist_len; pos++)
       fprintf(fs, "%s += %s\n", cfg.NAME, my_fs_prunepath(filelist[pos]));
    fprintf(fs, "\n\n# end of makefile include\n");
@@ -716,31 +736,17 @@ int my_save_makefile(int argc, char **argv, FILE * fs)
 
 
 /// save list of OID specifications as C source file
-/// @param[in] argc   number of arguments
-/// @param[in] argv   array of arguments
 /// @param[in] fs     FILE stream of output file
-int my_save_source(int argc, char **argv, FILE * fs)
+int my_save_source(FILE * fs)
 {
    size_t         pos;
-   char           buff[256];
-   time_t         timer;
-   struct tm    * tm_info;
 
    // print header
-   fprintf(fs, "//\n");
-   time(&timer);
-   tm_info = localtime(&timer);
-   strftime(buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", tm_info);
-   fprintf(fs, "// Generated on:   %s\n", buff);
-   fprintf(fs, "// Generated with:");
-   for(pos = 0; pos < (size_t)argc; pos++)
-      fprintf(fs, " %s", argv[pos]);
-   fprintf(fs, "\n");
-   fprintf(fs, "//\n");
    fprintf(fs, "#define _%s 1\n", cfg.NAME);
    fprintf(fs, "\n");
    fprintf(fs, "#include <stdio.h>\n");
-   fprintf(fs, "#include \"lspecdata.h\"\n");
+   for(pos = 0; ( ((cfg.includes)) && ((cfg.includes[pos])) ); pos++)
+      fprintf(fs, "#include <%s>\n", cfg.includes[pos]);
    fprintf(fs, "\n");
 
    // sort OIDs
@@ -752,7 +758,7 @@ int my_save_source(int argc, char **argv, FILE * fs)
 
    // generate array
    fprintf(fs, "const size_t %s_len = %zu;\n", cfg.name, oidspeclist_len);
-   fprintf(fs, "const struct ldapschema_spec * %s[] =\n", cfg.name);
+   fprintf(fs, "%s * %s[] =\n", cfg.type, cfg.name);
    fprintf(fs, "{\n");
    for(pos = 0; pos < oidspeclist_len; pos++)
       fprintf(fs, "  &%s%zu, // %s\n", cfg.name, pos, oidspeclist[pos]->oid[0]);
@@ -777,7 +783,7 @@ int my_save_source_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx)
 
    fprintf(fs, "// %s\n", oidspec->oid[0]);
    fprintf(fs, "// %s:%i\n", my_fs_prunepath(oidspec->filename), oidspec->lineno);
-   fprintf(fs, "const struct ldapschema_spec %s%zu =\n", cfg.name, idx);
+   fprintf(fs, "%s %s%zu =\n", cfg.type, cfg.name, idx);
    fprintf(fs, "{\n");
    my_save_source_oidspec_strs(fs, ".oid",            oidspec->oid);
    my_save_source_oidspec_strs(fs, ".name",           oidspec->name);
@@ -865,19 +871,23 @@ int my_save_source_oidspec_strs(FILE * fs, const char * fld, char ** vals)
 /// prints program usage and exits
 void my_usage(void)
 {
-   printf("Usage: %s [options] [file ...]\n", PROGRAM_NAME);
-   printf("       %s [options] [dir ...]\n", PROGRAM_NAME);
-   printf("Options:\n");
+   printf("Usage: %s --source [OPTIONS] [path ...]\n", PROGRAM_NAME);
+   printf("       %s --header [OPTIONS] [path ...]\n", PROGRAM_NAME);
+   printf("       %s --makefile [OPTIONS] [path ...]\n", PROGRAM_NAME);
+   printf("OPTIONS:\n");
    printf("  -h, --help                print this help and exit\n");
-   printf("  -H, --header              output C header instead of C source\n");
-   printf("  -m, --makefile            output makefile include instead of C source\n");
    printf("  -n, --dryrun              show what would be done, but do nothing\n");
-   printf("  -N name, --name=name      name of output variable(default: \"%s\")\n", cfg.name);
-   printf("  -o file                   output file\n");
-   printf("  -p str, --prune=str       prune string from recorded filenames\n");
-   printf("  -s, --source              output C source\n");
+   printf("  -o file                   output file (default: \"%s\")\n", cfg.output);
    printf("  -v, --verbose             run in verbose mode\n");
    printf("  -V, --version             print version number and exit\n");
+   printf("  --include=header          add CPP #include in source and header (default: none)\n");
+   printf("  --name=name               name of output variable(default: \"%s\")\n", cfg.name);
+   printf("  --prune=str               prune string from saved filenames (default: none)\n");
+   printf("  --type=type               set output variable type(default: \"%s\")\n", cfg.type);
+   printf("FORMATS:\n");
+   printf("  --header                  output C header\n");
+   printf("  --makefile                output makefile include\n");
+   printf("  --source                  output C source\n");
    printf("\n");
    return;
 }
