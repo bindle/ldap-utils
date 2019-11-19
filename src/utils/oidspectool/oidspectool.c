@@ -208,23 +208,23 @@ OIDSpec * my_oidspec_alloc(void);
 // save list of OID specifications
 int my_save(int argc, char **argv);
 
-// save list of OID specifications as C source file
-int my_save_c(int argc, char **argv, FILE * fs);
-
-// save individual OID specification
-int my_save_c_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx);
-
-// save OID specification field as bit flags
-int my_save_c_oidspec_flgs(FILE * fs, const char * fld, char ** vals);
-
-// save OID specification field as const strings
-int my_save_c_oidspec_strs(FILE * fs, const char * fld, char ** vals);
-
 // save list of OID specifications as C header file
-int my_save_h(int argc, char **argv, FILE * fs);
+int my_save_header(int argc, char **argv, FILE * fs);
 
 // save list of OID spec files as Makefile include
 int my_save_makefile(int argc, char **argv, FILE * fs);
+
+// save list of OID specifications as C source file
+int my_save_source(int argc, char **argv, FILE * fs);
+
+// save individual OID specification
+int my_save_source_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx);
+
+// save OID specification field as bit flags
+int my_save_source_oidspec_flgs(FILE * fs, const char * fld, char ** vals);
+
+// save OID specification field as const strings
+int my_save_source_oidspec_strs(FILE * fs, const char * fld, char ** vals);
 
 // prints program usage and exits
 void my_usage(void);
@@ -616,7 +616,7 @@ int my_save(int argc, char **argv)
    switch(cfg.format)
    {
          case OidSpecFormatHeader:
-         my_save_h(argc, argv, fs);
+         my_save_header(argc, argv, fs);
          break;
 
          case OidSpecFormatMakefile:
@@ -624,7 +624,7 @@ int my_save(int argc, char **argv)
          break;
 
          default:
-         my_save_c(argc, argv, fs);
+         my_save_source(argc, argv, fs);
          break;
    };
 
@@ -636,158 +636,11 @@ int my_save(int argc, char **argv)
 }
 
 
-/// save list of OID specifications as C source file
+/// save list of OID specifications as C header file
 /// @param[in] argc   number of arguments
 /// @param[in] argv   array of arguments
 /// @param[in] fs     FILE stream of output file
-int my_save_c(int argc, char **argv, FILE * fs)
-{
-   size_t         pos;
-   char           buff[256];
-   time_t         timer;
-   struct tm    * tm_info;
-
-   // print header
-   fprintf(fs, "//\n");
-   time(&timer);
-   tm_info = localtime(&timer);
-   strftime(buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", tm_info);
-   fprintf(fs, "// Generated on:   %s\n", buff);
-   fprintf(fs, "// Generated with:");
-   for(pos = 0; pos < (size_t)argc; pos++)
-      fprintf(fs, " %s", argv[pos]);
-   fprintf(fs, "\n");
-   fprintf(fs, "//\n");
-   fprintf(fs, "#define _%s 1\n", cfg.NAME);
-   fprintf(fs, "\n");
-   fprintf(fs, "#include <stdio.h>\n");
-   fprintf(fs, "#include \"lspecdata.h\"\n");
-   fprintf(fs, "\n");
-
-   // sort OIDs
-   qsort(oidspeclist, oidspeclist_len, sizeof(OIDSpec *), oidspec_cmp);
-
-   // save OID specs
-   for(pos = 0; pos < oidspeclist_len; pos++)
-      my_save_c_oidspec(fs, oidspeclist[pos], pos);
-
-   // generate array
-   fprintf(fs, "const size_t %s_len = %zu;\n", cfg.name, oidspeclist_len);
-   fprintf(fs, "const struct ldapschema_spec * %s[] =\n", cfg.name);
-   fprintf(fs, "{\n");
-   for(pos = 0; pos < oidspeclist_len; pos++)
-      fprintf(fs, "  &%s%zu, // %s\n", cfg.name, pos, oidspeclist[pos]->oid[0]);
-   fprintf(fs, "  NULL\n");
-   fprintf(fs, "};\n");
-   fprintf(fs, "\n");
-
-   // prints footer
-   fprintf(fs, "/* end of source */\n");
-
-   return(0);
-}
-
-
-/// save individual OID specification
-/// @param[in] fs         FILE stream of output file
-/// @param[in] oidspec    OID specification to save
-/// @param[in] idx        index or ID of OID specification
-int my_save_c_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx)
-{
-   size_t pos;
-
-   fprintf(fs, "// %s\n", oidspec->oid[0]);
-   fprintf(fs, "// %s:%i\n", my_fs_prunepath(oidspec->filename), oidspec->lineno);
-   fprintf(fs, "const struct ldapschema_spec %s%zu =\n", cfg.name, idx);
-   fprintf(fs, "{\n");
-   my_save_c_oidspec_strs(fs, ".oid",            oidspec->oid);
-   my_save_c_oidspec_strs(fs, ".name",           oidspec->name);
-   my_save_c_oidspec_strs(fs, ".desc",           oidspec->desc);
-   my_save_c_oidspec_flgs(fs, ".flags",          oidspec->flags);
-   my_save_c_oidspec_flgs(fs, ".type",           oidspec->type);
-   my_save_c_oidspec_flgs(fs, ".class",          oidspec->class);
-   my_save_c_oidspec_strs(fs, ".def",            oidspec->def);
-   my_save_c_oidspec_strs(fs, ".abnf",           oidspec->abnf);
-   my_save_c_oidspec_strs(fs, ".re_posix",       oidspec->re_posix);
-   my_save_c_oidspec_strs(fs, ".re_pcre",        oidspec->re_pcre);
-   my_save_c_oidspec_strs(fs, ".spec",           oidspec->spec);
-   my_save_c_oidspec_strs(fs, ".spec_type",      oidspec->spec_type);
-   my_save_c_oidspec_strs(fs, ".spec_name",      oidspec->spec_name);
-   my_save_c_oidspec_strs(fs, ".spec_section",   oidspec->spec_section);
-   my_save_c_oidspec_strs(fs, ".spec_source",    oidspec->spec_source);
-   my_save_c_oidspec_strs(fs, ".spec_vendor",    oidspec->spec_vendor);
-   fprintf(fs, "   %-15s =", ".examples");
-   if ((oidspec->examples))
-   {
-      fprintf(fs, " (const char *[])\n");
-      fprintf(fs, "%20s {\n", "");
-      for(pos = 0; ((oidspec->examples[pos])); pos++)
-         fprintf(fs, "%20s    %s,\n", "", oidspec->examples[pos]);
-      fprintf(fs, "%20s    NULL,\n", "");
-      fprintf(fs, "%20s },\n", "");
-   } else
-   {
-      fprintf(fs, " NULL,\n");
-   };
-   fprintf(fs, "};\n\n\n");
-
-   return(0);
-}
-
-
-/// save OID specification field as bit flags
-/// @param[in] fs     FILE stream of output file
-/// @param[in] fld    name of field
-/// @param[in] vals   array of values
-int my_save_c_oidspec_flgs(FILE * fs, const char * fld, char ** vals)
-{
-   size_t pos;
-
-   fprintf(fs, "   %-15s =", fld);
-   if ( (!(vals)) || (!(vals[0])) )
-   {
-      fprintf(fs, " 0,\n");
-      return(0);
-   };
-
-   fprintf(fs, " %s", vals[0]);
-   for(pos = 1; ((vals[pos])); pos++)
-      fprintf(fs, "| %s", vals[pos]);
-   fprintf(fs, ",\n");
-
-   return(0);
-}
-
-
-/// save OID specification field as const strings
-/// @param[in] fs     FILE stream of output file
-/// @param[in] fld    name of field
-/// @param[in] vals   array of values
-int my_save_c_oidspec_strs(FILE * fs, const char * fld, char ** vals)
-{
-   size_t pos;
-
-   fprintf(fs, "   %-15s =", fld);
-   if ( (!(vals)) || (!(vals[0])) )
-   {
-      fprintf(fs, " NULL,\n");
-      return(0);
-   };
-
-   fprintf(fs, " %s", vals[0]);
-   for(pos = 1; ((vals[pos])); pos++)
-      fprintf(fs, "\n%20s %s", "", vals[pos]);
-   fprintf(fs, ",\n");
-
-   return(0);
-}
-
-
-// save list of OID specifications as C header file
-/// @param[in] argc   number of arguments
-/// @param[in] argv   array of arguments
-/// @param[in] fs     FILE stream of output file
-int my_save_h(int argc, char **argv, FILE * fs)
+int my_save_header(int argc, char **argv, FILE * fs)
 {
    size_t         pos;
    char           buff[256];
@@ -856,6 +709,152 @@ int my_save_makefile(int argc, char **argv, FILE * fs)
    return(0);
 }
 
+
+/// save list of OID specifications as C source file
+/// @param[in] argc   number of arguments
+/// @param[in] argv   array of arguments
+/// @param[in] fs     FILE stream of output file
+int my_save_source(int argc, char **argv, FILE * fs)
+{
+   size_t         pos;
+   char           buff[256];
+   time_t         timer;
+   struct tm    * tm_info;
+
+   // print header
+   fprintf(fs, "//\n");
+   time(&timer);
+   tm_info = localtime(&timer);
+   strftime(buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", tm_info);
+   fprintf(fs, "// Generated on:   %s\n", buff);
+   fprintf(fs, "// Generated with:");
+   for(pos = 0; pos < (size_t)argc; pos++)
+      fprintf(fs, " %s", argv[pos]);
+   fprintf(fs, "\n");
+   fprintf(fs, "//\n");
+   fprintf(fs, "#define _%s 1\n", cfg.NAME);
+   fprintf(fs, "\n");
+   fprintf(fs, "#include <stdio.h>\n");
+   fprintf(fs, "#include \"lspecdata.h\"\n");
+   fprintf(fs, "\n");
+
+   // sort OIDs
+   qsort(oidspeclist, oidspeclist_len, sizeof(OIDSpec *), oidspec_cmp);
+
+   // save OID specs
+   for(pos = 0; pos < oidspeclist_len; pos++)
+      my_save_source_oidspec(fs, oidspeclist[pos], pos);
+
+   // generate array
+   fprintf(fs, "const size_t %s_len = %zu;\n", cfg.name, oidspeclist_len);
+   fprintf(fs, "const struct ldapschema_spec * %s[] =\n", cfg.name);
+   fprintf(fs, "{\n");
+   for(pos = 0; pos < oidspeclist_len; pos++)
+      fprintf(fs, "  &%s%zu, // %s\n", cfg.name, pos, oidspeclist[pos]->oid[0]);
+   fprintf(fs, "  NULL\n");
+   fprintf(fs, "};\n");
+   fprintf(fs, "\n");
+
+   // prints footer
+   fprintf(fs, "/* end of source */\n");
+
+   return(0);
+}
+
+
+/// save individual OID specification
+/// @param[in] fs         FILE stream of output file
+/// @param[in] oidspec    OID specification to save
+/// @param[in] idx        index or ID of OID specification
+int my_save_source_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx)
+{
+   size_t pos;
+
+   fprintf(fs, "// %s\n", oidspec->oid[0]);
+   fprintf(fs, "// %s:%i\n", my_fs_prunepath(oidspec->filename), oidspec->lineno);
+   fprintf(fs, "const struct ldapschema_spec %s%zu =\n", cfg.name, idx);
+   fprintf(fs, "{\n");
+   my_save_source_oidspec_strs(fs, ".oid",            oidspec->oid);
+   my_save_source_oidspec_strs(fs, ".name",           oidspec->name);
+   my_save_source_oidspec_strs(fs, ".desc",           oidspec->desc);
+   my_save_source_oidspec_flgs(fs, ".flags",          oidspec->flags);
+   my_save_source_oidspec_flgs(fs, ".type",           oidspec->type);
+   my_save_source_oidspec_flgs(fs, ".class",          oidspec->class);
+   my_save_source_oidspec_strs(fs, ".def",            oidspec->def);
+   my_save_source_oidspec_strs(fs, ".abnf",           oidspec->abnf);
+   my_save_source_oidspec_strs(fs, ".re_posix",       oidspec->re_posix);
+   my_save_source_oidspec_strs(fs, ".re_pcre",        oidspec->re_pcre);
+   my_save_source_oidspec_strs(fs, ".spec",           oidspec->spec);
+   my_save_source_oidspec_strs(fs, ".spec_type",      oidspec->spec_type);
+   my_save_source_oidspec_strs(fs, ".spec_name",      oidspec->spec_name);
+   my_save_source_oidspec_strs(fs, ".spec_section",   oidspec->spec_section);
+   my_save_source_oidspec_strs(fs, ".spec_source",    oidspec->spec_source);
+   my_save_source_oidspec_strs(fs, ".spec_vendor",    oidspec->spec_vendor);
+   fprintf(fs, "   %-15s =", ".examples");
+   if ((oidspec->examples))
+   {
+      fprintf(fs, " (const char *[])\n");
+      fprintf(fs, "%20s {\n", "");
+      for(pos = 0; ((oidspec->examples[pos])); pos++)
+         fprintf(fs, "%20s    %s,\n", "", oidspec->examples[pos]);
+      fprintf(fs, "%20s    NULL,\n", "");
+      fprintf(fs, "%20s },\n", "");
+   } else
+   {
+      fprintf(fs, " NULL,\n");
+   };
+   fprintf(fs, "};\n\n\n");
+
+   return(0);
+}
+
+
+/// save OID specification field as bit flags
+/// @param[in] fs     FILE stream of output file
+/// @param[in] fld    name of field
+/// @param[in] vals   array of values
+int my_save_source_oidspec_flgs(FILE * fs, const char * fld, char ** vals)
+{
+   size_t pos;
+
+   fprintf(fs, "   %-15s =", fld);
+   if ( (!(vals)) || (!(vals[0])) )
+   {
+      fprintf(fs, " 0,\n");
+      return(0);
+   };
+
+   fprintf(fs, " %s", vals[0]);
+   for(pos = 1; ((vals[pos])); pos++)
+      fprintf(fs, "| %s", vals[pos]);
+   fprintf(fs, ",\n");
+
+   return(0);
+}
+
+
+/// save OID specification field as const strings
+/// @param[in] fs     FILE stream of output file
+/// @param[in] fld    name of field
+/// @param[in] vals   array of values
+int my_save_source_oidspec_strs(FILE * fs, const char * fld, char ** vals)
+{
+   size_t pos;
+
+   fprintf(fs, "   %-15s =", fld);
+   if ( (!(vals)) || (!(vals[0])) )
+   {
+      fprintf(fs, " NULL,\n");
+      return(0);
+   };
+
+   fprintf(fs, " %s", vals[0]);
+   for(pos = 1; ((vals[pos])); pos++)
+      fprintf(fs, "\n%20s %s", "", vals[pos]);
+   fprintf(fs, ",\n");
+
+   return(0);
+}
 
 
 /// prints program usage and exits
