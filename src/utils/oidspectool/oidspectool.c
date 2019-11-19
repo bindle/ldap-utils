@@ -323,6 +323,11 @@ int main(int argc, char * argv[])
    // prints result
    if ((err = my_save(&config, argc, argv)) != 0)
       return(1);
+   if ((config.verbose))
+   {
+      printf("stats: %zu files parsed\n", filelist_len);
+      printf("stats: %zu OID specifications indexed\n", oidspeclist_len);
+   };
 
    return(0);
 }
