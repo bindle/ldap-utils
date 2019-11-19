@@ -150,6 +150,7 @@ size_t            oidspeclist_len;
 char           ** filelist;
 size_t            filelist_len;
 
+MyConfig          config;
 
 //////////////////
 //              //
@@ -222,7 +223,6 @@ int main(int argc, char * argv[])
    int            c;
    int            err;
    int            opt_index;
-   MyConfig       config;
 
    static char          short_options[]   = "hmno:vV";
    static struct option long_options[]    =
@@ -369,7 +369,7 @@ int my_fs_parsefile(MyConfig * cnf, const char * file)
 
    // open file for parsing
    if ((cnf->verbose))
-      printf("opening %s ...\n", file);
+      printf("parsing \"%s\" ...\n", file);
    if ((fs = fopen(file, "r")) == NULL)
    {
       fprintf(stderr, "%s: %s: %s\n", PROGRAM_NAME, file, strerror(errno));
@@ -416,6 +416,8 @@ int my_fs_scanpath(MyConfig * cnf, const char * path)
    };
 
    // open directory
+   if ((cnf->verbose))
+      printf("scanning \"%s\" ...\n", path);
    if ((dir = opendir(path)) == NULL)
    {
       fprintf(stderr, "%s: %s: %s\n", PROGRAM_NAME, path, strerror(errno));
@@ -538,6 +540,8 @@ int my_save(MyConfig * cnf, int argc, char **argv)
    fs = stdout;
    if ( ((cnf->output)) && ((strcmp("-", cnf->output))) )
    {
+      if ((cnf->verbose))
+         printf("saving results to \"%s\" ...\n", cnf->output);
       if ((fs = fopen(cnf->output, "w")) == NULL)
       {
          fprintf(stderr, "%s: fopen: %s: %s\n", PROGRAM_NAME, cnf->output, strerror(errno));
@@ -877,6 +881,8 @@ int my_yyoidspec(void)
       fprintf(stderr, "%s: %s: %i: spec missing .type field\n", PROGRAM_NAME, cur_filename, yylineno);
       return(1);
    };
+   if ((config.verbose))
+      printf("adding %s (%s) ...\n", cur_oidspec->oid[0], cur_oidspec->desc[0]);
 
    // searches for duplicate (I know, I know, I am being lazy)
    for(pos = 0; pos < oidspeclist_len; pos++)
