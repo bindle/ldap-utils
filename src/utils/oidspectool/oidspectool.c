@@ -593,7 +593,7 @@ int my_save_c(MyConfig * cnf, int argc, char **argv, FILE * fs)
 
    // save OID specs
    for(pos = 0; pos < oidspeclist_len; pos++)
-      my_save_c_oidspec(stdout, oidspeclist[pos], pos);
+      my_save_c_oidspec(fs, oidspeclist[pos], pos);
 
    // generate array
    fprintf(fs, "const size_t ldapschema_oidspecs_len = %zu;\n", oidspeclist_len);
@@ -604,6 +604,9 @@ int my_save_c(MyConfig * cnf, int argc, char **argv, FILE * fs)
    fprintf(fs, "  NULL\n");
    fprintf(fs, "};\n");
    fprintf(fs, "\n");
+
+   // prints footer
+   fprintf(fs, "/* end of source */\n");
 
    return(0);
 }
