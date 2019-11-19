@@ -262,6 +262,7 @@ int main(int argc, char * argv[])
       {"dryrun",        no_argument, 0, 'n'},
       {"name",    required_argument, 0, 'N'},
       {"prune",   required_argument, 0, 'p'},
+      {"source",        no_argument, 0, 's'},
       {"verbose",       no_argument, 0, 'v'},
       {"version",       no_argument, 0, 'V'},
       {NULL,            0,           0, 0  }
@@ -302,6 +303,10 @@ int main(int argc, char * argv[])
 
          case 'p':
          cfg.prune = optarg;
+         break;
+
+         case 's':
+         cfg.format = OidSpecFormatSource;
          break;
 
          case 'V':
@@ -870,6 +875,7 @@ void my_usage(void)
    printf("  -N name, --name=name      name of output variable(default: \"%s\")\n", cfg.name);
    printf("  -o file                   output file\n");
    printf("  -p str, --prune=str       prune string from recorded filenames\n");
+   printf("  -s, --source              output C source\n");
    printf("  -v, --verbose             run in verbose mode\n");
    printf("  -V, --version             print version number and exit\n");
    printf("\n");
