@@ -103,7 +103,7 @@
 struct my_config
 {
    int            dryrun;
-   int            makefile;
+   int            format;
    const char   * output;
    int            verbose;
 };
@@ -195,6 +195,9 @@ int my_save_c_oidspec_flgs(FILE * fs, const char * fld, char ** vals);
 // save OID specification field as const strings
 int my_save_c_oidspec_strs(FILE * fs, const char * fld, char ** vals);
 
+// save list of OID specifications as C header file
+int my_save_h(MyConfig * cnf, int argc, char **argv, FILE * fs);
+
 // save list of OID spec files as Makefile include
 int my_save_makefile(MyConfig * cnf, int argc, char **argv, FILE * fs);
 
@@ -224,10 +227,11 @@ int main(int argc, char * argv[])
    int            err;
    int            opt_index;
 
-   static char          short_options[]   = "hmno:vV";
+   static char          short_options[]   = "hHmno:vV";
    static struct option long_options[]    =
    {
       {"help",          no_argument, 0, 'h'},
+      {"header",        no_argument, 0, 'H'},
       {"makefile",      no_argument, 0, 'm'},
       {"dryrun",        no_argument, 0, 'n'},
       {"verbose",       no_argument, 0, 'v'},
@@ -236,6 +240,7 @@ int main(int argc, char * argv[])
    };
 
    bzero(&config, sizeof(config));
+   config.format = 'c';
 
    // loops through args
    while((c = getopt_long(argc, argv, short_options, long_options, &opt_index)) != -1)
@@ -250,8 +255,12 @@ int main(int argc, char * argv[])
          my_usage();
          return(0);
 
+         case 'H':
+         config.format = 'h';
+         break;
+
          case 'm':
-         config.makefile++;
+         config.format = 'm';
          break;
 
          case 'n':
@@ -554,10 +563,12 @@ int my_save(MyConfig * cnf, int argc, char **argv)
       };
    };
 
-   if ((cnf->makefile))
-      my_save_makefile(cnf, argc, argv, fs);
-   else
-      my_save_c(cnf, argc, argv, fs);
+   switch(cnf->format)
+   {
+         case 'h': my_save_h(cnf, argc, argv, fs); break;
+         case 'm': my_save_makefile(cnf, argc, argv, fs); break;
+         default:  my_save_c(cnf, argc, argv, fs); break;
+   };
 
    // closes file
    if (fs != stdout)
@@ -594,18 +605,13 @@ int my_save_c(MyConfig * cnf, int argc, char **argv, FILE * fs)
    fprintf(fs, "//\n");
    fprintf(fs, "\n");
    fprintf(fs, "#include <stdio.h>\n");
-   fprintf(fs, "#include \"lspec.h\"\n");
+   fprintf(fs, "#include \"lspecdata.h\"\n");
    fprintf(fs, "\n");
 
    // sort OIDs
    qsort(oidspeclist, oidspeclist_len, sizeof(OIDSpec *), oidspec_cmp);
 
    // save OID specs
-   for(pos = 0; pos < oidspeclist_len; pos++)
-      fprintf(fs, "extern const struct ldapschema_spec oidspec%zu;\n", pos);
-   fprintf(fs, "extern const size_t ldapschema_oidspecs_len;\n");
-   fprintf(fs, "extern const struct ldapschema_spec * ldapschema_oidspecs[];\n");
-   fprintf(fs, "\n\n");
    for(pos = 0; pos < oidspeclist_len; pos++)
       my_save_c_oidspec(fs, oidspeclist[pos], pos);
 
@@ -721,6 +727,47 @@ int my_save_c_oidspec_strs(FILE * fs, const char * fld, char ** vals)
 }
 
 
+// save list of OID specifications as C header file
+/// @param[in] cnf    configuration information
+/// @param[in] argc   number of arguments
+/// @param[in] argv   array of arguments
+/// @param[in] fs     FILE stream of output file
+int my_save_h(MyConfig * cnf, int argc, char **argv, FILE * fs)
+{
+   size_t         pos;
+   char           buff[256];
+   time_t         timer;
+   struct tm    * tm_info;
+
+   assert(cnf != NULL);
+
+   // print header
+   fprintf(fs, "//\n");
+   time(&timer);
+   tm_info = localtime(&timer);
+   strftime(buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", tm_info);
+   fprintf(fs, "// Generated on:   %s\n", buff);
+   fprintf(fs, "// Generated with:");
+   for(pos = 0; pos < (size_t)argc; pos++)
+      fprintf(fs, " %s", argv[pos]);
+   fprintf(fs, "\n");
+   fprintf(fs, "//\n");
+   fprintf(fs, "\n");
+   fprintf(fs, "#include <stdio.h>\n");
+   fprintf(fs, "#include \"lspec.h\"\n");
+   fprintf(fs, "\n");
+
+   // save OID specs
+   for(pos = 0; pos < oidspeclist_len; pos++)
+      fprintf(fs, "extern const struct ldapschema_spec oidspec%zu;\n", pos);
+   fprintf(fs, "extern const size_t ldapschema_oidspecs_len;\n");
+   fprintf(fs, "extern const struct ldapschema_spec * ldapschema_oidspecs[];\n");
+   fprintf(fs, "/* end of header */\n");
+
+   return(0);
+}
+
+
 /// save list of OID spec files as Makefile include
 /// @param[in] cnf    configuration information
 /// @param[in] argc   number of arguments
@@ -765,6 +812,7 @@ void my_usage(void)
    printf("       %s [options] [dir ...]\n", PROGRAM_NAME);
    printf("Options:\n");
    printf("  -h, --help                print this help and exit\n");
+   printf("  -H, --header              output C header instead of C source\n");
    printf("  -m, --makefile            output makefile include instead of C source\n");
    printf("  -n, --dryrun              show what would be done, but do nothing\n");
    printf("  -o file                   output file\n");
