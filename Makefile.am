@@ -88,8 +88,11 @@ noinst_LIBRARIES			= lib/libldaputils.a
 
 
 # lists
+OIDSPEC_FILES				= $(srcdir)/lib/libldapschema/specs/rfc/rfc4517.oidspec
 AM_INSTALLCHECK_STD_OPTIONS_EXEMPT	=
-BUILT_SOURCES				= src/utils/oidspectool/oidspecparser.h
+BUILT_SOURCES				= lib/libldapschema/lspecdata.c \
+					  lib/libldapschema/lspecdata.h \
+					  src/utils/oidspectool/oidspecparser.h
 TESTS					=
 XFAIL_TESTS				=
 EXTRA_MANS				=
@@ -104,7 +107,11 @@ EXTRA_DIST				= $(noinst_HEADERS) \
 					  $(srcdir)/doc/ldapinfo.1.in \
 					  $(srcdir)/doc/ldapdebug.1.in \
 					  $(srcdir)/doc/ldaptree.1.in \
-					  lib/libldaputils/libldaputils.sym
+					  lib/libldaputils/libldaputils.sym \
+					  lib/libldapschema/lspecdata.c \
+					  lib/libldapschema/lspecdata.h \
+					  lib/libldapschema/specs/template.oidspec \
+					  $(OIDSPEC_FILES)
 CLEANFILES				= \
 					  $(builddir)/a.out   $(srcdir)/a.out \
 					  $(builddir)/*/a.out $(srcdir)/*/a.out \
@@ -125,6 +132,7 @@ if LDAPUTILS_LIBLDAPSCHEMA
    include_HEADERS			+= include/ldapschema.h
 endif
 lib_libldapschema_a_DEPENDENCIES	= Makefile lib/libldapschema/libldapschema.sym
+lib_libldapschema_a_CPPFLAGS		= $(AM_CPPFLAGS) -I$(srcdir)/lib/libldapschema
 lib_libldapschema_a_CFLAGS		= $(AM_CFLAGS)
 lib_libldapschema_a_LIBADD		= $(AM_LIBS)
 lib_libldapschema_a_SOURCES		= $(noinst_HEADERS) \
@@ -141,6 +149,8 @@ lib_libldapschema_a_SOURCES		= $(noinst_HEADERS) \
 					  lib/libldapschema/loutput.h \
 					  lib/libldapschema/lspec.c \
 					  lib/libldapschema/lspec.h \
+					  lib/libldapschema/lspecdata.c \
+					  lib/libldapschema/lspecdata.h \
 					  lib/libldapschema/lsort.c \
 					  lib/libldapschema/lsort.h
 
@@ -150,6 +160,7 @@ if LDAPUTILS_LIBLDAPSCHEMA
    lib_LTLIBRARIES			+= lib/libldapschema.la
 endif
 lib_libldapschema_la_DEPENDENCIES	= Makefile lib/libldapschema/libldapschema.sym
+lib_libldapschema_la_CPPFLAGS		= $(AM_CPPFLAGS) -I$(srcdir)/lib/libldapschema
 lib_libldapschema_la_CFLAGS		= $(AM_CFLAGS)
 lib_libldapschema_la_LDFLAGS		= -rpath'$(libdir)' \
 					  -version-info $(LIB_VERSION_INFO) \
@@ -170,6 +181,8 @@ lib_libldapschema_la_SOURCES		= $(noinst_HEADERS) \
 					  lib/libldapschema/loutput.h \
 					  lib/libldapschema/lspec.c \
 					  lib/libldapschema/lspec.h \
+					  lib/libldapschema/lspecdata.c \
+					  lib/libldapschema/lspecdata.h \
 					  lib/libldapschema/lsort.c \
 					  lib/libldapschema/lsort.h
 
@@ -326,6 +339,16 @@ doc/ldapinfo.1: Makefile $(srcdir)/doc/ldapinfo.1.in
 
 doc/ldaptree.1: Makefile $(srcdir)/doc/ldaptree.1.in
 	@$(do_subst_dt)
+
+lib/libldapschema/lspecdata.c: $(OIDSPEC_FILES)
+	$(MAKE) src/oidspectool
+	@mkdir -p lib/libldapschema
+	src/oidspectool -o $(@) $(OIDSPEC_FILES)
+
+lib/libldapschema/lspecdata.h: $(OIDSPEC_FILES)
+	$(MAKE) src/oidspectool
+	@mkdir -p lib/libldapschema
+	src/oidspectool -o $(@) --header $(OIDSPEC_FILES)
 
 
 # local targets
