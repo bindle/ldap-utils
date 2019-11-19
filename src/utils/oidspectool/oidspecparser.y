@@ -46,6 +46,7 @@ int yylex(void);
 } 
 
 %token NULLSTR
+%token CONST_CAST
 %token FLD_ABNF
 %token FLD_CLASS
 %token FLD_DEF
@@ -94,7 +95,7 @@ field             :
                   | FLD_CLASS        '=' CLASS        { my_yysubmit( FLD_CLASS,        $3 ); }
                   | FLD_DESC         '=' CSTRING      { my_yysubmit( FLD_DESC,         $3 ); }
                   | FLD_DEF          '=' CSTRING      { my_yysubmit( FLD_DEF,          $3 ); }
-                  | FLD_EXAMPLES     '=' strings      { my_yycommit( FLD_EXAMPLES         ); }
+                  | FLD_EXAMPLES     '=' examples     { my_yycommit( FLD_EXAMPLES         ); }
                   | FLD_FLAGS        '=' flags        { my_yycommit( FLD_FLAGS            ); }
                   | FLD_NAME         '=' CSTRING      { my_yysubmit( FLD_NAME,         $3 ); }
                   | FLD_OID          '=' CSTRING      { my_yysubmit( FLD_OID,          $3 ); }
@@ -124,6 +125,21 @@ flags             :
                   | flags '|' FLAG                    { my_yyappend( $3 ); }
                   ;
 
+examples          :
+                  | NULLSTR
+                  | CONST_CAST '{' NULLSTR '}'
+                  | CONST_CAST '{' NULLSTR ',' '}'
+                  | CONST_CAST '{' snippets NULLSTR '}'
+                  | CONST_CAST '{' snippets NULLSTR ',' '}'
+                  ;
+
+snippets          :
+                  | snippets snippet ','
+                  ;
+
+snippet           :
+                  | CSTRING                           { my_yyappend( $1     ); }
+                  ;
 
 %%
 

@@ -51,8 +51,88 @@
    .spec_name     =  "4523",
    .spec_section  =  "2.11",
    .spec_source   =  NULL,
-   .spec_vendor   =  NULL,
-//   .examples      =  NULL,
+   .spec_vendor   =  "IETF",
+   .examples      =  NULL,
+};
+
+
+
+{
+   // RFC 4517           LDAP: Syntaxes and Matching Rules           June 2006
+   //
+   // 3.3.11.  Facsimile Telephone Number
+   //
+   //    A value of the Facsimile Telephone Number syntax is a subscriber
+   //    number of a facsimile device on the public switched telephone
+   //    network.  The LDAP-specific encoding of a value of this syntax is
+   //    defined by the following ABNF:
+   //
+   //       fax-number       = telephone-number *( DOLLAR fax-parameter )
+   //       telephone-number = PrintableString
+   //       fax-parameter    = "twoDimensional" /
+   //                          "fineResolution" /
+   //                          "unlimitedLength" /
+   //                          "b4Length" /
+   //                          "a3Width" /
+   //                          "b4Width" /
+   //                          "uncompressed"
+   //
+   //    The <telephone-number> is a string of printable characters that
+   //    complies with the internationally agreed format for representing
+   //    international telephone numbers [E.123].  The <PrintableString> rule
+   //    is defined in Section 3.2.  The <DOLLAR> rule is defined in
+   //    [RFC4512].
+   //
+   //    The LDAP definition for the Facsimile Telephone Number syntax is:
+   //
+   //       ( 1.3.6.1.4.1.1466.115.121.1.22 DESC 'Facsimile Telephone Number')
+   //
+   //    The Facsimile Telephone Number syntax corresponds to the
+   //    FacsimileTelephoneNumber ASN.1 type from [X.520].
+   //
+   .oid           =  "1.3.6.1.4.1.1466.115.121.1.22",
+   .name          =  "FacsimileTelephoneNumber",
+   .desc          =  "Facsimile Telephone Number",
+   .flags         =  LDAPSCHEMA_O_READABLE | LDAPSCHEMA_O_COMMON_ABNF,
+   .type          =  LDAPSCHEMA_SYNTAX,
+   .class         =  LDAPSCHEMA_CLASS_ASCII,
+   .def           =  "( 2.5.4.23 NAME 'facsimileTelephoneNumber' SYNTAX 1.3.6.1.4.1.1466.115.121.1.22 )",
+   .abnf          =  "fax-number       = telephone-number\n"
+                     "                   *( DOLLAR fax-parameter )\n"
+                     "telephone-number = PrintableString\n"
+                     "fax-parameter    = \"twoDimensional\" /\n"
+                     "                   \"fineResolution\" /\n"
+                     "                   \"unlimitedLength\" /\n"
+                     "                   \"b4Length\" /\n"
+                     "                   \"a3Width\" /\n"
+                     "                   \"b4Width\" /\n"
+                     "                   \"uncompressed\"\n",
+   .re_posix      =  "("
+                        "(^\\+[[:digit:]] [[:digit:]]{3,3} [[:digit:]]{3,3} [[:digit:]]{4,4})|"
+                        "(^\\+[[:digit:]]-[[:digit:]]{3,3}-[[:digit:]]{3,3}-[[:digit:]]{4,4})|"
+                        "(^\\+[[:digit:]]{2,2} [[:digit:]] [[:digit:]]{4,4} [[:digit:]]{4,4})"
+                     ")(\\$"
+                        "(twoDimensional)|"
+                        "(fineResolution)|"
+                        "(unlimitedLength)|"
+                        "(b4Length)|"
+                        "(a3Width)|"
+                        "(b4Width)|"
+                        "(uncompressed)"
+                     "){0,}$",
+   .re_pcre       =  NULL,
+   .spec          =  "RFC 4517: Lightweight Directory Access Protocol (LDAP): Syntaxes and Matching Rules",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4517",
+   .spec_section  =  "3.3.11",
+   .spec_source   =  "https://tools.ietf.org/rfc/rfc4517.txt",
+   .spec_vendor   =  "IETF",
+   .examples      = (const char *[])
+                    {
+                       "+61 3 9896 7801",
+                       "+81 3 347 7418$fineResolution",
+                       NULL,
+                    },
 };
 
 

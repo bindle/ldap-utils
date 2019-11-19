@@ -615,6 +615,8 @@ int my_save_c(MyConfig * cnf, int argc, char **argv, FILE * fs)
 /// @param[in] idx        index or ID of OID specification
 int my_save_c_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx)
 {
+   size_t pos;
+
    fprintf(fs, "// %s\n", oidspec->oid[0]);
    fprintf(fs, "// %s:%i\n", oidspec->filename, oidspec->lineno);
    fprintf(fs, "const struct ldapschema_spec oidspec%zu =\n", idx);
@@ -635,7 +637,19 @@ int my_save_c_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx)
    my_save_c_oidspec_strs(fs, ".spec_section",   oidspec->spec_section);
    my_save_c_oidspec_strs(fs, ".spec_source",    oidspec->spec_source);
    my_save_c_oidspec_strs(fs, ".spec_vendor",    oidspec->spec_vendor);
-   my_save_c_oidspec_strs(fs, ".examples",       NULL);
+   fprintf(fs, "   %-15s =", ".examples");
+   if ((oidspec->examples))
+   {
+      fprintf(fs, " (const char *[])\n");
+      fprintf(fs, "%20s {\n", "");
+      for(pos = 0; ((oidspec->examples[pos])); pos++)
+         fprintf(fs, "%20s    %s,\n", "", oidspec->examples[pos]);
+      fprintf(fs, "%20s    NULL,\n", "");
+      fprintf(fs, "%20s },\n", "");
+   } else
+   {
+      fprintf(fs, " NULL,\n");
+   };
    fprintf(fs, "};\n\n\n");
 
    return(0);
