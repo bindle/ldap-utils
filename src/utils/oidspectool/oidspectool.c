@@ -118,6 +118,7 @@ struct my_oidspec
    char    ** oid;
    char    ** name;
    char    ** desc;
+   char    ** examples;
    char    ** flags;
    char    ** type;
    char    ** class;
@@ -493,6 +494,7 @@ void my_oidspec_free(OIDSpec * oidspec)
    my_oidspec_free_strs(oidspec->oid);
    my_oidspec_free_strs(oidspec->name);
    my_oidspec_free_strs(oidspec->desc);
+   my_oidspec_free_strs(oidspec->examples);
    my_oidspec_free_strs(oidspec->flags);
    my_oidspec_free_strs(oidspec->type);
    my_oidspec_free_strs(oidspec->class);
@@ -818,6 +820,7 @@ int my_yycommit(enum yytokentype type)
       case FLD_CLASS:          name = ".class";         vals = &cur_oidspec->class;        break;
       case FLD_DEF:            name = ".def";           vals = &cur_oidspec->def;          break;
       case FLD_DESC:           name = ".desc";          vals = &cur_oidspec->desc;         break;
+      case FLD_EXAMPLES:       name = ".examples";      vals = &cur_oidspec->examples;     break;
       case FLD_FLAGS:          name = ".flags";         vals = &cur_oidspec->flags;        break;
       case FLD_NAME:           name = ".name";          vals = &cur_oidspec->name;         break;
       case FLD_OID:            name = ".oid";           vals = &cur_oidspec->oid;          break;

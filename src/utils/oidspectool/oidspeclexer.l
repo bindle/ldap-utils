@@ -43,9 +43,13 @@ int yylex();
 
 %%
 
-"//"[^\n]*[\n]                      ; /* ignore comments */
-"/*".*"*/"                          ; /* ignore comments */
+"//"[^\n]*[\n]                      ; /* ignore C++ comments */
+"/*".*"*/"                          ; /* ignore C comments */
 [ \t\n]                             ; /* ignore whitespace */
+"#"[a-zA-Z0-9]+[^\n]*[\n]           ; /* ignore C preprocessor directives */
+
+"const "[^\n]+"="[^\n]*[\n]         ; /* ignore non-code blocks (allows oidspectool to process its own output) */
+"&"[_a-zA-Z0-9]+","                 ; /* ignore pointer references (allows oidspectool to process its own output) */
 
 ["].*[^\\]["]                       { yylval.str = yytext; return(CSTRING); }
 ["]["]                              { yylval.str = yytext; return(CSTRING); }
@@ -102,6 +106,7 @@ int yylex();
 ".spec_vendor"                      { return(FLD_SPEC_VENDOR); }
 ".spec"                             { return(FLD_SPEC); }
 ".type"                             { return(FLD_TYPE); }
+".examples"                         { return(FLD_EXAMPLES); }
 
 .                                   { return((int) yytext[0]); } /* treat remaining as single character tokens */
 

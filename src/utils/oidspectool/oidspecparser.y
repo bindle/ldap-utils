@@ -50,6 +50,7 @@ int yylex(void);
 %token FLD_CLASS
 %token FLD_DEF
 %token FLD_DESC
+%token FLD_EXAMPLES
 %token FLD_FLAGS
 %token FLD_NAME
 %token FLD_OID
@@ -80,6 +81,7 @@ stanzas           : /* empty */
                   ;
 
 stanza            :
+                  | '{' NULLSTR '}'                   { ; }                /* ignore empty stanzas */
                   | '{' fields '}'                    { my_yyoidspec(); }
                   ;
 
@@ -92,6 +94,7 @@ field             :
                   | FLD_CLASS        '=' CLASS        { my_yysubmit( FLD_CLASS,        $3 ); }
                   | FLD_DESC         '=' CSTRING      { my_yysubmit( FLD_DESC,         $3 ); }
                   | FLD_DEF          '=' CSTRING      { my_yysubmit( FLD_DEF,          $3 ); }
+                  | FLD_EXAMPLES     '=' strings      { my_yycommit( FLD_EXAMPLES         ); }
                   | FLD_FLAGS        '=' flags        { my_yycommit( FLD_FLAGS            ); }
                   | FLD_NAME         '=' CSTRING      { my_yysubmit( FLD_NAME,         $3 ); }
                   | FLD_OID          '=' CSTRING      { my_yysubmit( FLD_OID,          $3 ); }
