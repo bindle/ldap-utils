@@ -122,8 +122,9 @@
 #define LDAPSCHEMA_O_NO_USER_MOD                      0x0008   ///< attributeType: is readonly
 #define LDAPSCHEMA_O_OBJECTCLASS                      0x0010   ///< attributeType: is objectClass
 #define LDAPSCHEMA_O_READABLE                         0x0020   ///< ldapSyntax: is human readable
-#define LDAPSCHEMA_O_COMMON_ABNF                      0x0040   ///< ldapSyntax: uses common ABNF
-#define LDAPSCHEMA_O_DEPRECATED                       0x0080   ///< object deprecated or removed by RFC
+#define LDAPSCHEMA_O_COMMON_ABNF                      0x0040   ///< ldapSyntax: uses common ABNF (RFC 4512, Section 1.2)
+#define LDAPSCHEMA_O_SCHEMA_ABNF                      0x0080   ///< ldapSyntax: uses schema ABNF (RFC 4512, Section 4.1)
+#define LDAPSCHEMA_O_DEPRECATED                       0x0100   ///< object deprecated or removed by RFC
 
 // objectclass types
 #define LDAPSCHEMA_STRUCTURAL                         0x0000
@@ -157,6 +158,7 @@
 
 // specification types
 #define LDAPSCHEMA_SPEC_RFC                           1
+#define LDAPSCHEMA_SPEC_URL                           2
 
 // specification classes
 #define LDAPSCHEMA_CLASS_UNKNOWN                      0
