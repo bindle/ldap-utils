@@ -245,24 +245,21 @@ AC_DEFUN([AC_LDAP_UTILS_LIBRARIES],[dnl
 ])dnl
 
 
-# AC_LDAP_UTILS_MAINTAINER
+# AC_LDAP_UTILS_OIDSPECTOOL
 # ______________________________________________________________________________
-AC_DEFUN([AC_LDAP_UTILS_MAINTAINER],[dnl
+AC_DEFUN([AC_LDAP_UTILS_OIDSPECTOOL],[dnl
 
-   enableval=""
-   AC_ARG_ENABLE(
-      maintainer,
-      [AS_HELP_STRING([--enable-maintainer], [enable maintainer tools])],
-      [ EMAINTAINER=$enableval ],
-      [ EMAINTAINER=$enableval ]
-   )
+   # prerequists
+   AC_REQUIRE([AC_LDAP_UTILS_LDAPSCHEMA])
+   AC_REQUIRE([AC_LDAP_UTILS_LIBLDAPSCHEMA])
 
-   if test "x${EMAINTAINER}" != "xyes";then
-      EMAINTAINER=no
+   LDAPUTILS_OIDSPECTOOL="no"
+   if test "x${LDAPUTILS_LDAPSCHEMA}" == "xyes" ||
+      test "x${LDAPUTILS_LIBLDAPSCHEMA}" == "xyes";then
+      LDAPUTILS_OIDSPECTOOL="yes"
    fi
-   LDAPUTILS_MAINTAINER=${EMAINTAINER}
 
-   AM_CONDITIONAL([LDAPUTILS_MAINTAINER], [test "x$LDAPUTILS_MAINTAINER" = "xyes"])
+   AM_CONDITIONAL([LDAPUTILS_OIDSPECTOOL], [test "x$LDAPUTILS_OIDSPECTOOL" = "xyes"])
 ])dnl
 
 

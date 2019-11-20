@@ -181,7 +181,6 @@ AC_BINDLE_GIT_PACKAGE_VERSION([contrib/bindletools/build-aux/git-package-version
 
 # custom configure options
 AC_BINDLE_ENABLE_WARNINGS([-Wno-padded], [-Wpadded])
-AC_LDAP_UTILS_MAINTAINER
 AC_LDAP_UTILS_LIBRARIES
 AC_LDAP_UTILS_LIBLDAPSCHEMA
 AC_LDAP_UTILS_UTILITIES
@@ -192,6 +191,7 @@ AC_LDAP_UTILS_LDAPDN2STR
 AC_LDAP_UTILS_LDAPINFO
 AC_LDAP_UTILS_LDAPSCHEMA
 AC_LDAP_UTILS_LDAPTREE
+AC_LDAP_UTILS_OIDSPECTOOL
 
 # Creates outputs
 AC_CONFIG_FILES([Makefile])
@@ -208,14 +208,16 @@ AC_MSG_NOTICE([   Libraries:])
 AC_MSG_NOTICE([      Install libldapschema.la   $LDAPUTILS_LIBLDAPSCHEMA])
 AC_MSG_NOTICE([ ])
 AC_MSG_NOTICE([   Utilities:])
-AC_MSG_NOTICE([      Build ldap2csv             $LDAPUTILS_LDAP2CSV])
-AC_MSG_NOTICE([      Build ldap2json            $LDAPUTILS_LDAP2JSON])
-AC_MSG_NOTICE([      Build ldapdebug            $LDAPUTILS_LDAPDEBUG])
-AC_MSG_NOTICE([      Build ldapdn2str           $LDAPUTILS_LDAPDN2STR])
-AC_MSG_NOTICE([      Build ldapinfo             $LDAPUTILS_LDAPINFO])
-AC_MSG_NOTICE([      Build ldapschema           $LDAPUTILS_LDAPSCHEMA])
-AC_MSG_NOTICE([      Build ldaptree             $LDAPUTILS_LDAPTREE])
-AC_MSG_NOTICE([      Build maintainer tools     $LDAPUTILS_MAINTAINER])
+AC_MSG_NOTICE([      Install ldap2csv           $LDAPUTILS_LDAP2CSV])
+AC_MSG_NOTICE([      Install ldap2json          $LDAPUTILS_LDAP2JSON])
+AC_MSG_NOTICE([      Install ldapdebug          $LDAPUTILS_LDAPDEBUG])
+AC_MSG_NOTICE([      Install ldapdn2str         $LDAPUTILS_LDAPDN2STR])
+AC_MSG_NOTICE([      Install ldapinfo           $LDAPUTILS_LDAPINFO])
+AC_MSG_NOTICE([      Install ldapschema         $LDAPUTILS_LDAPSCHEMA])
+AC_MSG_NOTICE([      Install ldaptree           $LDAPUTILS_LDAPTREE])
+AC_MSG_NOTICE([ ])
+AC_MSG_NOTICE([   Internal Utilities:])
+AC_MSG_NOTICE([      Build oidspectool          $LDAPUTILS_OIDSPECTOOL])
 AC_MSG_NOTICE([ ])
 AC_MSG_NOTICE([   Please send suggestions to:   $PACKAGE_BUGREPORT])
 AC_MSG_NOTICE([ ])

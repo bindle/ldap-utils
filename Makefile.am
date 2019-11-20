@@ -64,8 +64,7 @@ AM_DISTCHECK_CONFIGURE_FLAGS		= --enable-strictwarnings \
 					  LDFLAGS="$(LDFLAGS)"
 AM_YFLAGS				= -d
 DEFS					=
-LDADD					= $(lib_LTLIBRARIES) \
-					  $(noinst_LTLIBRARIES)
+LDADD					=
 
 
 # automake targets
@@ -89,6 +88,10 @@ noinst_LIBRARIES			= lib/libldaputils.a
 
 # lists
 OIDSPEC_FILES				= $(srcdir)/lib/libldapschema/specs/rfc/rfc4517.oidspec
+MY_OIDSPECFLAGS				= --include=lspecdata.h \
+					  --include=lspec.h \
+					  --sparse \
+					  $(OIDSPEC_FILES)
 AM_INSTALLCHECK_STD_OPTIONS_EXEMPT	=
 BUILT_SOURCES				= lib/libldapschema/lspecdata.c \
 					  lib/libldapschema/lspecdata.h \
@@ -297,18 +300,14 @@ src_ldaptree_SOURCES			= src/ldaptree.c
 
 
 # macros for oidspectool
-if LDAPUTILS_MAINTAINER
+if LDAPUTILS_OIDSPECTOOL
    noinst_PROGRAMS			+= src/oidspectool
 endif
 src_oidspectool_DEPENDENCIES		= Makefile
 src_oidspectool_CPPFLAGS		= -DPROGRAM_NAME="\"oidspectool\"" -Isrc/utils/oidspectool -I$(srcdir)/src/utils/oidspectool -DHAVE_CONFIG_H=1
 src_oidspectool_CFLAGS			= -O2 -W
-src_oidspectool_YFLAGS			= $(AM_YFLAGS)
-src_oidspectool_LDFLAGS			= $(AM_LDFLAGS)
-src_oidspectool_LDADD			= $(AM_LDADD)
-src_oidspectool_SOURCES			= src/utils/oidspectool/oidspeclexer.l \
-					  src/utils/oidspectool/oidspecparser.h \
-					  src/utils/oidspectool/oidspecparser.y \
+src_oidspectool_SOURCES			= src/utils/oidspectool/oidspecparser.y \
+					  src/utils/oidspectool/oidspeclexer.l \
 					  src/utils/oidspectool/oidspectool.c \
 					  src/utils/oidspectool/oidspectool.h
 
@@ -320,6 +319,13 @@ include $(srcdir)/contrib/bindletools/build-aux/makefile-bindle.am
 include $(srcdir)/contrib/bindletools/build-aux/makefile-autotools.am
 include $(srcdir)/contrib/bindletools/build-aux/makefile-subst.am
 include $(srcdir)/contrib/bindletools/build-aux/makefile-version.am
+
+
+# custom silent rules
+MY_V_OIDSPEC				= $(my__v_OIDSPEC_$(V))
+my__v_OIDSPEC_				=
+my__v_OIDSPEC_0				= @echo "  OIDSPEC " $@;
+my__v_OIDSPEC_1				=
 
 
 # custom targets
@@ -341,14 +347,16 @@ doc/ldaptree.1: Makefile $(srcdir)/doc/ldaptree.1.in
 	@$(do_subst_dt)
 
 lib/libldapschema/lspecdata.c: $(OIDSPEC_FILES)
-	$(MAKE) src/oidspectool
+	@$(MAKE) -s src/oidspectool
 	@mkdir -p lib/libldapschema
-	src/oidspectool -o $(@) $(OIDSPEC_FILES)
+	$(MY_V_OIDSPEC)src/oidspectool -o $(@) --source $(MY_OIDSPECFLAGS)
+	@touch $(@)
 
 lib/libldapschema/lspecdata.h: $(OIDSPEC_FILES)
-	$(MAKE) src/oidspectool
+	@$(MAKE) -s src/oidspectool
 	@mkdir -p lib/libldapschema
-	src/oidspectool -o $(@) --header $(OIDSPEC_FILES)
+	$(MY_V_OIDSPEC)src/oidspectool -o $(@) --header $(MY_OIDSPECFLAGS)
+	@touch $(@)
 
 
 # local targets
