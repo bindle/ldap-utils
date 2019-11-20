@@ -1,0 +1,648 @@
+// List of OIDs from
+// IANA Lightweight Directory Access Protocol (LDAP) Parameters
+// https://www.iana.org/assignments/ldap-parameters/ldap-parameters.xhtml
+//
+// OIDs should be moved to appropiate oidspec files as time permits.
+
+
+{
+   .oid           =  "1.2.826.0.1.3344810.2.3",
+   .name          =  "Matched Values Control",
+   .desc          =  "Matched Values Control",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "RFC 3876: Returning Matched Values with the Lightweight Directory Access Protocol version 3 (LDAPv3)",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "3876",
+   .spec_section  =  "2",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.2.840.113556.1.4.319",
+   .name          =  "LDAP Simple Paged Results Control",
+   .desc          =  "LDAP Simple Paged Results Control",
+   .flags         =  0,                                 
+   .type          =  LDAPSCHEMA_CONTROL,                                     
+   .def           =  NULL,
+   .spec          =  "RFC 2696: LDAP Control Extension for Simple Paged Results Manipulation",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,                                   
+   .spec_name     =  "2696",                                                
+   .spec_section  =  "2",
+   .spec_vendor   =  "IETF",                                                
+};
+
+
+
+{
+   .oid           =  "1.2.840.113556.1.4.473",
+   .name          =  "Sort Request",
+   .desc          =  "Sort Request",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "RFC 2891: LDAP Control Extension for Server Side Sorting of Search Results",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "2891",
+   .spec_section  =  "1.1",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.2.840.113556.1.4.474",
+   .name          =  "Sort Response",
+   .desc          =  "Sort Response",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "RFC 2891: LDAP Control Extension for Server Side Sorting of Search Results",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "2891",
+   .spec_section  =  "1.2",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.1.7.1",
+   .name          =  "LCUP Sync Request Control",
+   .desc          =  "LCUP Sync Request Control",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "RFC 3928: Lightweight Directory Access Protocol (LDAP) Client Update Protocol (LCUP)",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "3928",
+   .spec_section  =  "3.6",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.1.7.2",
+   .name          =  "LCUP Sync Update Control",
+   .desc          =  "LCUP Sync Update Control",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "RFC 3928: Lightweight Directory Access Protocol (LDAP) Client Update Protocol (LCUP)",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "3928",
+   .spec_section  =  "3.7",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.1.7.3",
+   .name          =  "LCUP Sync Done Control",
+   .desc          =  "LCUP Sync Done Control",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "RFC 3928: Lightweight Directory Access Protocol (LDAP) Client Update Protocol (LCUP)",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "3928",
+   .spec_section  =  "3.8",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.1.12",
+   .name          =  "Assertion Control",
+   .desc          =  "Assertion Control",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "RFC 4528: Lightweight Directory Access Protocol (LDAP) Assertion Control",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4528",
+   .spec_section  =  "3",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.1.13.1",
+   .name          =  "LDAP Pre-read Control",
+   .desc          =  "LDAP Pre-read Control",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "RFC 4527: Lightweight Directory Access Protocol (LDAP) Read Entry Controls",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4527",
+   .spec_section  =  "3.1",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.1.13.2",
+   .name          =  "LDAP Post-read Control",
+   .desc          =  "LDAP Post-read Control",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "RFC 4527: Lightweight Directory Access Protocol (LDAP) Read Entry Controls",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4527",
+   .spec_section  =  "3.2",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.1.21.2",
+   .name          =  "Transaction Specification Control",
+   .desc          =  "Transaction Specification Control",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "RFC 5805: Lightweight Directory Access Protocol (LDAP) Transactions",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "5805",
+   .spec_section  =  "2.2",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.4.1.4203.1.9.1.1",
+   .name          =  "LDAP Content Synchronization Control",
+   .desc          =  "LDAP Content Synchronization Control",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "RFC 4533: The Lightweight Directory Access Protocol (LDAP) Content Synchronization Operation",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4533",
+   .spec_section  =  "2",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.4.1.4203.1.10.1",
+   .name          =  "Subentries",
+   .desc          =  "Subentries",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "RFC 3672: Subentries in the Lightweight Directory Access Protocol (LDAP)",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "3672",
+   .spec_section  =  "3",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "2.16.840.1.113730.3.4.2",
+   .name          =  "ManageDsaIT",
+   .desc          =  "ManageDsaIT", 
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "RFC 3296: Named Subordinate References in Lightweight Directory Access Protocol (LDAP) Directories",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "3296",
+   .spec_section  =  "3",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "2.16.840.1.113730.3.4.15",
+   .name          =  "Authorization Identity Response Control",
+   .desc          =  "Authorization Identity Response Control",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "RFC 3829: Lightweight Directory Access Protocol (LDAP) Authorization Identity Request and Response Controls",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "3829",
+   .spec_section  =  "2",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "2.16.840.1.113730.3.4.16",
+   .name          =  "Authorization Identity Request Control",
+   .desc          =  "Authorization Identity Request Control",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "RFC 3829: Lightweight Directory Access Protocol (LDAP) Authorization Identity Request and Response Controls",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "3829",
+   .spec_section  =  "3",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "2.16.840.1.113730.3.4.18",
+   .name          =  "Proxy Authorization Control",
+   .desc          =  "Proxy Authorization Control",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "RFC 4370: Lightweight Directory Access Protocol (LDAP) Proxied Authorization Control",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4370",
+   .spec_section  =  "2",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.1.22",
+   .name          =  "LDAP Don't Use Copy Control",
+   .desc          =  "LDAP Don't Use Copy Control",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "RFC 6171: The Lightweight Directory Access Protocol (LDAP) Don't Use Copy Control",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "6171",
+   .spec_section  =  "3",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.1.8",
+   .name          =  "Cancel Operation",
+   .desc          =  "Cancel Operation",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_EXTENSION,
+   .def           =  NULL,
+   .spec          =  "RFC 3909: Lightweight Directory Access Protocol (LDAP) Cancel Operation",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "6171",
+   .spec_section  =  "2",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.1.21.1",
+   .name          =  "Start Transaction Extended Request",
+   .desc          =  "Start Transaction Extended Request",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_EXTENSION,
+   .def           =  NULL,
+   .spec          =  "RFC 5805: Lightweight Directory Access Protocol (LDAP) Transactions",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "5805",
+   .spec_section  =  "2.1",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.1.21.3",
+   .name          =  "End Transaction Extended Request",
+   .desc          =  "End Transaction Extended Request",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_EXTENSION,
+   .def           =  NULL,
+   .spec          =  "RFC 5805: Lightweight Directory Access Protocol (LDAP) Transactions",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "5805",
+   .spec_section  =  "2.3",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.4.1.1466.101.119.1",
+   .name          =  "Dynamic Refresh",
+   .desc          =  "Dynamic Refresh",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_EXTENSION,
+   .def           =  NULL,
+   .spec          =  "RFC 2589: Lightweight Directory Access Protocol (v3): Extensions for Dynamic Directory Services",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "2589",
+   .spec_section  =  "4.1",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.4.1.1466.20037",
+   .name          =  "StartTLS",
+   .desc          =  "StartTLS",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_EXTENSION,
+   .def           =  NULL,
+   .spec          =  "RFC 4511: Lightweight Directory Access Protocol (LDAP): The Protocol",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4511",
+   .spec_section  =  "4.14.1",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.4.1.4203.1.11.1",
+   .name          =  "Modify Password",
+   .desc          =  "Modify Password",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_EXTENSION,
+   .def           =  NULL,
+   .spec          =  "RFC 3062: LDAP Password Modify Extended Operation",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "3062",
+   .spec_section  =  "2",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.4.1.4203.1.11.3",
+   .name          =  "Who am I?",
+   .desc          =  "Who am I?",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_EXTENSION,
+   .def           =  NULL,
+   .spec          =  "RFC 4532: Lightweight Directory Access Protocol (LDAP) \"Who am I?\" Operation",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4532",
+   .spec_section  =  "2",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.1.17.1",
+   .name          =  "StartLBURPRequest LDAP ExtendedRequest message",
+   .desc          =  "StartLBURPRequest LDAP ExtendedRequest message",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_EXTENSION,
+   .def           =  NULL,
+   .spec          =  "RFC 4373: Lightweight Directory Access Protocol (LDAP) Bulk Update/Replication Protocol (LBURP)",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4373",
+   .spec_section  =  "5.1",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.1.17.2",
+   .name          =  "StartLBURPResponse LDAP ExtendedResponse message",
+   .desc          =  "StartLBURPResponse LDAP ExtendedResponse message",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_EXTENSION,
+   .def           =  NULL,
+   .spec          =  "RFC 4373: Lightweight Directory Access Protocol (LDAP) Bulk Update/Replication Protocol (LBURP)",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4373",
+   .spec_section  =  "5.2",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.1.17.3",
+   .name          =  "EndLBURPRequest LDAP ExtendedRequest message",
+   .desc          =  "EndLBURPRequest LDAP ExtendedRequest message",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_EXTENSION,
+   .def           =  NULL,
+   .spec          =  "RFC 4373: Lightweight Directory Access Protocol (LDAP) Bulk Update/Replication Protocol (LBURP)",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4373",
+   .spec_section  =  "5.5",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.1.17.4",
+   .name          =  "EndLBURPResponse LDAP ExtendedResponse message",
+   .desc          =  "EndLBURPResponse LDAP ExtendedResponse message",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_EXTENSION,
+   .def           =  NULL,
+   .spec          =  "RFC 4373: Lightweight Directory Access Protocol (LDAP) Bulk Update/Replication Protocol (LBURP)",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4373",
+   .spec_section  =  "5.6",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.1.17.5",
+   .name          =  "LBURPUpdateRequest LDAP ExtendedRequest message",
+   .desc          =  "LBURPUpdateRequest LDAP ExtendedRequest message",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_EXTENSION,
+   .def           =  NULL,
+   .spec          =  "RFC 4373: Lightweight Directory Access Protocol (LDAP) Bulk Update/Replication Protocol (LBURP)",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4373",
+   .spec_section  =  "5.3",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.1.17.6",
+   .name          =  "LBURPUpdateResponse LDAP ExtendedResponse message",
+   .desc          =  "LBURPUpdateResponse LDAP ExtendedResponse message",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_EXTENSION,
+   .def           =  NULL,
+   .spec          =  "RFC 4373: Lightweight Directory Access Protocol (LDAP) Bulk Update/Replication Protocol (LBURP)",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4373",
+   .spec_section  =  "5.4",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.1.19",
+   .name          =  "LDAP Turn Operation",
+   .desc          =  "LDAP Turn Operation",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_EXTENSION,
+   .def           =  NULL,
+   .spec          =  "RFC 4531: Lightweight Directory Access Protocol (LDAP) Turn Operation",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4531",
+   .spec_section  =  "2",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.1.14",
+   .name          =  "Modify-Increment",
+   .desc          =  "Modify-Increment",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_FEATURE,
+   .def           =  NULL,
+   .spec          =  "RFC 4525: Lightweight Directory Access Protocol (LDAP) Modify-Increment Extension",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4525",
+   .spec_section  =  "2",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.4.1.4203.1.5.1",
+   .name          =  "All Op Attrs",
+   .desc          =  "All Op Attrs",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_FEATURE,
+   .def           =  NULL,
+   .spec          =  "RFC 3673: Lightweight Directory Access Protocol version 3 (LDAPv3): All Operational Attributes",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "3673",
+   .spec_section  =  "2",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.4.1.4203.1.5.2",
+   .name          =  "OC AD Lists",
+   .desc          =  "OC AD Lists",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_FEATURE,
+   .def           =  NULL,
+   .spec          =  "RFC 4529: Requesting Attributes by Object Class in the Lightweight Directory Access Protocol (LDAP)",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4529",
+   .spec_section  =  "3",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.4.1.4203.1.5.3",
+   .name          =  "True/False filters",
+   .desc          =  "True/False filters",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_FEATURE,
+   .def           =  NULL,
+   .spec          =  "RFC 4526: Lightweight Directory Access Protocol (LDAP) Absolute True and False Filters",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4526",
+   .spec_section  =  "2",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.4.1.4203.1.5.4",
+   .name          =  "Language Tag Options",
+   .desc          =  "Language Tag Options",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_FEATURE,
+   .def           =  NULL,
+   .spec          =  "RFC 3866: Language Tags and Ranges in the Lightweight Directory Access Protocol (LDAP)",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "3866",
+   .spec_section  =  "4",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.4.1.4203.1.5.5",
+   .name          =  "Language Range Options",
+   .desc          =  "Language Range Options",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_FEATURE,
+   .def           =  NULL,
+   .spec          =  "RFC 3866: Language Tags and Ranges in the Lightweight Directory Access Protocol (LDAP)",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "3866",
+   .spec_section  =  "4",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.1.17.7",
+   .name          =  "LBURP Incremental Update style OID",
+   .desc          =  "LBURP Incremental Update style OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_FEATURE,
+   .def           =  NULL,
+   .spec          =  "RFC 4373: Lightweight Directory Access Protocol (LDAP) Bulk Update/Replication Protocol (LBURP)",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4373",
+   .spec_section  =  "5.1.1",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+{
+   .oid           =  "1.3.6.1.1.21.4",
+   .name          =  "Aborted Transaction Notice",
+   .desc          =  "Aborted Transaction Notice",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_NAMEFORM,
+   .def           =  NULL,
+   .spec          =  "RFC 5805: Lightweight Directory Access Protocol (LDAP) Transactions",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "5805",
+   .spec_section  =  "2.4",
+   .spec_vendor   =  "IETF",
+};
+
+
+
+// end of OID spec file
