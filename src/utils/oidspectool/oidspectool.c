@@ -713,7 +713,7 @@ int my_save_header(FILE * fs)
    fprintf(fs, "\n");
    fprintf(fs, "#include <stdio.h>\n");
    for(pos = 0; ( ((cfg.includes)) && ((cfg.includes[pos])) ); pos++)
-      fprintf(fs, "#include <%s>\n", cfg.includes[pos]);
+      fprintf(fs, "#include \"%s\"\n", cfg.includes[pos]);
    fprintf(fs, "\n");
 
    // save OID specs
@@ -755,7 +755,7 @@ int my_save_source(FILE * fs)
    fprintf(fs, "\n");
    fprintf(fs, "#include <stdio.h>\n");
    for(pos = 0; ( ((cfg.includes)) && ((cfg.includes[pos])) ); pos++)
-      fprintf(fs, "#include <%s>\n", cfg.includes[pos]);
+      fprintf(fs, "#include \"%s\"\n", cfg.includes[pos]);
    fprintf(fs, "\n");
 
    // sort OIDs
