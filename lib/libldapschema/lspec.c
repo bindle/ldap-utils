@@ -158,57 +158,6 @@
 const struct ldapschema_spec ldapschema_spec[] =
 {
    {
-      // RFC 4530                     LDAP entryUUID                    June 2006
-      //
-      // 2.1.  UUID Syntax
-      //
-      //    A Universally Unique Identifier (UUID) [RFC4122] is a 16-octet (128-
-      //    bit) value that identifies an object.  The ASN.1 [X.680] type UUID is
-      //    defined to represent UUIDs as follows:
-      //
-      //        UUID ::= OCTET STRING (SIZE(16))
-      //              -- constrained to an UUID [RFC4122]
-      //
-      //    In LDAP, UUID values are encoded using the [ASCII] character string
-      //    representation described in [RFC4122].  For example,
-      //    "597ae2f6-16a6-1027-98f4-d28b5365dc14".
-      //
-      //    The following is an LDAP syntax description suitable for publication
-      //    in subschema subentries.
-      //
-      //        ( 1.3.6.1.1.16.1 DESC 'UUID' )
-      //
-      .oid           =  "1.3.6.1.1.16.1",
-      .name          =  NULL,
-      .desc          =  "UUID",
-      .flags         =  LDAPSCHEMA_O_READABLE,
-      .type          =  LDAPSCHEMA_SYNTAX | LDAPSCHEMA_CLASS_ASCII,
-      .def           =  "( 1.3.6.1.1.16.1 DESC 'UUID' )",
-      .abnf          =  "UUID               = time-low \"-\"\n"
-                        "                     time-mid \"-\"\n"
-                        "                     time-high-and-version \"-\"\n"
-                        "                     clock-seq-and-reserved\n"
-                        "                     clock-seq-low \"-\" node\n"
-                        "time-low               = 4hexOctet\n"
-                        "time-mid               = 2hexOctet\n"
-                        "time-high-and-version  = 2hexOctet\n"
-                        "clock-seq-and-reserved = hexOctet\n"
-                        "clock-seq-low          = hexOctet\n"
-                        "node                   = 6hexOctet\n"
-                        "hexOctet               = hexDigit hexDigit\n"
-                        "hexDigit = \"0\" / \"1\" / \"2\" / \"3\" / \"4\" /\n"
-                        "           \"5\" / \"6\" / \"7\" / \"8\" / \"9\" /\n"
-                        "           \"a\" / \"b\" / \"c\" / \"d\" / \"e\" / \"f\" /\n"
-                        "           \"A\" / \"B\" / \"C\" / \"D\" / \"E\" / \"F\"\n",
-      .re_posix      =  "^([[:xdigit:]]{8,8}(-[[:xdigit:]]{4,4}){3,3}-[[:xdigit:]]{12,12})$",
-      .re_pcre       =  NULL,
-      .source        =  "RFC 4530 Section 2.1",
-      .spec_type     =  LDAPSCHEMA_SPEC_RFC,
-      .spec_name     =  "4530",
-      .spec_section  =  "2.1",
-      .examples      =  (const char *[]){ "597ae2f6-16a6-1027-98f4-d28b5365dc14", NULL },
-   },
-   {
       // RFC 2252 Section 4.3.2: Syntax Object Identifiers
       .oid           =  "1.3.6.1.4.1.1466.115.121.1.1",
       .name          =  NULL,

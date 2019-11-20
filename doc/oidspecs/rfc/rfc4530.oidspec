@@ -1,0 +1,317 @@
+
+
+{
+   //
+   // RFC 4122                  A UUID URN Namespace                 July 2005
+   //
+   // 3.  Namespace Registration Template
+   // 
+   //    Namespace ID:  UUID
+   //    Registration Information:
+   //       Registration date: 2003-10-01
+   // 
+   //    Declared registrant of the namespace:
+   //       JTC 1/SC6 (ASN.1 Rapporteur Group)
+   // 
+   //    Declaration of syntactic structure:
+   //       A UUID is an identifier that is unique across both space and time,
+   //       with respect to the space of all UUIDs.  Since a UUID is a fixed
+   //       size and contains a time field, it is possible for values to
+   //       rollover (around A.D. 3400, depending on the specific algorithm
+   //       used).  A UUID can be used for multiple purposes, from tagging
+   //       objects with an extremely short lifetime, to reliably identifying
+   //       very persistent objects across a network.
+   // 
+   //       The internal representation of a UUID is a specific sequence of
+   //       bits in memory, as described in Section 4.  To accurately
+   //       represent a UUID as a URN, it is necessary to convert the bit
+   //       sequence to a string representation.
+   // 
+   //       Each field is treated as an integer and has its value printed as a
+   //       zero-filled hexadecimal digit string with the most significant
+   //       digit first.  The hexadecimal values "a" through "f" are output as
+   //       lower case characters and are case insensitive on input.
+   // 
+   //       The formal definition of the UUID string representation is
+   //       provided by the following ABNF [7]:
+   // 
+   //       UUID                   = time-low "-" time-mid "-"
+   //                                time-high-and-version "-"
+   //                                clock-seq-and-reserved
+   //                                clock-seq-low "-" node
+   //       time-low               = 4hexOctet
+   //       time-mid               = 2hexOctet
+   //       time-high-and-version  = 2hexOctet
+   //       clock-seq-and-reserved = hexOctet
+   //       clock-seq-low          = hexOctet
+   //       node                   = 6hexOctet
+   //       hexOctet               = hexDigit hexDigit
+   //       hexDigit =
+   //             "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9" /
+   //             "a" / "b" / "c" / "d" / "e" / "f" /
+   //             "A" / "B" / "C" / "D" / "E" / "F"
+   // 
+   //    The following is an example of the string representation of a UUID as
+   //    a URN:
+   // 
+   //    urn:uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf6
+   // 
+   //    Relevant ancillary documentation:
+   //       [1][2]
+   //    Identifier uniqueness considerations:
+   //       This document specifies three algorithms to generate UUIDs: the
+   //       first leverages the unique values of 802 MAC addresses to
+   //       guarantee uniqueness, the second uses pseudo-random number
+   //       generators, and the third uses cryptographic hashing and
+   //       application-provided text strings.  As a result, the UUIDs
+   //       generated according to the mechanisms here will be unique from all
+   //       other UUIDs that have been or will be assigned.
+   // 
+   //    Identifier persistence considerations:
+   //       UUIDs are inherently very difficult to resolve in a global sense.
+   //       This, coupled with the fact that UUIDs are temporally unique
+   //       within their spatial context, ensures that UUIDs will remain as
+   //       persistent as possible.
+   // 
+   //    Process of identifier assignment:
+   //       Generating a UUID does not require that a registration authority
+   //       be contacted.  One algorithm requires a unique value over space
+   //       for each generator.  This value is typically an IEEE 802 MAC
+   //       address, usually already available on network-connected hosts.
+   //       The address can be assigned from an address block obtained from
+   //       the IEEE registration authority.  If no such address is available,
+   //       or privacy concerns make its use undesirable, Section 4.5
+   //       specifies two alternatives.  Another approach is to use version 3
+   //       or version 4 UUIDs as defined below.
+   // 
+   //    Process for identifier resolution:
+   //       Since UUIDs are not globally resolvable, this is not applicable.
+   // 
+   //    Rules for Lexical Equivalence:
+   //       Consider each field of the UUID to be an unsigned integer as shown
+   //       in the table in section Section 4.1.2.  Then, to compare a pair of
+   //       UUIDs, arithmetically compare the corresponding fields from each
+   //       UUID in order of significance and according to their data type.
+   //       Two UUIDs are equal if and only if all the corresponding fields
+   //       are equal.
+   // 
+   //       As an implementation note, equality comparison can be performed on
+   //       many systems by doing the appropriate byte-order canonicalization,
+   //       and then treating the two UUIDs as 128-bit unsigned integers.
+   // 
+   //       UUIDs, as defined in this document, can also be ordered
+   //       lexicographically.  For a pair of UUIDs, the first one follows the
+   //       second if the most significant field in which the UUIDs differ is
+   //       greater for the first UUID.  The second precedes the first if the
+   //       most significant field in which the UUIDs differ is greater for
+   //       the second UUID.
+   // 
+   //    Conformance with URN Syntax:
+   //       The string representation of a UUID is fully compatible with the
+   //       URN syntax.  When converting from a bit-oriented, in-memory
+   //       representation of a UUID into a URN, care must be taken to
+   //       strictly adhere to the byte order issues mentioned in the string
+   //       representation section.
+   // 
+   //    Validation mechanism:
+   //       Apart from determining whether the timestamp portion of the UUID
+   //       is in the future and therefore not yet assignable, there is no
+   //       mechanism for determining whether a UUID is 'valid'.
+   // 
+   //    Scope:
+   //       UUIDs are global in scope.
+   //
+   //
+   // RFC 4530                     LDAP entryUUID                    June 2006
+   // 
+   // 2.1.  UUID Syntax
+   // 
+   //    A Universally Unique Identifier (UUID) [RFC4122] is a 16-octet (128-
+   //    bit) value that identifies an object.  The ASN.1 [X.680] type UUID is
+   //    defined to represent UUIDs as follows:
+   // 
+   //        UUID ::= OCTET STRING (SIZE(16))
+   //              -- constrained to an UUID [RFC4122]
+   //        
+   //    In LDAP, UUID values are encoded using the [ASCII] character string
+   //    representation described in [RFC4122].  For example,
+   //    "597ae2f6-16a6-1027-98f4-d28b5365dc14".
+   // 
+   //    The following is an LDAP syntax description suitable for publication
+   //    in subschema subentries.
+   // 
+   //        ( 1.3.6.1.1.16.1 DESC 'UUID' )
+   // 
+   .oid           =  "1.3.6.1.1.16.1",
+   .name          =  "UUID",
+   .desc          =  "UUID",
+   .flags         =  LDAPSCHEMA_O_READABLE,
+   .type          =  LDAPSCHEMA_SYNTAX,
+   .class         =  LDAPSCHEMA_CLASS_ASCII,
+   .def           =  "( 1.3.6.1.1.16.1 DESC 'UUID' )",
+   .abnf          =  "UUID                   = time-low \"-\" time-mid \"-\"\n"
+                     "                         time-high-and-version \"-\"\n"
+                     "                         clock-seq-and-reserved\n"
+                     "                         clock-seq-low \"-\" node\n"
+                     "time-low               = 4hexOctet\n"
+                     "time-mid               = 2hexOctet\n"
+                     "time-high-and-version  = 2hexOctet\n"
+                     "clock-seq-and-reserved = hexOctet\n"
+                     "clock-seq-low          = hexOctet\n"
+                     "node                   = 6hexOctet\n"
+                     "hexOctet               = hexDigit hexDigit\n"
+                     "hexDigit =\n"
+                     "      \"0\" / \"1\" / \"2\" / \"3\" / \"4\" / \"5\" / \"6\" / \"7\" / \"8\" / \"9\" /\n"
+                     "      \"a\" / \"b\" / \"c\" / \"d\" / \"e\" / \"f\" /\n"
+                     "      \"A\" / \"B\" / \"C\" / \"D\" / \"E\" / \"F\"\n",
+   .re_posix      =  NULL,
+   .re_pcre       =  NULL,
+   .spec          =  "RFC 4530: LDAP entryUUID",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4530",
+   .spec_section  =  "2.1",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+   .examples      =  (const char *[])
+                     {
+                        "597ae2f6-16a6-1027-98f4-d28b5365dc14",
+                        NULL,
+                     },
+};
+
+
+
+
+{
+   //
+   // RFC 4530                     LDAP entryUUID                    June 2006
+   // 
+   // 2.2.  'uuidMatch' Matching Rule
+   // 
+   //    The 'uuidMatch' matching rule compares an asserted UUID with a stored
+   //    UUID for equality.  Its semantics are the same as the
+   //    'octetStringMatch' [X.520][RFC4517] matching rule.  The rule differs
+   //    from 'octetStringMatch' in that the assertion value is encoded using
+   //    the UUID string representation instead of the normal OCTET STRING
+   //    string representation.
+   // 
+   //    The following is an LDAP matching rule description suitable for
+   //    publication in subschema subentries.
+   // 
+   //        ( 1.3.6.1.1.16.2 NAME 'uuidMatch'
+   //            SYNTAX 1.3.6.1.1.16.1 )
+   //
+   .oid           =  "1.3.6.1.1.16.2",
+   .name          =  "uuidMatch",
+   .desc          =  "'uuidMatch' Matching Rule",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_MATCHINGRULE,
+   .def           =  "( 1.3.6.1.1.16.2 NAME 'uuidMatch' SYNTAX 1.3.6.1.1.16.1 )",
+   .spec          =  "RFC 4530: LDAP entryUUID",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4530",
+   .spec_section  =  "2.2",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+   .examples      =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4530                     LDAP entryUUID                    June 2006
+   // 
+   // 2.3.  'uuidOrderingMatch' Matching Rule
+   // 
+   //    The 'uuidOrderingMatch' matching rule compares an asserted UUID with
+   //    a stored UUID for ordering.  Its semantics are the same as the
+   //    'octetStringOrderingMatch' [X.520][RFC4517] matching rule.  The rule
+   //    differs from 'octetStringOrderingMatch' in that the assertion value
+   //    is encoded using the UUID string representation instead of the normal
+   //    OCTET STRING string representation.
+   // 
+   //   The following is an LDAP matching rule description suitable for
+   //    publication in subschema subentries.
+   // 
+   //        ( 1.3.6.1.1.16.3 NAME 'uuidOrderingMatch'
+   //            SYNTAX 1.3.6.1.1.16.1 )
+   //      
+   //    Note that not all UUID variants have a defined ordering; and even
+   //    where it does, servers are not obligated to assign UUIDs in any
+   //    particular order.  This matching rule is provided for completeness.
+   //
+   .oid           =  "1.3.6.1.1.16.3",
+   .name          =  "uuidOrderingMatch",                                           
+   .desc          =  "'uuidOrderingMatch' Matching Rule",
+   .flags         =  0,                                 
+   .type          =  LDAPSCHEMA_MATCHINGRULE,
+   .def           =  "( 1.3.6.1.1.16.3 NAME 'uuidOrderingMatch' SYNTAX 1.3.6.1.1.16.1 )",
+   .spec          =  "RFC 4530: LDAP entryUUID",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,                                   
+   .spec_name     =  "4530",
+   .spec_section  =  "2.3",
+   .spec_source   =  NULL,                                                  
+   .spec_vendor   =  "IETF",                                                
+   .spec_text     =  NULL,                                                  
+   .notes         =  NULL,                                                  
+   .examples      =  NULL,
+};  
+
+
+
+{
+   //
+   // RFC 4530                     LDAP entryUUID                    June 2006
+   // 
+   // 2.4.  'entryUUID' Attribute
+   // 
+   //    The 'entryUUID' operational attribute provides the Universally Unique
+   //    Identifier (UUID) assigned to the entry. 
+   // 
+   //    The following is an LDAP attribute type description suitable for
+   //    publication in subschema subentries.
+   // 
+   //        ( 1.3.6.1.1.16.4 NAME 'entryUUID'
+   //            DESC 'UUID of the entry'
+   //            EQUALITY uuidMatch
+   //            ORDERING uuidOrderingMatch
+   //            SYNTAX 1.3.6.1.1.16.1
+   //            SINGLE-VALUE
+   //            NO-USER-MODIFICATION
+   //            USAGE directoryOperation )
+   //      
+   //    Servers SHALL generate and assign a new UUID to each entry upon its
+   //    addition to the directory and provide that UUID as the value of the
+   //    'entryUUID' operational attribute.  An entry's UUID is immutable.
+   // 
+   //    UUID are to be generated in accordance with Section 4 of [RFC4122].
+   //    In particular, servers MUST ensure that each generated UUID is unique
+   //    in space and time.
+   //
+   .oid           =  "1.3.6.1.1.16.4",
+   .name          =  "entryUUID",
+   .desc          =  "UUID of the entry",
+   .flags         =  LDAPSCHEMA_O_READABLE | LDAPSCHEMA_O_SINGLEVALUE | LDAPSCHEMA_O_NO_USER_MOD,
+   .type          =  LDAPSCHEMA_ATTRIBUTETYPE,
+   .def           =  "( 1.3.6.1.1.16.4 NAME 'entryUUID' DESC 'UUID of the entry' EQUALITY uuidMatch ORDERING uuidOrderingMatch SYNTAX 1.3.6.1.1.16.1 SINGLE-VALUE NO-USER-MODIFICATION USAGE directoryOperation )",
+   .spec          =  "RFC 4530: LDAP entryUUID",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4530",
+   .spec_section  =  "2.4",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+   .examples      =  NULL,
+};
+
+
+
+
+
+// end of OID spec file
