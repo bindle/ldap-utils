@@ -634,7 +634,7 @@
    .name          =  "Aborted Transaction Notice",
    .desc          =  "Aborted Transaction Notice",
    .flags         =  0,
-   .type          =  LDAPSCHEMA_NAMEFORM,
+   .type          =  LDAPSCHEMA_UNSOLICITED,
    .def           =  NULL,
    .spec          =  "RFC 5805: Lightweight Directory Access Protocol (LDAP) Transactions",
    .spec_type     =  LDAPSCHEMA_SPEC_RFC,

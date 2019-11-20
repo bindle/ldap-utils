@@ -77,6 +77,7 @@ int yylex();
 "LDAPSCHEMA_FEATURE"                { yylval.str = yytext; return(TYPE); }
 "LDAPSCHEMA_CONTROL"                { yylval.str = yytext; return(TYPE); }
 "LDAPSCHEMA_EXTENSION"              { yylval.str = yytext; return(TYPE); }
+"LDAPSCHEMA_UNSOLICITED"            { yylval.str = yytext; return(TYPE); }
 
 "LDAPSCHEMA_CLASS_UNKNOWN"          { yylval.str = yytext; return(CLASS); }
 "LDAPSCHEMA_CLASS_ASCII"            { yylval.str = yytext; return(CLASS); }
