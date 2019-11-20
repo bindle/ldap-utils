@@ -97,7 +97,7 @@ field             :
                   | FLD_ABNF         '=' strings      { my_yycommit( FLD_ABNF             ); }
                   | FLD_CLASS        '=' CLASS        { my_yysubmit( FLD_CLASS,        $3 ); }
                   | FLD_DESC         '=' CSTRING      { my_yysubmit( FLD_DESC,         $3 ); }
-                  | FLD_DEF          '=' CSTRING      { my_yysubmit( FLD_DEF,          $3 ); }
+                  | FLD_DEF          '=' strings      { my_yycommit( FLD_DEF              ); }
                   | FLD_EXAMPLES     '=' examples     { my_yycommit( FLD_EXAMPLES         ); }
                   | FLD_FLAGS        '=' flags        { my_yycommit( FLD_FLAGS            ); }
                   | FLD_IGNORE       '=' NULLSTR      { my_yysubmit( FLD_IGNORE,   "NULL" ); }
