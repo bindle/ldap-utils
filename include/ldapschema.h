@@ -174,6 +174,30 @@
 #define LDAPSCHEMA_CLASS_UTF8_MULTILINE               9
 
 
+// specification fields
+#define LDAPSCHEMA_FLD_OID                            1
+#define LDAPSCHEMA_FLD_NAME                           2
+#define LDAPSCHEMA_FLD_DESC                           3
+#define LDAPSCHEMA_FLD_DEF                            4
+#define LDAPSCHEMA_FLD_SOURCE                         5
+#define LDAPSCHEMA_FLD_ABNF                           6
+#define LDAPSCHEMA_FLD_RE_POSIX                       7
+#define LDAPSCHEMA_FLD_RE_PCRE                        8
+#define LDAPSCHEMA_FLD_EXAMPLES                       9
+#define LDAPSCHEMA_FLD_SPEC                           10
+#define LDAPSCHEMA_FLD_SPEC_NAME                      11
+#define LDAPSCHEMA_FLD_SPEC_SECTION                   12
+#define LDAPSCHEMA_FLD_SPEC_SOURCE                    13
+#define LDAPSCHEMA_FLD_SPEC_VENDOR                    14
+#define LDAPSCHEMA_FLD_SPEC_TEXT                      15
+#define LDAPSCHEMA_FLD_SPEC_TYPE                      16
+#define LDAPSCHEMA_FLD_TYPE                           17
+#define LDAPSCHEMA_FLD_SUBTYPE                        18
+#define LDAPSCHEMA_FLD_CLASS                          19
+#define LDAPSCHEMA_FLD_FLAGS                          20
+#define LDAPSCHEMA_FLD_NOTES                          21
+
+
 /////////////////
 //             //
 //  Datatypes  //
@@ -362,6 +386,26 @@ ldapschema_value_free(
 _LDAPSCHEMA_F void
 ldapschema_value_free_len(
          struct berval        ** vals );
+
+
+//-----------------------------//
+// OID Specification functions //
+//-----------------------------//
+#pragma mark OID Specification functions functions
+
+_LDAPSCHEMA_F int
+ldapschema_spec_field(
+         const LDAPSchemaSpec  * spec,
+         int                     field,
+         void                  * outvalue );
+
+_LDAPSCHEMA_F const LDAPSchemaSpec * const *
+ldapschema_spec_list(
+         size_t                * lenp );
+
+_LDAPSCHEMA_F const LDAPSchemaSpec *
+ldapschema_spec_search(
+         const char            * oid);
 
 
 //------------------//

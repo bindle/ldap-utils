@@ -78,6 +78,8 @@ struct ldapschema_spec
    const char      * spec_name;
    const char      * spec_source;
    const char      * spec_vendor;
+   const char      * spec_text;
+   const char      * notes;
    uint8_t           type;
    uint8_t           subtype;
    uint8_t           class;
