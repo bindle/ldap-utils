@@ -21,6 +21,8 @@
    .spec_section  =  "3.3.2",                                               // section of specification which defines/declares OID
    .spec_source   =  NULL,                                                  // URL of specification if not derivable from .spec_type
    .spec_vendor   =  "IETF",                                                // Vendor/author of spec
+   .spec_text     =  NULL,                                                  // copy of specification pertinent to OID
+   .notes         =  NULL,                                                  // additional notes for end user consumption
    .examples      =  (const char *[])
                      {
                         "'0101111101'B",
