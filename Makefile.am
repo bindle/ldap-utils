@@ -87,7 +87,8 @@ noinst_LIBRARIES			= lib/libldaputils.a
 
 
 # lists
-OIDSPEC_FILES				= $(srcdir)/doc/oidspecs/rfc/rfc4517.oidspec \
+OIDSPEC_FILES				= $(srcdir)/doc/oidspecs/rfc/rfc2252.oidspec \
+					  $(srcdir)/doc/oidspecs/rfc/rfc4517.oidspec \
 					  $(srcdir)/doc/oidspecs/rfc/rfc4523.oidspec \
 					  $(srcdir)/doc/oidspecs/rfc/rfc4530.oidspec
 MY_OIDSPECFLAGS				= --include=lspecdata.h \
