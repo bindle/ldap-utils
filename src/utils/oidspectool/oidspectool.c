@@ -168,6 +168,7 @@ OIDSpec        ** oidspeclist       = NULL;
 size_t            oidspeclist_len   = 0;
 char           ** filelist          = NULL;
 size_t            filelist_len      = 0;
+size_t            ignorelist_len    = 0;
 
 
 MyConfig cfg =
@@ -416,6 +417,7 @@ int main(int argc, char * argv[])
    {
       printf("stats: %zu files parsed\n", filelist_len);
       printf("stats: %zu OID specifications indexed\n", oidspeclist_len);
+      printf("stats: %zu OID specifications ignored\n", ignorelist_len);
    };
 
    return(0);
@@ -1045,6 +1047,7 @@ int my_yyoidspec(void)
          fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
          exit(EXIT_FAILURE);
       };
+      ignorelist_len++;
       return(0);
    };
    if ((cfg.verbose))
