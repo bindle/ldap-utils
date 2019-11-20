@@ -115,12 +115,12 @@ field             :
                   ;
 
 string            :
-                  | NULLSTR                           { my_yyappend( "NULL" ); }
+                  | NULLSTR
                   | CSTRING                           { my_yyappend( $1     ); }
                   ;
 
 strings           :
-                  | NULLSTR                           { my_yyappend( "NULL" ); }
+                  | NULLSTR
                   | strings CSTRING                   { my_yyappend( $2     ); }
                   ;
 
