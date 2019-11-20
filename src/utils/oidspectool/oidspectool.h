@@ -47,6 +47,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <errno.h>
 
 #include "oidspecparser.h"
 
@@ -87,7 +88,6 @@
 /////////////////
 #pragma mark - Variables
 
-extern int          errno;
 extern int          yylineno;
 extern char       * yytext;
 extern const char * my_filename;
