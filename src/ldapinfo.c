@@ -69,6 +69,7 @@
 #define LDAP_DEPRECATED 1
 #include <ldap.h>
 #include <ldaputils.h>
+#include <ldapschema.h>
 
 
 ///////////////////
@@ -160,9 +161,9 @@ int main(int argc, char * argv[]);
 // parses configuration
 int my_config(int argc, char * argv[], MyConfig ** cnfp);
 
-void my_field(const char * name, const char * val);
+void my_field(const char * name, const char * val, int isoid);
 
-void my_fields(const char * name, char ** vals);
+void my_fields(const char * name, char ** vals, int isoid);
 
 char * my_monitor(MyConfig * cnf, const char * base);
 
@@ -363,26 +364,33 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
 }
 
 
-void my_field(const char * name, const char * val)
+void my_field(const char * name, const char * val, int isoid)
 {
+   const LDAPSchemaSpec  * spec;
+   char                  * desc;
+
+   desc = NULL;
+   if ((isoid))
+      if ((spec = ldapschema_spec_search(val)) != NULL)
+         ldapschema_spec_field(spec, LDAPSCHEMA_FLD_DESC, &desc);
+
    if (!(name))
       name = "";
-   printf("%-28s %s\n", name, val);
+   if ((desc))
+      printf("%-28s %s (%s)\n", name, val, desc);
+   else
+      printf("%-28s %s\n", name, val);
+
    return;
 }
 
 
-void my_fields(const char * name, char ** vals)
+void my_fields(const char * name, char ** vals, int isoid)
 {
    size_t x;
-   if (!(vals))
-   {
-      my_field(name, NULL);
-      return;
-   };
-   my_field(name, vals[0]);
+   my_field(name, vals[0], isoid);
    for(x = 1; ((vals[x])); x++)
-      my_field(NULL, vals[x]);
+      my_field(NULL, vals[x], isoid);
    return;
 }
 
@@ -519,9 +527,9 @@ int my_monitor_connections(MyConfig * cnf, const char * base)
 
       snprintf(buff, sizeof(buff), "%s: %s", name[0], vals[0]);
       if (!(count))
-         my_field("Connections:", buff);
+         my_field("Connections:", buff, 0);
       else
-         my_field(NULL, buff);
+         my_field(NULL, buff, 0);
       count++;
 
       if ((name))
@@ -612,7 +620,7 @@ int my_monitor_database(MyConfig * cnf, const char * base)
          ldap_value_free(vals);
       };
 
-      my_field(((count)) ? NULL : "Naming contexts:", buff);
+      my_field(((count)) ? NULL : "Naming contexts:", buff, 0);
       count++;
 
       // retrieves next entry
@@ -708,9 +716,9 @@ int my_monitor_listeners(MyConfig * cnf, const char * base)
 
       snprintf(buff, sizeof(buff), "%s initiated: %s; completed %s", cn[0], initiated[0], completed[0]);
       if (!(count))
-         my_field("Operations:", buff);
+         my_field("Operations:", buff, 0);
       else
-         my_field(NULL, buff);
+         my_field(NULL, buff, 0);
       count++;
 
       ldap_value_free(cn);
@@ -811,9 +819,9 @@ int my_monitor_operations(MyConfig * cnf, const char * base)
          uri[0] = '\0';
          snprintf(buff, sizeof(buff), "%s%s", uris[0], addr);
          if (!(count))
-            my_field("Listeners:", buff);
+            my_field("Listeners:", buff, 0);
          else
-            my_field(NULL, buff);
+            my_field(NULL, buff, 0);
          count++;
       };
 
@@ -901,44 +909,44 @@ int my_rootdse(MyConfig * cnf)
    // obtain vendor name and version
    if ((vals = ldap_get_values(ld, msg, "vendorName")) != NULL)
    {
-      my_fields("Vendor name:", vals);
+      my_fields("Vendor name:", vals, 0);
       ldap_value_free(vals);
    }
    else if ((vals = ldap_get_values(ld, msg, "isGlobalCatalogReady")) != NULL)
    {
-      my_field("Vendor name:", "Microsoft Active Directory");
+      my_field("Vendor name:", "Microsoft Active Directory", 0);
       ldap_value_free(vals);
    }
    else if ((vals = ldap_get_values(ld, msg, "objectClass")) != NULL)
    {
       for(s = 0; ((vals[s])); s++)
          if (!(strcasecmp(vals[s], "OpenLDAProotDSE")))
-            my_field("Vendor name:", "OpenLDAP");
+            my_field("Vendor name:", "OpenLDAP", 0);
       ldap_value_free(vals);
    };
    if ((vals = ldap_get_values(ld, msg, "vendorVersion")) != NULL)
    {
-      my_fields("Vendor version:", vals);
+      my_fields("Vendor version:", vals, 0);
       ldap_value_free(vals);
    }
    else if ((vers))
-      my_field("Vendor version:", vers);
+      my_field("Vendor version:", vers, 0);
    if ((vals = ldap_get_values(ld, msg, "supportedLDAPVersion")) != NULL)
    {
-      my_fields("LDAP version:", vals);
+      my_fields("LDAP version:", vals, 0);
       ldap_value_free(vals);
    };
 
    // DNs
    if ((schema))
-      my_fields("Subschema Subentry:", schema);
+      my_fields("Subschema Subentry:", schema, 0);
    if ((vals = ldap_get_values(ld, msg, "configContext")) != NULL)
    {
-      my_fields("Configuration context:", vals);
+      my_fields("Configuration context:", vals, 0);
       ldap_value_free(vals);
    };
    if ((monitor))
-      my_fields("Monitoring context:", monitor);
+      my_fields("Monitoring context:", monitor, 0);
    printf("\n");
 
    // print schema
@@ -960,12 +968,12 @@ int my_rootdse(MyConfig * cnf)
    if ((monitor))
    {
       if ((rc = my_monitor_database(cnf, monitor[0])) == -1)
-         my_fields("Naming contexts:", vals);
+         my_fields("Naming contexts:", vals, 0);
       printf("\n");
    }
    else
    {
-      my_fields("Naming contexts:", vals);
+      my_fields("Naming contexts:", vals, 0);
       printf("\n");
    };
 
@@ -979,7 +987,7 @@ int my_rootdse(MyConfig * cnf)
    // obtain supported controls
    if ((vals = ldap_get_values(ld, msg, "supportedControl")) != NULL)
    {
-      my_fields("Supported controls:", vals);
+      my_fields("Supported controls:", vals, 1);
       printf("\n");
       ldap_value_free(vals);
    };
@@ -987,7 +995,7 @@ int my_rootdse(MyConfig * cnf)
    // obtain supported extension
    if ((vals = ldap_get_values(ld, msg, "supportedExtension")) != NULL)
    {
-      my_fields("Supported extension:", vals);
+      my_fields("Supported extension:", vals, 1);
       printf("\n");
       ldap_value_free(vals);
    };
@@ -995,7 +1003,7 @@ int my_rootdse(MyConfig * cnf)
    // obtain supported features
    if ((vals = ldap_get_values(ld, msg, "supportedFeatures")) != NULL)
    {
-      my_fields("Supported features:", vals);
+      my_fields("Supported features:", vals, 1);
       printf("\n");
       ldap_value_free(vals);
    };
@@ -1003,7 +1011,7 @@ int my_rootdse(MyConfig * cnf)
    // obtain supported SASL mechanisms
    if ((vals = ldap_get_values(ld, msg, "supportedSASLMechanisms")) != NULL)
    {
-      my_fields("Supported SASL mechanisms:", vals);
+      my_fields("Supported SASL mechanisms:", vals, 0);
       printf("\n");
       ldap_value_free(vals);
    };
@@ -1055,7 +1063,7 @@ int my_schema(MyConfig * cnf, const char * base)
       if (i > 0)
       {
          snprintf(buff, sizeof(buff), "ldapSyntaxes: %i", i);
-         my_field("Schema:",  buff);
+         my_field("Schema:",  buff, 0);
       };
       ldap_value_free(vals);
    };
@@ -1066,7 +1074,7 @@ int my_schema(MyConfig * cnf, const char * base)
       if (i > 0)
       {
          snprintf(buff, sizeof(buff), "matchingRules: %i", i);
-         my_field(NULL,  buff);
+         my_field(NULL,  buff, 0);
       };
       ldap_value_free(vals);
    };
@@ -1077,7 +1085,7 @@ int my_schema(MyConfig * cnf, const char * base)
       if (i > 0)
       {
          snprintf(buff, sizeof(buff), "matchingRuleUse: %i", i);
-         my_field(NULL,  buff);
+         my_field(NULL,  buff, 0);
       };
       ldap_value_free(vals);
    };
@@ -1088,7 +1096,7 @@ int my_schema(MyConfig * cnf, const char * base)
       if (i > 0)
       {
          snprintf(buff, sizeof(buff), "attributeTypes: %i", i);
-         my_field(NULL,  buff);
+         my_field(NULL,  buff, 0);
       };
       ldap_value_free(vals);
    };
@@ -1099,7 +1107,7 @@ int my_schema(MyConfig * cnf, const char * base)
       if (i > 0)
       {
          snprintf(buff, sizeof(buff), "objectClasses: %i", i);
-         my_field(NULL,  buff);
+         my_field(NULL,  buff, 0);
       };
       ldap_value_free(vals);
    };
@@ -1110,7 +1118,7 @@ int my_schema(MyConfig * cnf, const char * base)
       if (i > 0)
       {
          snprintf(buff, sizeof(buff), "dITContentRules: %i", i);
-         my_field(NULL,  buff);
+         my_field(NULL,  buff, 0);
       };
       ldap_value_free(vals);
    };
@@ -1121,7 +1129,7 @@ int my_schema(MyConfig * cnf, const char * base)
       if (i > 0)
       {
          snprintf(buff, sizeof(buff), "dITStructureRules: %i", i);
-         my_field(NULL,  buff);
+         my_field(NULL,  buff, 0);
       };
       ldap_value_free(vals);
    };
@@ -1132,7 +1140,7 @@ int my_schema(MyConfig * cnf, const char * base)
       if (i > 0)
       {
          snprintf(buff, sizeof(buff), "nameForms: %i", i);
-         my_field(NULL,  buff);
+         my_field(NULL,  buff, 0);
       };
       ldap_value_free(vals);
    };

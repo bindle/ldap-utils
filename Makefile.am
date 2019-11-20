@@ -270,11 +270,11 @@ if LDAPUTILS_LDAPINFO
    bin_PROGRAMS				+= src/ldapinfo
    man_MANS				+= doc/ldapinfo.1
 endif
-src_ldapinfo_DEPENDENCIES		= Makefile lib/libldaputils.a
+src_ldapinfo_DEPENDENCIES		= Makefile lib/libldaputils.a lib/libldapschema.a
 src_ldapinfo_CPPFLAGS			= -DPROGRAM_NAME="\"ldapinfo\"" $(AM_CPPFLAGS)
 src_ldapinfo_CFLAGS			= $(AM_CFLAGS)
 src_ldapinfo_LDFLAGS			= $(AM_LDFLAGS)
-src_ldapinfo_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
+src_ldapinfo_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a lib/libldapschema.a
 src_ldapinfo_SOURCES			= src/ldapinfo.c
 
 
