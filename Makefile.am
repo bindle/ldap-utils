@@ -117,7 +117,7 @@ EXTRA_DIST				= $(noinst_HEADERS) \
 					  lib/libldaputils/libldaputils.sym \
 					  lib/libldapschema/lspecdata.c \
 					  lib/libldapschema/lspecdata.h \
-					  lib/libldapschema/specs/template.oidspec \
+					  doc/oidspecs/template.oidspec \
 					  $(OIDSPEC_FILES)
 CLEANFILES				= \
 					  $(builddir)/a.out   $(srcdir)/a.out \
