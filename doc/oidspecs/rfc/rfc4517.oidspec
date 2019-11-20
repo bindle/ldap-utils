@@ -45,32 +45,32 @@
    //          modifiable;
    //      USAGE indicates the application of this attribute type; and
    //      <extensions> describe extensions.
-   //         
+   //
    //    Each attribute type description must contain at least one of the SUP
    //    or SYNTAX fields.  If no SYNTAX field is provided, the attribute type
    //    description takes its value from the supertype.
-   //         
+   //
    //    If SUP field is provided, the EQUALITY, ORDERING, and SUBSTRING
    //    fields, if not specified, take their value from the supertype.
-   //         
+   //
    //    Usage of userApplications, the default, indicates that attributes of
    //    this type represent user information.  That is, they are user
    //    attributes.
-   //         
+   //
    //    A usage of directoryOperation, distributedOperation, or dSAOperation
    //    indicates that attributes of this type represent operational and/or
    //    administrative information.  That is, they are operational
    //    attributes.
-   //             
+   //
    //    directoryOperation usage indicates that the attribute of this type is
    //    a directory operational attribute.  distributedOperation usage
    //    indicates that the attribute of this type is a DSA-shared usage
    //    operational attribute.  dSAOperation usage indicates that the
    //    attribute of this type is a DSA-specific operational attribute.
-   //     
+   //
    //    COLLECTIVE requires usage userApplications.  Use of collective
    //    attribute types in LDAP is discussed in [RFC3671].
-   //     
+   //
    //    NO-USER-MODIFICATION requires an operational usage.
    //
    //    Note that the <AttributeTypeDescription> does not list the matching
@@ -496,7 +496,7 @@
    //    The list of precluded attributes cannot include any attribute listed
    //    as mandatory in the rule, the structural object class, or any of the
    //    allowed auxiliary object classes.
-   // 
+   //
    //    Each content rule is identified by the object identifier, as well as
    //    any short names (descriptors), of the structural object class it
    //    applies to.
@@ -524,7 +524,7 @@
    //    object class of an entry are not applicable to that entry.
    //
    //    DIT content rule descriptions are written according to the ABNF:
-   // 
+   //
    //      DITContentRuleDescription = LPAREN WSP
    //          numericoid                 ; object identifier
    //          [ SP "NAME" SP qdescrs ]   ; short names (descriptors)
@@ -535,7 +535,7 @@
    //          [ SP "MAY" SP oids ]       ; attribute types
    //          [ SP "NOT" SP oids ]       ; attribute types
    //          extensions WSP RPAREN      ; extensions
-   //   
+   //
    //    where:
    //      <numericoid> is the object identifier of the structural object
    //          class associated with this DIT content rule;
@@ -865,7 +865,7 @@
 
 
 {
-   //               
+   //
    // RFC 4517           LDAP: Syntaxes and Matching Rules           June 2006
    //
    // 3.3.10.  Enhanced Guide
@@ -958,7 +958,7 @@
 
 
 {
-   //                
+   //
    // RFC 4517           LDAP: Syntaxes and Matching Rules           June 2006
    //
    // 3.3.11.  Facsimile Telephone Number
@@ -1025,7 +1025,7 @@
 
 
 {
-   //                
+   //
    // RFC 4517           LDAP: Syntaxes and Matching Rules           June 2006
    //
    // 3.3.12.  Fax
@@ -1191,7 +1191,7 @@
 
 
 {
-   //                
+   //
    // RFC 4517           LDAP: Syntaxes and Matching Rules           June 2006
    //
    // 3.3.14.  Guide
@@ -1252,7 +1252,7 @@
 
 
 {
-   //                
+   //
    // RFC 4517           LDAP: Syntaxes and Matching Rules           June 2006
    //
    // 3.3.15.  IA5 String
@@ -1291,7 +1291,7 @@
 
 
 {
-   //                
+   //
    // RFC 4517           LDAP: Syntaxes and Matching Rules           June 2006
    //
    // 3.3.16.  Integer
@@ -1678,7 +1678,7 @@
 
 
 {
-   //                
+   //
    // RFC 4517           LDAP: Syntaxes and Matching Rules           June 2006
    //
    // 3.3.23.  Numeric String
@@ -1824,7 +1824,7 @@
 
 
 {
-   //                
+   //
    // RFC 4517           LDAP: Syntaxes and Matching Rules           June 2006
    //
    // 3.3.25.  Octet String
@@ -2146,9 +2146,9 @@
 
 
 {
-   //                
+   //
    // RFC 4517           LDAP: Syntaxes and Matching Rules           June 2006
-   //                
+   //
    // 3.3.30.  Substring Assertion
    //
    //    A value of the Substring Assertion syntax is a sequence of zero, one,
@@ -2236,7 +2236,7 @@
 
 
 {
-   //                
+   //
    // RFC 4517           LDAP: Syntaxes and Matching Rules           June 2006
    //
    // 3.3.31.  Telephone Number
@@ -2360,7 +2360,7 @@
 
 
 {
-   //                
+   //
    // RFC 4517           LDAP: Syntaxes and Matching Rules           June 2006
    //
    // 3.3.33.  Telex Number
@@ -2495,7 +2495,7 @@
 
 
 {
-   //                
+   //
    // RFC 4517           LDAP: Syntaxes and Matching Rules           June 2006
    //
    // 4.2.1.  bitStringMatch
@@ -2556,17 +2556,17 @@
    //    The booleanMatch rule is an equality matching rule.
    //
    .oid           =  "2.5.13.13",
-   .name          =  "booleanMatch",                                           
+   .name          =  "booleanMatch",
    .desc          =  "booleanMatch",
-   .type          =  LDAPSCHEMA_MATCHINGRULE,                                     
+   .type          =  LDAPSCHEMA_MATCHINGRULE,
    .def           =  "( 2.5.13.13 NAME 'booleanMatch' SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 )",
-   .spec          =  "RFC 4517: LDAP: Syntaxes and Matching Rules",         
-   .spec_type     =  LDAPSCHEMA_SPEC_RFC,                                   
-   .spec_name     =  "4517",                                                
+   .spec          =  "RFC 4517: LDAP: Syntaxes and Matching Rules",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4517",
    .spec_section  =  "4.2.2",
-   .spec_source   =  NULL,                                                  
-   .spec_vendor   =  "IETF",                                                
-}; 
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+};
 
 
 
@@ -2598,7 +2598,7 @@
    //    The caseExactIA5Match rule is an equality matching rule.
    //
    .oid           =  "1.3.6.1.4.1.1466.109.114.1",
-   .name          =  "caseExactIA5Match",  
+   .name          =  "caseExactIA5Match",
    .desc          =  "caseExactIA5Match",
    .type          =  LDAPSCHEMA_MATCHINGRULE,
    .def           =  "( 1.3.6.1.4.1.1466.109.114.1 NAME 'caseExactIA5Match' SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 )",
