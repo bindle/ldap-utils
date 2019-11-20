@@ -98,6 +98,7 @@ int yylex();
 ".desc"                             { return(FLD_DESC); }
 ".flags"                            { return(FLD_FLAGS); }
 ".name"                             { return(FLD_NAME); }
+".notes"                            { return(FLD_NOTES); }
 ".oid"                              { return(FLD_OID); }
 ".re_posix"                         { return(FLD_RE_POSIX); }
 ".re_pcre"                          { return(FLD_RE_PCRE); }
@@ -106,6 +107,7 @@ int yylex();
 ".spec_source"                      { return(FLD_SPEC_SOURCE); }
 ".spec_type"                        { return(FLD_SPEC_TYPE); }
 ".spec_vendor"                      { return(FLD_SPEC_VENDOR); }
+".spec_text"                        { return(FLD_SPEC_TEXT); }
 ".spec"                             { return(FLD_SPEC); }
 ".type"                             { return(FLD_TYPE); }
 ".examples"                         { return(FLD_EXAMPLES); }

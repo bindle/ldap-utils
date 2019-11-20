@@ -131,6 +131,7 @@ struct my_oidspec
    int        lineno;
    char    ** oid;
    char    ** name;
+   char    ** notes;
    char    ** desc;
    char    ** examples;
    char    ** flags;
@@ -145,6 +146,7 @@ struct my_oidspec
    char    ** spec_name;
    char    ** spec_section;
    char    ** spec_source;
+   char    ** spec_text;
    char    ** spec_vendor;
 };
 typedef struct my_oidspec OIDSpec;
@@ -801,6 +803,8 @@ int my_save_source_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx)
    my_save_source_oidspec_strs(fs, ".spec_section",   oidspec->spec_section);
    my_save_source_oidspec_strs(fs, ".spec_source",    oidspec->spec_source);
    my_save_source_oidspec_strs(fs, ".spec_vendor",    oidspec->spec_vendor);
+   my_save_source_oidspec_strs(fs, ".spec_text",      oidspec->spec_text);
+   my_save_source_oidspec_strs(fs, ".notes",          oidspec->notes);
    fprintf(fs, "   %-15s =", ".examples");
    if ((oidspec->examples))
    {
@@ -963,6 +967,7 @@ int my_yycommit(enum yytokentype type)
       case FLD_EXAMPLES:       name = ".examples";      vals = &cur_oidspec->examples;     break;
       case FLD_FLAGS:          name = ".flags";         vals = &cur_oidspec->flags;        break;
       case FLD_NAME:           name = ".name";          vals = &cur_oidspec->name;         break;
+      case FLD_NOTES:          name = ".notes";         vals = &cur_oidspec->notes;        break;
       case FLD_OID:            name = ".oid";           vals = &cur_oidspec->oid;          break;
       case FLD_RE_POSIX:       name = ".re_posix";      vals = &cur_oidspec->re_posix;     break;
       case FLD_RE_PCRE:        name = ".re_pcre";       vals = &cur_oidspec->re_pcre;      break;
@@ -970,6 +975,7 @@ int my_yycommit(enum yytokentype type)
       case FLD_SPEC_NAME:      name = ".spec_name";     vals = &cur_oidspec->spec_name;    break;
       case FLD_SPEC_SECTION:   name = ".spec_section";  vals = &cur_oidspec->spec_section; break;
       case FLD_SPEC_SOURCE:    name = ".spec_source";   vals = &cur_oidspec->spec_source;  break;
+      case FLD_SPEC_TEXT:      name = ".spec_text";     vals = &cur_oidspec->spec_text;    break;
       case FLD_SPEC_TYPE:      name = ".spec_type";     vals = &cur_oidspec->spec_type;    break;
       case FLD_SPEC_VENDOR:    name = ".spec_vendor";   vals = &cur_oidspec->spec_vendor;  break;
       case FLD_TYPE:           name = ".type";          vals = &cur_oidspec->type;         break;

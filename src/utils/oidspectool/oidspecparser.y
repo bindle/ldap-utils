@@ -54,6 +54,7 @@ int yylex(void);
 %token FLD_EXAMPLES
 %token FLD_FLAGS
 %token FLD_NAME
+%token FLD_NOTES
 %token FLD_OID
 %token FLD_RE_POSIX
 %token FLD_RE_PCRE
@@ -61,6 +62,7 @@ int yylex(void);
 %token FLD_SPEC_NAME
 %token FLD_SPEC_SECTION
 %token FLD_SPEC_SOURCE
+%token FLD_SPEC_TEXT
 %token FLD_SPEC_TYPE
 %token FLD_SPEC_VENDOR
 %token FLD_TYPE
@@ -98,6 +100,7 @@ field             :
                   | FLD_EXAMPLES     '=' examples     { my_yycommit( FLD_EXAMPLES         ); }
                   | FLD_FLAGS        '=' flags        { my_yycommit( FLD_FLAGS            ); }
                   | FLD_NAME         '=' CSTRING      { my_yysubmit( FLD_NAME,         $3 ); }
+                  | FLD_NOTES        '=' strings      { my_yycommit( FLD_NOTES            ); }
                   | FLD_OID          '=' CSTRING      { my_yysubmit( FLD_OID,          $3 ); }
                   | FLD_RE_PCRE      '=' strings      { my_yycommit( FLD_RE_PCRE          ); }
                   | FLD_RE_POSIX     '=' strings      { my_yycommit( FLD_RE_POSIX         ); }
@@ -106,6 +109,7 @@ field             :
                   | FLD_SPEC_SECTION '=' CSTRING      { my_yysubmit( FLD_SPEC_SECTION, $3 ); }
                   | FLD_SPEC_SOURCE  '=' strings      { my_yycommit( FLD_SPEC_SOURCE      ); }
                   | FLD_SPEC_VENDOR  '=' string       { my_yycommit( FLD_SPEC_VENDOR      ); }
+                  | FLD_SPEC_TEXT    '=' strings      { my_yycommit( FLD_SPEC_TEXT        ); }
                   | FLD_SPEC_TYPE    '=' SPEC_TYPE    { my_yysubmit( FLD_SPEC_TYPE,    $3 ); }
                   | FLD_TYPE         '=' TYPE         { my_yysubmit( FLD_TYPE,         $3 ); }
                   ;
