@@ -136,6 +136,7 @@ struct my_oidspec
    char    ** desc;
    char    ** examples;
    char    ** flags;
+   char    ** ignore;
    char    ** type;
    char    ** class;
    char    ** def;
@@ -979,6 +980,7 @@ int my_yycommit(enum yytokentype type)
       case FLD_DESC:           name = ".desc";          vals = &cur_oidspec->desc;         break;
       case FLD_EXAMPLES:       name = ".examples";      vals = &cur_oidspec->examples;     break;
       case FLD_FLAGS:          name = ".flags";         vals = &cur_oidspec->flags;        break;
+      case FLD_IGNORE:         name = ".ignore";        vals = &cur_oidspec->ignore;       break;
       case FLD_NAME:           name = ".name";          vals = &cur_oidspec->name;         break;
       case FLD_NOTES:          name = ".notes";         vals = &cur_oidspec->notes;        break;
       case FLD_OID:            name = ".oid";           vals = &cur_oidspec->oid;          break;
@@ -1032,6 +1034,18 @@ int my_yyoidspec(void)
    {
       fprintf(stderr, "%s: %s: %i: spec missing .desc field\n", PROGRAM_NAME, cur_filename, yylineno);
       return(1);
+   };
+   if ((cur_oidspec->ignore))
+   {
+      if ((cfg.verbose))
+         printf("ignoring %s (%s) ...\n", cur_oidspec->oid[0], cur_oidspec->desc[0]);
+      my_oidspec_free(cur_oidspec);
+      if ((cur_oidspec = my_oidspec_alloc()) == NULL)
+      {
+         fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
+         exit(EXIT_FAILURE);
+      };
+      return(0);
    };
    if ((cfg.verbose))
       printf("adding %s (%s) ...\n", cur_oidspec->oid[0], cur_oidspec->desc[0]);

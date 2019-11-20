@@ -53,6 +53,7 @@ int yylex(void);
 %token FLD_DESC
 %token FLD_EXAMPLES
 %token FLD_FLAGS
+%token FLD_IGNORE
 %token FLD_NAME
 %token FLD_NOTES
 %token FLD_OID
@@ -99,6 +100,7 @@ field             :
                   | FLD_DEF          '=' CSTRING      { my_yysubmit( FLD_DEF,          $3 ); }
                   | FLD_EXAMPLES     '=' examples     { my_yycommit( FLD_EXAMPLES         ); }
                   | FLD_FLAGS        '=' flags        { my_yycommit( FLD_FLAGS            ); }
+                  | FLD_IGNORE       '=' NULLSTR      { my_yysubmit( FLD_IGNORE,   "NULL" ); }
                   | FLD_NAME         '=' CSTRING      { my_yysubmit( FLD_NAME,         $3 ); }
                   | FLD_NOTES        '=' strings      { my_yycommit( FLD_NOTES            ); }
                   | FLD_OID          '=' CSTRING      { my_yysubmit( FLD_OID,          $3 ); }

@@ -97,6 +97,7 @@ int yylex();
 ".def"                              { return(FLD_DEF); }
 ".desc"                             { return(FLD_DESC); }
 ".flags"                            { return(FLD_FLAGS); }
+".ignore"                           { return(FLD_IGNORE); }
 ".name"                             { return(FLD_NAME); }
 ".notes"                            { return(FLD_NOTES); }
 ".oid"                              { return(FLD_OID); }
