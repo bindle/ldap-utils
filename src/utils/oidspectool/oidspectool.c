@@ -121,6 +121,7 @@ struct my_config
    const char  ** includes;
    char           NAME[256];
    int            verbose;
+   int            sparse;
 };
 typedef struct my_config MyConfig;
 
@@ -172,6 +173,7 @@ MyConfig cfg =
 {
    .dryrun        = 0,
    .verbose       = 0,
+   .sparse        = 0,
    .format        = OidSpecFormatUnknown,
    .output        = "-",
    .prune         = NULL,
@@ -260,7 +262,7 @@ int main(int argc, char * argv[])
    size_t         pos;
    void         * ptr;
 
-   static char          short_options[]   = "C:hHMnN:o:p:ST:vV";
+   static char          short_options[]   = "C:hHMnN:o:p:sST:vV";
    static struct option long_options[]    =
    {
       {"include",       required_argument, 0, 'I'},
@@ -273,6 +275,7 @@ int main(int argc, char * argv[])
       {"makefile",      no_argument,       0, 'M'},
       {"dryrun",        no_argument,       0, 'n'},
       {"source",        no_argument,       0, 'S'},
+      {"sparse",        no_argument,       0, 's'},
       {"verbose",       no_argument,       0, 'v'},
       {"version",       no_argument,       0, 'V'},
       {NULL,            0,                 0, 0  }
@@ -329,6 +332,10 @@ int main(int argc, char * argv[])
 
          case 'p':
          cfg.prune = optarg;
+         break;
+
+         case 's':
+         cfg.sparse++;
          break;
 
          case 'S':
@@ -805,18 +812,17 @@ int my_save_source_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx)
    my_save_source_oidspec_strs(fs, ".spec_vendor",    oidspec->spec_vendor);
    my_save_source_oidspec_strs(fs, ".spec_text",      oidspec->spec_text);
    my_save_source_oidspec_strs(fs, ".notes",          oidspec->notes);
-   fprintf(fs, "   %-15s =", ".examples");
    if ((oidspec->examples))
    {
-      fprintf(fs, " (const char *[])\n");
+      fprintf(fs, "   %-15s = (const char *[])\n", ".examples");
       fprintf(fs, "%20s {\n", "");
       for(pos = 0; ((oidspec->examples[pos])); pos++)
          fprintf(fs, "%20s    %s,\n", "", oidspec->examples[pos]);
       fprintf(fs, "%20s    NULL,\n", "");
       fprintf(fs, "%20s },\n", "");
-   } else
+   } else if (!(cfg.sparse))
    {
-      fprintf(fs, " NULL,\n");
+      fprintf(fs, "   %-15s = NULL,\n", ".examples");
    };
    fprintf(fs, "};\n\n\n");
 
@@ -831,6 +837,9 @@ int my_save_source_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx)
 int my_save_source_oidspec_flgs(FILE * fs, const char * fld, char ** vals)
 {
    size_t pos;
+
+   if ( (!(vals)) && ((cfg.sparse)) )
+      return(0);
 
    fprintf(fs, "   %-15s =", fld);
    if ( (!(vals)) || (!(vals[0])) )
@@ -855,6 +864,9 @@ int my_save_source_oidspec_flgs(FILE * fs, const char * fld, char ** vals)
 int my_save_source_oidspec_strs(FILE * fs, const char * fld, char ** vals)
 {
    size_t pos;
+
+   if ( (!(vals)) && ((cfg.sparse)) )
+      return(0);
 
    fprintf(fs, "   %-15s =", fld);
    if ( (!(vals)) || (!(vals[0])) )
@@ -887,6 +899,7 @@ void my_usage(void)
    printf("  --include=header          add CPP #include in source and header (default: none)\n");
    printf("  --name=name               name of output variable(default: \"%s\")\n", cfg.name);
    printf("  --prune=str               prune string from saved filenames (default: none)\n");
+   printf("  --sparse                  exclude fields with NULL or 0 values\n");
    printf("  --type=type               set output variable type(default: \"%s\")\n", cfg.type);
    printf("FORMATS:\n");
    printf("  --header                  output C header\n");
