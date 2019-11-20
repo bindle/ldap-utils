@@ -1,0 +1,1914 @@
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 2.1.  Certificate
+   //
+   //       ( 1.3.6.1.4.1.1466.115.121.1.8 DESC 'X.509 Certificate' )
+   //
+   //    A value of this syntax is an X.509 Certificate [X.509, clause 7].
+   //
+   //    Due to changes made to the definition of a Certificate through time,
+   //    no LDAP-specific encoding is defined for this syntax.  Values of this
+   //    syntax SHOULD be encoded using Distinguished Encoding Rules (DER)
+   //    [X.690] and MUST only be transferred using the ;binary transfer
+   //    option [RFC4522]; that is, by requesting and returning values using
+   //    attribute descriptions such as "userCertificate;binary".
+   //
+   //    As values of this syntax contain digitally signed data, values of
+   //    this syntax and the form of each value MUST be preserved as
+   //    presented.
+   //
+   .oid           =  "1.3.6.1.4.1.1466.115.121.1.8",
+   .name          =  "Certificate",
+   .desc          =  "X.509 Certificate",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_SYNTAX,
+   .class         =  LDAPSCHEMA_CLASS_UNKNOWN,
+   .def           =  "( 1.3.6.1.4.1.1466.115.121.1.8 DESC 'X.509 Certificate' )",
+   .abnf          =  NULL,
+   .re_posix      =  NULL,
+   .re_pcre       =  NULL,
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "2.1",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+   .examples      =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 2.2.  CertificateList
+   //
+   //       ( 1.3.6.1.4.1.1466.115.121.1.9 DESC 'X.509 Certificate List' )
+   //
+   //    A value of this syntax is an X.509 CertificateList [X.509, clause
+   //    7.3].
+   //
+   //    Due to changes made to the definition of a CertificateList through
+   //    time, no LDAP-specific encoding is defined for this syntax.  Values
+   //    of this syntax SHOULD be encoded using DER [X.690] and MUST only be
+   //    transferred using the ;binary transfer option [RFC4522]; that is, by
+   //    requesting and returning values using attribute descriptions such as
+   //    "certificateRevocationList;binary".
+   //
+   //    As values of this syntax contain digitally signed data, values of
+   //    this syntax and the form of each value MUST be preserved as
+   //    presented.
+   //
+   .oid           =  "1.3.6.1.4.1.1466.115.121.1.9",
+   .name          =  "CertificateList",
+   .desc          =  "X.509 Certificate List",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_SYNTAX,
+   .class         =  LDAPSCHEMA_CLASS_UNKNOWN,
+   .def           =  "( 1.3.6.1.4.1.1466.115.121.1.9 DESC 'X.509 Certificate List' )",
+   .abnf          =  NULL,
+   .re_posix      =  NULL,
+   .re_pcre       =  NULL,
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "2.2",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",                                                // Vendor/author of spec
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+   .examples      =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 2.3.  CertificatePair
+   //
+   //      ( 1.3.6.1.4.1.1466.115.121.1.10 DESC 'X.509 Certificate Pair' )
+   //
+   //    A value of this syntax is an X.509 CertificatePair [X.509, clause
+   //    11.2.3].
+   //
+   //    Due to changes made to the definition of an X.509 CertificatePair
+   //    through time, no LDAP-specific encoding is defined for this syntax.
+   //    Values of this syntax SHOULD be encoded using DER [X.690] and MUST
+   //    only be transferred using the ;binary transfer option [RFC4522]; that
+   //    is, by requesting and returning values using attribute descriptions
+   //    such as "crossCertificatePair;binary".
+   //
+   //    As values of this syntax contain digitally signed data, values of
+   //    this syntax and the form of each value MUST be preserved as
+   //    presented.
+   //
+   .oid           =  "1.3.6.1.4.1.1466.115.121.1.10",
+   .name          =  "CertificatePair",
+   .desc          =  "X.509 Certificate Pair",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_SYNTAX,
+   .class         =  LDAPSCHEMA_CLASS_UNKNOWN,
+   .def           =  "( 1.3.6.1.4.1.1466.115.121.1.10 DESC 'X.509 Certificate Pair' )",
+   .abnf          =  NULL,
+   .re_posix      =  NULL,
+   .re_pcre       =  NULL,
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "2.3",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+   .examples      =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 2.4.  SupportedAlgorithm
+   //
+   //       ( 1.3.6.1.4.1.1466.115.121.1.49
+   //            DESC 'X.509 Supported Algorithm' )
+   //
+   //    A value of this syntax is an X.509 SupportedAlgorithm [X.509, clause
+   //    11.2.7].
+   //
+   //    Due to changes made to the definition of an X.509 SupportedAlgorithm
+   //    through time, no LDAP-specific encoding is defined for this syntax.
+   //    Values of this syntax SHOULD be encoded using DER [X.690] and MUST
+   //    only be transferred using the ;binary transfer option [RFC4522]; that
+   //    is, by requesting and returning values using attribute descriptions
+   //    such as "supportedAlgorithms;binary".
+   //
+   //    As values of this syntax contain digitally signed data, values of
+   //    this syntax and the form of the value MUST be preserved as presented.
+   //
+   .oid           =  "1.3.6.1.4.1.1466.115.121.1.49",
+   .name          =  "SupportedAlgorithm",
+   .desc          =  "X.509 Supported Algorithm",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_SYNTAX,
+   .class         =  LDAPSCHEMA_CLASS_UNKNOWN,
+   .def           =  "( 1.3.6.1.4.1.1466.115.121.1.49 DESC 'X.509 Supported Algorithm' )",
+   .abnf          =  NULL,
+   .re_posix      =  NULL,
+   .re_pcre       =  NULL,
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "2.4",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+   .examples      =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 2.5.  CertificateExactAssertion
+   //
+   //       ( 1.3.6.1.1.15.1 DESC 'X.509 Certificate Exact Assertion' )
+   //
+   //    A value of this syntax is an X.509 CertificateExactAssertion [X.509,
+   //    clause 11.3.1].  Values of this syntax MUST be encoded using the
+   //    Generic String Encoding Rules (GSER) [RFC3641].  Appendix A.1
+   //    provides an equivalent Augmented Backus-Naur Form (ABNF) [RFC4234]
+   //    grammar for this syntax.
+   //
+   // A.1.  CertificateExactAssertion
+   //
+   //    CertificateExactAssertion = "{" sp cea-serialNumber ","
+   //         sp cea-issuer sp "}"
+   //
+   //    cea-serialNumber = id-serialNumber msp CertificateSerialNumber
+   //    cea-issuer = id-issuer msp Name
+   //
+   //    id-serialNumber =
+   //         %x73.65.72.69.61.6C.4E.75.6D.62.65.72 ; 'serialNumber'
+   //    id-issuer = %x69.73.73.75.65.72 ; 'issuer'
+   //
+   //    Name = id-rdnSequence ":" RDNSequence
+   //    id-rdnSequence = %x72.64.6E.53.65.71.75.65.6E.63.65 ; 'rdnSequence'
+   //
+   //    CertificateSerialNumber = INTEGER
+   //
+   .oid           =  "1.3.6.1.1.15.1",
+   .name          =  "CertificateExactAssertion",
+   .desc          =  "X.509 Certificate Exact Assertion",
+   .flags         =  LDAPSCHEMA_O_READABLE,
+   .type          =  LDAPSCHEMA_SYNTAX,
+   .class         =  LDAPSCHEMA_CLASS_ASCII,
+   .def           =  "( 1.3.6.1.1.15.1 DESC 'X.509 Certificate Exact Assertion' )",
+   .abnf          =  "CertificateExactAssertion = \"{\" sp cea-serialNumber \",\"\n"
+                     "     sp cea-issuer sp \"}\"\n"
+                     "\n"
+                     "cea-serialNumber = id-serialNumber msp CertificateSerialNumber\n"
+                     "cea-issuer = id-issuer msp Name\n"
+                     "\n"
+                     "id-serialNumber =\n"
+                     "     %x73.65.72.69.61.6C.4E.75.6D.62.65.72 ; 'serialNumber'\n"
+                     "id-issuer = %x69.73.73.75.65.72 ; 'issuer'\n"
+                     "\n"
+                     "Name = id-rdnSequence \":\" RDNSequence\n"
+                     "id-rdnSequence = %x72.64.6E.53.65.71.75.65.6E.63.65 ; 'rdnSequence'\n"
+                     "\n"
+                     "CertificateSerialNumber = INTEGER\n",
+   .re_posix      =  NULL,
+   .re_pcre       =  NULL,
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "2.5",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+   .examples      =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 2.6.  CertificateAssertion
+   //
+   //       ( 1.3.6.1.1.15.2 DESC 'X.509 Certificate Assertion' )
+   //
+   //    A value of this syntax is an X.509 CertificateAssertion [X.509,
+   //    clause 11.3.2].  Values of this syntax MUST be encoded using GSER
+   //    [RFC3641].  Appendix A.2 provides an equivalent ABNF [RFC4234]
+   //    grammar for this syntax.
+   //
+   // A.2.  CertificateAssertion
+   //
+   // CertificateAssertion = "{" [ sp ca-serialNumber ]
+   //      [ sep sp ca-issuer ]
+   //      [ sep sp ca-subjectKeyIdentifier ]
+   //      [ sep sp ca-authorityKeyIdentifier ]
+   //      [ sep sp ca-certificateValid ]
+   //      [ sep sp ca-privateKeyValid ]
+   //      [ sep sp ca-subjectPublicKeyAlgID ]
+   //      [ sep sp ca-keyUsage ]
+   //      [ sep sp ca-subjectAltName ]
+   //      [ sep sp ca-policy ]
+   //      [ sep sp ca-pathToName ]
+   //      [ sep sp ca-subject ]
+   //      [ sep sp ca-nameConstraints ] sp "}"
+   //
+   // ca-serialNumber = id-serialNumber msp CertificateSerialNumber
+   // ca-issuer = id-issuer msp Name
+   // ca-subjectKeyIdentifier = id-subjectKeyIdentifier msp
+   //      SubjectKeyIdentifier
+   // ca-authorityKeyIdentifier = id-authorityKeyIdentifier msp
+   //      AuthorityKeyIdentifier
+   // ca-certificateValid = id-certificateValid msp Time
+   // ca-privateKeyValid = id-privateKeyValid msp GeneralizedTime
+   // ca-subjectPublicKeyAlgID = id-subjectPublicKeyAlgID msp
+   //      OBJECT-IDENTIFIER
+   // ca-keyUsage = id-keyUsage msp KeyUsage
+   // ca-subjectAltName = id-subjectAltName msp AltNameType
+   // ca-policy = id-policy msp CertPolicySet
+   // ca-pathToName = id-pathToName msp Name
+   // ca-subject = id-subject msp Name
+   // ca-nameConstraints = id-nameConstraints msp NameConstraintsSyntax
+   //
+   // id-subjectKeyIdentifier =
+   //      %x73.75.62.6A.65.63.74.4B.65.79.49.64.65.6E.74.69.66.69.65.72
+   //      ; 'subjectKeyIdentifier'
+   // id-authorityKeyIdentifier =
+   //      %x61.75.74.68.6F.72.69.74.79.4B.65.79.49.64.65.6E.74.69.66.69.65.72
+   //      ; 'authorityKeyIdentifier'
+   // id-certificateValid = %x63.65.72.74.69.66.69.63.61.74.65.56.61.6C.69.64
+   //      ; 'certificateValid'
+   // id-privateKeyValid = %x70.72.69.76.61.74.65.4B.65.79.56.61.6C.69.64
+   //      ; 'privateKeyValid'
+   // id-subjectPublicKeyAlgID  =
+   //      %x73.75.62.6A.65.63.74.50.75.62.6C.69.63.4B.65.79.41.6C.67.49.44
+   //      ; 'subjectPublicKeyAlgID'
+   // id-keyUsage = %x6B.65.79.55.73.61.67.65 ; 'keyUsage'
+   // id-subjectAltName = %x73.75.62.6A.65.63.74.41.6C.74.4E.61.6D.65
+   //      ; 'subjectAltName'
+   // id-policy = %x70.6F.6C.69.63.79 ; 'policy'
+   // id-pathToName = %x70.61.74.68.54.6F.4E.61.6D.65 ; 'pathToName'
+   // id-subject = %x73.75.62.6A.65.63.74 ; 'subject'
+   // id-nameConstraints = %x6E.61.6D.65.43.6F.6E.73.74.72.61.69.6E.74.73
+   //      ; 'nameConstraints'
+   //
+   // SubjectKeyIdentifier = KeyIdentifier
+   //
+   // KeyIdentifier = OCTET-STRING
+   //
+   // AuthorityKeyIdentifier = "{" [ sp aki-keyIdentifier ]
+   //      [ sep sp aki-authorityCertIssuer ]
+   //      [ sep sp aki-authorityCertSerialNumber ] sp "}"
+   //
+   // aki-keyIdentifier = id-keyIdentifier msp KeyIdentifier
+   // aki-authorityCertIssuer = id-authorityCertIssuer msp GeneralNames
+   //
+   // GeneralNames = "{" sp GeneralName *( "," sp GeneralName ) sp "}"
+   // GeneralName  = gn-otherName
+   //      / gn-rfc822Name
+   //      / gn-dNSName
+   //      / gn-x400Address
+   //      / gn-directoryName
+   //      / gn-ediPartyName
+   //      / gn-uniformResourceIdentifier
+   //      / gn-iPAddress
+   //      / gn-registeredID
+   //
+   // gn-otherName = id-otherName ":" OtherName
+   // gn-rfc822Name = id-rfc822Name ":" IA5String
+   // gn-dNSName = id-dNSName ":" IA5String
+   // gn-x400Address = id-x400Address ":" ORAddress
+   // gn-directoryName = id-directoryName ":" Name
+   // gn-ediPartyName = id-ediPartyName ":" EDIPartyName
+   // gn-iPAddress = id-iPAddress ":" OCTET-STRING
+   // gn-registeredID = gn-id-registeredID ":" OBJECT-IDENTIFIER
+   //
+   // gn-uniformResourceIdentifier = id-uniformResourceIdentifier
+   //      ":" IA5String
+   //
+   // id-otherName = %x6F.74.68.65.72.4E.61.6D.65 ; 'otherName'
+   // gn-id-registeredID = %x72.65.67.69.73.74.65.72.65.64.49.44
+   //      ; 'registeredID'
+   //
+   // OtherName = "{" sp on-type-id "," sp on-value sp "}"
+   // on-type-id = id-type-id msp OBJECT-IDENTIFIER
+   // on-value = id-value msp Value
+   //      ;; <Value> as defined in Section 3 of [RFC3641]
+   //
+   // id-type-id = %x74.79.70.65.2D.69.64 ; 'type-id'
+   // id-value = %x76.61.6C.75.65 ; 'value'
+   //
+   // ORAddress = dquote *SafeIA5Character dquote
+   // SafeIA5Character = %x01-21 / %x23-7F / ; ASCII minus dquote
+   //      dquote dquote ; escaped double quote
+   // dquote = %x22 ; '"' (double quote)
+   //
+   // ;; Note: The <ORAddress> rule encodes the x400Address component
+   // ;; of a GeneralName as a character string between double quotes.
+   // ;; The character string is first derived according to Section 4.1
+   // ;; of [RFC2156], and then any embedded double quotes are escaped
+   // ;; by being repeated. This resulting string is output between
+   // ;; double quotes.
+   //
+   // EDIPartyName = "{" [ sp nameAssigner "," ] sp partyName sp "}"
+   // nameAssigner = id-nameAssigner msp DirectoryString
+   // partyName = id-partyName msp DirectoryString
+   // id-nameAssigner = %x6E.61.6D.65.41.73.73.69.67.6E.65.72
+   //      ; 'nameAssigner'
+   // id-partyName    = %x70.61.72.74.79.4E.61.6D.65 ; 'partyName'
+   //
+   // aki-authorityCertSerialNumber = id-authorityCertSerialNumber
+   //      msp CertificateSerialNumber
+   //
+   // id-keyIdentifier = %x6B.65.79.49.64.65.6E.74.69.66.69.65.72
+   //      ; 'keyIdentifier'
+   // id-authorityCertIssuer =
+   //      %x61.75.74.68.6F.72.69.74.79.43.65.72.74.49.73.73.75.65.72
+   //      ; 'authorityCertIssuer'
+   //
+   // id-authorityCertSerialNumber = %x61.75.74.68.6F.72.69.74.79.43
+   //      %x65.72.74.53.65.72.69.61.6C.4E.75.6D.62.65.72
+   //      ; 'authorityCertSerialNumber'
+   //
+   // Time = time-utcTime / time-generalizedTime
+   // time-utcTime = id-utcTime ":" UTCTime
+   // time-generalizedTime = id-generalizedTime ":" GeneralizedTime
+   // id-utcTime = %x75.74.63.54.69.6D.65 ; 'utcTime'
+   // id-generalizedTime = %x67.65.6E.65.72.61.6C.69.7A.65.64.54.69.6D.65
+   //      ; 'generalizedTime'
+   //
+   // KeyUsage = BIT-STRING / key-usage-bit-list
+   // key-usage-bit-list = "{" [ sp key-usage *( "," sp key-usage ) ] sp "}"
+   //
+   // ;; Note: The <key-usage-bit-list> rule encodes the one bits in
+   // ;; a KeyUsage value as a comma separated list of identifiers.
+   //
+   // key-usage = id-digitalSignature
+   //      / id-nonRepudiation
+   //      / id-keyEncipherment
+   //      / id-dataEncipherment
+   //      / id-keyAgreement
+   //      / id-keyCertSign
+   //      / id-cRLSign
+   //      / id-encipherOnly
+   //      / id-decipherOnly
+   //
+   // id-digitalSignature = %x64.69.67.69.74.61.6C.53.69.67.6E.61.74
+   //      %x75.72.65 ; 'digitalSignature'
+   // id-nonRepudiation   = %x6E.6F.6E.52.65.70.75.64.69.61.74.69.6F.6E
+   //      ; 'nonRepudiation'
+   // id-keyEncipherment  = %x6B.65.79.45.6E.63.69.70.68.65.72.6D.65.6E.74
+   //      ; 'keyEncipherment'
+   // id-dataEncipherment = %x64.61.74.61.45.6E.63.69.70.68.65.72.6D.65.6E
+   //      %x74 ; "dataEncipherment'
+   // id-keyAgreement     = %x6B.65.79.41.67.72.65.65.6D.65.6E.74
+   //      ; 'keyAgreement'
+   // id-keyCertSign      = %x6B.65.79.43.65.72.74.53.69.67.6E
+   //      ; 'keyCertSign'
+   // id-cRLSign          = %x63.52.4C.53.69.67.6E ; "cRLSign"
+   // id-encipherOnly     = %x65.6E.63.69.70.68.65.72.4F.6E.6C.79
+   //      ; 'encipherOnly'
+   // id-decipherOnly     = %x64.65.63.69.70.68.65.72.4F.6E.6C.79
+   //      ; 'decipherOnly'
+   //
+   // AltNameType = ant-builtinNameForm / ant-otherNameForm
+   //
+   // ant-builtinNameForm = id-builtinNameForm ":" BuiltinNameForm
+   // ant-otherNameForm = id-otherNameForm ":" OBJECT-IDENTIFIER
+   //
+   // id-builtinNameForm = %x62.75.69.6C.74.69.6E.4E.61.6D.65.46.6F.72.6D
+   //      ; 'builtinNameForm'
+   // id-otherNameForm   = %x6F.74.68.65.72.4E.61.6D.65.46.6F.72.6D
+   //      ; 'otherNameForm'
+   //
+   // BuiltinNameForm  = id-rfc822Name
+   //      / id-dNSName
+   //      / id-x400Address
+   //      / id-directoryName
+   //      / id-ediPartyName
+   //      / id-uniformResourceIdentifier
+   //      / id-iPAddress
+   //      / id-registeredId
+   //
+   // id-rfc822Name = %x72.66.63.38.32.32.4E.61.6D.65 ; 'rfc822Name'
+   // id-dNSName = %x64.4E.53.4E.61.6D.65 ; 'dNSName'
+   // id-x400Address  = %x78.34.30.30.41.64.64.72.65.73.73 ; 'x400Address'
+   // id-directoryName = %x64.69.72.65.63.74.6F.72.79.4E.61.6D.65
+   //      ; 'directoryName'
+   // id-ediPartyName  = %x65.64.69.50.61.72.74.79.4E.61.6D.65
+   //      ; 'ediPartyName'
+   // id-iPAddress = %x69.50.41.64.64.72.65.73.73 ; 'iPAddress'
+   // id-registeredId = %x72.65.67.69.73.74.65.72.65.64.49.64
+   //      ; 'registeredId'
+   //
+   // id-uniformResourceIdentifier = %x75.6E.69.66.6F.72.6D.52.65.73.6F.75
+   //      %x72.63.65.49.64.65.6E.74.69.66.69.65.72
+   //      ; 'uniformResourceIdentifier'
+   //
+   // CertPolicySet = "{" sp CertPolicyId *( "," sp CertPolicyId ) sp "}"
+   // CertPolicyId = OBJECT-IDENTIFIER
+   //
+   // NameConstraintsSyntax = "{" [ sp ncs-permittedSubtrees ]
+   //      [ sep sp ncs-excludedSubtrees ] sp "}"
+   //
+   // ncs-permittedSubtrees = id-permittedSubtrees msp GeneralSubtrees
+   // ncs-excludedSubtrees = id-excludedSubtrees  msp GeneralSubtrees
+   //
+   // id-permittedSubtrees =
+   //      %x70.65.72.6D.69.74.74.65.64.53.75.62.74.72.65.65.73
+   //      ; 'permittedSubtrees'
+   // id-excludedSubtrees =
+   //      %x65.78.63.6C.75.64.65.64.53.75.62.74.72.65.65.73
+   //      ; 'excludedSubtrees'
+   //
+   // GeneralSubtrees = "{" sp GeneralSubtree
+   //      *( "," sp GeneralSubtree ) sp "}"
+   // GeneralSubtree  = "{" sp gs-base
+   //      [ "," sp gs-minimum ]
+   //      [ "," sp gs-maximum ] sp "}"
+   //
+   // gs-base = id-base msp GeneralName
+   // gs-minimum = id-minimum msp BaseDistance
+   // gs-maximum = id-maximum msp BaseDistance
+   //
+   // id-base = %x62.61.73.65 ; 'base'
+   // id-minimum = %x6D.69.6E.69.6D.75.6D ; 'minimum'
+   // id-maximum = %x6D.61.78.69.6D.75.6D ; 'maximum'
+   //
+   // BaseDistance = INTEGER-0-MAX
+   //
+   .oid           =  "1.3.6.1.1.15.2",
+   .name          =  "CertificateAssertion",
+   .desc          =  "X.509 Certificate Assertion",
+   .flags         =  LDAPSCHEMA_O_READABLE,
+   .type          =  LDAPSCHEMA_SYNTAX,
+   .class         =  LDAPSCHEMA_CLASS_ASCII,
+   .def           =  "( 1.3.6.1.1.15.2 DESC 'X.509 Certificate Assertion' )",
+   .abnf          =  "CertificateAssertion = \"{\" [ sp ca-serialNumber ]\n"
+                     "     [ sep sp ca-issuer ]\n"
+                     "     [ sep sp ca-subjectKeyIdentifier ]\n"
+                     "     [ sep sp ca-authorityKeyIdentifier ]\n"
+                     "     [ sep sp ca-certificateValid ]\n"
+                     "     [ sep sp ca-privateKeyValid ]\n"
+                     "     [ sep sp ca-subjectPublicKeyAlgID ]\n"
+                     "     [ sep sp ca-keyUsage ]\n"
+                     "     [ sep sp ca-subjectAltName ]\n"
+                     "     [ sep sp ca-policy ]\n"
+                     "     [ sep sp ca-pathToName ]\n"
+                     "     [ sep sp ca-subject ]\n"
+                     "     [ sep sp ca-nameConstraints ] sp \"}\"\n"
+                     "\n"
+                     "ca-serialNumber = id-serialNumber msp CertificateSerialNumber\n"
+                     "ca-issuer = id-issuer msp Name\n"
+                     "ca-subjectKeyIdentifier = id-subjectKeyIdentifier msp\n"
+                     "     SubjectKeyIdentifier\n"
+                     "ca-authorityKeyIdentifier = id-authorityKeyIdentifier msp\n"
+                     "     AuthorityKeyIdentifier\n"
+                     "ca-certificateValid = id-certificateValid msp Time\n"
+                     "ca-privateKeyValid = id-privateKeyValid msp GeneralizedTime\n"
+                     "ca-subjectPublicKeyAlgID = id-subjectPublicKeyAlgID msp\n"
+                     "     OBJECT-IDENTIFIER\n"
+                     "ca-keyUsage = id-keyUsage msp KeyUsage\n"
+                     "ca-subjectAltName = id-subjectAltName msp AltNameType\n"
+                     "ca-policy = id-policy msp CertPolicySet\n"
+                     "ca-pathToName = id-pathToName msp Name\n"
+                     "ca-subject = id-subject msp Name\n"
+                     "ca-nameConstraints = id-nameConstraints msp NameConstraintsSyntax\n"
+                     "\n"
+                     "id-subjectKeyIdentifier =\n"
+                     "     %x73.75.62.6A.65.63.74.4B.65.79.49.64.65.6E.74.69.66.69.65.72\n"
+                     "     ; 'subjectKeyIdentifier'\n"
+                     "id-authorityKeyIdentifier =\n"
+                     "     %x61.75.74.68.6F.72.69.74.79.4B.65.79.49.64.65.6E.74.69.66.69.65.72\n"
+                     "     ; 'authorityKeyIdentifier'\n"
+                     "id-certificateValid = %x63.65.72.74.69.66.69.63.61.74.65.56.61.6C.69.64\n"
+                     "     ; 'certificateValid'\n"
+                     "id-privateKeyValid = %x70.72.69.76.61.74.65.4B.65.79.56.61.6C.69.64\n"
+                     "     ; 'privateKeyValid'\n"
+                     "id-subjectPublicKeyAlgID  =\n"
+                     "     %x73.75.62.6A.65.63.74.50.75.62.6C.69.63.4B.65.79.41.6C.67.49.44\n"
+                     "     ; 'subjectPublicKeyAlgID'\n"
+                     "id-keyUsage = %x6B.65.79.55.73.61.67.65 ; 'keyUsage'\n"
+                     "id-subjectAltName = %x73.75.62.6A.65.63.74.41.6C.74.4E.61.6D.65\n"
+                     "     ; 'subjectAltName'\n"
+                     "id-policy = %x70.6F.6C.69.63.79 ; 'policy'\n"
+                     "id-pathToName = %x70.61.74.68.54.6F.4E.61.6D.65 ; 'pathToName'\n"
+                     "id-subject = %x73.75.62.6A.65.63.74 ; 'subject'\n"
+                     "id-nameConstraints = %x6E.61.6D.65.43.6F.6E.73.74.72.61.69.6E.74.73\n"
+                     "     ; 'nameConstraints'\n"
+                     "\n"
+                     "SubjectKeyIdentifier = KeyIdentifier\n"
+                     "\n"
+                     "KeyIdentifier = OCTET-STRING\n"
+                     "\n"
+                     "AuthorityKeyIdentifier = \"{\" [ sp aki-keyIdentifier ]\n"
+                     "     [ sep sp aki-authorityCertIssuer ]\n"
+                     "     [ sep sp aki-authorityCertSerialNumber ] sp \"}\"\n"
+                     "\n"
+                     "aki-keyIdentifier = id-keyIdentifier msp KeyIdentifier\n"
+                     "aki-authorityCertIssuer = id-authorityCertIssuer msp GeneralNames\n"
+                     "\n"
+                     "GeneralNames = \"{\" sp GeneralName *( \",\" sp GeneralName ) sp \"}\"\n"
+                     "GeneralName  = gn-otherName\n"
+                     "     / gn-rfc822Name\n"
+                     "     / gn-dNSName\n"
+                     "     / gn-x400Address\n"
+                     "     / gn-directoryName\n"
+                     "     / gn-ediPartyName\n"
+                     "     / gn-uniformResourceIdentifier\n"
+                     "     / gn-iPAddress\n"
+                     "     / gn-registeredID\n"
+                     "\n"
+                     "gn-otherName = id-otherName \":\" OtherName\n"
+                     "gn-rfc822Name = id-rfc822Name \":\" IA5String\n"
+                     "gn-dNSName = id-dNSName \":\" IA5String\n"
+                     "gn-x400Address = id-x400Address \":\" ORAddress\n"
+                     "gn-directoryName = id-directoryName \":\" Name\n"
+                     "gn-ediPartyName = id-ediPartyName \":\" EDIPartyName\n"
+                     "gn-iPAddress = id-iPAddress \":\" OCTET-STRING\n"
+                     "gn-registeredID = gn-id-registeredID \":\" OBJECT-IDENTIFIER\n"
+                     "\n"
+                     "gn-uniformResourceIdentifier = id-uniformResourceIdentifier\n"
+                     "     \":\" IA5String\n"
+                     "\n"
+                     "id-otherName = %x6F.74.68.65.72.4E.61.6D.65 ; 'otherName'\n"
+                     "gn-id-registeredID = %x72.65.67.69.73.74.65.72.65.64.49.44\n"
+                     "     ; 'registeredID'\n"
+                     "\n"
+                     "OtherName = \"{\" sp on-type-id \",\" sp on-value sp \"}\"\n"
+                     "on-type-id = id-type-id msp OBJECT-IDENTIFIER\n"
+                     "on-value = id-value msp Value\n"
+                     "     ;; <Value> as defined in Section 3 of [RFC3641]\n"
+                     "\n"
+                     "id-type-id = %x74.79.70.65.2D.69.64 ; 'type-id'\n"
+                     "id-value = %x76.61.6C.75.65 ; 'value'\n"
+                     "\n"
+                     "ORAddress = dquote *SafeIA5Character dquote\n"
+                     "SafeIA5Character = %x01-21 / %x23-7F / ; ASCII minus dquote\n"
+                     "     dquote dquote ; escaped double quote\n"
+                     "dquote = %x22 ; '\"' (double quote)\n"
+                     "\n"
+                     ";; Note: The <ORAddress> rule encodes the x400Address component\n"
+                     ";; of a GeneralName as a character string between double quotes.\n"
+                     ";; The character string is first derived according to Section 4.1\n"
+                     ";; of [RFC2156], and then any embedded double quotes are escaped\n"
+                     ";; by being repeated. This resulting string is output between\n"
+                     ";; double quotes.\n"
+                     "\n"
+                     "EDIPartyName = \"{\" [ sp nameAssigner \",\" ] sp partyName sp \"}\"\n"
+                     "nameAssigner = id-nameAssigner msp DirectoryString\n"
+                     "partyName = id-partyName msp DirectoryString\n"
+                     "id-nameAssigner = %x6E.61.6D.65.41.73.73.69.67.6E.65.72\n"
+                     "     ; 'nameAssigner'\n"
+                     "id-partyName    = %x70.61.72.74.79.4E.61.6D.65 ; 'partyName'\n"
+                     "\n"
+                     "aki-authorityCertSerialNumber = id-authorityCertSerialNumber\n"
+                     "     msp CertificateSerialNumber\n"
+                     "\n"
+                     "id-keyIdentifier = %x6B.65.79.49.64.65.6E.74.69.66.69.65.72\n"
+                     "     ; 'keyIdentifier'\n"
+                     "id-authorityCertIssuer =\n"
+                     "     %x61.75.74.68.6F.72.69.74.79.43.65.72.74.49.73.73.75.65.72\n"
+                     "     ; 'authorityCertIssuer'\n"
+                     "\n"
+                     "id-authorityCertSerialNumber = %x61.75.74.68.6F.72.69.74.79.43\n"
+                     "     %x65.72.74.53.65.72.69.61.6C.4E.75.6D.62.65.72\n"
+                     "     ; 'authorityCertSerialNumber'\n"
+                     "\n"
+                     "Time = time-utcTime / time-generalizedTime\n"
+                     "time-utcTime = id-utcTime \":\" UTCTime\n"
+                     "time-generalizedTime = id-generalizedTime \":\" GeneralizedTime\n"
+                     "id-utcTime = %x75.74.63.54.69.6D.65 ; 'utcTime'\n"
+                     "id-generalizedTime = %x67.65.6E.65.72.61.6C.69.7A.65.64.54.69.6D.65\n"
+                     "     ; 'generalizedTime'\n"
+                     "\n"
+                     "KeyUsage = BIT-STRING / key-usage-bit-list\n"
+                     "key-usage-bit-list = \"{\" [ sp key-usage *( \",\" sp key-usage ) ] sp \"}\"\n"
+                     "\n"
+                     ";; Note: The <key-usage-bit-list> rule encodes the one bits in\n"
+                     ";; a KeyUsage value as a comma separated list of identifiers.\n"
+                     "\n"
+                     "key-usage = id-digitalSignature\n"
+                     "     / id-nonRepudiation\n"
+                     "     / id-keyEncipherment\n"
+                     "     / id-dataEncipherment\n"
+                     "     / id-keyAgreement\n"
+                     "     / id-keyCertSign\n"
+                     "     / id-cRLSign\n"
+                     "     / id-encipherOnly\n"
+                     "     / id-decipherOnly\n"
+                     "\n"
+                     "id-digitalSignature = %x64.69.67.69.74.61.6C.53.69.67.6E.61.74\n"
+                     "     %x75.72.65 ; 'digitalSignature'\n"
+                     "id-nonRepudiation   = %x6E.6F.6E.52.65.70.75.64.69.61.74.69.6F.6E\n"
+                     "     ; 'nonRepudiation'\n"
+                     "id-keyEncipherment  = %x6B.65.79.45.6E.63.69.70.68.65.72.6D.65.6E.74\n"
+                     "     ; 'keyEncipherment'\n"
+                     "id-dataEncipherment = %x64.61.74.61.45.6E.63.69.70.68.65.72.6D.65.6E\n"
+                     "     %x74 ; \"dataEncipherment'\n"
+                     "id-keyAgreement     = %x6B.65.79.41.67.72.65.65.6D.65.6E.74\n"
+                     "     ; 'keyAgreement'\n"
+                     "id-keyCertSign      = %x6B.65.79.43.65.72.74.53.69.67.6E\n"
+                     "     ; 'keyCertSign'\n"
+                     "id-cRLSign          = %x63.52.4C.53.69.67.6E ; \"cRLSign\"\n"
+                     "id-encipherOnly     = %x65.6E.63.69.70.68.65.72.4F.6E.6C.79\n"
+                     "     ; 'encipherOnly'\n"
+                     "id-decipherOnly     = %x64.65.63.69.70.68.65.72.4F.6E.6C.79\n"
+                     "     ; 'decipherOnly'\n"
+                     "\n"
+                     "AltNameType = ant-builtinNameForm / ant-otherNameForm\n"
+                     "\n"
+                     "ant-builtinNameForm = id-builtinNameForm \":\" BuiltinNameForm\n"
+                     "ant-otherNameForm = id-otherNameForm \":\" OBJECT-IDENTIFIER\n"
+                     "\n"
+                     "id-builtinNameForm = %x62.75.69.6C.74.69.6E.4E.61.6D.65.46.6F.72.6D\n"
+                     "     ; 'builtinNameForm'\n"
+                     "id-otherNameForm   = %x6F.74.68.65.72.4E.61.6D.65.46.6F.72.6D\n"
+                     "     ; 'otherNameForm'\n"
+                     "\n"
+                     "BuiltinNameForm  = id-rfc822Name\n"
+                     "     / id-dNSName\n"
+                     "     / id-x400Address\n"
+                     "     / id-directoryName\n"
+                     "     / id-ediPartyName\n"
+                     "     / id-uniformResourceIdentifier\n"
+                     "     / id-iPAddress\n"
+                     "     / id-registeredId\n"
+                     "\n"
+                     "id-rfc822Name = %x72.66.63.38.32.32.4E.61.6D.65 ; 'rfc822Name'\n"
+                     "id-dNSName = %x64.4E.53.4E.61.6D.65 ; 'dNSName'\n"
+                     "id-x400Address  = %x78.34.30.30.41.64.64.72.65.73.73 ; 'x400Address'\n"
+                     "id-directoryName = %x64.69.72.65.63.74.6F.72.79.4E.61.6D.65\n"
+                     "     ; 'directoryName'\n"
+                     "id-ediPartyName  = %x65.64.69.50.61.72.74.79.4E.61.6D.65\n"
+                     "     ; 'ediPartyName'\n"
+                     "id-iPAddress = %x69.50.41.64.64.72.65.73.73 ; 'iPAddress'\n"
+                     "id-registeredId = %x72.65.67.69.73.74.65.72.65.64.49.64\n"
+                     "     ; 'registeredId'\n"
+                     "\n"
+                     "id-uniformResourceIdentifier = %x75.6E.69.66.6F.72.6D.52.65.73.6F.75\n"
+                     "     %x72.63.65.49.64.65.6E.74.69.66.69.65.72\n"
+                     "     ; 'uniformResourceIdentifier'\n"
+                     "\n"
+                     "CertPolicySet = \"{\" sp CertPolicyId *( \",\" sp CertPolicyId ) sp \"}\"\n"
+                     "CertPolicyId = OBJECT-IDENTIFIER\n"
+                     "\n"
+                     "NameConstraintsSyntax = \"{\" [ sp ncs-permittedSubtrees ]\n"
+                     "     [ sep sp ncs-excludedSubtrees ] sp \"}\"\n"
+                     "\n"
+                     "ncs-permittedSubtrees = id-permittedSubtrees msp GeneralSubtrees\n"
+                     "ncs-excludedSubtrees = id-excludedSubtrees  msp GeneralSubtrees\n"
+                     "\n"
+                     "id-permittedSubtrees =\n"
+                     "     %x70.65.72.6D.69.74.74.65.64.53.75.62.74.72.65.65.73\n"
+                     "     ; 'permittedSubtrees'\n"
+                     "id-excludedSubtrees =\n"
+                     "     %x65.78.63.6C.75.64.65.64.53.75.62.74.72.65.65.73\n"
+                     "     ; 'excludedSubtrees'\n"
+                     "\n"
+                     "GeneralSubtrees = \"{\" sp GeneralSubtree\n"
+                     "     *( \",\" sp GeneralSubtree ) sp \"}\"\n"
+                     "GeneralSubtree  = \"{\" sp gs-base\n"
+                     "     [ \",\" sp gs-minimum ]\n"
+                     "     [ \",\" sp gs-maximum ] sp \"}\"\n"
+                     "\n"
+                     "gs-base = id-base msp GeneralName\n"
+                     "gs-minimum = id-minimum msp BaseDistance\n"
+                     "gs-maximum = id-maximum msp BaseDistance\n"
+                     "\n"
+                     "id-base = %x62.61.73.65 ; 'base'\n"
+                     "id-minimum = %x6D.69.6E.69.6D.75.6D ; 'minimum'\n"
+                     "id-maximum = %x6D.61.78.69.6D.75.6D ; 'maximum'\n"
+                     "\n"
+                     "BaseDistance = INTEGER-0-MAX\n",
+   .re_posix      =  NULL,
+   .re_pcre       =  NULL,
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "2.6",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+   .examples      =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 2.7.  CertificatePairExactAssertion
+   //
+   //       ( 1.3.6.1.1.15.3
+   //            DESC 'X.509 Certificate Pair Exact Assertion' )
+   //
+   //    A value of this syntax is an X.509 CertificatePairExactAssertion
+   //    [X.509, clause 11.3.3].  Values of this syntax MUST be encoded using
+   //    GSER [RFC3641].  Appendix A.3 provides an equivalent ABNF [RFC4234]
+   //    grammar for this syntax.
+   //
+   //
+   // A.3.  CertificatePairExactAssertion
+   //
+   //   CertificatePairExactAssertion = "{" [ sp cpea-issuedTo ]
+   //        [sep sp cpea-issuedBy ] sp "}"
+   //   ;; At least one of <cpea-issuedTo> or <cpea-issuedBy> MUST be present.
+   //
+   //   cpea-issuedTo = id-issuedToThisCAAssertion msp
+   //        CertificateExactAssertion
+   //   cpea-issuedBy = id-issuedByThisCAAssertion msp
+   //        CertificateExactAssertion
+   //
+   //   id-issuedToThisCAAssertion = %x69.73.73.75.65.64.54.6F.54.68.69.73
+   //        %x43.41.41.73.73.65.72.74.69.6F.6E ; 'issuedToThisCAAssertion'
+   //   id-issuedByThisCAAssertion = %x69.73.73.75.65.64.42.79.54.68.69.73
+   //        %x43.41.41.73.73.65.72.74.69.6F.6E ; 'issuedByThisCAAssertion'
+   //
+   .oid           =  "1.3.6.1.1.15.3",
+   .name          =  "CertificatePairExactAssertion",
+   .desc          =  "X.509 Certificate Pair Exact Assertion",
+   .flags         =  LDAPSCHEMA_O_READABLE,
+   .type          =  LDAPSCHEMA_SYNTAX,
+   .class         =  LDAPSCHEMA_CLASS_ASCII,
+   .def           =  "( 1.3.6.1.1.15.3 DESC 'X.509 Certificate Pair Exact Assertion' )",
+   .abnf          =  "CertificatePairExactAssertion = \"{\" [ sp cpea-issuedTo ]\n"
+                     "     [sep sp cpea-issuedBy ] sp \"}\"\n"
+                     ";; At least one of <cpea-issuedTo> or <cpea-issuedBy> MUST be present.\n"
+                     "\n"
+                     "cpea-issuedTo = id-issuedToThisCAAssertion msp\n"
+                     "     CertificateExactAssertion\n"
+                     "cpea-issuedBy = id-issuedByThisCAAssertion msp\n"
+                     "     CertificateExactAssertion\n"
+                     "\n"
+                     "id-issuedToThisCAAssertion = %x69.73.73.75.65.64.54.6F.54.68.69.73\n"
+                     "     %x43.41.41.73.73.65.72.74.69.6F.6E ; 'issuedToThisCAAssertion'\n"
+                     "id-issuedByThisCAAssertion = %x69.73.73.75.65.64.42.79.54.68.69.73\n"
+                     "     %x43.41.41.73.73.65.72.74.69.6F.6E ; 'issuedByThisCAAssertion'\n",
+   .re_posix      =  NULL,
+   .re_pcre       =  NULL,
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "2.7",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+   .examples      =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 2.8.  CertificatePairAssertion
+   //
+   //       ( 1.3.6.1.1.15.4 DESC 'X.509 Certificate Pair Assertion' )
+   //
+   //    A value of this syntax is an X.509 CertificatePairAssertion [X.509,
+   //    clause 11.3.4].  Values of this syntax MUST be encoded using GSER
+   //    [RFC3641].  Appendix A.4 provides an equivalent ABNF [RFC4234]
+   //    grammar for this syntax.
+   //
+   //
+   // A.4.  CertificatePairAssertion
+   //
+   //    CertificatePairAssertion = "{" [ sp cpa-issuedTo ]
+   //         [sep sp cpa-issuedBy ] sp "}"
+   //    ;; At least one of <cpa-issuedTo> and <cpa-issuedBy> MUST be present.
+   //
+   //    cpa-issuedTo = id-issuedToThisCAAssertion msp CertificateAssertion
+   //    cpa-issuedBy = id-issuedByThisCAAssertion msp CertificateAssertion
+   //
+   .oid           =  "1.3.6.1.1.15.4",
+   .name          =  "CertificatePairAssertion",
+   .desc          =  "X.509 Certificate Pair Assertion",
+   .flags         =  LDAPSCHEMA_O_READABLE,
+   .type          =  LDAPSCHEMA_SYNTAX,
+   .class         =  LDAPSCHEMA_CLASS_ASCII,
+   .def           =  "( 1.3.6.1.1.15.4 DESC 'X.509 Certificate Pair Assertion' )",
+   .abnf          =  "CertificatePairAssertion = \"{\" [ sp cpa-issuedTo ]\n"
+                     "     [sep sp cpa-issuedBy ] sp \"}\"\n"
+                     ";; At least one of <cpa-issuedTo> and <cpa-issuedBy> MUST be present.\n"
+                     "\n"
+                     "cpa-issuedTo = id-issuedToThisCAAssertion msp CertificateAssertion\n"
+                     "cpa-issuedBy = id-issuedByThisCAAssertion msp CertificateAssertion\n",
+   .re_posix      =  NULL,
+   .re_pcre       =  NULL,
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "2.8",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+   .examples      =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 2.9.  CertificateListExactAssertion
+   //
+   //       ( 1.3.6.1.1.15.5
+   //            DESC 'X.509 Certificate List Exact Assertion' )
+   //
+   //    A value of this syntax is an X.509 CertificateListExactAssertion
+   //    [X.509, clause 11.3.5].  Values of this syntax MUST be encoded using
+   //    GSER [RFC3641].  Appendix A.5 provides an equivalent ABNF grammar for
+   //    this syntax.
+   //
+   // A.5.  CertificateListExactAssertion
+   //
+   //    CertificateListExactAssertion = "{" sp clea-issuer ","
+   //         sp clea-thisUpdate
+   //         [ "," sp clea-distributionPoint ] sp "}"
+   //
+   //    clea-issuer = id-issuer msp Name
+   //    clea-thisUpdate = id-thisUpdate msp Time
+   //    clea-distributionPoint = id-distributionPoint msp
+   //         DistributionPointName
+   //
+   //    id-thisUpdate = %x74.68.69.73.55.70.64.61.74.65 ; 'thisUpdate'
+   //    id-distributionPoint =
+   //         %x64.69.73.74.72.69.62.75.74.69.6F.6E.50.6F.69.6E.74
+   //         ; 'distributionPoint'
+   //
+   //    DistributionPointName = dpn-fullName / dpn-nameRelativeToCRLIssuer
+   //
+   //    dpn-fullName = id-fullName ":" GeneralNames
+   //    dpn-nameRelativeToCRLIssuer = id-nameRelativeToCRLIssuer ":"
+   //         RelativeDistinguishedName
+   //
+   //    id-fullName = %x66.75.6C.6C.4E.61.6D.65 ; 'fullName'
+   //    id-nameRelativeToCRLIssuer = %x6E.61.6D.65.52.65.6C.61.74.69.76.65
+   //         %x54.6F.43.52.4C.49.73.73.75.65.72 ; 'nameRelativeToCRLIssuer'
+   //
+   .oid           =  "1.3.6.1.1.15.5",
+   .name          =  "CertificateListExactAssertion",
+   .desc          =  "X.509 Certificate List Exact Assertion",
+   .flags         =  LDAPSCHEMA_O_READABLE,
+   .type          =  LDAPSCHEMA_SYNTAX,
+   .class         =  LDAPSCHEMA_CLASS_ASCII,
+   .def           =  "( 1.3.6.1.1.15.5 DESC 'X.509 Certificate List Exact Assertion' )",
+   .abnf          =  "CertificateListExactAssertion = \"{\" sp clea-issuer \",\"\n"
+                     "     sp clea-thisUpdate\n"
+                     "     [ \",\" sp clea-distributionPoint ] sp \"}\"\n"
+                     "\n"
+                     "clea-issuer = id-issuer msp Name\n"
+                     "clea-thisUpdate = id-thisUpdate msp Time\n"
+                     "clea-distributionPoint = id-distributionPoint msp\n"
+                     "     DistributionPointName\n"
+                     "\n"
+                     "id-thisUpdate = %x74.68.69.73.55.70.64.61.74.65 ; 'thisUpdate'\n"
+                     "id-distributionPoint =\n"
+                     "     %x64.69.73.74.72.69.62.75.74.69.6F.6E.50.6F.69.6E.74\n"
+                     "     ; 'distributionPoint'\n"
+                     "\n"
+                     "DistributionPointName = dpn-fullName / dpn-nameRelativeToCRLIssuer\n"
+                     "\n"
+                     "dpn-fullName = id-fullName \":\" GeneralNames\n"
+                     "dpn-nameRelativeToCRLIssuer = id-nameRelativeToCRLIssuer \":\"\n"
+                     "     RelativeDistinguishedName\n"
+                     "\n"
+                     "id-fullName = %x66.75.6C.6C.4E.61.6D.65 ; 'fullName'\n"
+                     "id-nameRelativeToCRLIssuer = %x6E.61.6D.65.52.65.6C.61.74.69.76.65\n"
+                     "     %x54.6F.43.52.4C.49.73.73.75.65.72 ; 'nameRelativeToCRLIssuer'\n",
+   .re_posix      =  NULL,
+   .re_pcre       =  NULL,
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "2.9",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+   .examples      =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 2.10.  CertificateListAssertion
+   //
+   //       ( 1.3.6.1.1.15.6 DESC 'X.509 Certificate List Assertion' )
+   //
+   //    A value of this syntax is an X.509 CertificateListAssertion [X.509,
+   //    clause 11.3.6].  Values of this syntax MUST be encoded using GSER
+   //    [RFC3641].  Appendix A.6 provides an equivalent ABNF [RFC4234]
+   //    grammar for this syntax.
+   //
+   // A.6.  CertificateListAssertion
+   //
+   //    CertificateListAssertion = "{" [ sp cla-issuer ]
+   //         [ sep sp cla-minCRLNumber ]
+   //         [ sep sp cla-maxCRLNumber ]
+   //         [ sep sp cla-reasonFlags ]
+   //         [ sep sp cla-dateAndTime ]
+   //         [ sep sp cla-distributionPoint ]
+   //         [ sep sp cla-authorityKeyIdentifier ] sp "}"
+   //
+   //    cla-issuer = id-issuer msp Name
+   //    cla-minCRLNumber = id-minCRLNumber msp CRLNumber
+   //    cla-maxCRLNumber = id-maxCRLNumber msp CRLNumber
+   //    cla-reasonFlags = id-reasonFlags msp ReasonFlags
+   //    cla-dateAndTime = id-dateAndTime msp Time
+   //
+   //    cla-distributionPoint = id-distributionPoint msp
+   //         DistributionPointName
+   //
+   //    cla-authorityKeyIdentifier = id-authorityKeyIdentifier msp
+   //         AuthorityKeyIdentifier
+   //
+   //    id-minCRLNumber = %x6D.69.6E.43.52.4C.4E.75.6D.62.65.72
+   //         ; 'minCRLNumber'
+   //    id-maxCRLNumber = %x6D.61.78.43.52.4C.4E.75.6D.62.65.72
+   //         ; 'maxCRLNumber'
+   //    id-reasonFlags = %x72.65.61.73.6F.6E.46.6C.61.67.73 ; 'reasonFlags'
+   //    id-dateAndTime = %x64.61.74.65.41.6E.64.54.69.6D.65 ; 'dateAndTime'
+   //
+   //    CRLNumber = INTEGER-0-MAX
+   //
+   //    ReasonFlags = BIT-STRING
+   //         / "{" [ sp reason-flag *( "," sp reason-flag ) ] sp "}"
+   //
+   //    reason-flag = id-unused
+   //         / id-keyCompromise
+   //         / id-cACompromise
+   //         / id-affiliationChanged
+   //         / id-superseded
+   //         / id-cessationOfOperation
+   //         / id-certificateHold
+   //         / id-privilegeWithdrawn
+   //         / id-aACompromise
+   //
+   //    id-unused = %x75.6E.75.73.65.64 ; 'unused'
+   //    id-keyCompromise = %x6B.65.79.43.6F.6D.70.72.6F.6D.69.73.65
+   //         ; 'keyCompromise'
+   //    id-cACompromise = %x63.41.43.6F.6D.70.72.6F.6D.69.73.65
+   //         ; 'cACompromise'
+   //    id-affiliationChanged =
+   //         %x61.66.66.69.6C.69.61.74.69.6F.6E.43.68.61.6E.67.65.64
+   //         ; 'affiliationChanged'
+   //    id-superseded = %x73.75.70.65.72.73.65.64.65.64 ; 'superseded'
+   //    id-cessationOfOperation =
+   //         %x63.65.73.73.61.74.69.6F.6E.4F.66.4F.70.65.72.61.74.69.6F.6E
+   //         ; 'cessationOfOperation'
+   //    id-certificateHold = %x63.65.72.74.69.66.69.63.61.74.65.48.6F.6C.64
+   //         ; 'certificateHold'
+   //    id-privilegeWithdrawn =
+   //         %x70.72.69.76.69.6C.65.67.65.57.69.74.68.64.72.61.77.6E
+   //         ; 'privilegeWithdrawn'
+   //
+   //    id-aACompromise = %x61.41.43.6F.6D.70.72.6F.6D.69.73.65
+   //         ; 'aACompromise'
+   //
+   .oid           =  "1.3.6.1.1.15.6",
+   .name          =  "CertificateListAssertion",
+   .desc          =  "X.509 Certificate List Assertion",
+   .flags         =  LDAPSCHEMA_O_READABLE,
+   .type          =  LDAPSCHEMA_SYNTAX,
+   .class         =  LDAPSCHEMA_CLASS_ASCII,
+   .def           =  "( 1.3.6.1.1.15.6 DESC 'X.509 Certificate List Assertion' )",
+   .abnf          =  "CertificateListAssertion = \"{\" [ sp cla-issuer ]\n"
+                     "     [ sep sp cla-minCRLNumber ]\n"
+                     "     [ sep sp cla-maxCRLNumber ]\n"
+                     "     [ sep sp cla-reasonFlags ]\n"
+                     "     [ sep sp cla-dateAndTime ]\n"
+                     "     [ sep sp cla-distributionPoint ]\n"
+                     "     [ sep sp cla-authorityKeyIdentifier ] sp \"}\"\n"
+                     "\n"
+                     "cla-issuer = id-issuer msp Name\n"
+                     "cla-minCRLNumber = id-minCRLNumber msp CRLNumber\n"
+                     "cla-maxCRLNumber = id-maxCRLNumber msp CRLNumber\n"
+                     "cla-reasonFlags = id-reasonFlags msp ReasonFlags\n"
+                     "cla-dateAndTime = id-dateAndTime msp Time\n"
+                     "\n"
+                     "cla-distributionPoint = id-distributionPoint msp\n"
+                     "     DistributionPointName\n"
+                     "\n"
+                     "cla-authorityKeyIdentifier = id-authorityKeyIdentifier msp\n"
+                     "     AuthorityKeyIdentifier\n"
+                     "\n"
+                     "id-minCRLNumber = %x6D.69.6E.43.52.4C.4E.75.6D.62.65.72\n"
+                     "     ; 'minCRLNumber'\n"
+                     "id-maxCRLNumber = %x6D.61.78.43.52.4C.4E.75.6D.62.65.72\n"
+                     "     ; 'maxCRLNumber'\n"
+                     "id-reasonFlags = %x72.65.61.73.6F.6E.46.6C.61.67.73 ; 'reasonFlags'\n"
+                     "id-dateAndTime = %x64.61.74.65.41.6E.64.54.69.6D.65 ; 'dateAndTime'\n"
+                     "\n"
+                     "CRLNumber = INTEGER-0-MAX\n"
+                     "\n"
+                     "ReasonFlags = BIT-STRING\n"
+                     "     / \"{\" [ sp reason-flag *( \",\" sp reason-flag ) ] sp \"}\"\n"
+                     "\n"
+                     "reason-flag = id-unused\n"
+                     "     / id-keyCompromise\n"
+                     "     / id-cACompromise\n"
+                     "     / id-affiliationChanged\n"
+                     "     / id-superseded\n"
+                     "     / id-cessationOfOperation\n"
+                     "     / id-certificateHold\n"
+                     "     / id-privilegeWithdrawn\n"
+                     "     / id-aACompromise\n"
+                     "\n"
+                     "id-unused = %x75.6E.75.73.65.64 ; 'unused'\n"
+                     "id-keyCompromise = %x6B.65.79.43.6F.6D.70.72.6F.6D.69.73.65\n"
+                     "     ; 'keyCompromise'\n"
+                     "id-cACompromise = %x63.41.43.6F.6D.70.72.6F.6D.69.73.65\n"
+                     "     ; 'cACompromise'\n"
+                     "id-affiliationChanged =\n"
+                     "     %x61.66.66.69.6C.69.61.74.69.6F.6E.43.68.61.6E.67.65.64\n"
+                     "     ; 'affiliationChanged'\n"
+                     "id-superseded = %x73.75.70.65.72.73.65.64.65.64 ; 'superseded'\n"
+                     "id-cessationOfOperation =\n"
+                     "     %x63.65.73.73.61.74.69.6F.6E.4F.66.4F.70.65.72.61.74.69.6F.6E\n"
+                     "     ; 'cessationOfOperation'\n"
+                     "id-certificateHold = %x63.65.72.74.69.66.69.63.61.74.65.48.6F.6C.64\n"
+                     "     ; 'certificateHold'\n"
+                     "id-privilegeWithdrawn =\n"
+                     "     %x70.72.69.76.69.6C.65.67.65.57.69.74.68.64.72.61.77.6E\n"
+                     "     ; 'privilegeWithdrawn'\n"
+                     "\n"
+                     "id-aACompromise = %x61.41.43.6F.6D.70.72.6F.6D.69.73.65\n"
+                     "     ; 'aACompromise'\n",
+   .re_posix      =  NULL,
+   .re_pcre       =  NULL,
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "2.10",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+   .examples      =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 2.11.  AlgorithmIdentifier
+   //
+   //       ( 1.3.6.1.1.15.7 DESC 'X.509 Algorithm Identifier' )
+   //
+   //    A value of this syntax is an X.509 AlgorithmIdentifier [X.509, Clause
+   //    7].  Values of this syntax MUST be encoded using GSER [RFC3641].
+   //
+   //    Appendix A.7 provides an equivalent ABNF [RFC4234] grammar for this
+   //    syntax.
+   //
+   // A.7.  AlgorithmIdentifier
+   //
+   //    AlgorithmIdentifier = "{" sp ai-algorithm
+   //         [ "," sp ai-parameters ] sp "}"
+   //
+   //    ai-algorithm = id-algorithm msp OBJECT-IDENTIFIER
+   //    ai-parameters = id-parameters msp Value
+   //    id-algorithm = %x61.6C.67.6F.72.69.74.68.6D ; 'algorithm'
+   //    id-parameters = %x70.61.72.61.6D.65.74.65.72.73 ; 'parameters'
+   //
+   .oid           =  "1.3.6.1.1.15.7",
+   .name          =  "AlgorithmIdentifier",
+   .desc          =  "X.509 Algorithm Identifier",
+   .flags         =  LDAPSCHEMA_O_READABLE,
+   .type          =  LDAPSCHEMA_SYNTAX,
+   .class         =  LDAPSCHEMA_CLASS_ASCII,
+   .def           =  "( 1.3.6.1.1.15.7 DESC 'X.509 Algorithm Identifier' )",
+   .abnf          =  "AlgorithmIdentifier = \"{\" sp ai-algorithm\n"
+                     "     [ \",\" sp ai-parameters ] sp \"}\"\n"
+                     "\n"
+                     "ai-algorithm = id-algorithm msp OBJECT-IDENTIFIER\n"
+                     "ai-parameters = id-parameters msp Value\n"
+                     "id-algorithm = %x61.6C.67.6F.72.69.74.68.6D ; 'algorithm'\n"
+                     "id-parameters = %x70.61.72.61.6D.65.74.65.72.73 ; 'parameters'\n",
+   .re_posix      =  NULL,
+   .re_pcre       =  NULL,
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "2.11",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+   .examples      =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 3.1.  certificateExactMatch
+   //
+   //    The certificateExactMatch matching rule compares the presented
+   //    certificate exact assertion value with an attribute value of the
+   //    certificate syntax as described in clause 11.3.1 of [X.509].
+   //
+   //       ( 2.5.13.34 NAME 'certificateExactMatch'
+   //            DESC 'X.509 Certificate Exact Match'
+   //            SYNTAX 1.3.6.1.1.15.1 )
+   //
+   .oid           =  "2.5.13.34",
+   .name          =  "certificateExactMatch",
+   .desc          =  "X.509 Certificate Exact Match",
+   .type          =  LDAPSCHEMA_MATCHINGRULE,
+   .def           =  "( 2.5.13.34 NAME 'certificateExactMatch' DESC 'X.509 Certificate Exact Match' SYNTAX 1.3.6.1.1.15.1 )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "3.1",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 3.2.  certificateMatch
+   //
+   //    The certificateMatch matching rule compares the presented certificate
+   //    assertion value with an attribute value of the certificate syntax as
+   //    described in clause 11.3.2 of [X.509].
+   //
+   //       ( 2.5.13.35 NAME 'certificateMatch'
+   //            DESC 'X.509 Certificate Match'
+   //            SYNTAX 1.3.6.1.1.15.2 )
+   //
+   .oid           =  "2.5.13.35",
+   .name          =  "certificateMatch",
+   .desc          =  "X.509 Certificate Match",
+   .type          =  LDAPSCHEMA_MATCHINGRULE,
+   .def           =  "( 2.5.13.35 NAME 'certificateMatch' DESC 'X.509 Certificate Match' SYNTAX 1.3.6.1.1.15.2 )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "3.2",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 3.3.  certificatePairExactMatch
+   //
+   //    The certificatePairExactMatch matching rule compares the presented
+   //    certificate pair exact assertion value with an attribute value of the
+   //    certificate pair syntax as described in clause 11.3.3 of [X.509].
+   //
+   //       ( 2.5.13.36 NAME 'certificatePairExactMatch'
+   //            DESC 'X.509 Certificate Pair Exact Match'
+   //            SYNTAX 1.3.6.1.1.15.3 )
+   //
+   .oid           =  "2.5.13.36",
+   .name          =  "certificatePairExactMatch",
+   .desc          =  "X.509 Certificate Pair Exact Match",
+   .type          =  LDAPSCHEMA_MATCHINGRULE,
+   .def           =  "( 2.5.13.36 NAME 'certificatePairExactMatch' DESC 'X.509 Certificate Pair Exact Match' SYNTAX 1.3.6.1.1.15.3 )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "3.3",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 3.4.  certificatePairMatch
+   //
+   //    The certificatePairMatch matching rule compares the presented
+   //    certificate pair assertion value with an attribute value of the
+   //    certificate pair syntax as described in clause 11.3.4 of [X.509].
+   //
+   //       ( 2.5.13.37 NAME 'certificatePairMatch'
+   //            DESC 'X.509 Certificate Pair Match'
+   //            SYNTAX 1.3.6.1.1.15.4 )
+   //
+   .oid           =  "2.5.13.37",
+   .name          =  "certificatePairMatch",
+   .desc          =  "X.509 Certificate Pair Match",
+   .type          =  LDAPSCHEMA_MATCHINGRULE,
+   .def           =  "( 2.5.13.37 NAME 'certificatePairMatch' DESC 'X.509 Certificate Pair Match' SYNTAX 1.3.6.1.1.15.4 )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "3.4",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 3.5.  certificateListExactMatch
+   //
+   //    The certificateListExactMatch matching rule compares the presented
+   //    certificate list exact assertion value with an attribute value of the
+   //    certificate pair syntax as described in clause 11.3.5 of [X.509].
+   //
+   //       ( 2.5.13.38 NAME 'certificateListExactMatch'
+   //            DESC 'X.509 Certificate List Exact Match'
+   //            SYNTAX 1.3.6.1.1.15.5 )
+   //
+   .oid           =  "2.5.13.38",
+   .name          =  "certificateListExactMatch",
+   .desc          =  "X.509 Certificate List Exact Match",
+   .type          =  LDAPSCHEMA_MATCHINGRULE,
+   .def           =  "( 2.5.13.38 NAME 'certificateListExactMatch' DESC 'X.509 Certificate List Exact Match' SYNTAX 1.3.6.1.1.15.5 )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "3.5",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 3.6.  certificateListMatch
+   //
+   //    The certificateListMatch matching rule compares the presented
+   //    certificate list assertion value with an attribute value of the
+   //    certificate pair syntax as described in clause 11.3.6 of [X.509].
+   //
+   //       ( 2.5.13.39 NAME 'certificateListMatch'
+   //            DESC 'X.509 Certificate List Match'
+   //            SYNTAX 1.3.6.1.1.15.6 )
+   //
+   .oid           =  "2.5.13.39",
+   .name          =  "certificateListMatch",
+   .desc          =  "X.509 Certificate List Match",
+   .type          =  LDAPSCHEMA_MATCHINGRULE,
+   .def           =  "( 2.5.13.39 NAME 'certificateListMatch' DESC 'X.509 Certificate List Match' SYNTAX 1.3.6.1.1.15.6 )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "3.6",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 3.7.  algorithmIdentifierMatch
+   //
+   //    The algorithmIdentifierMatch mating rule compares a presented
+   //    algorithm identifier with an attribute value of the supported
+   //    algorithm as described in clause 11.3.7 of [X.509].
+   //
+   //       ( 2.5.13.40 NAME 'algorithmIdentifier'
+   //            DESC 'X.509 Algorithm Identifier Match'
+   //            SYNTAX 1.3.6.1.1.15.7 )
+   //
+   .oid           =  "2.5.13.40",
+   .name          =  "algorithmIdentifierMatch",
+   .desc          =  "X.509 Algorithm Identifier Match",
+   .type          =  LDAPSCHEMA_MATCHINGRULE,
+   .def           =  "( 2.5.13.40 NAME 'algorithmIdentifier' DESC 'X.509 Algorithm Identifier Match' SYNTAX 1.3.6.1.1.15.7 )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "3.7",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 4.1.  userCertificate
+   //
+   //    The userCertificate attribute holds the X.509 certificates issued to
+   //    the user by one or more certificate authorities, as discussed in
+   //    clause 11.2.1 of [X.509].
+   //
+   //       ( 2.5.4.36 NAME 'userCertificate'
+   //            DESC 'X.509 user certificate'
+   //            EQUALITY certificateExactMatch
+   //            SYNTAX 1.3.6.1.4.1.1466.115.121.1.8 )
+   //
+   //    As required by this attribute type's syntax, values of this attribute
+   //    are requested and transferred using the attribute description
+   //    "userCertificate;binary".
+   //
+   .oid           =  "2.5.4.36",
+   .name          =  "userCertificate",
+   .desc          =  "X.509 user certificate",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_ATTRIBUTETYPE,
+   .def           =  "( 2.5.4.36 NAME 'userCertificate' DESC 'X.509 user certificate' EQUALITY certificateExactMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.8 )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "4.1",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 4.2.  cACertificate
+   //
+   //    The cACertificate attribute holds the X.509 certificates issued to
+   //    the certificate authority (CA), as discussed in clause 11.2.2 of
+   //    [X.509].
+   //
+   //       ( 2.5.4.37 NAME 'cACertificate'
+   //            DESC 'X.509 CA certificate'
+   //            EQUALITY certificateExactMatch
+   //            SYNTAX 1.3.6.1.4.1.1466.115.121.1.8 )
+   //
+   //    As required by this attribute type's syntax, values of this attribute
+   //    are requested and transferred using the attribute description
+   //    "cACertificate;binary".
+   //
+   .oid           =  "2.5.4.37",
+   .name          =  "cACertificate",
+   .desc          =  "X.509 CA certificate",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_ATTRIBUTETYPE,
+   .def           =  "( 2.5.4.37 NAME 'cACertificate' DESC 'X.509 CA certificate' EQUALITY certificateExactMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.8 )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "4.2",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 4.3.  crossCertificatePair
+   //
+   //    The crossCertificatePair attribute holds an X.509 certificate pair,
+   //    as discussed in clause 11.2.3 of [X.509].
+   //
+   //       ( 2.5.4.40 NAME 'crossCertificatePair'
+   //            DESC 'X.509 cross certificate pair'
+   //            EQUALITY certificatePairExactMatch
+   //            SYNTAX 1.3.6.1.4.1.1466.115.121.1.10 )
+   //
+   //    As required by this attribute type's syntax, values of this attribute
+   //    are requested and transferred using the attribute description
+   //    "crossCertificatePair;binary".
+   //
+   .oid           =  "2.5.4.40",
+   .name          =  "crossCertificatePair",
+   .desc          =  "X.509 cross certificate pair",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_ATTRIBUTETYPE,
+   .def           =  "( 2.5.4.40 NAME 'crossCertificatePair' DESC 'X.509 cross certificate pair' EQUALITY certificatePairExactMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.10 )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "4.3",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 4.4.  certificateRevocationList
+   //
+   //    The certificateRevocationList attribute holds certificate lists, as
+   //    discussed in 11.2.4 of [X.509].
+   //
+   //       ( 2.5.4.39 NAME 'certificateRevocationList'
+   //            DESC 'X.509 certificate revocation list'
+   //            EQUALITY certificateListExactMatch
+   //            SYNTAX 1.3.6.1.4.1.1466.115.121.1.9 )
+   //
+   //    As required by this attribute type's syntax, values of this attribute
+   //    are requested and transferred using the attribute description
+   //    "certificateRevocationList;binary".
+   //
+   .oid           =  "2.5.4.39",
+   .name          =  "certificateRevocationList",
+   .desc          =  "X.509 certificate revocation list",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_ATTRIBUTETYPE,
+   .def           =  "( 2.5.4.39 NAME 'certificateRevocationList' DESC 'X.509 certificate revocation list' EQUALITY certificateListExactMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.9 )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "4.4",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 4.5.  authorityRevocationList
+   //
+   //    The authorityRevocationList attribute holds certificate lists, as
+   //    discussed in 11.2.5 of [X.509].
+   //
+   //       ( 2.5.4.38 NAME 'authorityRevocationList'
+   //            DESC 'X.509 authority revocation list'
+   //            EQUALITY certificateListExactMatch
+   //            SYNTAX 1.3.6.1.4.1.1466.115.121.1.9 )
+   //
+   //    As required by this attribute type's syntax, values of this attribute
+   //    are requested and transferred using the attribute description
+   //    "authorityRevocationList;binary".
+   //
+   .oid           =  "2.5.4.38",
+   .name          =  "authorityRevocationList",
+   .desc          =  "X.509 authority revocation list",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_ATTRIBUTETYPE,
+   .def           =  "( 2.5.4.38 NAME 'authorityRevocationList' DESC 'X.509 authority revocation list' EQUALITY certificateListExactMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.9 )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "4.5",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 4.6.  deltaRevocationList
+   //
+   //    The deltaRevocationList attribute holds certificate lists, as
+   //    discussed in 11.2.6 of [X.509].
+   //
+   //       ( 2.5.4.53 NAME 'deltaRevocationList'
+   //            DESC 'X.509 delta revocation list'
+   //            EQUALITY certificateListExactMatch
+   //            SYNTAX 1.3.6.1.4.1.1466.115.121.1.9 )
+   //
+   //    As required by this attribute type's syntax, values of this attribute
+   //    MUST be requested and transferred using the attribute description
+   //    "deltaRevocationList;binary".
+   //
+   .oid           =  "2.5.4.53",
+   .name          =  "deltaRevocationList",
+   .desc          =  "X.509 delta revocation list",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_ATTRIBUTETYPE,
+   .def           =  "( 2.5.4.53 NAME 'deltaRevocationList' DESC 'X.509 delta revocation list' EQUALITY certificateListExactMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.9 )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "4.6",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 4.7.  supportedAlgorithms
+   //
+   //    The supportedAlgorithms attribute holds supported algorithms, as
+   //    discussed in 11.2.7 of [X.509].
+   //
+   //       ( 2.5.4.52 NAME 'supportedAlgorithms'
+   //            DESC 'X.509 supported algorithms'
+   //            EQUALITY algorithmIdentifierMatch
+   //            SYNTAX 1.3.6.1.4.1.1466.115.121.1.49 )
+   //
+   //    As required by this attribute type's syntax, values of this attribute
+   //    MUST be requested and transferred using the attribute description
+   //    "supportedAlgorithms;binary".
+   //
+   .oid           =  "2.5.4.52",
+   .name          =  "supportedAlgorithms",
+   .desc          =  "X.509 supported algorithms",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_ATTRIBUTETYPE,
+   .def           =  "( 2.5.4.52 NAME 'supportedAlgorithms' DESC 'X.509 supported algorithms' EQUALITY algorithmIdentifierMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.49 )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "4.7",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 5.1.  pkiUser
+   //
+   //    This object class is used in augment entries for objects that may be
+   //    subject to certificates, as defined in clause 11.1.1 of [X.509].
+   //
+   //       ( 2.5.6.21 NAME 'pkiUser'
+   //            DESC 'X.509 PKI User'
+   //            SUP top AUXILIARY
+   //            MAY userCertificate )
+   //
+   .oid           =  "2.5.6.21",
+   .name          =  "pkiUser",
+   .desc          =  "X.509 PKI User",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_OBJECTCLASS,,
+   .def           =  "( 2.5.6.21 NAME 'pkiUser' DESC 'X.509 PKI User' SUP top AUXILIARY MAY userCertificate )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "5.1",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 5.2.  pkiCA
+   //
+   //    This object class is used to augment entries for objects that act as
+   //    certificate authorities, as defined in clause 11.1.2 of [X.509]
+   //
+   //       ( 2.5.6.22 NAME 'pkiCA'
+   //            DESC 'X.509 PKI Certificate Authority'
+   //            SUP top AUXILIARY
+   //            MAY ( cACertificate $ certificateRevocationList $
+   //                 authorityRevocationList $ crossCertificatePair ) )
+   //
+   .oid           =  "2.5.6.22",
+   .name          =  "pkiCA",
+   .desc          =  "X.509 PKI Certificate Authority",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_OBJECTCLASS,,
+   .def           =  "( 2.5.6.22 NAME 'pkiCA' DESC 'X.509 PKI Certificate Authority' SUP top AUXILIARY MAY ( cACertificate $ certificateRevocationList $ authorityRevocationList $ crossCertificatePair ) )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "5.2",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 5.3.  cRLDistributionPoint
+   //
+   //    This class is used to represent objects that act as CRL distribution
+   //    points, as discussed in clause 11.1.3 of [X.509].
+   //
+   //       ( 2.5.6.19 NAME 'cRLDistributionPoint'
+   //            DESC 'X.509 CRL distribution point'
+   //            SUP top STRUCTURAL
+   //            MUST cn
+   //            MAY ( certificateRevocationList $
+   //                 authorityRevocationList $ deltaRevocationList ) )
+   //
+   .oid           =  "2.5.6.19",
+   .name          =  "cRLDistributionPoint",
+   .desc          =  "X.509 CRL distribution point",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_OBJECTCLASS,,
+   .def           =  "( 2.5.6.19 NAME 'cRLDistributionPoint' DESC 'X.509 CRL distribution point' SUP top STRUCTURAL MUST cn MAY ( certificateRevocationList $ authorityRevocationList $ deltaRevocationList ) )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "5.3",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 5.4.  deltaCRL
+   //
+   //    The deltaCRL object class is used to augment entries to hold delta
+   //    revocation lists, as discussed in clause 11.1.4 of [X.509].
+   //
+   //       ( 2.5.6.23 NAME 'deltaCRL'
+   //            DESC 'X.509 delta CRL'
+   //            SUP top AUXILIARY
+   //            MAY deltaRevocationList )
+   //
+   .oid           =  "2.5.6.23",
+   .name          =  "deltaCRL",
+   .desc          =  "X.509 delta CRL",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_OBJECTCLASS,,
+   .def           =  "( 2.5.6.23 NAME 'deltaCRL' DESC 'X.509 delta CRL' SUP top AUXILIARY MAY deltaRevocationList )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "5.4",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 5.5.  strongAuthenticationUser
+   //
+   //    This object class is used to augment entries for objects
+   //    participating in certificate-based authentication, as defined in
+   //    clause 6.15 of [X.521].  This object class is deprecated in favor of
+   //    pkiUser.
+   //
+   //       ( 2.5.6.15 NAME 'strongAuthenticationUser'
+   //            DESC 'X.521 strong authentication user'
+   //            SUP top AUXILIARY
+   //            MUST userCertificate )
+   //
+   .oid           =  "2.5.6.15",
+   .name          =  "strongAuthenticationUser",
+   .desc          =  "X.521 strong authentication user",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_OBJECTCLASS,,
+   .def           =  "( 2.5.6.15 NAME 'strongAuthenticationUser' DESC 'X.521 strong authentication user' SUP top AUXILIARY MUST userCertificate )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "5.5",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 5.6.  userSecurityInformation
+   //
+   //    This object class is used to augment entries with needed additional
+   //    associated security information, as defined in clause 6.16 of
+   //    [X.521].
+   //
+   //       ( 2.5.6.18 NAME 'userSecurityInformation'
+   //            DESC 'X.521 user security information'
+   //            SUP top AUXILIARY
+   //            MAY ( supportedAlgorithms ) )
+   //
+   .oid           =  "2.5.6.18",
+   .name          =  "userSecurityInformation",
+   .desc          =  "X.521 user security information",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_OBJECTCLASS,,
+   .def           =  "( 2.5.6.18 NAME 'userSecurityInformation' DESC 'X.521 user security information' SUP top AUXILIARY MAY ( supportedAlgorithms ) )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "5.6",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 5.7.  certificationAuthority
+   //
+   //    This object class is used to augment entries for objects that act as
+   //    certificate authorities, as defined in clause 6.17 of [X.521].  This
+   //    object class is deprecated in favor of pkiCA.
+   //
+   //       ( 2.5.6.16 NAME 'certificationAuthority'
+   //            DESC 'X.509 certificate authority'
+   //            SUP top AUXILIARY
+   //            MUST ( authorityRevocationList $
+   //                 certificateRevocationList $ cACertificate )
+   //            MAY crossCertificatePair )
+   //
+   .oid           =  "2.5.6.16",
+   .name          =  "certificationAuthority",
+   .desc          =  "X.509 certificate authority",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_OBJECTCLASS,,
+   .def           =  "( 2.5.6.16 NAME 'certificationAuthority' DESC 'X.509 certificate authority' SUP top AUXILIARY MUST ( authorityRevocationList $ certificateRevocationList $ cACertificate ) MAY crossCertificatePair )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "5.7",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+{
+   //
+   // RFC 4523                   LDAP X.509 Schema                   June 2006
+   //
+   // 5.8.  certificationAuthority-V2
+   //
+   //    This object class is used to augment entries for objects that act as
+   //    certificate authorities, as defined in clause 6.18 of [X.521].  This
+   //    object class is deprecated in favor of pkiCA.
+   //
+   //       ( 2.5.6.16.2 NAME 'certificationAuthority-V2'
+   //            DESC 'X.509 certificate authority, version 2'
+   //            SUP certificationAuthority AUXILIARY
+   //            MAY deltaRevocationList )
+   //
+   .oid           =  "2.5.6.16.2",
+   .name          =  "certificationAuthority-V2",
+   .desc          =  "X.509 certificate authority, version 2",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_OBJECTCLASS,,
+   .def           =  "( 2.5.6.16.2 NAME 'certificationAuthority-V2' DESC 'X.509 certificate authority, version 2' SUP certificationAuthority AUXILIARY MAY deltaRevocationList )",
+   .spec          =  "RFC 4523: LDAP X.509 Schema",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4523",
+   .spec_section  =  "5.8",
+   .spec_source   =  NULL,
+   .spec_vendor   =  "IETF",
+   .spec_text     =  NULL,
+   .notes         =  NULL,
+};
+
+
+
+// end of OID spec file
