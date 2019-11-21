@@ -135,6 +135,9 @@ DISTCHECK_CONFIGURE_FLAGS		= --enable-strictwarnings
 
 # macros for lib/libldapschema.a
 if LDAPUTILS_LIBLDAPSCHEMA
+   noinst_LIBRARIES			+= lib/libldapschema.a
+endif
+if LDAPUTILS_LTLIBLDAPSCHEMA
    lib_LIBRARIES			+= lib/libldapschema.a
    include_HEADERS			+= include/ldapschema.h
 endif
@@ -163,7 +166,7 @@ lib_libldapschema_a_SOURCES		= $(noinst_HEADERS) \
 
 
 # macros for lib/libldapschema.la
-if LDAPUTILS_LIBLDAPSCHEMA
+if LDAPUTILS_LTLIBLDAPSCHEMA
    lib_LTLIBRARIES			+= lib/libldapschema.la
 endif
 lib_libldapschema_la_DEPENDENCIES	= Makefile lib/libldapschema/libldapschema.sym
@@ -195,6 +198,9 @@ lib_libldapschema_la_SOURCES		= $(noinst_HEADERS) \
 
 
 # macros for lib/libutil.la
+if LDAPUTILS_LIBLDAPUTILS
+   noinst_LIBRARIES			+= lib/libldaputils.a
+endif
 lib_libldaputils_a_DEPENDENCIES		= Makefile lib/libldaputils/libldaputils.sym
 lib_libldaputils_a_CFLAGS		= $(AM_CFLAGS)
 lib_libldaputils_a_LIBADD		= $(AM_LIBS)

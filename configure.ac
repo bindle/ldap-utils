@@ -183,6 +183,7 @@ AC_BINDLE_GIT_PACKAGE_VERSION([contrib/bindletools/build-aux/git-package-version
 AC_BINDLE_ENABLE_WARNINGS([-Wno-padded], [-Wpadded])
 AC_LDAP_UTILS_LIBRARIES
 AC_LDAP_UTILS_LIBLDAPSCHEMA
+AC_LDAP_UTILS_LIBLDAPUTILS
 AC_LDAP_UTILS_UTILITIES
 AC_LDAP_UTILS_LDAP2CSV
 AC_LDAP_UTILS_LDAP2JSON
@@ -205,19 +206,21 @@ AC_MSG_NOTICE([   Use Warnings                  $USE_WARNINGS])
 AC_MSG_NOTICE([   Use Strict Warnings           $USE_STRICTWARNINGS])
 AC_MSG_NOTICE([ ])
 AC_MSG_NOTICE([   Libraries:])
-AC_MSG_NOTICE([      Install libldapschema.la   $LDAPUTILS_LIBLDAPSCHEMA])
+AC_MSG_NOTICE([      Install libldapschema.a    $LDAPUTILS_LIBLDAPSCHEMA_STATUS])
+AC_MSG_NOTICE([      Install libldapschema.la   $LDAPUTILS_LTLIBLDAPSCHEMA_STATUS])
+AC_MSG_NOTICE([      Install libldaputils.a     $LDAPUTILS_LIBLDAPUTILS_STATUS])
 AC_MSG_NOTICE([ ])
 AC_MSG_NOTICE([   Utilities:])
-AC_MSG_NOTICE([      Install ldap2csv           $LDAPUTILS_LDAP2CSV])
-AC_MSG_NOTICE([      Install ldap2json          $LDAPUTILS_LDAP2JSON])
-AC_MSG_NOTICE([      Install ldapdebug          $LDAPUTILS_LDAPDEBUG])
-AC_MSG_NOTICE([      Install ldapdn2str         $LDAPUTILS_LDAPDN2STR])
-AC_MSG_NOTICE([      Install ldapinfo           $LDAPUTILS_LDAPINFO])
-AC_MSG_NOTICE([      Install ldapschema         $LDAPUTILS_LDAPSCHEMA])
-AC_MSG_NOTICE([      Install ldaptree           $LDAPUTILS_LDAPTREE])
+AC_MSG_NOTICE([      ldap2csv                   $LDAPUTILS_LDAP2CSV_STATUS])
+AC_MSG_NOTICE([      ldap2json                  $LDAPUTILS_LDAP2JSON_STATUS])
+AC_MSG_NOTICE([      ldapdebug                  $LDAPUTILS_LDAPDEBUG_STATUS])
+AC_MSG_NOTICE([      ldapdn2str                 $LDAPUTILS_LDAPDN2STR_STATUS])
+AC_MSG_NOTICE([      ldapinfo                   $LDAPUTILS_LDAPINFO_STATUS])
+AC_MSG_NOTICE([      ldapschema                 $LDAPUTILS_LDAPSCHEMA_STATUS])
+AC_MSG_NOTICE([      ldaptree                   $LDAPUTILS_LDAPTREE_STATUS])
 AC_MSG_NOTICE([ ])
 AC_MSG_NOTICE([   Internal Utilities:])
-AC_MSG_NOTICE([      Build oidspectool          $LDAPUTILS_OIDSPECTOOL])
+AC_MSG_NOTICE([      oidspectool                $LDAPUTILS_OIDSPECTOOL_STATUS])
 AC_MSG_NOTICE([ ])
 AC_MSG_NOTICE([   Please send suggestions to:   $PACKAGE_BUGREPORT])
 AC_MSG_NOTICE([ ])
