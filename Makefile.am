@@ -58,7 +58,8 @@ ACLOCAL_AMFLAGS				= -I m4 -W all -W error
 AM_MAKEINFOFLAGS                        = --no-split
 AM_DISTCHECK_CONFIGURE_FLAGS		= --enable-strictwarnings \
 					  --enable-libldapschema \
-					  --enable-maintainer \
+					  --enable-ldapschema \
+					  --enable-ldapdebug \
 					  CFLAGS="$(CFLAGS)" \
 					  CPPFLAGS="$(CPPFLAGS)" \
 					  LDFLAGS="$(LDFLAGS)"
