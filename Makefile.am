@@ -84,7 +84,7 @@ noinst_HEADERS				= include/ldapschema.h \
 					  include/ldaputils.h \
 					  include/ldaputils_cdefs.h
 noinst_PROGRAMS				=
-noinst_LIBRARIES			= lib/libldaputils.a
+noinst_LIBRARIES			=
 
 
 # lists
