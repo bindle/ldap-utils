@@ -72,16 +72,15 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
    assert(lsd != NULL);
    assert(ld  != NULL);
 
-   timeout.tv_sec    = 5;
-   timeout.tv_usec   = 0;
-
    attrs = NULL;
    if ((err = ldapschema_definition_split(lsd, "( + * )", 7, &attrs)) == -1)
       return(lsd->errcode);
 
    // searches for schema DN
-   res = NULL;
-   if ((err = ldap_search_ext_s(ld, "", LDAP_SCOPE_BASE, "(objectclass=*)", attrs, 0, NULL, NULL, NULL, 0, &res)) != LDAP_SUCCESS)
+   timeout.tv_sec    = 5;
+   timeout.tv_usec   = 0;
+   res               = NULL;
+   if ((err = ldap_search_ext_s(ld, "", LDAP_SCOPE_BASE, "(objectclass=*)", attrs, 0, NULL, NULL, &timeout, 0, &res)) != LDAP_SUCCESS)
    {
       ldapschema_value_free(attrs);
       return(err);
@@ -100,8 +99,10 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
    ldap_msgfree(res);
 
    // searches for schema entry
-   res = NULL;
-   if ((err = ldap_search_ext_s(ld, dns[0], LDAP_SCOPE_BASE, "(objectclass=*)", attrs, 0, NULL, NULL, NULL, 0, &res)) != LDAP_SUCCESS)
+   timeout.tv_sec    = 5;
+   timeout.tv_usec   = 0;
+   res               = NULL;
+   if ((err = ldap_search_ext_s(ld, dns[0], LDAP_SCOPE_BASE, "(objectclass=*)", attrs, 0, NULL, NULL, &timeout, 0, &res)) != LDAP_SUCCESS)
    {
       ldap_value_free(dns);
       ldapschema_value_free(attrs);
