@@ -163,6 +163,7 @@ AC_SEARCH_LIBS([ldap_value_free],      ldap,,AC_MSG_ERROR([missing required func
 AC_SEARCH_LIBS([socket],               socket,,AC_MSG_ERROR([missing required function]), [-lresolv])
 
 # check for headers
+AC_CHECK_HEADER_STDBOOL
 AC_CHECK_HEADERS([fcntl.h],,           [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([termios.h],,         [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([ldap.h],,            [AC_MSG_ERROR([missing required header])])
