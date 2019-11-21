@@ -8,7 +8,7 @@
    .desc          =  "Bit String",                                          // short description of OID
    .flags         =  LDAPSCHEMA_O_READABLE,                                 // relevant ldapschema flags from ldapschema.h 
    .type          =  LDAPSCHEMA_SYNTAX,                                     // OID type (i.e. syntax, matching rule, etc)
-   .class         =  LDAPSCHEMA_CLASS_ASCII,                                // data class (i.e. utf8, integer, image, etc)
+   .subtype       =  LDAPSCHEMA_CLASS_ASCII,                                // data class (i.e. utf8, integer, image, etc)
    .def           =  "( 1.3.6.1.4.1.1466.115.121.1.6 DESC 'Bit String' )",  // official definition of OID
    .abnf          =  "BitString    = SQUOTE *binary-digit SQUOTE \"B\"\n"   // if a syntax, the syntax's ABNF
                      "SQUOTE  = %x27 ; single quote (\"'\")\n"
