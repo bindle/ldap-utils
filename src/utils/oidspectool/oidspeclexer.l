@@ -90,6 +90,15 @@ int yylex();
 "LDAPSCHEMA_CLASS_AUDIO"            { yylval.str = yytext; return(SUBTYPE); }
 "LDAPSCHEMA_CLASS_UTF8_MULTILINE"   { yylval.str = yytext; return(SUBTYPE); }
 
+"LDAPSCHEMA_STRUCTURAL"             { yylval.str = yytext; return(SUBTYPE); }
+"LDAPSCHEMA_ABSTRACT"               { yylval.str = yytext; return(SUBTYPE); }
+"LDAPSCHEMA_AUXILIARY"              { yylval.str = yytext; return(SUBTYPE); }
+
+"LDAPSCHEMA_USER_APP"               { yylval.str = yytext; return(SUBTYPE); }
+"LDAPSCHEMA_DIRECTORY_OP"           { yylval.str = yytext; return(SUBTYPE); }
+"LDAPSCHEMA_DISTRIBUTED_OP"         { yylval.str = yytext; return(SUBTYPE); }
+"LDAPSCHEMA_DSA_OP"                 { yylval.str = yytext; return(SUBTYPE); }
+
 "LDAPSCHEMA_SPEC_RFC"               { yylval.str = yytext; return(SPEC_TYPE); }
 "LDAPSCHEMA_SPEC_URL"               { yylval.str = yytext; return(SPEC_TYPE); }
 

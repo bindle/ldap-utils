@@ -1037,6 +1037,53 @@ int my_yyoidspec(void)
       fprintf(stderr, "%s: %s: %i: spec missing .desc field\n", PROGRAM_NAME, cur_filename, yylineno);
       return(1);
    };
+
+   // checks subtype and type
+   if ( ((cur_oidspec->type)) && ((cur_oidspec->subtype)) )
+   {
+      if (!(strcmp(cur_oidspec->type[0], "LDAPSCHEMA_SYNTAX")))
+      {
+         if (  (!(strcmp(cur_oidspec->type[0], "LDAPSCHEMA_CLASS_UNKNOWN"))) ||
+               (!(strcmp(cur_oidspec->type[0], "LDAPSCHEMA_CLASS_ASCII"))) ||
+               (!(strcmp(cur_oidspec->type[0], "LDAPSCHEMA_CLASS_UTF8"))) ||
+               (!(strcmp(cur_oidspec->type[0], "LDAPSCHEMA_CLASS_INTEGER"))) ||
+               (!(strcmp(cur_oidspec->type[0], "LDAPSCHEMA_CLASS_UNSIGNED"))) ||
+               (!(strcmp(cur_oidspec->type[0], "LDAPSCHEMA_CLASS_BOOLEAN"))) ||
+               (!(strcmp(cur_oidspec->type[0], "LDAPSCHEMA_CLASS_DATA"))) ||
+               (!(strcmp(cur_oidspec->type[0], "LDAPSCHEMA_CLASS_IMAGE"))) ||
+               (!(strcmp(cur_oidspec->type[0], "LDAPSCHEMA_CLASS_AUDIO"))) ||
+               (!(strcmp(cur_oidspec->type[0], "LDAPSCHEMA_CLASS_UTF8_MULTILINE"))) )
+         {
+            fprintf(stderr, "%s: %s: %i: type %s contains invalid subtype %s\n", PROGRAM_NAME, cur_filename, yylineno, cur_oidspec->type[0], cur_oidspec->subtype[0]);
+            return(1);
+         };
+      } else if (!(strcmp(cur_oidspec->type[0], "LDAPSCHEMA_ATTRIBUTETYPE")))
+      {
+         if (  (!(strcmp(cur_oidspec->type[0], "LDAPSCHEMA_USER_APP"))) ||
+               (!(strcmp(cur_oidspec->type[0], "LDAPSCHEMA_DIRECTORY_OP"))) ||
+               (!(strcmp(cur_oidspec->type[0], "LDAPSCHEMA_DISTRIBUTED_OP"))) ||
+               (!(strcmp(cur_oidspec->type[0], "LDAPSCHEMA_DSA_OP"))) )
+         {
+            fprintf(stderr, "%s: %s: %i: type %s contains invalid subtype %s\n", PROGRAM_NAME, cur_filename, yylineno, cur_oidspec->type[0], cur_oidspec->subtype[0]);
+            return(1);
+         };
+      } else if (!(strcmp(cur_oidspec->type[0], "LDAPSCHEMA_OBJECTCLASS")))
+      {
+         if (  (!(strcmp(cur_oidspec->type[0], "LDAPSCHEMA_STRUCTURAL"))) ||
+               (!(strcmp(cur_oidspec->type[0], "LDAPSCHEMA_ABSTRACT"))) ||
+               (!(strcmp(cur_oidspec->type[0], "LDAPSCHEMA_AUXILIARY"))) )
+         {
+            fprintf(stderr, "%s: %s: %i: type %s contains invalid subtype %s\n", PROGRAM_NAME, cur_filename, yylineno, cur_oidspec->type[0], cur_oidspec->subtype[0]);
+            return(1);
+         };
+      };
+   } else if ( (!(cur_oidspec->type)) && ((cur_oidspec->subtype)) )
+   {
+      fprintf(stderr, "%s: %s: %i: cannot specify subtype without type\n", PROGRAM_NAME, cur_filename, yylineno);
+      return(1);
+   };
+
+   // skips OID if ignore field is found
    if ((cur_oidspec->ignore))
    {
       if ((cfg.verbose))
