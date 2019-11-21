@@ -224,20 +224,6 @@ typedef struct ldap_schema_extension LDAPSchemaExtension;
 
 typedef struct ldapschema_spec LDAPSchemaSpec;
 
-enum ldap_schema_syntax_class
-{
-   LDAPSchemaSyntaxUnknown        = 0,
-   LDAPSchemaSyntaxASCII          = 1,
-   LDAPSchemaSyntaxUTF8           = 2,
-   LDAPSchemaSyntaxInteger        = 3,
-   LDAPSchemaSyntaxUnsigned       = 4,
-   LDAPSchemaSyntaxBoolean        = 5,
-   LDAPSchemaSyntaxData           = 6,
-   LDAPSchemaSyntaxImage          = 7,
-   LDAPSchemaSyntaxAudio          = 8,
-   LDAPSchemaSyntaxUTF8MultiLine  = 9
-};
-typedef enum ldap_schema_syntax_class LDAPSchemaSyntaxClass;
 
 /// LDAP schema extension
 struct ldap_schema_extension
