@@ -216,6 +216,8 @@ typedef struct ldap_schema_syntax LDAPSchemaSyntax;
 
 typedef struct ldap_schema_objectclass LDAPSchemaObjectclass;
 
+typedef union ldap_schema_pointer LDAPSchemaPointer;
+
 typedef struct ldap_schema_attributetype LDAPSchemaAttributeType;
 
 typedef struct ldap_schema_matchingrule LDAPSchemaMatchingRule;

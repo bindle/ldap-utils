@@ -342,7 +342,7 @@ void ldapschema_print_models( LDAPSchema * lsd )
    assert(lsd != NULL);
    
    for(x = 0; x < lsd->oids_len; x++)
-      ldapschema_print_model(lsd, lsd->oids[x]);
+      ldapschema_print_model(lsd, lsd->oids[x].model);
 
    return;
 }

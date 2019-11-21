@@ -74,7 +74,7 @@ struct ldap_schema
 {
    int32_t              errcode;          ///< last error code
    int32_t              pad32;
-   void              ** oids;             ///< array of all known oids
+   LDAPSchemaPointer  * oids;             ///< array of all known oids
    size_t               oids_len;         ///< length of oids array
    LDAPSchemaSyntax  ** syntaxes;         ///< array of syntaxes
    size_t               syntaxes_len;     ///< length of syntaxes array
@@ -136,6 +136,17 @@ struct ldap_schema_objectclass
    LDAPSchemaAttributeType   ** all_must;
    LDAPSchemaAttributeType   ** all_may;
 };
+
+
+union ldap_schema_pointer
+{
+   LDAPSchemaModel          * model;
+   LDAPSchemaSyntax         * syntax;
+   LDAPSchemaObjectclass    * objectclass;
+   LDAPSchemaAttributeType  * attributetype;
+   LDAPSchemaMatchingRule   * matchingrule;
+};
+
 
 /// LDAP schema attributeType
 struct ldap_schema_attributetype

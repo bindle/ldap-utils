@@ -598,7 +598,7 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
    ldapschema_value_free(argv);
 
    // adds syntax into OID list
-   if ((ldapschema_insert(lsd, &lsd->oids, &lsd->oids_len, attr, ldapschema_model_cmp)) != LDAP_SUCCESS)
+   if ((ldapschema_insert(lsd, (void ***)&lsd->oids, &lsd->oids_len, attr, ldapschema_model_cmp)) != LDAP_SUCCESS)
    {
       ldapschema_attributetype_free(attr);
       return(NULL);
@@ -797,7 +797,7 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
    syntax->model.spec = ldapschema_spec_search(syntax->model.oid);
 
    // adds syntax into OID list
-   if ((ldapschema_insert(lsd, &lsd->oids, &lsd->oids_len, syntax, ldapschema_model_cmp)) != LDAP_SUCCESS)
+   if ((ldapschema_insert(lsd, (void ***)&lsd->oids, &lsd->oids_len, syntax, ldapschema_model_cmp)) != LDAP_SUCCESS)
    {
       ldapschema_syntax_free(syntax);
       return(NULL);

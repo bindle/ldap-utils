@@ -182,16 +182,16 @@ void ldapschema_free(LDAPSchema * lsd)
    // frees oids
    if ((lsd->oids))
    {
-      for(i = 0; ((lsd->oids[i])); i++)
+      for(i = 0; ((lsd->oids[i].model)); i++)
       {
-         switch( ((LDAPSchemaModel *)lsd->oids[i])->type )
+         switch( lsd->oids[i].model->type )
          {
             case LDAPSCHEMA_SYNTAX:
-            ldapschema_syntax_free(lsd->oids[i]);
+            ldapschema_syntax_free(lsd->oids[i].syntax);
             break;
 
             default:
-            free(lsd->oids[i]);
+            free(lsd->oids[i].model);
             break;
          };
       };
