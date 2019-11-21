@@ -42,7 +42,7 @@ AC_DEFUN([AC_LDAP_UTILS_LDAP2CSV],[dnl
    enableval=""
    AC_ARG_ENABLE(
       ldap2csv,
-      [AS_HELP_STRING([   --disable-ldap2csv], [disable building ldap2csv utility])],
+      [AS_HELP_STRING([--disable-ldap2csv], [disable building ldap2csv utility])],
       [ ELDAP2CSV=$enableval ],
       [ ELDAP2CSV=$enableval ]
    )
@@ -72,7 +72,7 @@ AC_DEFUN([AC_LDAP_UTILS_LDAP2JSON],[dnl
    enableval=""
    AC_ARG_ENABLE(
       ldap2csv,
-      [AS_HELP_STRING([   --disable-ldap2json], [disable building ldap2json utility])],
+      [AS_HELP_STRING([--disable-ldap2json], [disable building ldap2json utility])],
       [ ELDAP2JSON=$enableval ],
       [ ELDAP2JSON=$enableval ]
    )
@@ -102,7 +102,7 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPDEBUG],[dnl
    enableval=""
    AC_ARG_ENABLE(
       ldapdebug,
-      [AS_HELP_STRING([   --enable-ldapdebug], [enable building ldapdebug utility])],
+      [AS_HELP_STRING([--enable-ldapdebug], [enable building ldapdebug utility])],
       [ ELDAPDEBUG=$enableval ],
       [ ELDAPDEBUG=$enableval ]
    )
@@ -132,7 +132,7 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPDN2STR],[dnl
    enableval=""
    AC_ARG_ENABLE(
       ldapdn2str,
-      [AS_HELP_STRING([   --disable-ldapdn2str], [disable building ldapdn2str utility])],
+      [AS_HELP_STRING([--disable-ldapdn2str], [disable building ldapdn2str utility])],
       [ ELDAPDN2STR=$enableval ],
       [ ELDAPDN2STR=$enableval ]
    )
@@ -162,7 +162,7 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPINFO],[dnl
    enableval=""
    AC_ARG_ENABLE(
       ldapinfo,
-      [AS_HELP_STRING([   --disable-ldapinfo], [disable building ldapinfo utility])],
+      [AS_HELP_STRING([--disable-ldapinfo], [disable building ldapinfo utility])],
       [ ELDAPINFO=$enableval ],
       [ ELDAPINFO=$enableval ]
    )
@@ -189,7 +189,7 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPSCHEMA],[dnl
    enableval=""
    AC_ARG_ENABLE(
       ldapschema,
-      [AS_HELP_STRING([   --enable-ldapschema], [enable ldapschema utility (experimental)])],
+      [AS_HELP_STRING([--enable-ldapschema], [enable ldapschema utility (experimental)])],
       [ ELDAPSCHEMA=$enableval ],
       [ ELDAPSCHEMA=$enableval ]
    )
@@ -219,7 +219,7 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPTREE],[dnl
    enableval=""
    AC_ARG_ENABLE(
       ldaptree,
-      [AS_HELP_STRING([   --disable-ldaptree], [disable building ldaptree utility])],
+      [AS_HELP_STRING([--disable-ldaptree], [disable building ldaptree utility])],
       [ ELDAPTREE=$enableval ],
       [ ELDAPTREE=$enableval ]
    )
@@ -249,7 +249,7 @@ AC_DEFUN([AC_LDAP_UTILS_LIBLDAPSCHEMA],[dnl
    enableval=""
    AC_ARG_ENABLE(
       libldapschema,
-      [AS_HELP_STRING([   --enable-libldapschema], [enable ldapschema library (experimental)])],
+      [AS_HELP_STRING([--enable-libldapschema], [enable ldapschema library (experimental)])],
       [ ELIBLDAPSCHEMA=$enableval ],
       [ ELIBLDAPSCHEMA=$enableval ]
    )
@@ -296,7 +296,7 @@ AC_DEFUN([AC_LDAP_UTILS_LIBLDAPUTILS],[dnl
    if test "x${LDAPUTILS_LIBLDAPUTILS}" == "xno";then
       LDAPUTILS_LIBLDAPUTILS_STATUS="skip"
    else
-      LDAPUTILS_LIBLDAPUTILS_STATUS="install"
+      LDAPUTILS_LIBLDAPUTILS_STATUS="build"
    fi
 
    AM_CONDITIONAL([LDAPUTILS_LIBLDAPUTILS], [test "x$LDAPUTILS_LIBLDAPUTILS" = "xyes"])
@@ -310,7 +310,7 @@ AC_DEFUN([AC_LDAP_UTILS_LIBRARIES],[dnl
    enableval=""
    AC_ARG_ENABLE(
       libraries,
-      [AS_HELP_STRING([--disable-libraries], [disable libraries])],
+      [AS_HELP_STRING([--disable-libraries], [disable all libraries by default])],
       [ ELDAPLIBRARIES=$enableval ],
       [ ELDAPLIBRARIES=$enableval ]
    )
@@ -355,7 +355,7 @@ AC_DEFUN([AC_LDAP_UTILS_UTILITIES],[dnl
    enableval=""
    AC_ARG_ENABLE(
       utilities,
-      [AS_HELP_STRING([--disable-utilities], [disable utilities])],
+      [AS_HELP_STRING([--disable-utilities], [disable all utilities by default])],
       [ ELDAPUTILITIES=$enableval ],
       [ ELDAPUTILITIES=$enableval ]
    )
