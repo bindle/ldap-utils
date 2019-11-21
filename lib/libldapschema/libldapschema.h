@@ -73,7 +73,7 @@
 struct ldap_schema
 {
    int32_t              errcode;          ///< last error code
-   int32_t              pad0;
+   int32_t              pad32;
    void              ** oids;             ///< array of all known oids
    size_t               oids_len;         ///< length of oids array
    LDAPSchemaSyntax  ** syntaxes;         ///< array of syntaxes
