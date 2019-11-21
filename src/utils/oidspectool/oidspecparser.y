@@ -48,7 +48,6 @@ int yylex(void);
 %token NULLSTR
 %token CONST_CAST
 %token FLD_ABNF
-%token FLD_CLASS
 %token FLD_DEF
 %token FLD_DESC
 %token FLD_EXAMPLES
@@ -67,11 +66,12 @@ int yylex(void);
 %token FLD_SPEC_TYPE
 %token FLD_SPEC_VENDOR
 %token FLD_TYPE
+%token FLD_SUBTYPE
 %token <str> CSTRING
 %token <str> OIDSTR
 %token <str> FLAG
 %token <str> TYPE
-%token <str> CLASS
+%token <str> SUBTYPE
 %token <str> SPEC_TYPE
 
 %start stanzas
@@ -95,7 +95,7 @@ fields            :
 
 field             :
                   | FLD_ABNF         '=' strings      { my_yycommit( FLD_ABNF             ); }
-                  | FLD_CLASS        '=' CLASS        { my_yysubmit( FLD_CLASS,        $3 ); }
+                  | FLD_SUBTYPE      '=' SUBTYPE      { my_yysubmit( FLD_SUBTYPE,      $3 ); }
                   | FLD_DESC         '=' CSTRING      { my_yysubmit( FLD_DESC,         $3 ); }
                   | FLD_DEF          '=' strings      { my_yycommit( FLD_DEF              ); }
                   | FLD_EXAMPLES     '=' examples     { my_yycommit( FLD_EXAMPLES         ); }

@@ -111,7 +111,6 @@ int ldapschema_spec_field(const LDAPSchemaSpec * s, int field, void * outvalue)
       // int values (flags/types/etc)
       case LDAPSCHEMA_FLD_TYPE:           *oi = (int)s->type;             return(0);
       case LDAPSCHEMA_FLD_SUBTYPE:        *oi = (int)s->subtype;          return(0);
-      case LDAPSCHEMA_FLD_CLASS:          *oi = (int)s->class;            return(0);
       case LDAPSCHEMA_FLD_SPEC_TYPE:      *oi = (int)s->spec_type;        return(0);
       case LDAPSCHEMA_FLD_FLAGS:          *oi = (int)s->flags;            return(0);
 
@@ -120,7 +119,6 @@ int ldapschema_spec_field(const LDAPSchemaSpec * s, int field, void * outvalue)
       case LDAPSCHEMA_FLD_NAME:           *os = strdup(s->name);          return(0);
       case LDAPSCHEMA_FLD_DESC:           *os = strdup(s->desc);          return(0);
       case LDAPSCHEMA_FLD_DEF:            *os = strdup(s->def);           return(0);
-      case LDAPSCHEMA_FLD_SOURCE:         *os = strdup(s->source);        return(0);
       case LDAPSCHEMA_FLD_ABNF:           *os = strdup(s->abnf);          return(0);
       case LDAPSCHEMA_FLD_RE_POSIX:       *os = strdup(s->re_posix);      return(0);
       case LDAPSCHEMA_FLD_RE_PCRE:        *os = strdup(s->re_pcre);       return(0);

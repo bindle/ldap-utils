@@ -25,7 +25,7 @@
    .desc          =  "X.509 Certificate",
    .flags         =  0,
    .type          =  LDAPSCHEMA_SYNTAX,
-   .class         =  LDAPSCHEMA_CLASS_UNKNOWN,
+   .subtype       =  LDAPSCHEMA_CLASS_UNKNOWN,
    .def           =  "( 1.3.6.1.4.1.1466.115.121.1.8 DESC 'X.509 Certificate' )",
    .abnf          =  NULL,
    .re_posix      =  NULL,
@@ -70,7 +70,7 @@
    .desc          =  "X.509 Certificate List",
    .flags         =  0,
    .type          =  LDAPSCHEMA_SYNTAX,
-   .class         =  LDAPSCHEMA_CLASS_UNKNOWN,
+   .subtype       =  LDAPSCHEMA_CLASS_UNKNOWN,
    .def           =  "( 1.3.6.1.4.1.1466.115.121.1.9 DESC 'X.509 Certificate List' )",
    .abnf          =  NULL,
    .re_posix      =  NULL,
@@ -115,7 +115,7 @@
    .desc          =  "X.509 Certificate Pair",
    .flags         =  0,
    .type          =  LDAPSCHEMA_SYNTAX,
-   .class         =  LDAPSCHEMA_CLASS_UNKNOWN,
+   .subtype       =  LDAPSCHEMA_CLASS_UNKNOWN,
    .def           =  "( 1.3.6.1.4.1.1466.115.121.1.10 DESC 'X.509 Certificate Pair' )",
    .abnf          =  NULL,
    .re_posix      =  NULL,
@@ -160,7 +160,7 @@
    .desc          =  "X.509 Supported Algorithm",
    .flags         =  0,
    .type          =  LDAPSCHEMA_SYNTAX,
-   .class         =  LDAPSCHEMA_CLASS_UNKNOWN,
+   .subtype       =  LDAPSCHEMA_CLASS_UNKNOWN,
    .def           =  "( 1.3.6.1.4.1.1466.115.121.1.49 DESC 'X.509 Supported Algorithm' )",
    .abnf          =  NULL,
    .re_posix      =  NULL,
@@ -214,7 +214,7 @@
    .desc          =  "X.509 Certificate Exact Assertion",
    .flags         =  LDAPSCHEMA_O_READABLE,
    .type          =  LDAPSCHEMA_SYNTAX,
-   .class         =  LDAPSCHEMA_CLASS_ASCII,
+   .subtype       =  LDAPSCHEMA_CLASS_ASCII,
    .def           =  "( 1.3.6.1.1.15.1 DESC 'X.509 Certificate Exact Assertion' )",
    .abnf          =  "CertificateExactAssertion = \"{\" sp cea-serialNumber \",\"\n"
                      "     sp cea-issuer sp \"}\"\n"
@@ -503,7 +503,7 @@
    .desc          =  "X.509 Certificate Assertion",
    .flags         =  LDAPSCHEMA_O_READABLE,
    .type          =  LDAPSCHEMA_SYNTAX,
-   .class         =  LDAPSCHEMA_CLASS_ASCII,
+   .subtype       =  LDAPSCHEMA_CLASS_ASCII,
    .def           =  "( 1.3.6.1.1.15.2 DESC 'X.509 Certificate Assertion' )",
    .abnf          =  NULL,
    .re_posix      =  NULL,
@@ -557,7 +557,7 @@
    .desc          =  "X.509 Certificate Pair Exact Assertion",
    .flags         =  LDAPSCHEMA_O_READABLE,
    .type          =  LDAPSCHEMA_SYNTAX,
-   .class         =  LDAPSCHEMA_CLASS_ASCII,
+   .subtype       =  LDAPSCHEMA_CLASS_ASCII,
    .def           =  "( 1.3.6.1.1.15.3 DESC 'X.509 Certificate Pair Exact Assertion' )",
    .abnf          =  "CertificatePairExactAssertion = \"{\" [ sp cpea-issuedTo ]\n"
                      "     [sep sp cpea-issuedBy ] sp \"}\"\n"
@@ -615,7 +615,7 @@
    .desc          =  "X.509 Certificate Pair Assertion",
    .flags         =  LDAPSCHEMA_O_READABLE,
    .type          =  LDAPSCHEMA_SYNTAX,
-   .class         =  LDAPSCHEMA_CLASS_ASCII,
+   .subtype       =  LDAPSCHEMA_CLASS_ASCII,
    .def           =  "( 1.3.6.1.1.15.4 DESC 'X.509 Certificate Pair Assertion' )",
    .abnf          =  "CertificatePairAssertion = \"{\" [ sp cpa-issuedTo ]\n"
                      "     [sep sp cpa-issuedBy ] sp \"}\"\n"
@@ -683,7 +683,7 @@
    .desc          =  "X.509 Certificate List Exact Assertion",
    .flags         =  LDAPSCHEMA_O_READABLE,
    .type          =  LDAPSCHEMA_SYNTAX,
-   .class         =  LDAPSCHEMA_CLASS_ASCII,
+   .subtype       =  LDAPSCHEMA_CLASS_ASCII,
    .def           =  "( 1.3.6.1.1.15.5 DESC 'X.509 Certificate List Exact Assertion' )",
    .abnf          =  "CertificateListExactAssertion = \"{\" sp clea-issuer \",\"\n"
                      "     sp clea-thisUpdate\n"
@@ -806,7 +806,7 @@
    .desc          =  "X.509 Certificate List Assertion",
    .flags         =  LDAPSCHEMA_O_READABLE,
    .type          =  LDAPSCHEMA_SYNTAX,
-   .class         =  LDAPSCHEMA_CLASS_ASCII,
+   .subtype       =  LDAPSCHEMA_CLASS_ASCII,
    .def           =  "( 1.3.6.1.1.15.6 DESC 'X.509 Certificate List Assertion' )",
    .abnf          =  "CertificateListAssertion = \"{\" [ sp cla-issuer ]\n"
                      "     [ sep sp cla-minCRLNumber ]\n"
@@ -914,7 +914,7 @@
    .desc          =  "X.509 Algorithm Identifier",
    .flags         =  LDAPSCHEMA_O_READABLE,
    .type          =  LDAPSCHEMA_SYNTAX,
-   .class         =  LDAPSCHEMA_CLASS_ASCII,
+   .subtype       =  LDAPSCHEMA_CLASS_ASCII,
    .def           =  "( 1.3.6.1.1.15.7 DESC 'X.509 Algorithm Identifier' )",
    .abnf          =  "AlgorithmIdentifier = \"{\" sp ai-algorithm\n"
                      "     [ \",\" sp ai-parameters ] sp \"}\"\n"

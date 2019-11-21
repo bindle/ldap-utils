@@ -68,7 +68,6 @@ struct ldapschema_spec
    const char      * name;
    const char      * desc;
    const char      * def;
-   const char      * source;
    const char      * abnf;
    const char      * re_posix;
    const char      * re_pcre;
@@ -82,8 +81,8 @@ struct ldapschema_spec
    const char      * notes;
    uint8_t           type;
    uint8_t           subtype;
-   uint8_t           class;
    uint8_t           spec_type;
+   uint8_t           pad8;
    uint32_t          flags;
 };
 

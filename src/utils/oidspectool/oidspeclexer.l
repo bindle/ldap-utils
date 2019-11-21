@@ -79,22 +79,22 @@ int yylex();
 "LDAPSCHEMA_EXTENSION"              { yylval.str = yytext; return(TYPE); }
 "LDAPSCHEMA_UNSOLICITED"            { yylval.str = yytext; return(TYPE); }
 
-"LDAPSCHEMA_CLASS_UNKNOWN"          { yylval.str = yytext; return(CLASS); }
-"LDAPSCHEMA_CLASS_ASCII"            { yylval.str = yytext; return(CLASS); }
-"LDAPSCHEMA_CLASS_UTF8"             { yylval.str = yytext; return(CLASS); }
-"LDAPSCHEMA_CLASS_INTEGER"          { yylval.str = yytext; return(CLASS); }
-"LDAPSCHEMA_CLASS_UNSIGNED"         { yylval.str = yytext; return(CLASS); }
-"LDAPSCHEMA_CLASS_BOOLEAN"          { yylval.str = yytext; return(CLASS); }
-"LDAPSCHEMA_CLASS_DATA"             { yylval.str = yytext; return(CLASS); }
-"LDAPSCHEMA_CLASS_IMAGE"            { yylval.str = yytext; return(CLASS); }
-"LDAPSCHEMA_CLASS_AUDIO"            { yylval.str = yytext; return(CLASS); }
-"LDAPSCHEMA_CLASS_UTF8_MULTILINE"   { yylval.str = yytext; return(CLASS); }
+"LDAPSCHEMA_CLASS_UNKNOWN"          { yylval.str = yytext; return(SUBTYPE); }
+"LDAPSCHEMA_CLASS_ASCII"            { yylval.str = yytext; return(SUBTYPE); }
+"LDAPSCHEMA_CLASS_UTF8"             { yylval.str = yytext; return(SUBTYPE); }
+"LDAPSCHEMA_CLASS_INTEGER"          { yylval.str = yytext; return(SUBTYPE); }
+"LDAPSCHEMA_CLASS_UNSIGNED"         { yylval.str = yytext; return(SUBTYPE); }
+"LDAPSCHEMA_CLASS_BOOLEAN"          { yylval.str = yytext; return(SUBTYPE); }
+"LDAPSCHEMA_CLASS_DATA"             { yylval.str = yytext; return(SUBTYPE); }
+"LDAPSCHEMA_CLASS_IMAGE"            { yylval.str = yytext; return(SUBTYPE); }
+"LDAPSCHEMA_CLASS_AUDIO"            { yylval.str = yytext; return(SUBTYPE); }
+"LDAPSCHEMA_CLASS_UTF8_MULTILINE"   { yylval.str = yytext; return(SUBTYPE); }
 
 "LDAPSCHEMA_SPEC_RFC"               { yylval.str = yytext; return(SPEC_TYPE); }
 "LDAPSCHEMA_SPEC_URL"               { yylval.str = yytext; return(SPEC_TYPE); }
 
 ".abnf"                             { return(FLD_ABNF); }
-".class"                            { return(FLD_CLASS); }
+".subtype"                          { return(FLD_SUBTYPE); }
 ".def"                              { return(FLD_DEF); }
 ".desc"                             { return(FLD_DESC); }
 ".flags"                            { return(FLD_FLAGS); }

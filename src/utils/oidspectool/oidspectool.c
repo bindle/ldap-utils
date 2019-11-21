@@ -138,7 +138,7 @@ struct my_oidspec
    char    ** flags;
    char    ** ignore;
    char    ** type;
-   char    ** class;
+   char    ** subtype;
    char    ** def;
    char    ** abnf;
    char    ** re_posix;
@@ -604,7 +604,7 @@ void my_oidspec_free(OIDSpec * oidspec)
    my_oidspec_free_strs(oidspec->examples);
    my_oidspec_free_strs(oidspec->flags);
    my_oidspec_free_strs(oidspec->type);
-   my_oidspec_free_strs(oidspec->class);
+   my_oidspec_free_strs(oidspec->subtype);
    my_oidspec_free_strs(oidspec->def);
    my_oidspec_free_strs(oidspec->abnf);
    my_oidspec_free_strs(oidspec->re_posix);
@@ -802,7 +802,7 @@ int my_save_source_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx)
    my_save_source_oidspec_strs(fs, ".desc",           oidspec->desc);
    my_save_source_oidspec_flgs(fs, ".flags",          oidspec->flags);
    my_save_source_oidspec_flgs(fs, ".type",           oidspec->type);
-   my_save_source_oidspec_flgs(fs, ".class",          oidspec->class);
+   my_save_source_oidspec_flgs(fs, ".subtype",        oidspec->subtype);
    my_save_source_oidspec_strs(fs, ".def",            oidspec->def);
    my_save_source_oidspec_strs(fs, ".abnf",           oidspec->abnf);
    my_save_source_oidspec_strs(fs, ".re_posix",       oidspec->re_posix);
@@ -977,7 +977,7 @@ int my_yycommit(enum yytokentype type)
    switch(type)
    {
       case FLD_ABNF:           name = ".abnf";          vals = &cur_oidspec->abnf;         break;
-      case FLD_CLASS:          name = ".class";         vals = &cur_oidspec->class;        break;
+      case FLD_SUBTYPE:        name = ".subtype";       vals = &cur_oidspec->subtype;      break;
       case FLD_DEF:            name = ".def";           vals = &cur_oidspec->def;          break;
       case FLD_DESC:           name = ".desc";          vals = &cur_oidspec->desc;         break;
       case FLD_EXAMPLES:       name = ".examples";      vals = &cur_oidspec->examples;     break;
