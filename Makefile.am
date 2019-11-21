@@ -197,7 +197,7 @@ lib_libldapschema_la_SOURCES		= $(noinst_HEADERS) \
 					  lib/libldapschema/lsort.h
 
 
-# macros for lib/libutil.la
+# macros for lib/libldaputils.a
 if LDAPUTILS_LIBLDAPUTILS
    noinst_LIBRARIES			+= lib/libldaputils.a
 endif
@@ -220,10 +220,10 @@ lib_libldaputils_a_SOURCES		= $(noinst_HEADERS) \
 					  lib/libldaputils/ltree.h
 
 
-# macros for ldap2csv
+# macros for src/ldap2csv
 if LDAPUTILS_LDAP2CSV
-bin_PROGRAMS                            += src/ldap2csv
-man_MANS				+= doc/ldap2csv.1
+   bin_PROGRAMS				+= src/ldap2csv
+   man_MANS				+= doc/ldap2csv.1
 endif
 src_ldap2csv_DEPENDENCIES		= Makefile lib/libldaputils.a
 src_ldap2csv_CPPFLAGS			= -DPROGRAM_NAME="\"ldap2csv\"" $(AM_CPPFLAGS)
@@ -233,10 +233,10 @@ src_ldap2csv_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
 src_ldap2csv_SOURCES			= src/ldap2csv.c
 
 
-# macros for ldap2json
+# macros for src/ldap2json
 if LDAPUTILS_LDAP2JSON
-bin_PROGRAMS                            += src/ldap2json
-man_MANS				+= doc/ldap2json.1
+   bin_PROGRAMS				+= src/ldap2json
+   man_MANS				+= doc/ldap2json.1
 endif
 src_ldap2json_DEPENDENCIES		= Makefile lib/libldaputils.a
 src_ldap2json_CPPFLAGS			= -DPROGRAM_NAME="\"ldap2json\"" $(AM_CPPFLAGS)
@@ -246,10 +246,10 @@ src_ldap2json_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
 src_ldap2json_SOURCES			= src/ldap2json.c
 
 
-# macros for ldapdebug
+# macros for src/ldapdebug
 if LDAPUTILS_LDAPDEBUG
-bin_PROGRAMS                            += src/ldapdebug
-man_MANS				+= doc/ldapdebug.1
+   bin_PROGRAMS				+= src/ldapdebug
+   man_MANS				+= doc/ldapdebug.1
 endif
 src_ldapdebug_DEPENDENCIES		= Makefile lib/libldaputils.a
 src_ldapdebug_CPPFLAGS			= -DPROGRAM_NAME="\"ldapdebug\"" $(AM_CPPFLAGS)
@@ -259,9 +259,9 @@ src_ldapdebug_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
 src_ldapdebug_SOURCES			= src/ldapdebug.c
 
 
-# macros for ldapdn2str
+# macros for src/ldapdn2str
 if LDAPUTILS_LDAPDN2STR
-bin_PROGRAMS                            += src/ldapdn2str
+   bin_PROGRAMS				+= src/ldapdn2str
 endif
 src_ldapdn2str_DEPENDENCIES		= Makefile lib/libldaputils.a
 src_ldapdn2str_CPPFLAGS			= -DPROGRAM_NAME="\"ldapdn2str\"" $(AM_CPPFLAGS)
@@ -271,7 +271,7 @@ src_ldapdn2str_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
 src_ldapdn2str_SOURCES			= src/ldapdn2str.c
 
 
-# macros for ldapinfo
+# macros for src/ldapinfo
 if LDAPUTILS_LDAPINFO
    bin_PROGRAMS				+= src/ldapinfo
    man_MANS				+= doc/ldapinfo.1
@@ -284,7 +284,7 @@ src_ldapinfo_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a lib/libldaps
 src_ldapinfo_SOURCES			= src/ldapinfo.c
 
 
-# macros for ldapschema
+# macros for src/ldapschema
 if LDAPUTILS_LDAPSCHEMA
    bin_PROGRAMS                         += src/ldapschema
 endif
@@ -296,10 +296,10 @@ src_ldapschema_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a lib/liblda
 src_ldapschema_SOURCES			= src/ldapschema.c
 
 
-# macros for ldaptree
+# macros for src/ldaptree
 if LDAPUTILS_LDAPTREE
-bin_PROGRAMS                            += src/ldaptree
-man_MANS				+= doc/ldaptree.1
+   bin_PROGRAMS				+= src/ldaptree
+   man_MANS				+= doc/ldaptree.1
 endif
 src_ldaptree_DEPENDENCIES		= Makefile lib/libldaputils.a
 src_ldaptree_CPPFLAGS			= -DPROGRAM_NAME="\"ldaptree\"" $(AM_CPPFLAGS)
@@ -309,7 +309,7 @@ src_ldaptree_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
 src_ldaptree_SOURCES			= src/ldaptree.c
 
 
-# macros for oidspectool
+# macros for src/oidspectool
 if LDAPUTILS_OIDSPECTOOL
    noinst_PROGRAMS			+= src/oidspectool
 endif
