@@ -158,6 +158,8 @@ static const char * ldapinfo_attrs[] =
 // main statement
 int main(int argc, char * argv[]);
 
+int my_cmp_strings(const void * ap, const void * bp);
+
 // parses configuration
 int my_config(int argc, char * argv[], MyConfig ** cnfp);
 
@@ -237,6 +239,14 @@ int main(int argc, char * argv[])
    my_unbind(cnf);
 
    return(0);
+}
+
+
+int my_cmp_strings(const void * ap, const void * bp)
+{
+   const char * a = *(const char * const *)ap;
+   const char * b = *(const char * const *)bp;
+   return(strcasecmp(a,b));
 }
 
 
@@ -388,6 +398,9 @@ void my_field(const char * name, const char * val, int isoid)
 void my_fields(const char * name, char ** vals, int isoid)
 {
    size_t x;
+   size_t vals_len;
+   for(vals_len = 0; ((vals[vals_len])); vals_len++);
+   qsort(vals, vals_len, sizeof(char *), my_cmp_strings);
    my_field(name, vals[0], isoid);
    for(x = 1; ((vals[x])); x++)
       my_field(NULL, vals[x], isoid);
