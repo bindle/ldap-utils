@@ -111,7 +111,7 @@ struct ldap_schema_model
    char                  * definition;  ///< defintion of object
    char                  * oid;         ///< oid of object
    char                  * desc;        ///< description of object;
-   LDAPSchemaSpec        * spec;
+   const LDAPSchemaSpec  * spec;
    LDAPSchemaExtension  ** extensions;
    size_t                  extensions_len;
 };

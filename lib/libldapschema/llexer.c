@@ -793,6 +793,9 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
    };
    ldapschema_value_free(argv);
 
+   // adds specification to syntax
+   syntax->model.spec = ldapschema_spec_search(syntax->model.oid);
+
    // adds syntax into OID list
    if ((ldapschema_insert(lsd, &lsd->oids, &lsd->oids_len, syntax, ldapschema_model_cmp)) != LDAP_SUCCESS)
    {

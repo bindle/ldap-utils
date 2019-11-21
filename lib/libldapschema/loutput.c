@@ -49,6 +49,8 @@
 #include <strings.h>
 #include <stdlib.h>
 
+#include "lspec.h"
+
 
 ///////////////////
 //               //
@@ -93,6 +95,31 @@ void
 ldapschema_print_model_type(
          LDAPSchema            * lsd,
          LDAPSchemaModel       * model );
+
+void
+ldapschema_print_multiline(
+         const char            * field,
+         const char            * input );
+
+void
+ldapschema_print_spec_abnf(
+         LDAPSchema            * lsd,
+         const LDAPSchemaSpec  * spec );
+
+void
+ldapschema_print_spec_meta(
+         LDAPSchema            * lsd,
+         const LDAPSchemaSpec  * spec );
+
+void
+ldapschema_print_spec_notes(
+         LDAPSchema            * lsd,
+         const LDAPSchemaSpec  * spec );
+
+void
+ldapschema_print_spec_text(
+         LDAPSchema            * lsd,
+         const LDAPSchemaSpec  * spec );
 
 
 /////////////////
@@ -139,6 +166,7 @@ void ldapschema_print_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeType *
    if ((attr->syntax))
    {
       printf("%*s%-*s %s (%s)\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "syntax:", attr->syntax->model.oid, attr->syntax->model.desc);
+      ldapschema_print_spec_abnf(lsd, attr->syntax->model.spec);
    };
 
    ldapschema_print_model_ext(lsd, &attr->model);
@@ -172,6 +200,10 @@ void ldapschema_print_model(LDAPSchema * lsd, LDAPSchemaModel * model)
    ldapschema_print_model_flags(lsd, model);
    ldapschema_print_model_ext(lsd, model);
    ldapschema_print_model_def(lsd, model);
+   ldapschema_print_spec_meta(lsd, model->spec);
+   ldapschema_print_spec_text(lsd, model->spec);
+   ldapschema_print_spec_notes(lsd, model->spec);
+   ldapschema_print_spec_abnf(lsd, model->spec);
 
    return;
 }
@@ -337,6 +369,99 @@ void ldapschema_print_models( LDAPSchema * lsd )
    
    for(x = 0; x < lsd->oids_len; x++)
       ldapschema_print_model(lsd, lsd->oids[x]);
+
+   return;
+}
+
+
+void ldapschema_print_multiline(const char * field, const char * input)
+{
+   char         * bol;
+   char         * eol;
+   char         * str;
+
+   assert(field != NULL);
+   if (!(input))
+      return;
+
+   if ((str = strdup(input)) == NULL)
+      return;
+
+   bol = str;
+   while((eol = index(bol, '\n')) != NULL)
+   {
+      eol[0] = '\0';
+      if (bol == str)
+         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, field, bol);
+      else
+         printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", bol);
+      bol = &eol[1];
+   };
+
+   free(str);
+
+   return;
+}
+
+
+void ldapschema_print_spec_abnf(LDAPSchema * lsd, const LDAPSchemaSpec * spec)
+{
+   assert(lsd   != NULL);
+
+   if (!(spec))
+      return;
+
+   ldapschema_print_multiline("abnf:", spec->abnf);
+   if ((spec->re_posix))
+      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "posix regex:", spec->re_posix);
+   if ((spec->re_pcre))
+      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "pcre:", spec->re_pcre);
+
+   return;
+}
+
+
+void ldapschema_print_spec_meta(LDAPSchema * lsd, const LDAPSchemaSpec * spec)
+{
+   assert(lsd   != NULL);
+
+   if (!(spec))
+      return;
+
+   if ((spec->spec))
+      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "spec name:", spec->spec);
+   if ((spec->spec_section))
+      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "spec chapter:", spec->spec_section);
+   if ((spec->spec_vendor))
+      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "spec vendor:", spec->spec_vendor);
+   if ((spec->spec_source))
+      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "spec source:", spec->spec_source);
+
+   return;
+}
+
+
+void ldapschema_print_spec_notes(LDAPSchema * lsd, const LDAPSchemaSpec * spec)
+{
+   assert(lsd   != NULL);
+
+   if (!(spec))
+      return;
+
+   ldapschema_print_multiline("spec text:", spec->notes);
+
+   return;
+}
+
+
+void ldapschema_print_spec_text(LDAPSchema * lsd, const LDAPSchemaSpec * spec)
+{
+   assert(lsd   != NULL);
+
+   if (!(spec))
+      return;
+
+   ldapschema_print_multiline("spec text:", spec->spec_text);
 
    return;
 }
