@@ -379,4 +379,8 @@ clean-local:
 distclean-local:
 	rm -fR $(srcdir)/autom4te.cache
 
+maintainer-clean-local:
+	rm -f lib/libldapschema/lspecdata.c $(srcdir)/lib/libldapschema/lspecdata.c
+	rm -f lib/libldapschema/lspecdata.h $(srcdir)/lib/libldapschema/lspecdata.h
+
 # end of automake file
