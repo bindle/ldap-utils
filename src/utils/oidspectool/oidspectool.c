@@ -674,9 +674,9 @@ int my_save(int argc, char **argv)
    tm_info = localtime(&timer);
    strftime(buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", tm_info);
    fprintf(fs, "%s Generated on:   %s\n", comment, buff);
-   fprintf(fs, "%s Generated with: %s \\\n", comment, argv[0]);
+   fprintf(fs, "%s Generated with: %s\n", comment, argv[0]);
    for(pos = 1; pos < ((size_t)(argc-1)); pos++)
-      fprintf(fs, "%s                    %s \\\n", comment, argv[pos]);
+      fprintf(fs, "%s                    %s\n", comment, argv[pos]);
    fprintf(fs, "%s                    %s\n", comment, argv[pos]);
    fprintf(fs, "\n");
    fprintf(fs, "%s\n", comment);
