@@ -441,26 +441,5 @@ ldapschema_print_syntaxes(
          LDAPSchema            * lsd );
 
 
-//----------------//
-// sort functions //
-//----------------//
-#pragma mark sort functions
-
-_LDAPSCHEMA_F int
-ldapschema_extension_cmp(
-         const void            * e1,
-         const void            * e2 );
-
-_LDAPSCHEMA_F int
-ldapschema_model_cmp(
-         const void            * m1,
-         const void            * m2 );
-
-_LDAPSCHEMA_F int
-ldapschema_syntax_cmp(
-         const LDAPSchemaSyntax * s1,
-         const LDAPSchemaSyntax * s2 );
-
-
 LDAPSCHEMA_END_C_DECLS
 #endif /* end of header */
