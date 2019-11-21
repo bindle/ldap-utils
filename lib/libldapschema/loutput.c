@@ -77,11 +77,6 @@ ldapschema_print_model_def(
          LDAPSchemaModel       * model );
 
 void
-ldapschema_print_model_desc(
-         LDAPSchema            * lsd,
-         LDAPSchemaModel       * model );
-
-void
 ldapschema_print_model_ext(
          LDAPSchema            * lsd,
          LDAPSchemaModel       * model );
@@ -147,7 +142,7 @@ void ldapschema_print_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeType *
          printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", attr->names[x]);
    };
 
-   ldapschema_print_model_desc(lsd, &attr->model);
+   ldapschema_print_multiline("description:", attr->model.desc);
    ldapschema_print_model_flags(lsd, &attr->model);
 
    switch(attr->usage)
@@ -196,7 +191,7 @@ void ldapschema_print_model(LDAPSchema * lsd, LDAPSchemaModel * model)
    assert(model != NULL);
 
    ldapschema_print_model_type(lsd, model);
-   ldapschema_print_model_desc(lsd, model);
+   ldapschema_print_multiline("description:", model->desc);
    ldapschema_print_model_flags(lsd, model);
    ldapschema_print_model_ext(lsd, model);
    ldapschema_print_model_def(lsd, model);
@@ -272,16 +267,6 @@ void ldapschema_print_model_def(LDAPSchema * lsd, LDAPSchemaModel * model)
 
    free(str);
 
-   return;
-}
-
-
-void ldapschema_print_model_desc(LDAPSchema * lsd, LDAPSchemaModel * model)
-{
-   assert(lsd   != NULL);
-   assert(model != NULL);
-   if ((model->desc))
-      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "description:", model->desc);
    return;
 }
 
