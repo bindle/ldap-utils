@@ -85,14 +85,6 @@ struct ldap_schema
 };
 
 
-/// LDAP schema descriptor state
-struct ldap_schema_link
-{
-   const char         * key;
-   void               * ptr;
-};
-
-
 /// LDAP schema extension
 struct ldap_schema_extension
 {
