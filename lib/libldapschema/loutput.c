@@ -96,26 +96,6 @@ ldapschema_print_multiline(
          const char            * field,
          const char            * input );
 
-void
-ldapschema_print_spec_abnf(
-         LDAPSchema            * lsd,
-         const LDAPSchemaSpec  * spec );
-
-void
-ldapschema_print_spec_meta(
-         LDAPSchema            * lsd,
-         const LDAPSchemaSpec  * spec );
-
-void
-ldapschema_print_spec_notes(
-         LDAPSchema            * lsd,
-         const LDAPSchemaSpec  * spec );
-
-void
-ldapschema_print_spec_text(
-         LDAPSchema            * lsd,
-         const LDAPSchemaSpec  * spec );
-
 
 /////////////////
 //             //
@@ -147,11 +127,11 @@ void ldapschema_print_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeType *
 
    switch(attr->usage)
    {
-      case LDAPSCHEMA_USER_APP:        str = "userApplications:"; break;
-      case LDAPSCHEMA_DIRECTORY_OP:    str = "directoryOperation:"; break;
-      case LDAPSCHEMA_DISTRIBUTED_OP:  str = "distributedOperation:"; break;
-      case LDAPSCHEMA_DSA_OP:          str = "dSAOperation:"; break;
-      default:                         str = "unknown:"; break;
+      case LDAPSCHEMA_USER_APP:        str = "userApplications";     break;
+      case LDAPSCHEMA_DIRECTORY_OP:    str = "directoryOperation";   break;
+      case LDAPSCHEMA_DISTRIBUTED_OP:  str = "distributedOperation"; break;
+      case LDAPSCHEMA_DSA_OP:          str = "dSAOperation";         break;
+      default:                         str = "unknown:";             break;
    };
    printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "usage:", str);
 
@@ -161,7 +141,10 @@ void ldapschema_print_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeType *
    if ((attr->syntax))
    {
       printf("%*s%-*s %s (%s)\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "syntax:", attr->syntax->model.oid, attr->syntax->model.desc);
-      ldapschema_print_spec_abnf(lsd, attr->syntax->model.spec);
+      if ((attr->syntax->model.spec))
+      {
+         ldapschema_print_multiline("abnf:", attr->syntax->model.spec->abnf);
+      };
    };
 
    ldapschema_print_model_ext(lsd, &attr->model);
@@ -195,10 +178,16 @@ void ldapschema_print_model(LDAPSchema * lsd, LDAPSchemaModel * model)
    ldapschema_print_model_flags(lsd, model);
    ldapschema_print_model_ext(lsd, model);
    ldapschema_print_model_def(lsd, model);
-   ldapschema_print_spec_meta(lsd, model->spec);
-   ldapschema_print_spec_text(lsd, model->spec);
-   ldapschema_print_spec_notes(lsd, model->spec);
-   ldapschema_print_spec_abnf(lsd, model->spec);
+   if ((model->spec))
+   {
+      ldapschema_print_multiline("spec name:",     model->spec->spec);
+      ldapschema_print_multiline("spec chapter:",  model->spec->spec_section);
+      ldapschema_print_multiline("spec vendor:",   model->spec->spec_vendor);
+      ldapschema_print_multiline("spec source:",   model->spec->spec_source);
+      ldapschema_print_multiline("spec text:",     model->spec->spec_text);
+      ldapschema_print_multiline("spec notes:",    model->spec->notes);
+      ldapschema_print_multiline("abnf:",          model->spec->abnf);
+   };
 
    return;
 }
@@ -384,69 +373,6 @@ void ldapschema_print_multiline(const char * field, const char * input)
    };
 
    free(str);
-
-   return;
-}
-
-
-void ldapschema_print_spec_abnf(LDAPSchema * lsd, const LDAPSchemaSpec * spec)
-{
-   assert(lsd   != NULL);
-
-   if (!(spec))
-      return;
-
-   ldapschema_print_multiline("abnf:", spec->abnf);
-   if ((spec->re_posix))
-      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "posix regex:", spec->re_posix);
-   if ((spec->re_pcre))
-      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "pcre:", spec->re_pcre);
-
-   return;
-}
-
-
-void ldapschema_print_spec_meta(LDAPSchema * lsd, const LDAPSchemaSpec * spec)
-{
-   assert(lsd   != NULL);
-
-   if (!(spec))
-      return;
-
-   if ((spec->spec))
-      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "spec name:", spec->spec);
-   if ((spec->spec_section))
-      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "spec chapter:", spec->spec_section);
-   if ((spec->spec_vendor))
-      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "spec vendor:", spec->spec_vendor);
-   if ((spec->spec_source))
-      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "spec source:", spec->spec_source);
-
-   return;
-}
-
-
-void ldapschema_print_spec_notes(LDAPSchema * lsd, const LDAPSchemaSpec * spec)
-{
-   assert(lsd   != NULL);
-
-   if (!(spec))
-      return;
-
-   ldapschema_print_multiline("spec text:", spec->notes);
-
-   return;
-}
-
-
-void ldapschema_print_spec_text(LDAPSchema * lsd, const LDAPSchemaSpec * spec)
-{
-   assert(lsd   != NULL);
-
-   if (!(spec))
-      return;
-
-   ldapschema_print_multiline("spec text:", spec->spec_text);
 
    return;
 }
