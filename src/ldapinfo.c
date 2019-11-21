@@ -413,7 +413,6 @@ char * my_monitor(MyConfig * cnf, const char * base)
    int               rc;
    int               err;
    int               msgid;
-   int               count;
    char            * str;
    char            * vers;
    char           ** vars;
@@ -441,7 +440,6 @@ char * my_monitor(MyConfig * cnf, const char * base)
    };
 
    // retrieves entry
-   count = 0;
    msg   = ldap_first_entry(ld, res);
 
    if ((vars = ldap_get_values(ld, msg, "monitoredInfo")) == NULL)
