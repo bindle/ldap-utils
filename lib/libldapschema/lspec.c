@@ -99,14 +99,12 @@ int ldapschema_spec_field(const LDAPSchemaSpec * s, int field, void * outvalue)
 {
    int       * oi;   // output int
    char     ** os;   // output char * (string)
-   char    *** oa;   // output char ** (array of strings)
 
    assert(s        != NULL);
    assert(outvalue != NULL);
 
    oi = outvalue;
    os = outvalue;
-   oa = outvalue;
 
    switch(field)
    {
