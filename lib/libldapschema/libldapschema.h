@@ -116,25 +116,22 @@ struct ldap_schema_model
    size_t                  extensions_len;
 };
 
+
 /// LDAP schema syntax
 struct ldap_schema_syntax
 {
    LDAPSchemaModel         model;
-   //LDAPSchemaSyntaxClass   data_class;
-   //int                     readable;
-   //int                     uses_abnf;
    const char            * pattern;
    const char            * source;
    const char            * abnf;
    regex_t                 re;
 };
 
+
 /// LDAP schema objectclass
 struct ldap_schema_objectclass
 {
    LDAPSchemaModel              model;
-   //int                          kind;
-   //size_t                       obsolete;
    size_t                       names_len;
    size_t                       must_len;
    size_t                       may_len;
@@ -148,6 +145,7 @@ struct ldap_schema_objectclass
    LDAPSchemaAttributeType   ** all_may;
 };
 
+/// LDAP schema attributeType
 struct ldap_schema_attributetype
 {
    LDAPSchemaModel                   model;
