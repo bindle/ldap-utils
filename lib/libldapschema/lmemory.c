@@ -186,6 +186,10 @@ void ldapschema_free(LDAPSchema * lsd)
       {
          switch( lsd->oids[i].model->type )
          {
+            case LDAPSCHEMA_ATTRIBUTETYPE:
+            ldapschema_attributetype_free(lsd->oids[i].attributetype);
+            break;
+
             case LDAPSCHEMA_SYNTAX:
             ldapschema_syntax_free(lsd->oids[i].syntax);
             break;
