@@ -155,6 +155,8 @@ int main(int argc, char * argv[])
 {
    int                    err;
    MyConfig             * cnf;
+   char                ** errs;
+   size_t                 pos;
 
    cnf = NULL;
 
@@ -178,6 +180,13 @@ int main(int argc, char * argv[])
       fprintf(stderr, "%s: ldapschema_fetch(): %s\n", cnf->lud->prog_name, ldapschema_err2string(err));
       my_unbind(cnf);
       return(1);
+   };
+
+   if ((errs = ldapschema_schema_errors(cnf->lsd)) != NULL)
+   {
+      for(pos = 0; ((errs[pos])); pos++)
+         fprintf(stderr, "%s: error %s\n", PROGRAM_NAME, errs[pos]);
+      ldapschema_value_free(errs);
    };
 
    ldapschema_print_syntaxes(cnf->lsd);
