@@ -115,6 +115,7 @@ void ldapschema_print_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeType *
 {
    size_t                     x;
    const char               * str;
+   LDAPSchemaAttributeType  * sup;
 
    assert(lsd  != NULL);
    assert(attr != NULL);
@@ -142,11 +143,15 @@ void ldapschema_print_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeType *
    };
    printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "usage:", str);
 
+   if ((sup = attr->sup) != NULL)
+   {
+      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "superior(s):", (((sup->names))?sup->names[0]:sup->model.oid) );
+      while ((sup = sup->sup) != NULL)
+         printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", (((sup->names))?sup->names[0]:sup->model.oid));
+   };
+
    ldapschema_print_attributetype_objcls(lsd, "required by:", attr->required_by, attr->required_by_len);
    ldapschema_print_attributetype_objcls(lsd, "allowed by:",  attr->allowed_by,  attr->allowed_by_len);
-
-   if ((attr->sup_name))
-      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "superior:", attr->sup_name);
 
    if ((attr->syntax))
    {
@@ -426,9 +431,10 @@ void ldapschema_print_multiline(const char * field, const char * input)
 
 void ldapschema_print_objectclass(LDAPSchema * lsd, LDAPSchemaObjectclass * objcls)
 {
-   size_t            x;
-   const char      * str;
-   char            * attrname;
+   size_t                     x;
+   const char               * str;
+   char                     * attrname;
+   LDAPSchemaObjectclass    * sup;
 
    assert(lsd    != NULL);
    assert(objcls != NULL);
@@ -455,8 +461,12 @@ void ldapschema_print_objectclass(LDAPSchema * lsd, LDAPSchemaObjectclass * objc
    };
    printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "usage:", str);
 
-   if ((objcls->sup_name))
-      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "superior:", objcls->sup_name);
+   if ((sup = objcls->sup) != NULL)
+   {
+      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "superior(s):", (((sup->names))?sup->names[0]:sup->model.oid) );
+      while ((sup = sup->sup) != NULL)
+         printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", (((sup->names))?sup->names[0]:sup->model.oid));
+   };
 
    for(x = 0; x < objcls->may_len; x++)
    {
