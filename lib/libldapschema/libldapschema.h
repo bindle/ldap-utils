@@ -76,7 +76,7 @@ struct ldap_schema
    int32_t                                pad32;
    LDAPSchemaPointer                    * oids;             ///< array of all known oids
    size_t                                 oids_len;         ///< length of oids array
-   LDAPSchemaSyntax                    ** syntaxes;         ///< array of syntaxes
+   LDAPSchemaAlias                      * syntaxes;         ///< array of syntaxes
    size_t                                 syntaxes_len;     ///< length of syntaxes array
    LDAPSchemaAttributeType             ** attrs;            ///< array of attributeTypes
    size_t                                 attrs_len;        ///< length of attributeTypes array
@@ -104,6 +104,21 @@ struct ldap_schema_model
    const LDAPSchemaSpec                 * spec;
    LDAPSchemaExtension                 ** extensions;
    size_t                                 extensions_len;
+};
+
+
+/// LDAP schema object alias
+struct ldap_schema_alias
+{
+   const char                           * alias;
+   union
+   {
+      const LDAPSchemaModel             * model;
+      const LDAPSchemaObjectclass       * objectclass;
+      const LDAPSchemaAttributeType     * attributetype;
+      const LDAPSchemaMatchingRule      * matchingrule;
+      const LDAPSchemaSyntax            * syntax;
+   };
 };
 
 
