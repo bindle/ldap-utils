@@ -458,33 +458,52 @@ void ldapschema_print_objectclass(LDAPSchema * lsd, LDAPSchemaObjectclass * objc
    if ((objcls->sup_name))
       printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "superior:", objcls->sup_name);
 
-   if ((objcls->may))
+   for(x = 0; x < objcls->may_len; x++)
    {
-      for(x = 0; x < objcls->may_len; x++)
-      {
-         if ((objcls->may[x]->names))
-            attrname = objcls->may[x]->names[0];
-         else
-            attrname = objcls->may[x]->model.oid;
-         if (x == 0)
-            printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "may:", attrname);
-         else
-            printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", attrname);
-      };
+      if ((objcls->may[x]->names))
+         attrname = objcls->may[x]->names[0];
+      else
+         attrname = objcls->may[x]->model.oid;
+      if (x == 0)
+         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "may:", attrname);
+      else
+         printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", attrname);
    };
-   if ((objcls->must))
+
+   for(x = 0; x < objcls->must_len; x++)
    {
-      for(x = 0; x < objcls->must_len; x++)
-      {
-         if ((objcls->must[x]->names))
-            attrname = objcls->must[x]->names[0];
-         else
-            attrname = objcls->must[x]->model.oid;
-         if (x == 0)
-            printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "must:", attrname);
-         else
-            printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", attrname);
-      };
+      if ((objcls->must[x]->names))
+         attrname = objcls->must[x]->names[0];
+      else
+         attrname = objcls->must[x]->model.oid;
+      if (x == 0)
+         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "must:", attrname);
+      else
+         printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", attrname);
+   };
+
+   for(x = 0; x < objcls->inherit_may_len; x++)
+   {
+      if ((objcls->inherit_may[x]->names))
+         attrname = objcls->inherit_may[x]->names[0];
+      else
+         attrname = objcls->inherit_may[x]->model.oid;
+      if (x == 0)
+         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "inherited may:", attrname);
+      else
+         printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", attrname);
+   };
+
+   for(x = 0; x < objcls->inherit_must_len; x++)
+   {
+      if ((objcls->inherit_must[x]->names))
+         attrname = objcls->inherit_must[x]->names[0];
+      else
+         attrname = objcls->inherit_must[x]->model.oid;
+      if (x == 0)
+         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "inherited must:", attrname);
+      else
+         printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", attrname);
    };
 
    ldapschema_print_model_ext(lsd, &objcls->model);

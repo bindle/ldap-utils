@@ -73,9 +73,12 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
    struct berval     ** vals;
    void               * ptr;
    size_t               idx;
+   size_t               subidx;
    LDAPSchemaAlias    * alias;
    LDAPSchemaAttributeType     * attr;
    LDAPSchemaAttributeType     * attrsup;
+   LDAPSchemaObjectclass       * objcls;
+   LDAPSchemaObjectclass       * objclssup;
 
    assert(lsd != NULL);
    assert(ld  != NULL);
@@ -199,6 +202,7 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
    // process objectClasses
    if ((vals = ldap_get_values_len(ld, msg, "objectClasses")) != NULL)
    {
+      // initial parsing of definition
       for(x = 0; ((vals[x])); x++)
       {
          if ( ((ptr = ldapschema_parse_objectclass(lsd, vals[x])) == NULL) &&
@@ -210,6 +214,52 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
          };
       };
       ldap_value_free_len(vals);
+
+      // maps superior
+      for(idx = 0; (idx < lsd->oids_len); idx++)
+      {
+         // checks for superior
+         objcls = lsd->oids[idx].objectclass;
+         if (objcls->model.type != LDAPSCHEMA_OBJECTCLASS)
+            continue;
+         if (!(objcls->sup_name))
+            continue;
+         if ((alias = ldapschema_get_alias(lsd, objcls->sup_name, lsd->objclses, lsd->objclses_len)) == NULL)
+         {
+            ldapschema_schema_err(lsd, &objcls->model, "specified invalid superior '%s'", objcls->sup_name);
+            continue;
+         };
+
+         // saves superior
+         objcls->sup = alias->objectclass;
+
+         // inherent specs from superior
+         objclssup   = objcls;
+         while((objclssup = objclssup->sup) != NULL)
+         {
+            objcls->model.flags |= objclssup->model.flags;
+            if (!(objcls->kind))
+               objcls->kind = objclssup->kind;
+            for(subidx = 0; (subidx < objclssup->may_len); subidx++)
+            {
+               if ((err = ldapschema_objectclass_attribute(lsd, objcls, objclssup->may[subidx], 0, 1)) > 0)
+               {
+                  ldap_value_free_len(vals);
+                  ldap_msgfree(res);
+                  return(lsd->errcode);
+               };
+            };
+            for(subidx = 0; (subidx < objclssup->must_len); subidx++)
+            {
+               if ((err = ldapschema_objectclass_attribute(lsd, objcls, objclssup->must[subidx], 1, 1)) > 0)
+               {
+                  ldap_value_free_len(vals);
+                  ldap_msgfree(res);
+                  return(lsd->errcode);
+               };
+            };
+         };
+      };
    };
 
    ldap_msgfree(res);

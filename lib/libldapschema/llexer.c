@@ -329,7 +329,7 @@ int ldapschema_objectclass_attribute(LDAPSchema * lsd,
       if ((inherited))
       {
          objcls_listp   = &objcls->inherit_must;
-         objcls_lenp    = &objcls->all_must_len;
+         objcls_lenp    = &objcls->inherit_must_len;
       } else
       {
          objcls_listp   = &objcls->must;
@@ -342,7 +342,7 @@ int ldapschema_objectclass_attribute(LDAPSchema * lsd,
       if ((inherited))
       {
          objcls_listp   = &objcls->inherit_may;
-         objcls_lenp    = &objcls->all_may_len;
+         objcls_lenp    = &objcls->inherit_may_len;
       } else
       {
          objcls_listp   = &objcls->may;

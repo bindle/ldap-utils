@@ -155,10 +155,10 @@ struct ldap_schema_objectclass
    size_t                                 names_len;
    size_t                                 must_len;
    size_t                                 may_len;
-   size_t                                 all_must_len;
-   size_t                                 all_may_len;
+   size_t                                 inherit_must_len;
+   size_t                                 inherit_may_len;
    char                                 * sup_name;
-   const LDAPSchemaObjectclass          * sup;
+   LDAPSchemaObjectclass                * sup;
    char                                ** names;
    LDAPSchemaAttributeType             ** must;
    LDAPSchemaAttributeType             ** may;
