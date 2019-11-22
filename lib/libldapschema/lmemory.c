@@ -175,7 +175,7 @@ void ldapschema_free(LDAPSchema * lsd)
 
    assert(lsd != NULL);
 
-   // frees syntaxes
+   // frees syntaxes list
    if ((lsd->syntaxes))
    {
       for(pos = 0; pos < lsd->syntaxes_len; pos++)
@@ -183,6 +183,15 @@ void ldapschema_free(LDAPSchema * lsd)
       free(lsd->syntaxes);
    };
    lsd->syntaxes = NULL;
+
+   // frees attribute types list
+   if ((lsd->attrs))
+   {
+      for(pos = 0; pos < lsd->attrs_len; pos++)
+         free(lsd->attrs[pos]);
+      free(lsd->attrs);
+   };
+   lsd->attrs = NULL;
 
    // frees oids
    if ((lsd->oids))

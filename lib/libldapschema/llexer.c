@@ -397,6 +397,7 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
    int                           argc;
    int                           err;
    LDAPSchemaAttributeType     * attr;
+   LDAPSchemaAlias             * alias;
 
    attr     = NULL;
    argv     = NULL;
@@ -605,11 +606,33 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
       return(NULL);
    };
 
-   // adds syntax into attributeType list
-   if ((ldapschema_insert(lsd, (void ***)&lsd->attrs, &lsd->attrs_len, attr, ldapschema_compar_models)) != LDAP_SUCCESS)
+   // adds attributeType into attributeType list using OID and names
+   if ((alias = malloc(sizeof(LDAPSchemaAlias *))) == NULL)
    {
-      ldapschema_attributetype_free(attr);
+      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
       return(NULL);
+   };
+   alias->alias         = attr->model.oid;
+   alias->attributetype = attr;
+   if ((ldapschema_insert(lsd, (void ***)&lsd->attrs, &lsd->attrs_len, alias, ldapschema_compar_aliases)) != LDAP_SUCCESS)
+   {
+      free(alias);
+      return(NULL);
+   };
+   for(pos = 0; (size_t)pos < attr->names_len; pos++)
+   {
+      if ((alias = malloc(sizeof(LDAPSchemaAlias *))) == NULL)
+      {
+         lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+         return(NULL);
+      };
+      alias->alias         = attr->names[pos];
+      alias->attributetype = attr;
+      if ((ldapschema_insert(lsd, (void ***)&lsd->attrs, &lsd->attrs_len, alias, ldapschema_compar_aliases)) != LDAP_SUCCESS)
+      {
+         free(alias);
+         return(NULL);
+      };
    };
 
    return(attr);
