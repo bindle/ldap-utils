@@ -242,6 +242,28 @@ void ldapschema_free(LDAPSchema * lsd)
       free(lsd->oids);
       lsd->oids = NULL;
    };
+   if ((lsd->dups))
+   {
+      for(i = 0; ((lsd->dups[i].model)); i++)
+      {
+         switch( lsd->dups[i].model->type )
+         {
+            case LDAPSCHEMA_ATTRIBUTETYPE:
+            ldapschema_attributetype_free(lsd->dups[i].attributetype);
+            break;
+
+            case LDAPSCHEMA_SYNTAX:
+            ldapschema_syntax_free(lsd->dups[i].syntax);
+            break;
+
+            default:
+            free(lsd->dups[i].model);
+            break;
+         };
+      };
+      free(lsd->oids);
+      lsd->oids = NULL;
+   };
 
    free(lsd);
 
