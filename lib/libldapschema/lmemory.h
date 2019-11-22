@@ -62,5 +62,12 @@
 //////////////////
 #pragma mark - Prototypes
 
+int
+ldapschema_append(
+         LDAPSchema            * lsd,
+         void                *** listp,
+         size_t                * lenp,
+         void                  * obj );
+
 
 #endif /* end of header file */

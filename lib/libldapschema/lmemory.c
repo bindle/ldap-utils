@@ -59,6 +59,29 @@
 /////////////////
 #pragma mark - Functions
 
+int ldapschema_append(LDAPSchema * lsd, void *** listp, size_t * lenp, void * obj)
+{
+   void        ** list;
+   size_t         size;
+
+   assert(lsd    != NULL);
+   assert(listp  != NULL);
+   assert(lenp   != NULL);
+   assert(obj    != NULL);
+
+   // increase size of array
+   size = sizeof(void *) * ((*lenp) + 2);
+   if ((list = realloc(*listp, size)) == NULL)
+      return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
+   *listp        = list;
+   list[*lenp+0] = obj;
+   list[*lenp+1] = NULL;
+   (*lenp)++;
+
+   return(LDAPSCHEMA_SUCCESS);
+}
+
+
 void ldapschema_attributetype_free( LDAPSchemaAttributeType  * attr )
 {
    assert(attr != NULL);
