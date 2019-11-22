@@ -359,13 +359,13 @@ doc/ldaptree.1: Makefile $(srcdir)/doc/ldaptree.1.in
 
 lib/libldapschema/lspecdata.c: $(OIDSPEC_FILES)
 	@$(MAKE) -s src/oidspectool
-	@mkdir -p lib/libldapschema
+	@$(MKDIR_P) lib/libldapschema
 	$(MY_V_OIDSPEC)src/oidspectool -o $(srcdir)/lib/libldapschema/lspecdata.c --source $(MY_OIDSPECFLAGS)
 	@touch $(srcdir)/lib/libldapschema/lspecdata.c
 
 lib/libldapschema/lspecdata.h: $(OIDSPEC_FILES)
 	@$(MAKE) -s src/oidspectool
-	@mkdir -p lib/libldapschema
+	@$(MKDIR_P) lib/libldapschema
 	$(MY_V_OIDSPEC)src/oidspectool -o $(srcdir)/lib/libldapschema/lspecdata.h --header $(MY_OIDSPECFLAGS)
 	@touch $(srcdir)/lib/libldapschema/lspecdata.h
 
