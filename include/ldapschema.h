@@ -311,7 +311,7 @@ ldapschema_value_free_len(
 //-----------------------------//
 // OID Specification functions //
 //-----------------------------//
-#pragma mark OID Specification functions functions
+#pragma mark OID Specification functions
 
 _LDAPSCHEMA_F int
 ldapschema_spec_field(
