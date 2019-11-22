@@ -78,6 +78,12 @@ ldapschema_syntax_cmp(
          const void * bp );
 
 
+extern inline int
+ldapschema_value_cmp(
+         const void * ap,
+         const void * bp );
+
+
 /////////////////
 //             //
 //  Functions  //

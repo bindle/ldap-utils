@@ -197,4 +197,29 @@ _LDAPSCHEMA_I int ldapschema_syntax_cmp( const void * ap, const void * bp )
    return(strcasecmp(a->model.desc, b->model.desc));
 }
 
+
+/// compares two strings `ap` and `bp`
+/// @param[in]    ap          reference to string
+/// @param[in]    bp          reference to string
+///
+/// @return    ldapschema_alias_cmp() returns an integer greater than, equal
+///            to, or less than 0, according as the alias of `ap` is
+///            lexicographically greater than, equal to, or less than the alias
+///            of `bp`.
+/// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
+_LDAPSCHEMA_I int ldapschema_value_cmp( const void * ap, const void * bp )
+{
+   const char * a = *(const char * const *)ap;
+   const char * b = *(const char * const *)bp;
+
+   if ( (!(a)) && (!(b)) )
+      return(0);
+   if (!(a))
+      return(1);
+   if (!(b))
+      return(-1);
+
+   return(strcasecmp(a, b));
+}
+
 #endif /* end of header file */
