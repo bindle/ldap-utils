@@ -453,10 +453,10 @@ void ldapschema_objectclass_free(LDAPSchemaObjectclass * objectclass)
    if ((objectclass->may))
       free(objectclass->may);
 
-   if ((objectclass->all_must))
-      free(objectclass->all_must);
-   if ((objectclass->all_may))
-      free(objectclass->all_may);
+   if ((objectclass->inherit_must))
+      free(objectclass->inherit_must);
+   if ((objectclass->inherit_may))
+      free(objectclass->inherit_may);
 
    free(objectclass);
 

@@ -162,8 +162,8 @@ struct ldap_schema_objectclass
    char                                ** names;
    LDAPSchemaAttributeType             ** must;
    LDAPSchemaAttributeType             ** may;
-   LDAPSchemaAttributeType             ** all_must;
-   LDAPSchemaAttributeType             ** all_may;
+   LDAPSchemaAttributeType             ** inherit_must;
+   LDAPSchemaAttributeType             ** inherit_may;
 };
 
 

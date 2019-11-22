@@ -77,6 +77,14 @@ ldapschema_definition_split_len(
          const struct berval   * def,
          char                *** argvp );
 
+int
+ldapschema_objectclass_attribute(
+         LDAPSchema                  * lsd,
+         LDAPSchemaObjectclass       * objcls,
+         LDAPSchemaAttributeType     * attr,
+         int                           must,
+         int                           inherited );
+
 LDAPSchemaAttributeType *
 ldapschema_parse_attributetype(
          LDAPSchema            * lsd,

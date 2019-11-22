@@ -72,6 +72,13 @@
 #pragma mark - Prototypes
 
 void
+ldapschema_print_attributetype_objcls(
+         LDAPSchema               * lsd,
+         const char               * name,
+         LDAPSchemaObjectclass   ** list,
+         size_t                     len );
+
+void
 ldapschema_print_model_def(
          LDAPSchema            * lsd,
          LDAPSchemaModel       * model );
@@ -106,8 +113,8 @@ ldapschema_print_multiline(
 
 void ldapschema_print_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeType * attr )
 {
-   size_t         x;
-   const char   * str;
+   size_t                     x;
+   const char               * str;
 
    assert(lsd  != NULL);
    assert(attr != NULL);
@@ -135,6 +142,9 @@ void ldapschema_print_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeType *
    };
    printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "usage:", str);
 
+   ldapschema_print_attributetype_objcls(lsd, "required by:", attr->required_by, attr->required_by_len);
+   ldapschema_print_attributetype_objcls(lsd, "allowed by:",  attr->allowed_by,  attr->allowed_by_len);
+
    if ((attr->sup_name))
       printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "superior:", attr->sup_name);
 
@@ -152,6 +162,34 @@ void ldapschema_print_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeType *
 
    return;
 }
+
+
+void ldapschema_print_attributetype_objcls(LDAPSchema * lsd,
+   const char * name, LDAPSchemaObjectclass ** list, size_t len)
+{
+   size_t pos;
+
+   assert(lsd != NULL);
+
+   if ( (!(list)) || (!(len)) )
+      return;
+
+   if ((list[0]->names))
+      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, name, list[0]->names[0]);
+   else
+      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, name, list[0]->model.oid);
+
+   for(pos = 1; (pos < len); pos++)
+   {
+      if ((list[pos]->names))
+         printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", list[pos]->names[0]);
+      else
+         printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", list[pos]->model.oid);
+   };
+
+   return;
+}
+
 
 
 void ldapschema_print_attributetypes( LDAPSchema * lsd )

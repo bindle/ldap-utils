@@ -124,10 +124,7 @@ ldapschema_parse_objectclass_attrs(
       const char                  * field,
       LDAPSchemaObjectclass       * objcls,
       const char                  * liststr,
-      LDAPSchemaAttributeType   *** list1p,
-      size_t                      * len1p,
-      LDAPSchemaAttributeType   *** list2p,
-      size_t                      * len2p );
+      int                           must );
 
 
 /////////////////
@@ -307,6 +304,62 @@ int ldapschema_definition_split_len(LDAPSchema * lsd, LDAPSchemaModel * mod, con
    assert(def   != NULL);
    assert(argvp != NULL);
    return(ldapschema_definition_split(lsd, mod, def->bv_val, def->bv_len, argvp));
+}
+
+
+int ldapschema_objectclass_attribute(LDAPSchema * lsd,
+   LDAPSchemaObjectclass * objcls, LDAPSchemaAttributeType * attr,
+   int must, int inherited)
+{
+   int                              err;
+   LDAPSchemaAttributeType      *** objcls_listp;
+   size_t                         * objcls_lenp;
+   LDAPSchemaObjectclass        *** attr_listp;
+   size_t                         * attr_lenp;
+
+   assert(lsd != NULL);
+   assert(objcls != NULL);
+   assert(attr != NULL);
+
+   // determines lists
+   if ((must))
+   {
+      attr_listp        = &attr->required_by;
+      attr_lenp         = &attr->required_by_len;
+      if ((inherited))
+      {
+         objcls_listp   = &objcls->inherit_must;
+         objcls_lenp    = &objcls->all_must_len;
+      } else
+      {
+         objcls_listp   = &objcls->must;
+         objcls_lenp    = &objcls->must_len;
+      };
+   } else
+   {
+      attr_listp        = &attr->allowed_by;
+      attr_lenp         = &attr->allowed_by_len;
+      if ((inherited))
+      {
+         objcls_listp   = &objcls->inherit_may;
+         objcls_lenp    = &objcls->all_may_len;
+      } else
+      {
+         objcls_listp   = &objcls->may;
+         objcls_lenp    = &objcls->may_len;
+      };
+   };
+
+   // adds to objectClass
+   if ((err = ldapschema_insert(lsd, (void ***)attr_listp,   attr_lenp, objcls, ldapschema_compar_models)) > 0)
+      return(err);
+   if ((err = ldapschema_insert(lsd, (void ***)objcls_listp, objcls_lenp, attr, ldapschema_compar_models)) > 0)
+      return(err);
+
+   // exits with insert err if not inherited
+   if (!(inherited))
+      return(err);
+   return(LDAPSCHEMA_SUCCESS);
 }
 
 
@@ -923,8 +976,7 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
       else if (!(strcasecmp(argv[pos], "MUST")))
       {
          pos++;
-         err = ldapschema_parse_objectclass_attrs(lsd, "MUST", objcls, argv[pos], &objcls->must, &objcls->must_len, &objcls->all_must, &objcls->all_must_len);
-         if (err != 0)
+         if ((err = ldapschema_parse_objectclass_attrs(lsd, "MUST", objcls, argv[pos], 1)) > 0)
          {
             ldapschema_value_free(argv);
             ldapschema_objectclass_free(objcls);
@@ -936,8 +988,7 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
       else if (!(strcasecmp(argv[pos], "MAY")))
       {
          pos++;
-         err = ldapschema_parse_objectclass_attrs(lsd, "MAY", objcls, argv[pos], &objcls->may, &objcls->may_len, &objcls->all_may, &objcls->all_may_len);
-         if (err != 0)
+         if ((err = ldapschema_parse_objectclass_attrs(lsd, "MAY", objcls, argv[pos], 0)) > 0)
          {
             ldapschema_value_free(argv);
             ldapschema_objectclass_free(objcls);
@@ -1014,8 +1065,7 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
 
 int ldapschema_parse_objectclass_attrs(LDAPSchema * lsd, const char * field,
    LDAPSchemaObjectclass * objcls, const char * liststr,
-   LDAPSchemaAttributeType *** list1p, size_t * len1p,
-   LDAPSchemaAttributeType *** list2p, size_t * len2p)
+   int must)
 {
    int                     err;
    char                 ** attrnames;
@@ -1026,12 +1076,9 @@ int ldapschema_parse_objectclass_attrs(LDAPSchema * lsd, const char * field,
    assert(lsd     != NULL);
    assert(objcls  != NULL);
    assert(liststr != NULL);
-   assert(list1p  != NULL);
-   assert(len1p   != NULL);
-   assert(list2p  != NULL);
-   assert(len2p   != NULL);
 
-   if ( ((*list1p)) || ((*list2p)) )
+   // checks for preexisting attribute list
+   if ( (((must)) && ((objcls->must))) || ((!(must)) && ((objcls->may))) )
    {
       ldapschema_schema_err(lsd,  &objcls->model, "LDAP definition contains duplicate '%s'", field);
       return(0);
@@ -1057,6 +1104,7 @@ int ldapschema_parse_objectclass_attrs(LDAPSchema * lsd, const char * field,
       attrnames_len = 1;
    };
 
+   // adds attribute to objectclass and objectclass to attribute
    for(idx = 0; idx < attrnames_len; idx++)
    {
       if ((alias = ldapschema_get_alias(lsd, attrnames[idx], lsd->attrs, lsd->attrs_len)) == NULL)
@@ -1065,16 +1113,13 @@ int ldapschema_parse_objectclass_attrs(LDAPSchema * lsd, const char * field,
          lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR;
       } else
       {
-         if ((err = ldapschema_insert(lsd, (void ***)list1p, len1p, alias->attributetype, ldapschema_compar_models)) > 0)
+         if ((err = ldapschema_objectclass_attribute(lsd, objcls, alias->attributetype, must, 0)) > 0)
          {
             ldapschema_value_free(attrnames);
             return(lsd->errcode);
          };
-         if ((err = ldapschema_insert(lsd, (void ***)list2p, len2p, alias->attributetype, ldapschema_compar_models)) > 0)
-         {
-            ldapschema_value_free(attrnames);
-            return(lsd->errcode);
-         };
+         if (err == -1)
+            ldapschema_schema_err(lsd, &objcls->model, "'%s' contains duplicate attributeType '%s'", field, attrnames[idx]);
       };
       if ((idx+1) < attrnames_len)
       {
