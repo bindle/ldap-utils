@@ -65,6 +65,7 @@
 int
 ldapschema_definition_split(
          LDAPSchema            * lsd,
+         LDAPSchemaModel       * mod,
          const char            * str,
          size_t                  strlen,
          char                *** argvp );
@@ -72,6 +73,7 @@ ldapschema_definition_split(
 int
 ldapschema_definition_split_len(
          LDAPSchema            * lsd,
+         LDAPSchemaModel       * mod,
          const struct berval   * def,
          char                *** argvp );
 

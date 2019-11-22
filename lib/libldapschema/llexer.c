@@ -148,8 +148,8 @@ ldapschema_parse_objectclass_attrs(
 ///            is encounted, returns -1.  The error code can be retrieved
 ///            using ldapschema_errno().
 /// @see       ldapschema_errno, ldapschema_value_free
-int ldapschema_definition_split(LDAPSchema * lsd, const char * str,
-   size_t strlen, char *** argvp)
+int ldapschema_definition_split(LDAPSchema * lsd, LDAPSchemaModel * mod,
+   const char * str, size_t strlen, char *** argvp)
 {
    char        ** argv;
    char         * line;
@@ -171,11 +171,6 @@ int ldapschema_definition_split(LDAPSchema * lsd, const char * str,
    // finds opening and ending parentheses
    for(bol = 0; ((bol < strlen) && (str[bol] != '(')); bol++);
    for(eol = strlen-1; ((eol > bol) && (str[eol] != ')')); eol--);
-   if ( (str[bol] != '(') || (eol <= bol) || (str[eol] != ')') )
-   {
-      lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR;
-      return(-1);
-   };
 
    // allocates mutable string
    line_len = (eol - bol - 1); // adjusts for beginning of line>
@@ -186,6 +181,16 @@ int ldapschema_definition_split(LDAPSchema * lsd, const char * str,
    };
    strncpy(line, &str[bol+1], line_len);
    line[line_len] = '\0';
+
+   // checks for required formatting
+   if ( (str[bol] != '(') || (eol <= bol) || (str[eol] != ')') )
+   {
+      if ( (!(mod)) || (!(mod->desc)) )
+         ldapschema_schema_err(lsd, mod, "definition: %s", line);
+      ldapschema_schema_err(lsd, mod, "invalid LDAP definition syntax");
+      free(line);
+      return(-1);
+   };
 
    // initializes argument list
    if ((argv = malloc(sizeof(char *))) == NULL)
@@ -296,12 +301,12 @@ int ldapschema_definition_split(LDAPSchema * lsd, const char * str,
 ///            is encounted, returns -1.  The error code can be retrieved
 ///            using ldapschema_errno().
 /// @see       ldapschema_errno, ldapschema_value_free
-int ldapschema_definition_split_len(LDAPSchema * lsd, const struct berval * def, char *** argvp )
+int ldapschema_definition_split_len(LDAPSchema * lsd, LDAPSchemaModel * mod, const struct berval * def, char *** argvp )
 {
    assert(lsd   != NULL);
    assert(def   != NULL);
    assert(argvp != NULL);
-   return(ldapschema_definition_split(lsd, def->bv_val, def->bv_len, argvp));
+   return(ldapschema_definition_split(lsd, mod, def->bv_val, def->bv_len, argvp));
 }
 
 
@@ -429,7 +434,7 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
       return(NULL);
 
    // parses definition
-   if ((argc = ldapschema_definition_split_len(lsd, def, &argv)) == -1)
+   if ((argc = ldapschema_definition_split_len(lsd, &attr->model, def, &argv)) == -1)
    {
       ldapschema_attributetype_free(attr);
       return(NULL);
@@ -474,7 +479,7 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
          pos++;
          if (argv[pos][0] == '(')
          {
-            if ((err = ldapschema_definition_split(lsd, argv[pos], strlen(argv[pos]), &attr->names)) == -1)
+            if ((err = ldapschema_definition_split(lsd, &attr->model, argv[pos], strlen(argv[pos]), &attr->names)) == -1)
             {
                ldapschema_value_free(argv);
                ldapschema_attributetype_free(attr);
@@ -707,7 +712,7 @@ int ldapschema_parse_ext(LDAPSchema * lsd, LDAPSchemaModel * model, const char *
    }
    else
    {
-      if ((err = ldapschema_definition_split(lsd, valstr, strlen(valstr), &ext->values)) != LDAPSCHEMA_SUCCESS)
+      if ((err = ldapschema_definition_split(lsd, model, valstr, strlen(valstr), &ext->values)) != LDAPSCHEMA_SUCCESS)
       {
          ldapschema_ext_free(ext);
          return(-1);
@@ -783,7 +788,7 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
       return(NULL);
 
    // parses definition
-   if ((argc = ldapschema_definition_split_len(lsd, def, &argv)) == -1)
+   if ((argc = ldapschema_definition_split_len(lsd, &objcls->model, def, &argv)) == -1)
    {
       ldapschema_objectclass_free(objcls);
       return(NULL);
@@ -828,7 +833,7 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
          pos++;
          if (argv[pos][0] == '(')
          {
-            if ((err = ldapschema_definition_split(lsd, argv[pos], strlen(argv[pos]), &objcls->names)) == -1)
+            if ((err = ldapschema_definition_split(lsd, &objcls->model, argv[pos], strlen(argv[pos]), &objcls->names)) == -1)
             {
                ldapschema_value_free(argv);
                ldapschema_objectclass_free(objcls);
@@ -1035,7 +1040,7 @@ int ldapschema_parse_objectclass_attrs(LDAPSchema * lsd, const char * field,
    // generate list of attributes
    if (liststr[0] == '(')
    {
-      if ((err = ldapschema_definition_split(lsd, liststr, strlen(liststr), &attrnames)) == -1)
+      if ((err = ldapschema_definition_split(lsd, &objcls->model, liststr, strlen(liststr), &attrnames)) == -1)
          return(err);
       attrnames_len = (size_t)ldapschema_count_values(attrnames);
    }
@@ -1136,7 +1141,7 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
       return(syntax);
 
    // parses definition
-   if ((argc = ldapschema_definition_split_len(lsd, def, &argv)) == -1)
+   if ((argc = ldapschema_definition_split_len(lsd, &syntax->model, def, &argv)) == -1)
    {
       ldapschema_syntax_free(syntax);
       return(NULL);

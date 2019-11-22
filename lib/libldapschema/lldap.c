@@ -82,7 +82,7 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
    lsd->schema_errs_cur = NULL;
 
    attrs = NULL;
-   if ((err = ldapschema_definition_split(lsd, "( + * )", 7, &attrs)) == -1)
+   if ((err = ldapschema_definition_split(lsd, NULL, "( + * )", 7, &attrs)) == -1)
       return(lsd->errcode);
 
    // searches for schema DN
