@@ -109,11 +109,20 @@ struct ldap_schema_model
 };
 
 
-/// LDAP schema syntax
-struct ldap_schema_syntax
+/// LDAP schema attributeType
+struct ldap_schema_attributetype
 {
    LDAPSchemaModel                        model;
-   regex_t                                re;
+   LDAPSchemaSyntax                     * syntax;
+   uint64_t                               usage;
+   size_t                                 names_len;
+   size_t                                 allowed_by_len;
+   size_t                                 required_by_len;
+   uint64_t                               min_upper;
+   char                                 * sup_name;
+   char                                ** names;
+   LDAPSchemaObjectclass               ** allowed_by;
+   LDAPSchemaObjectclass               ** required_by;
 };
 
 
@@ -145,20 +154,11 @@ union ldap_schema_pointer
 };
 
 
-/// LDAP schema attributeType
-struct ldap_schema_attributetype
+/// LDAP schema syntax
+struct ldap_schema_syntax
 {
    LDAPSchemaModel                        model;
-   LDAPSchemaSyntax                     * syntax;
-   uint64_t                               usage;
-   size_t                                 names_len;
-   size_t                                 allowed_by_len;
-   size_t                                 required_by_len;
-   uint64_t                               min_upper;
-   char                                 * sup_name;
-   char                                ** names;
-   LDAPSchemaObjectclass               ** allowed_by;
-   LDAPSchemaObjectclass               ** required_by;
+   regex_t                                re;
 };
 
 
