@@ -55,31 +55,31 @@
 #pragma mark - Inline Functions
 
 extern inline int
-ldapschema_alias_cmp(
+ldapschema_compar_aliases(
          const void * ap,
          const void * bp );
 
 
 extern inline int
-ldapschema_extension_cmp(
+ldapschema_compar_extensions(
          const void * ap,
          const void * bp );
 
 
 extern inline int
-ldapschema_model_cmp(
+ldapschema_compar_models(
          const void * ap,
          const void * bp );
 
 
 extern inline int
-ldapschema_syntax_cmp(
+ldapschema_compar_syntaxes(
          const void * ap,
          const void * bp );
 
 
 extern inline int
-ldapschema_value_cmp(
+ldapschema_compar_values(
          const void * ap,
          const void * bp );
 

@@ -599,14 +599,14 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
    ldapschema_value_free(argv);
 
    // adds syntax into OID list
-   if ((ldapschema_insert(lsd, (void ***)&lsd->oids, &lsd->oids_len, attr, ldapschema_model_cmp)) != LDAP_SUCCESS)
+   if ((ldapschema_insert(lsd, (void ***)&lsd->oids, &lsd->oids_len, attr, ldapschema_compar_models)) != LDAP_SUCCESS)
    {
       ldapschema_attributetype_free(attr);
       return(NULL);
    };
 
    // adds syntax into attributeType list
-   if ((ldapschema_insert(lsd, (void ***)&lsd->attrs, &lsd->attrs_len, attr, ldapschema_model_cmp)) != LDAP_SUCCESS)
+   if ((ldapschema_insert(lsd, (void ***)&lsd->attrs, &lsd->attrs_len, attr, ldapschema_compar_models)) != LDAP_SUCCESS)
    {
       ldapschema_attributetype_free(attr);
       return(NULL);
@@ -662,7 +662,7 @@ int ldapschema_parse_ext(LDAPSchema * lsd, LDAPSchemaModel * model, const char *
       };
    };
 
-   if ((err = ldapschema_insert(lsd, (void ***)&model->extensions, &model->extensions_len, ext, ldapschema_extension_cmp)) != LDAP_SUCCESS)
+   if ((err = ldapschema_insert(lsd, (void ***)&model->extensions, &model->extensions_len, ext, ldapschema_compar_extensions)) != LDAP_SUCCESS)
    {
       ldapschema_ext_free(ext);
       return(-1);
@@ -809,7 +809,7 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
    };
 
    // adds syntax into OID list
-   if ((ldapschema_insert(lsd, (void ***)&lsd->oids, &lsd->oids_len, syntax, ldapschema_model_cmp)) != LDAP_SUCCESS)
+   if ((ldapschema_insert(lsd, (void ***)&lsd->oids, &lsd->oids_len, syntax, ldapschema_compar_models)) != LDAP_SUCCESS)
    {
       ldapschema_syntax_free(syntax);
       return(NULL);
@@ -823,7 +823,7 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
    };
    alias->alias  = syntax->model.oid;
    alias->syntax = syntax;
-   if ((ldapschema_insert(lsd, (void ***)&lsd->syntaxes, &lsd->syntaxes_len, alias, ldapschema_alias_cmp)) != LDAP_SUCCESS)
+   if ((ldapschema_insert(lsd, (void ***)&lsd->syntaxes, &lsd->syntaxes_len, alias, ldapschema_compar_aliases)) != LDAP_SUCCESS)
    {
       free(alias);
       return(NULL);
