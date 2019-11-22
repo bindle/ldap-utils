@@ -76,7 +76,7 @@ struct ldap_schema
    int32_t                                pad32;
    LDAPSchemaPointer                    * oids;             ///< array of all known oids
    size_t                                 oids_len;         ///< length of oids array
-   LDAPSchemaAlias                      * syntaxes;         ///< array of syntaxes
+   LDAPSchemaAlias                     ** syntaxes;         ///< array of syntaxes
    size_t                                 syntaxes_len;     ///< length of syntaxes array
    LDAPSchemaAttributeType             ** attrs;            ///< array of attributeTypes
    size_t                                 attrs_len;        ///< length of attributeTypes array

@@ -171,12 +171,17 @@ LDAPSchemaExtension * ldapschema_ext_initialize(LDAPSchema * lsd, const char * n
 void ldapschema_free(LDAPSchema * lsd)
 {
    int i;
+   size_t   pos;
 
    assert(lsd != NULL);
 
    // frees syntaxes
    if ((lsd->syntaxes))
+   {
+      for(pos = 0; pos < lsd->syntaxes_len; pos++)
+         free(lsd->syntaxes[pos]);
       free(lsd->syntaxes);
+   };
    lsd->syntaxes = NULL;
 
    // frees oids
