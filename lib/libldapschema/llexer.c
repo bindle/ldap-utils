@@ -900,7 +900,7 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
          pos++;
          if ( ((objcls->must)) || ((objcls->all_must)) )
          {
-            ldapschema_schema_err(lsd, "objectclass definition contains duplicate MUST: %s", argv[pos], objcls->model.definition);
+            ldapschema_schema_err(lsd, "objectclass definition contains duplicate MUST: %s", objcls->model.definition);
             ldapschema_value_free(argv);
             ldapschema_objectclass_free(objcls);
             return(NULL);
@@ -939,7 +939,7 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
          {
             if ((alias = ldapschema_get_alias(lsd, attrnames[idx], lsd->attrs, lsd->attrs_len)) == NULL)
             {
-               ldapschema_schema_err(lsd, "objectclass definition requires invalid attributeType '%s': %s", argv[pos], attrnames[idx], objcls->model.definition);
+               ldapschema_schema_err(lsd, "objectclass definition requires invalid attributeType '%s': %s", attrnames[idx], objcls->model.definition);
             } else
             {
                if ((err = ldapschema_insert(lsd, (void ***)&objcls->must, &objcls->must_len, alias->attributetype, ldapschema_compar_models)) != LDAP_SUCCESS)
@@ -967,7 +967,7 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
          pos++;
          if ( ((objcls->may)) || ((objcls->all_may)) )
          {
-            ldapschema_schema_err(lsd, "objectclass definition contains duplicate MAY: %s", argv[pos], objcls->model.definition);
+            ldapschema_schema_err(lsd, "objectclass definition contains duplicate MAY: %s", objcls->model.definition);
             ldapschema_value_free(argv);
             ldapschema_objectclass_free(objcls);
             return(NULL);
@@ -1006,7 +1006,7 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
          {
             if ((alias = ldapschema_get_alias(lsd, attrnames[idx], lsd->attrs, lsd->attrs_len)) == NULL)
             {
-               ldapschema_schema_err(lsd, "objectclass definition allows invalid attributeType '%s': %s", argv[pos], attrnames[idx], objcls->model.definition);
+               ldapschema_schema_err(lsd, "objectclass definition allows invalid attributeType '%s': %s", attrnames[idx], objcls->model.definition);
                lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR;
             } else
             {
