@@ -49,6 +49,10 @@ All rights reserved.
      - [ ] write utility which parses and sorts LDIF
      - [ ] write man page
 
+   - [x] libldapschema
+     - [ ] add support for multiple objectClass superiors
+     - [ ] write man pages
+
    - [x] libldaputils
      - [ ] add support for auth mechanisms other than simple auth.
      - [ ] write LDIF parser
