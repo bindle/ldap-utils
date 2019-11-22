@@ -34,7 +34,7 @@
 
 # AC_LDAP_UTILS_LDAP2CSV
 # ______________________________________________________________________________
-AC_DEFUN([AC_LDAP_UTILS_LDAP2CSV],[dnl
+AC_DEFUN_ONCE([AC_LDAP_UTILS_LDAP2CSV],[dnl
 
    # prerequists
    AC_REQUIRE([AC_LDAP_UTILS_UTILITIES])
@@ -64,7 +64,7 @@ AC_DEFUN([AC_LDAP_UTILS_LDAP2CSV],[dnl
 
 # AC_LDAP_UTILS_LDAP2JSON
 # ______________________________________________________________________________
-AC_DEFUN([AC_LDAP_UTILS_LDAP2JSON],[dnl
+AC_DEFUN_ONCE([AC_LDAP_UTILS_LDAP2JSON],[dnl
 
    # prerequists
    AC_REQUIRE([AC_LDAP_UTILS_UTILITIES])
@@ -94,7 +94,7 @@ AC_DEFUN([AC_LDAP_UTILS_LDAP2JSON],[dnl
 
 # AC_LDAP_UTILS_LDAPDEBUG
 # ______________________________________________________________________________
-AC_DEFUN([AC_LDAP_UTILS_LDAPDEBUG],[dnl
+AC_DEFUN_ONCE([AC_LDAP_UTILS_LDAPDEBUG],[dnl
 
    # prerequists
    AC_REQUIRE([AC_LDAP_UTILS_UTILITIES])
@@ -124,7 +124,7 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPDEBUG],[dnl
 
 # AC_LDAP_UTILS_LDAPDN2STR
 # ______________________________________________________________________________
-AC_DEFUN([AC_LDAP_UTILS_LDAPDN2STR],[dnl
+AC_DEFUN_ONCE([AC_LDAP_UTILS_LDAPDN2STR],[dnl
 
    # prerequists
    AC_REQUIRE([AC_LDAP_UTILS_UTILITIES])
@@ -154,7 +154,7 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPDN2STR],[dnl
 
 # AC_LDAP_UTILS_LDAPINFO
 # ______________________________________________________________________________
-AC_DEFUN([AC_LDAP_UTILS_LDAPINFO],[dnl
+AC_DEFUN_ONCE([AC_LDAP_UTILS_LDAPINFO],[dnl
 
    # prerequists
    AC_REQUIRE([AC_LDAP_UTILS_UTILITIES])
@@ -184,7 +184,7 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPINFO],[dnl
 
 # AC_LDAP_UTILS_LDAPSCHEMA
 # ______________________________________________________________________________
-AC_DEFUN([AC_LDAP_UTILS_LDAPSCHEMA],[dnl
+AC_DEFUN_ONCE([AC_LDAP_UTILS_LDAPSCHEMA],[dnl
 
    enableval=""
    AC_ARG_ENABLE(
@@ -211,7 +211,7 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPSCHEMA],[dnl
 
 # AC_LDAP_UTILS_LDAPTREE
 # ______________________________________________________________________________
-AC_DEFUN([AC_LDAP_UTILS_LDAPTREE],[dnl
+AC_DEFUN_ONCE([AC_LDAP_UTILS_LDAPTREE],[dnl
 
    # prerequists
    AC_REQUIRE([AC_LDAP_UTILS_UTILITIES])
@@ -241,7 +241,7 @@ AC_DEFUN([AC_LDAP_UTILS_LDAPTREE],[dnl
 
 # AC_LDAP_UTILS_LIBLDAPSCHEMA
 # ______________________________________________________________________________
-AC_DEFUN([AC_LDAP_UTILS_LIBLDAPSCHEMA],[dnl
+AC_DEFUN_ONCE([AC_LDAP_UTILS_LIBLDAPSCHEMA],[dnl
 
    AC_REQUIRE([AC_LDAP_UTILS_LDAPSCHEMA])
    AC_REQUIRE([AC_LDAP_UTILS_LDAPINFO])
@@ -283,7 +283,7 @@ AC_DEFUN([AC_LDAP_UTILS_LIBLDAPSCHEMA],[dnl
 
 # AC_LDAP_UTILS_LIBLDAPUTILS
 # ______________________________________________________________________________
-AC_DEFUN([AC_LDAP_UTILS_LIBLDAPUTILS],[dnl
+AC_DEFUN_ONCE([AC_LDAP_UTILS_LIBLDAPUTILS],[dnl
 
    AC_REQUIRE([AC_LDAP_UTILS_LDAP2CSV])
    AC_REQUIRE([AC_LDAP_UTILS_LDAP2JSON])
@@ -305,7 +305,7 @@ AC_DEFUN([AC_LDAP_UTILS_LIBLDAPUTILS],[dnl
 
 # AC_LDAP_UTILS_LIBRARIES
 # ______________________________________________________________________________
-AC_DEFUN([AC_LDAP_UTILS_LIBRARIES],[dnl
+AC_DEFUN_ONCE([AC_LDAP_UTILS_LIBRARIES],[dnl
 
    enableval=""
    AC_ARG_ENABLE(
@@ -329,7 +329,7 @@ AC_DEFUN([AC_LDAP_UTILS_LIBRARIES],[dnl
 
 # AC_LDAP_UTILS_OIDSPECTOOL
 # ______________________________________________________________________________
-AC_DEFUN([AC_LDAP_UTILS_OIDSPECTOOL],[dnl
+AC_DEFUN_ONCE([AC_LDAP_UTILS_OIDSPECTOOL],[dnl
 
    # prerequists
    AC_REQUIRE([AC_LDAP_UTILS_LIBLDAPSCHEMA])
@@ -350,7 +350,7 @@ AC_DEFUN([AC_LDAP_UTILS_OIDSPECTOOL],[dnl
 
 # AC_LDAP_UTILS_UTILITIES
 # ______________________________________________________________________________
-AC_DEFUN([AC_LDAP_UTILS_UTILITIES],[dnl
+AC_DEFUN_ONCE([AC_LDAP_UTILS_UTILITIES],[dnl
 
    enableval=""
    AC_ARG_ENABLE(
