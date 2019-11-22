@@ -45,7 +45,7 @@
 #pragma mark - Headers
 
 #include "libldapschema.h"
-
+#include "lspec.h"
 
 ///////////////////
 //               //
@@ -147,6 +147,38 @@ _LDAPSCHEMA_I int ldapschema_compar_models( const void * ap, const void * bp )
 {
    const LDAPSchemaModel * a = *(const LDAPSchemaModel * const *)ap;
    const LDAPSchemaModel * b = *(const LDAPSchemaModel * const *)bp;
+
+   if ( (!(a)) && (!(b)) )
+      return(0);
+   if (!(a))
+      return(1);
+   if (!(b))
+      return(-1);
+
+   if ( (!(a->oid)) && (!(b->oid)) )
+      return(0);
+   if (!(a->oid))
+      return(1);
+   if (!(b->oid))
+      return(-1);
+
+   return(strcasecmp(a->oid, b->oid));
+}
+
+
+/// compares the LDAP syntax descriptions of `s1` and `s2`
+/// @param[in]    ap          reference to LDAP syntax
+/// @param[in]    bp          reference to LDAP syntax
+///
+/// @return    ldapschema_syntax_cmp() returns an integer greater than, equal
+///            to, or less than 0, according as the description of `s1` is
+///            lexicographically greater than, equal to, or less than the
+///            description of `s2`.
+/// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
+_LDAPSCHEMA_I int ldapschema_compar_spec( const void * ap, const void * bp )
+{
+   const LDAPSchemaSpec * a = *(const LDAPSchemaSpec * const *)ap;
+   const LDAPSchemaSpec * b = *(const LDAPSchemaSpec * const *)bp;
 
    if ( (!(a)) && (!(b)) )
       return(0);

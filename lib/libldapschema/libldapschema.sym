@@ -87,6 +87,7 @@ ldapschema_spec_search
 ldapschema_compar_aliases
 ldapschema_compar_extensions
 ldapschema_compar_models
+ldapschema_compar_spec
 ldapschema_compar_syntaxes
 ldapschema_compar_values
 # end of symbol export file

@@ -73,6 +73,12 @@ ldapschema_compar_models(
 
 
 extern inline int
+ldapschema_compar_spec(
+         const void * ap,
+         const void * bp );
+
+
+extern inline int
 ldapschema_compar_syntaxes(
          const void * ap,
          const void * bp );

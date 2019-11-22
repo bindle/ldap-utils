@@ -386,6 +386,12 @@ ldapschema_compar_models(
 
 
 _LDAPSCHEMA_F int
+ldapschema_compar_spec(
+         const void * ap,
+         const void * bp );
+
+
+_LDAPSCHEMA_F int
 ldapschema_compar_syntaxes(
          const void * ap,
          const void * bp );
