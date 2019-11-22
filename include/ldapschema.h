@@ -250,6 +250,10 @@ _LDAPSCHEMA_F int
 ldapschema_errno(
          LDAPSchema            * lsd );
 
+_LDAPSCHEMA_F char **
+ldapschema_schema_errors(
+         LDAPSchema            * lsd );
+
 
 //-----------------//
 // LDAP functions //

@@ -176,4 +176,33 @@ int ldapschema_schema_err(LDAPSchema * lsd, LDAPSchemaModel * mod, const char * 
    return(0);
 }
 
+
+char ** ldapschema_schema_errors(LDAPSchema * lsd )
+{
+   char     ** errs;
+   size_t      len;
+   size_t      pos;
+
+   assert(lsd != NULL);
+
+   if (!(lsd->schema_errs))
+      return(NULL);
+
+   for(len = 0; ((lsd->schema_errs[len])); len++);
+   if ((errs = malloc(sizeof(char *)*(len+1))) == NULL)
+      return(NULL);
+
+   for(pos = 0; pos < len; pos++)
+   {
+      if ((errs[pos] = strdup(lsd->schema_errs[pos])) == NULL)
+      {
+         ldapschema_value_free(errs);
+         return(NULL);
+      };
+   };
+   errs[pos] = NULL;
+
+   return(errs);
+}
+
 /* end of source file */
