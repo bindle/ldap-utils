@@ -351,9 +351,9 @@ int ldapschema_objectclass_attribute(LDAPSchema * lsd,
    };
 
    // adds to objectClass
-   if ((err = ldapschema_insert(lsd, (void ***)attr_listp,   attr_lenp, objcls, ldapschema_compar_models)) > 0)
+   if ((err = ldapschema_insert(lsd, (void ***)attr_listp,   attr_lenp, objcls, ldapschema_compar_objectclasses)) > 0)
       return(err);
-   if ((err = ldapschema_insert(lsd, (void ***)objcls_listp, objcls_lenp, attr, ldapschema_compar_models)) > 0)
+   if ((err = ldapschema_insert(lsd, (void ***)objcls_listp, objcls_lenp, attr, ldapschema_compar_attributetypes)) > 0)
       return(err);
 
    // exits with insert err if not inherited

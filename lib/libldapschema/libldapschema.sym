@@ -89,8 +89,10 @@ ldapschema_get_attributetype
 ldapschema_get_ldapsyntax
 # sort comparison functions
 ldapschema_compar_aliases
+ldapschema_compar_attributetypes
 ldapschema_compar_extensions
 ldapschema_compar_models
+ldapschema_compar_objectclasses
 ldapschema_compar_spec
 ldapschema_compar_syntaxes
 ldapschema_compar_values

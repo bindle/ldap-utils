@@ -102,6 +102,44 @@ _LDAPSCHEMA_I int ldapschema_compar_aliases( const void * ap, const void * bp )
 }
 
 
+/// compares the LDAP attributeType name and OIDs of `ap` and `bp`
+/// @param[in]    ap          reference to LDAP syntax
+/// @param[in]    bp          reference to LDAP syntax
+///
+/// @return    ldapschema_syntax_cmp() returns an integer greater than, equal
+///            to, or less than 0, according as the description of `s1` is
+///            lexicographically greater than, equal to, or less than the
+///            description of `s2`.
+/// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
+_LDAPSCHEMA_I int ldapschema_compar_attributetypes( const void * ap, const void * bp )
+{
+   const LDAPSchemaAttributeType * a = *(const LDAPSchemaAttributeType * const *)ap;
+   const LDAPSchemaAttributeType * b = *(const LDAPSchemaAttributeType * const *)bp;
+   const char                    * as;
+   const char                    * bs;
+
+   if ( (!(a)) && (!(b)) )
+      return(0);
+   if (!(a))
+      return(1);
+   if (!(b))
+      return(-1);
+
+   as = ((a->names)) ? a->names[0] : a->model.oid;
+   bs = ((b->names)) ? b->names[0] : b->model.oid;
+
+
+   if ( (!(as)) && (!(bs)) )
+      return(0);
+   if (!(as))
+      return(1);
+   if (!(bs))
+      return(-1);
+
+   return(strcasecmp(as, bs));
+}
+
+
 /// compares the OIDs of `m1` and `m2`
 /// @param[in]    ap          reference to LDAP model
 /// @param[in]    bp          reference to LDAP model
@@ -163,6 +201,44 @@ _LDAPSCHEMA_I int ldapschema_compar_models( const void * ap, const void * bp )
       return(-1);
 
    return(strcasecmp(a->oid, b->oid));
+}
+
+
+/// compares the LDAP attributeType name and OIDs of `ap` and `bp`
+/// @param[in]    ap          reference to LDAP syntax
+/// @param[in]    bp          reference to LDAP syntax
+///
+/// @return    ldapschema_syntax_cmp() returns an integer greater than, equal
+///            to, or less than 0, according as the description of `s1` is
+///            lexicographically greater than, equal to, or less than the
+///            description of `s2`.
+/// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
+_LDAPSCHEMA_I int ldapschema_compar_objectclasses( const void * ap, const void * bp )
+{
+   const LDAPSchemaObjectclass * a = *(const LDAPSchemaObjectclass * const *)ap;
+   const LDAPSchemaObjectclass * b = *(const LDAPSchemaObjectclass * const *)bp;
+   const char                  * as;
+   const char                  * bs;
+
+   if ( (!(a)) && (!(b)) )
+      return(0);
+   if (!(a))
+      return(1);
+   if (!(b))
+      return(-1);
+
+   as = ((a->names)) ? a->names[0] : a->model.oid;
+   bs = ((b->names)) ? b->names[0] : b->model.oid;
+
+
+   if ( (!(as)) && (!(bs)) )
+      return(0);
+   if (!(as))
+      return(1);
+   if (!(bs))
+      return(-1);
+
+   return(strcasecmp(as, bs));
 }
 
 

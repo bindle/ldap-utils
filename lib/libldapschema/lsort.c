@@ -61,6 +61,12 @@ ldapschema_compar_aliases(
 
 
 extern inline int
+ldapschema_compar_attributetypes(
+         const void * ap,
+         const void * bp );
+
+
+extern inline int
 ldapschema_compar_extensions(
          const void * ap,
          const void * bp );
@@ -68,6 +74,12 @@ ldapschema_compar_extensions(
 
 extern inline int
 ldapschema_compar_models(
+         const void * ap,
+         const void * bp );
+
+
+extern inline int
+ldapschema_compar_objectclasses(
          const void * ap,
          const void * bp );
 
