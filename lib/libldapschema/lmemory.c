@@ -292,7 +292,7 @@ int ldapschema_insert(LDAPSchema * lsd, void *** listp, size_t * lenp, void * ob
    while ((high - low) > 1)
    {
       mid = (low + high) / 2;
-      res = compar(obj, list[mid]);
+      res = compar(&obj, &list[mid]);
       if (res < 0)
          high = mid;
       else if (res > 0)
@@ -305,7 +305,7 @@ int ldapschema_insert(LDAPSchema * lsd, void *** listp, size_t * lenp, void * ob
    };
 
    // checks low value
-   if ((res = compar(obj, list[low])) == 0)
+   if ((res = compar(&obj, &list[low])) == 0)
    {
       lsd->errcode = LDAPSCHEMA_DUPLICATE;
       return(-1);
@@ -313,7 +313,7 @@ int ldapschema_insert(LDAPSchema * lsd, void *** listp, size_t * lenp, void * ob
    else if (res < 0)
       idx = low;
    // checks high value
-   else if ((res = compar(obj, list[high])) == 0)
+   else if ((res = compar(&obj, &list[high])) == 0)
    {
       lsd->errcode = LDAPSCHEMA_DUPLICATE;
       return(-1);

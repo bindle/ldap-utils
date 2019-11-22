@@ -56,20 +56,20 @@
 
 extern inline int
 ldapschema_extension_cmp(
-         const void * e1,
-         const void * e2 );
+         const void * ap,
+         const void * bp );
 
 
 extern inline int
 ldapschema_model_cmp(
-         const void * m1,
-         const void * m2 );
+         const void * ap,
+         const void * bp );
 
 
 extern inline int
 ldapschema_syntax_cmp(
-         const LDAPSchemaSyntax * s1,
-         const LDAPSchemaSyntax * s2 );
+         const void * ap,
+         const void * bp );
 
 
 /////////////////

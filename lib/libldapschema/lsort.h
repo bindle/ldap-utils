@@ -71,96 +71,98 @@
 #pragma mark - Inline Functions
 
 /// compares the OIDs of `m1` and `m2`
-/// @param[in]    p1          reference to LDAP model
-/// @param[in]    p2          reference to LDAP model
+/// @param[in]    ap          reference to LDAP model
+/// @param[in]    bp          reference to LDAP model
 ///
 /// @return    ldapschema_model_cmp() returns an integer greater than, equal
 ///            to, or less than 0, according as the OID of `m1` is
 ///            lexicographically greater than, equal to, or less than the OID
 ///            of `m2`.
 /// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
-_LDAPSCHEMA_I int ldapschema_extension_cmp( const void * p1, const void * p2 )
+_LDAPSCHEMA_I int ldapschema_extension_cmp( const void * ap, const void * bp )
 {
-   const LDAPSchemaExtension * e1 = p1;
-   const LDAPSchemaExtension * e2 = p2;
+   const LDAPSchemaExtension * a = *(const LDAPSchemaExtension * const *)ap;
+   const LDAPSchemaExtension * b = *(const LDAPSchemaExtension * const *)bp;
 
-   if ( (!(e1)) && (!(e2)) )
+   if ( (!(a)) && (!(b)) )
       return(0);
-   if (!(e1))
-      return(-1);
-   if (!(e2))
+   if (!(a))
       return(1);
+   if (!(b))
+      return(-1);
 
-   if ( (!(e1->extension)) && (!(e2->extension)) )
+   if ( (!(a->extension)) && (!(b->extension)) )
       return(0);
-   if (!(e1->extension))
-      return(-1);
-   if (!(e2->extension))
+   if (!(a->extension))
       return(1);
+   if (!(b->extension))
+      return(-1);
 
-   return(strcasecmp(e1->extension, e2->extension));
+   return(strcasecmp(a->extension, b->extension));
 }
 
 
 /// compares the OIDs of `m1` and `m2`
-/// @param[in]    p1          reference to LDAP model
-/// @param[in]    p2          reference to LDAP model
+/// @param[in]    ap          reference to LDAP model
+/// @param[in]    bp          reference to LDAP model
 ///
 /// @return    ldapschema_model_cmp() returns an integer greater than, equal
 ///            to, or less than 0, according as the OID of `m1` is
 ///            lexicographically greater than, equal to, or less than the OID
 ///            of `m2`.
 /// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
-_LDAPSCHEMA_I int ldapschema_model_cmp( const void * p1, const void * p2 )
+_LDAPSCHEMA_I int ldapschema_model_cmp( const void * ap, const void * bp )
 {
-   const LDAPSchemaModel * m1 = p1;
-   const LDAPSchemaModel * m2 = p2;
+   const LDAPSchemaModel * a = *(const LDAPSchemaModel * const *)ap;
+   const LDAPSchemaModel * b = *(const LDAPSchemaModel * const *)bp;
 
-   if ( (!(m1)) && (!(m2)) )
+   if ( (!(a)) && (!(b)) )
       return(0);
-   if (!(m1))
-      return(-1);
-   if (!(m2))
+   if (!(a))
       return(1);
+   if (!(b))
+      return(-1);
 
-   if ( (!(m1->oid)) && (!(m2->oid)) )
+   if ( (!(a->oid)) && (!(b->oid)) )
       return(0);
-   if (!(m1->oid))
-      return(-1);
-   if (!(m2->oid))
+   if (!(a->oid))
       return(1);
+   if (!(b->oid))
+      return(-1);
 
-   return(strcasecmp(m1->oid, m2->oid));
+   return(strcasecmp(a->oid, b->oid));
 }
 
 
 /// compares the LDAP syntax descriptions of `s1` and `s2`
-/// @param[in]    s1          Numeric error code
-/// @param[in]    s2          Numeric error code
+/// @param[in]    ap          reference to LDAP syntax
+/// @param[in]    bp          reference to LDAP syntax
 ///
 /// @return    ldapschema_syntax_cmp() returns an integer greater than, equal
 ///            to, or less than 0, according as the description of `s1` is
 ///            lexicographically greater than, equal to, or less than the
 ///            description of `s2`.
 /// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
-_LDAPSCHEMA_I int ldapschema_syntax_cmp( const LDAPSchemaSyntax * s1, const LDAPSchemaSyntax * s2 )
+_LDAPSCHEMA_I int ldapschema_syntax_cmp( const void * ap, const void * bp )
 {
+   const LDAPSchemaSyntax * a = *(const LDAPSchemaSyntax * const *)ap;
+   const LDAPSchemaSyntax * b = *(const LDAPSchemaSyntax * const *)bp;
 
-   if ( (!(s1)) && (!(s2)) )
+   if ( (!(a)) && (!(b)) )
       return(0);
-   if (!(s1))
-      return(-1);
-   if (!(s2))
+   if (!(a))
       return(1);
+   if (!(b))
+      return(-1);
 
-   if ( (!(s1->model.desc)) && (!(s2->model.desc)) )
+   if ( (!(a->model.desc)) && (!(b->model.desc)) )
       return(0);
-   if (!(s1->model.desc))
-      return(-1);
-   if (!(s2->model.desc))
+   if (!(a->model.desc))
       return(1);
+   if (!(b->model.desc))
+      return(-1);
 
-   return(strcasecmp(s1->model.desc, s2->model.desc));
+   return(strcasecmp(a->model.desc, b->model.desc));
 }
 
 #endif /* end of header file */
