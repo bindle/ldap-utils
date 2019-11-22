@@ -311,10 +311,20 @@ int ldapschema_initialize(LDAPSchema ** lsdp)
 }
 
 
+/// adds error to list of schema errors
+/// @param[in]  lsd        reference to allocated ldap_schema struct
+/// @param[in]  listp      reference to sorted array to manipulate
+/// @param[in]  lenp       reference to length of array
+/// @param[in]  obj        reference to object to add to array
+/// @param[in]  compar     reference to compare function used to determine
+///                        object's position within the list.
+///
+/// @return    If successfull, returns 0.  If duplicate, returns -1. Otherwise
+///            errcode is set and the value is return;
+/// @see       ldapschema_append
 int ldapschema_insert(LDAPSchema * lsd, void *** listp, size_t * lenp, void * obj, int (*compar)(const void *, const void *))
 {
    void        ** list;
-   //size_t         len;
    size_t         size;
    size_t         low;
    size_t         mid;
@@ -332,10 +342,7 @@ int ldapschema_insert(LDAPSchema * lsd, void *** listp, size_t * lenp, void * ob
    // increase size of array
    size = sizeof(void *) * ((*lenp) + 2);
    if ((list = realloc(*listp, size)) == NULL)
-   {
-      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
-      return(-1);
-   };
+      return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
    *listp        = list;
    list[*lenp+0] = NULL;
    list[*lenp+1] = NULL;
@@ -360,26 +367,17 @@ int ldapschema_insert(LDAPSchema * lsd, void *** listp, size_t * lenp, void * ob
       else if (res > 0)
          low = mid;
       else
-      {
-         lsd->errcode = LDAPSCHEMA_DUPLICATE;
          return(-1);
-      };
    };
 
    // checks low value
    if ((res = compar(&obj, &list[low])) == 0)
-   {
-      lsd->errcode = LDAPSCHEMA_DUPLICATE;
       return(-1);
-   }
    else if (res < 0)
       idx = low;
    // checks high value
    else if ((res = compar(&obj, &list[high])) == 0)
-   {
-      lsd->errcode = LDAPSCHEMA_DUPLICATE;
       return(-1);
-   }
    else if (res < 0)
       idx = high;
    else
@@ -393,7 +391,7 @@ int ldapschema_insert(LDAPSchema * lsd, void *** listp, size_t * lenp, void * ob
    list[pos] = obj;
    (*lenp)++;
 
-   return(0);
+   return(LDAPSCHEMA_SUCCESS);
 }
 
 
