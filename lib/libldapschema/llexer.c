@@ -815,7 +815,7 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
       return(NULL);
    };
 
-   // adds syntax into syntax list
+   // adds syntax into syntax list using OID and desc
    if ((alias = malloc(sizeof(LDAPSchemaAlias *))) == NULL)
    {
       lsd->errcode = LDAPSCHEMA_NO_MEMORY;
@@ -827,6 +827,21 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
    {
       free(alias);
       return(NULL);
+   };
+   if ((syntax->model.desc))
+   {
+      if ((alias = malloc(sizeof(LDAPSchemaAlias *))) == NULL)
+      {
+         lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+         return(NULL);
+      };
+      alias->alias  = syntax->model.desc;
+      alias->syntax = syntax;
+      if ((ldapschema_insert(lsd, (void ***)&lsd->syntaxes, &lsd->syntaxes_len, alias, ldapschema_compar_aliases)) != LDAP_SUCCESS)
+      {
+         free(alias);
+         return(NULL);
+      };
    };
 
 
