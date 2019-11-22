@@ -175,18 +175,20 @@ int main(int argc, char * argv[])
    };
 
    // fetches schema
-   if ((err = ldapschema_fetch(cnf->lsd, cnf->lud->ld)) != LDAP_SUCCESS)
+   if ( ((err = ldapschema_fetch(cnf->lsd, cnf->lud->ld)) != LDAP_SUCCESS) && (err != LDAPSCHEMA_SCHEMA_ERROR) )
    {
       fprintf(stderr, "%s: ldapschema_fetch(): %s\n", cnf->lud->prog_name, ldapschema_err2string(err));
       my_unbind(cnf);
       return(1);
    };
-
-   if ((errs = ldapschema_schema_errors(cnf->lsd)) != NULL)
+   if (err == LDAPSCHEMA_SCHEMA_ERROR)
    {
-      for(pos = 0; ((errs[pos])); pos++)
-         fprintf(stderr, "%s: error %s\n", PROGRAM_NAME, errs[pos]);
-      ldapschema_value_free(errs);
+      if ((errs = ldapschema_schema_errors(cnf->lsd)) != NULL)
+      {
+         for(pos = 0; ((errs[pos])); pos++)
+            fprintf(stderr, "%s: schema error %s\n", PROGRAM_NAME, errs[pos]);
+         ldapschema_value_free(errs);
+      };
    };
 
    ldapschema_print_syntaxes(cnf->lsd);

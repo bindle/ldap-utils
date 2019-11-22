@@ -177,6 +177,8 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
 
    ldap_msgfree(res);
 
+   if ((lsd->schema_errs))
+      return(lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR);
    return(LDAP_SUCCESS);
 }
 
