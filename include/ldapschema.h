@@ -360,9 +360,26 @@ _LDAPSCHEMA_F void
 ldapschema_print_syntaxes(
          LDAPSchema            * lsd );
 
-//------------------//
-// output functions //
-//------------------//
+
+//-----------------//
+// query functions //
+//-----------------//
+#pragma mark query functions
+
+_LDAPSCHEMA_F const LDAPSchemaAttributeType *
+ldapschema_get_attributetype(
+         LDAPSchema            * lsd,
+         const char            * name );
+
+_LDAPSCHEMA_F const LDAPSchemaSyntax *
+ldapschema_get_ldapsyntax(
+         LDAPSchema            * lsd,
+         const char            * name );
+
+
+//---------------------------//
+// sort comparison functions //
+//---------------------------//
 #pragma mark sort comparison functions
 
 #ifndef _LIB_LIBLDAPSCHEMA_H

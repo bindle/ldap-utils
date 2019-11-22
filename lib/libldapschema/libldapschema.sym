@@ -83,6 +83,9 @@ ldapschema_value_free_len
 ldapschema_spec_field
 ldapschema_spec_list
 ldapschema_spec_search
+# query functions
+ldapschema_get_attributetype
+ldapschema_get_ldapsyntax
 # sort comparison functions
 ldapschema_compar_aliases
 ldapschema_compar_extensions
