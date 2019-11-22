@@ -111,6 +111,25 @@
 #include "lerror.h"
 
 
+//////////////////
+//              //
+//  Prototypes  //
+//              //
+//////////////////
+#pragma mark - Prototypes
+
+int
+ldapschema_parse_objectclass_attrs(
+      LDAPSchema                  * lsd,
+      const char                  * field,
+      LDAPSchemaObjectclass       * objcls,
+      const char                  * liststr,
+      LDAPSchemaAttributeType   *** list1p,
+      size_t                      * len1p,
+      LDAPSchemaAttributeType   *** list2p,
+      size_t                      * len2p );
+
+
 /////////////////
 //             //
 //  Functions  //
@@ -749,9 +768,6 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
    int64_t                             pos;
    int                                 argc;
    int                                 err;
-   char                             ** attrnames;
-   size_t                              attrnames_len;
-   size_t                              idx;
    LDAPSchemaObjectclass             * objcls;
    LDAPSchemaAlias                   * alias;
 
@@ -898,141 +914,32 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
       else if (!(strcasecmp(argv[pos], "MUST")))
       {
          pos++;
-         if ( ((objcls->must)) || ((objcls->all_must)) )
+         err = ldapschema_parse_objectclass_attrs(lsd, "MUST", objcls, argv[pos], &objcls->must, &objcls->must_len, &objcls->all_must, &objcls->all_must_len);
+         if (err != 0)
          {
-            ldapschema_schema_err(lsd, "objectclass definition contains duplicate MUST: %s", objcls->model.definition);
             ldapschema_value_free(argv);
             ldapschema_objectclass_free(objcls);
             return(NULL);
          };
-         if (argv[pos][0] == '(')
-         {
-            if ((err = ldapschema_definition_split(lsd, argv[pos], strlen(argv[pos]), &attrnames)) == -1)
-            {
-               ldapschema_value_free(argv);
-               ldapschema_objectclass_free(objcls);
-               return(NULL);
-            };
-            attrnames_len = (size_t)ldapschema_count_values(attrnames);
-         }
-         else
-         {
-            if ((attrnames = malloc(sizeof(char *)*2)) == NULL)
-            {
-               lsd->errcode = LDAPSCHEMA_NO_MEMORY;
-               ldapschema_value_free(argv);
-               ldapschema_objectclass_free(objcls);
-               return(NULL);
-            };
-            if ((attrnames[0] = strdup(argv[pos])) == NULL)
-            {
-               lsd->errcode = LDAPSCHEMA_NO_MEMORY;
-               ldapschema_value_free(attrnames);
-               ldapschema_value_free(argv);
-               ldapschema_objectclass_free(objcls);
-               return(NULL);
-            };
-            attrnames[1]  = NULL;
-            attrnames_len = 1;
-         };
-         for(idx = 0; idx < attrnames_len; idx++)
-         {
-            if ((alias = ldapschema_get_alias(lsd, attrnames[idx], lsd->attrs, lsd->attrs_len)) == NULL)
-            {
-               ldapschema_schema_err(lsd, "objectclass definition requires invalid attributeType '%s': %s", attrnames[idx], objcls->model.definition);
-            } else
-            {
-               if ((err = ldapschema_insert(lsd, (void ***)&objcls->must, &objcls->must_len, alias->attributetype, ldapschema_compar_models)) != LDAP_SUCCESS)
-               {
-                  ldapschema_value_free(argv);
-                  ldapschema_value_free(attrnames);
-                  ldapschema_objectclass_free(objcls);
-                  return(NULL);
-               };
-               if ((err = ldapschema_insert(lsd, (void ***)&objcls->all_must, &objcls->all_must_len, alias->attributetype, ldapschema_compar_models)) != LDAP_SUCCESS)
-               {
-                  ldapschema_value_free(argv);
-                  ldapschema_value_free(attrnames);
-                  ldapschema_objectclass_free(objcls);
-                  return(NULL);
-               };
-            };
-         };
-         ldapschema_value_free(attrnames);
       }
 
       // inteprets MAY
       else if (!(strcasecmp(argv[pos], "MAY")))
       {
          pos++;
-         if ( ((objcls->may)) || ((objcls->all_may)) )
+         err = ldapschema_parse_objectclass_attrs(lsd, "MAY", objcls, argv[pos], &objcls->may, &objcls->may_len, &objcls->all_may, &objcls->all_may_len);
+         if (err != 0)
          {
-            ldapschema_schema_err(lsd, "objectclass definition contains duplicate MAY: %s", objcls->model.definition);
             ldapschema_value_free(argv);
             ldapschema_objectclass_free(objcls);
             return(NULL);
          };
-         if (argv[pos][0] == '(')
-         {
-            if ((err = ldapschema_definition_split(lsd, argv[pos], strlen(argv[pos]), &attrnames)) == -1)
-            {
-               ldapschema_value_free(argv);
-               ldapschema_objectclass_free(objcls);
-               return(NULL);
-            };
-            attrnames_len = (size_t)ldapschema_count_values(attrnames);
-         }
-         else
-         {
-            if ((attrnames = malloc(sizeof(char *)*2)) == NULL)
-            {
-               lsd->errcode = LDAPSCHEMA_NO_MEMORY;
-               ldapschema_value_free(argv);
-               ldapschema_objectclass_free(objcls);
-               return(NULL);
-            };
-            if ((attrnames[0] = strdup(argv[pos])) == NULL)
-            {
-               lsd->errcode = LDAPSCHEMA_NO_MEMORY;
-               ldapschema_value_free(attrnames);
-               ldapschema_value_free(argv);
-               ldapschema_objectclass_free(objcls);
-               return(NULL);
-            };
-            attrnames[1]  = NULL;
-            attrnames_len = 1;
-         };
-         for(idx = 0; idx < attrnames_len; idx++)
-         {
-            if ((alias = ldapschema_get_alias(lsd, attrnames[idx], lsd->attrs, lsd->attrs_len)) == NULL)
-            {
-               ldapschema_schema_err(lsd, "objectclass definition allows invalid attributeType '%s': %s", attrnames[idx], objcls->model.definition);
-               lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR;
-            } else
-            {
-               if ((err = ldapschema_insert(lsd, (void ***)&objcls->may, &objcls->may_len, alias->attributetype, ldapschema_compar_models)) != LDAP_SUCCESS)
-               {
-                  ldapschema_value_free(argv);
-                  ldapschema_value_free(attrnames);
-                  ldapschema_objectclass_free(objcls);
-                  return(NULL);
-               };
-               if ((err = ldapschema_insert(lsd, (void ***)&objcls->all_may, &objcls->all_may_len, alias->attributetype, ldapschema_compar_models)) != LDAP_SUCCESS)
-               {
-                  ldapschema_value_free(argv);
-                  ldapschema_value_free(attrnames);
-                  ldapschema_objectclass_free(objcls);
-                  return(NULL);
-               };
-            };
-         };
-         ldapschema_value_free(attrnames);
       }
 
       // handle unknown parameters
       else
       {
-         ldapschema_schema_err(lsd, "invalid term '%s' in objectclass definition: %s", argv[pos], objcls->model.definition);
+         ldapschema_schema_err(lsd, &objcls->model, "invalid term '%s' in definition", argv[pos]);
          ldapschema_value_free(argv);
          ldapschema_objectclass_free(objcls);
          return(NULL);
@@ -1051,7 +958,7 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
    };
    if (err == -1)
    {
-      ldapschema_schema_err(lsd, "duplicate objects with OID %s found", objcls->model.oid);
+      ldapschema_schema_err(lsd,  &objcls->model, "LDAP definition defines duplicate OID '%s'", objcls->model.oid);
       if ((err = ldapschema_append(lsd,(void ***)&lsd->dups, &lsd->dups_len, objcls)) != LDAP_SUCCESS)
       {
          ldapschema_objectclass_free(objcls);
@@ -1087,12 +994,89 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
          return(NULL);
       };
       if (err == -1)
-         ldapschema_schema_err(lsd, " objectClasses with duplicate name '%s' found", objcls->model.oid);
+         ldapschema_schema_err(lsd,  &objcls->model, " objectClasses with duplicate oid '%s' found", objcls->model.oid);
    };
 
    return(objcls);
 }
 
+
+int ldapschema_parse_objectclass_attrs(LDAPSchema * lsd, const char * field,
+   LDAPSchemaObjectclass * objcls, const char * liststr,
+   LDAPSchemaAttributeType *** list1p, size_t * len1p,
+   LDAPSchemaAttributeType *** list2p, size_t * len2p)
+{
+   int                     err;
+   char                 ** attrnames;
+   size_t                  attrnames_len;
+   size_t                  idx;
+   LDAPSchemaAlias       * alias;
+
+   assert(lsd     != NULL);
+   assert(objcls  != NULL);
+   assert(liststr != NULL);
+   assert(list1p  != NULL);
+   assert(len1p   != NULL);
+   assert(list2p  != NULL);
+   assert(len2p   != NULL);
+
+   if ( ((*list1p)) || ((*list2p)) )
+   {
+      ldapschema_schema_err(lsd,  &objcls->model, "LDAP definition contains duplicate '%s'", field);
+      return(0);
+   };
+
+   // generate list of attributes
+   if (liststr[0] == '(')
+   {
+      if ((err = ldapschema_definition_split(lsd, liststr, strlen(liststr), &attrnames)) == -1)
+         return(err);
+      attrnames_len = (size_t)ldapschema_count_values(attrnames);
+   }
+   else
+   {
+      if ((attrnames = malloc(sizeof(char *)*2)) == NULL)
+         return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
+      if ((attrnames[0] = strdup(liststr)) == NULL)
+      {
+         free(attrnames);
+         return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
+      };
+      attrnames[1]  = NULL;
+      attrnames_len = 1;
+   };
+
+   for(idx = 0; idx < attrnames_len; idx++)
+   {
+      if ((alias = ldapschema_get_alias(lsd, attrnames[idx], lsd->attrs, lsd->attrs_len)) == NULL)
+      {
+         ldapschema_schema_err(lsd,  &objcls->model, "'%s' contains invalid attributeType '%s'", field, attrnames[idx]);
+         lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR;
+      } else
+      {
+         if ((err = ldapschema_insert(lsd, (void ***)list1p, len1p, alias->attributetype, ldapschema_compar_models)) > 0)
+         {
+            ldapschema_value_free(attrnames);
+            return(lsd->errcode);
+         };
+         if ((err = ldapschema_insert(lsd, (void ***)list2p, len2p, alias->attributetype, ldapschema_compar_models)) > 0)
+         {
+            ldapschema_value_free(attrnames);
+            return(lsd->errcode);
+         };
+      };
+      if ((idx+1) < attrnames_len)
+      {
+         idx++;
+         if ((strcasecmp("$", attrnames[idx])))
+            ldapschema_schema_err(lsd,  &objcls->model, "'%s' contains invalid delimiter", field);
+      };
+   };
+
+   ldapschema_value_free(attrnames);
+
+   return(0);
+}
 
 
 /// parses an LDAP syntax definition string

@@ -84,7 +84,9 @@ struct ldap_schema
    size_t                                 attrs_len;        ///< length of attributeTypes array
    LDAPSchemaAlias                     ** objclses;         ///< array of objectClasses
    size_t                                 objclses_len;     ///< length of objectClasses array
-   char                                ** schema_errors;    ///< list of schema errors discovered
+   char                                ** schema_errs;      ///< list of schema errors discovered
+   size_t                                 schema_errs_cnt;  ///< number of objects with errors
+   LDAPSchemaModel                      * schema_errs_cur;  ///< reference to current object being reported (may contain multiple errors)
 };
 
 

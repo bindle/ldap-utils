@@ -97,35 +97,80 @@ int ldapschema_errno( LDAPSchema * lsd )
 ///
 /// @return    Returns a numeric code of last error
 /// @see       ldapschema_free, ldapschema_initialize, ldapschema_err2string
-int ldapschema_schema_err(LDAPSchema * lsd, const char * fmt, ... )
+int ldapschema_schema_err(LDAPSchema * lsd, LDAPSchemaModel * mod, const char * fmt, ... )
 {
    char        buff[512];
    va_list     args;
    char      * str;
+   const char  * type;
+   const char  * def;
+   size_t        len;
 
    assert(lsd != NULL);
    assert(fmt != NULL);
 
-   if (!(lsd->schema_errors))
+
+   // initialize errors if first error
+   if (!(lsd->schema_errs))
    {
-      if ((lsd->schema_errors = malloc(sizeof(char *)*2)) == NULL)
+      if ((lsd->schema_errs = malloc(sizeof(char *)*2)) == NULL)
          return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
-      lsd->schema_errors[0] = NULL;
+      lsd->schema_errs[0] = NULL;
    };
 
+   // determine object type
+   def = NULL;
+   if ((mod))
+   {
+      switch(mod->type)
+      {
+         case LDAPSCHEMA_ATTRIBUTETYPE:   type = "attributeType";    break;
+         case LDAPSCHEMA_OBJECTCLASS:     type = "objectClass";      break;
+         case LDAPSCHEMA_SYNTAX:          type = "ldapSyntax";       break;
+         case LDAPSCHEMA_MATCHINGRULE:    type = "matchingRules";    break;
+         default:                         type = "unknown";          break;
+      };
+      def = mod->definition;
+   } else
+   {
+      type = "";
+   };
+
+   // save definition if first error for object
+   if (lsd->schema_errs_cur != mod)
+   {
+      lsd->schema_errs_cnt++;
+      snprintf(buff, sizeof(buff), "%s %zu: ", type, lsd->schema_errs_cnt);
+      len = strlen(buff);
+      snprintf(&buff[len], sizeof(buff)-len, "definition: %s", mod->definition);
+      if ((str = strdup(buff)) == NULL)
+         return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
+      if ((lsd->schema_errs = ldapschema_value_add(lsd->schema_errs, str, NULL)) == NULL)
+      {
+         free(str);
+         return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
+      };
+   };
+
+   // create error header
+   snprintf(buff, sizeof(buff), "%s %zu: ", type, lsd->schema_errs_cnt);
+   len = strlen(buff);
+
+   // process error message
    va_start(args, fmt);
-   vsnprintf(buff, sizeof(buff), fmt, args);
+   vsnprintf(&buff[len], sizeof(buff)-len, fmt, args);
    va_end(args);
 
+   // save error
    if ((str = strdup(buff)) == NULL)
       return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
-
-   if ((lsd->schema_errors = ldapschema_value_add(lsd->schema_errors, str, NULL)) == NULL)
+   if ((lsd->schema_errs = ldapschema_value_add(lsd->schema_errs, str, NULL)) == NULL)
    {
       free(str);
       return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
    };
 
+   // set error code
    lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR;
 
    return(0);

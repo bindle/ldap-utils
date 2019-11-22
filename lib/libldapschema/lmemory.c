@@ -216,8 +216,8 @@ void ldapschema_free(LDAPSchema * lsd)
    };
    lsd->attrs = NULL;
 
-   if ((lsd->schema_errors))
-      ldapschema_value_free(lsd->schema_errors);
+   if ((lsd->schema_errs))
+      ldapschema_value_free(lsd->schema_errs);
 
    // frees oids
    if ((lsd->oids))

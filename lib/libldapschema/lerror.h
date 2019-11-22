@@ -65,8 +65,9 @@
 int
 ldapschema_schema_err(
          LDAPSchema            * lsd,
+         LDAPSchemaModel       * mod,
          const char            * fmt,
-                                 ... ) __attribute__((format(printf, 2, 3)));
+                                 ... ) __attribute__((format(printf, 3, 4)));
 
 
 #endif /* end of header file */

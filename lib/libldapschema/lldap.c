@@ -74,6 +74,13 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
    assert(lsd != NULL);
    assert(ld  != NULL);
 
+   // reset errors
+   if ((lsd->schema_errs))
+      ldapschema_value_free(lsd->schema_errs);
+   lsd->schema_errs     = NULL;
+   lsd->schema_errs_cnt = 0;
+   lsd->schema_errs_cur = NULL;
+
    attrs = NULL;
    if ((err = ldapschema_definition_split(lsd, "( + * )", 7, &attrs)) == -1)
       return(lsd->errcode);
