@@ -103,6 +103,8 @@ AC_PROG_EGREP
 AC_PROG_FGREP
 AM_PROG_LEX
 AC_PROG_LN_S
+AC_PROG_MKDIR_P
+AC_PROG_SED
 
 # GNU Libtool Support
 LT_INIT(dlopen disable-fast-install win32-dll)
