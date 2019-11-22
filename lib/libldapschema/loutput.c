@@ -211,11 +211,12 @@ void ldapschema_print_model_def(LDAPSchema * lsd, LDAPSchemaModel * model)
    if ((str = strdup(&model->definition[1])) == NULL)
       return;
 
+   // strips leading white space
    for (pos = 0; ((pos < len) && ((str[pos] == ' ') || (str[pos] == '\t'))); pos++);
    bol = pos;
 
    // print formatted definition
-   printf("%*s%-*s (\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "defintion:");
+   printf("%*s%-*s (\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "definition:");
    while(pos < len)
    {
       // process quoted strings
@@ -255,6 +256,8 @@ void ldapschema_print_model_def(LDAPSchema * lsd, LDAPSchemaModel * model)
          pos++;
       };
    };
+   str[pos-1] = '\0';
+   printf("%*s    %s\n", LDAPSCHEMA_WIDTH_HEADER, "", &str[bol]);
    printf("%*s )\n", LDAPSCHEMA_WIDTH_HEADER, "");
 
    free(str);
@@ -369,11 +372,13 @@ void ldapschema_print_multiline(const char * field, const char * input)
    {
       eol[0] = '\0';
       if (bol == str)
-         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, field, bol);
+         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, field, str);
       else
          printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", bol);
       bol = &eol[1];
    };
+   if (bol == str)
+      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, field, str);
 
    free(str);
 
