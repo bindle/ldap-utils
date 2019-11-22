@@ -105,6 +105,7 @@
 #include <stdlib.h>
 
 #include "lsort.h"
+#include "lspec.h"
 
 
 /////////////////
@@ -795,6 +796,16 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
 
    // adds specification to syntax
    syntax->model.spec = ldapschema_spec_search(syntax->model.oid);
+
+   // compiles regular expression, if available
+   if ( ((syntax->model.spec)) && ((syntax->model.spec->re_posix)) )
+   {
+      if ((regcomp(&syntax->re, syntax->model.spec->re_posix, REG_EXTENDED | REG_NOSUB)))
+      {
+         regfree(&syntax->re);
+         bzero(&syntax->re, sizeof(syntax->re));
+      };
+   };
 
    // adds syntax into OID list
    if ((ldapschema_insert(lsd, (void ***)&lsd->oids, &lsd->oids_len, syntax, ldapschema_model_cmp)) != LDAP_SUCCESS)

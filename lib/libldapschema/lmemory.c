@@ -437,6 +437,7 @@ void ldapschema_syntax_free(LDAPSchemaSyntax * syntax)
 {
    assert(syntax != NULL);
 
+   regfree(&syntax->re);
    ldapschema_object_free(&syntax->model);
 
    free(syntax);

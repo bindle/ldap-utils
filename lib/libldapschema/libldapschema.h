@@ -113,9 +113,6 @@ struct ldap_schema_model
 struct ldap_schema_syntax
 {
    LDAPSchemaModel         model;
-   const char            * pattern;
-   const char            * source;
-   const char            * abnf;
    regex_t                 re;
 };
 
