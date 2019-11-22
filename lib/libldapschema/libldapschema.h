@@ -80,6 +80,7 @@ struct ldap_schema
    size_t                                 syntaxes_len;     ///< length of syntaxes array
    LDAPSchemaAlias                     ** attrs;            ///< array of attributeTypes
    size_t                                 attrs_len;        ///< length of attributeTypes array
+   char                                ** schema_errors;    ///< list of schema errors discovered
 };
 
 

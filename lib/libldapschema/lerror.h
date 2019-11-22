@@ -62,5 +62,11 @@
 //////////////////
 #pragma mark - Prototypes
 
+int
+ldapschema_schema_err(
+         LDAPSchema            * lsd,
+         const char            * fmt,
+                                 ... );
+
 
 #endif /* end of header file */

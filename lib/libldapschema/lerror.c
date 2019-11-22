@@ -45,6 +45,7 @@
 
 #include <errno.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include <string.h>
 #include <strings.h>
 #include <stdlib.h>
@@ -86,6 +87,46 @@ int ldapschema_errno( LDAPSchema * lsd )
 {
    assert(lsd != NULL);
    return(lsd->errcode);
+}
+
+
+/// adds error to list of schema errors
+/// @param[in]  lsd     reference to allocated ldap_schema struct
+/// @param[in]  fmt     error format string
+/// @param[in]  ...     error format arguments
+///
+/// @return    Returns a numeric code of last error
+/// @see       ldapschema_free, ldapschema_initialize, ldapschema_err2string
+int ldapschema_schema_err(LDAPSchema * lsd, const char * fmt, ... )
+{
+   char        buff[512];
+   va_list     args;
+   char      * str;
+
+   assert(lsd != NULL);
+   assert(fmt != NULL);
+
+   if (!(lsd->schema_errors))
+   {
+      if ((lsd->schema_errors = malloc(sizeof(char *)*2)) == NULL)
+         return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
+      lsd->schema_errors[0] = NULL;
+   };
+
+   va_start(args, fmt);
+   vsnprintf(buff, sizeof(buff), fmt, args);
+   va_end(args);
+
+   if ((str = strdup(buff)) == NULL)
+      return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
+
+   if ((lsd->schema_errors = ldapschema_value_add(lsd->schema_errors, str, NULL)) == NULL)
+   {
+      free(str);
+      return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
+   };
+
+   return(0);
 }
 
 /* end of source file */
