@@ -49,6 +49,8 @@
 #include <strings.h>
 #include <stdlib.h>
 
+#include "llexer.h"
+
 
 /////////////////
 //             //

@@ -62,5 +62,40 @@
 //////////////////
 #pragma mark - Prototypes
 
+int
+ldapschema_definition_split(
+         LDAPSchema            * lsd,
+         const char            * str,
+         size_t                  strlen,
+         char                *** argvp );
+
+int
+ldapschema_definition_split_len(
+         LDAPSchema            * lsd,
+         const struct berval   * def,
+         char                *** argvp );
+
+LDAPSchemaAttributeType *
+ldapschema_parse_attributetype(
+         LDAPSchema            * lsd,
+         const struct berval   * def );
+
+int
+ldapschema_parse_ext(
+         LDAPSchema            * lsd,
+         LDAPSchemaModel       * model,
+         const char            * key,
+         const char            * valstr );
+
+LDAPSchemaObjectclass *
+ldapschema_parse_objectclass(
+         LDAPSchema            * lsd,
+         const struct berval   * def );
+
+LDAPSchemaSyntax *
+ldapschema_parse_syntax(
+         LDAPSchema            * lsd,
+         const struct berval   * def );
+
 
 #endif /* end of header file */

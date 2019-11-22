@@ -182,32 +182,6 @@ struct ldap_schema_syntax
 //////////////////
 #pragma mark - Prototypes
 
-//-----------------//
-// lexer functions //
-//-----------------//
-#pragma mark lexer functions
-
-int
-ldapschema_definition_split(
-         LDAPSchema            * lsd,
-         const char            * str,
-         size_t                  strlen,
-         char                *** argvp );
-
-int
-ldapschema_definition_split_len(
-         LDAPSchema            * lsd,
-         const struct berval   * def,
-         char                *** argvp );
-
-int
-ldapschema_parse_ext(
-         LDAPSchema            * lsd,
-         LDAPSchemaModel       * model,
-         const char            * key,
-         const char            * valstr );
-
-
 //------------------//
 // memory functions //
 //-------=----------//

@@ -262,22 +262,6 @@ ldapschema_fetch(
          LDAP                  * ld );
 
 
-//-----------------//
-// lexer functions //
-//-----------------//
-#pragma mark lexer functions
-
-_LDAPSCHEMA_F LDAPSchemaAttributeType *
-ldapschema_parse_attributetype(
-         LDAPSchema            * lsd,
-         const struct berval   * def );
-
-_LDAPSCHEMA_F LDAPSchemaSyntax *
-ldapschema_parse_syntax(
-         LDAPSchema            * lsd,
-         const struct berval   * def );
-
-
 //------------------//
 // memory functions //
 //------------------//
