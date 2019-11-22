@@ -158,10 +158,13 @@ void ldapschema_print_attributetypes( LDAPSchema * lsd )
 {
    size_t x;
    assert(lsd != NULL);
-   for(x = 0; x < lsd->attrs_len; x++)
+   for(x = 0; x < lsd->oids_len; x++)
    {
-      ldapschema_print_attributetype(lsd, lsd->attrs[x]);
-      printf("\n");
+      if (lsd->oids[x].model->type == LDAPSCHEMA_ATTRIBUTETYPE)
+      {
+         ldapschema_print_attributetype(lsd, lsd->oids[x].attributetype);
+         printf("\n");
+      };
    };
    return;
 }
@@ -393,10 +396,13 @@ void ldapschema_print_syntaxes( LDAPSchema * lsd )
 {
    size_t x;
    assert(lsd != NULL);
-   for(x = 0; x < lsd->syntaxes_len; x++)
+   for(x = 0; x < lsd->oids_len; x++)
    {
-      ldapschema_print_syntax(lsd, lsd->syntaxes[x]);
-      printf("\n");
+      if (lsd->oids[x].model->type == LDAPSCHEMA_SYNTAX)
+      {
+         ldapschema_print_syntax(lsd, lsd->oids[x].syntax);
+         printf("\n");
+      };
    };
    return;
 }
