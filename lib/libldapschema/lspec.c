@@ -60,13 +60,6 @@
 #pragma mark - Variables
 
 
-#pragma mark const struct ldapschema_syntax_spec syntax_spec
-const struct ldapschema_spec ldapschema_spec[] =
-{
-   { .oid =  NULL, },
-};
-
-
 //////////////////
 //              //
 //  Prototypes  //
