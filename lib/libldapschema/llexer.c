@@ -639,11 +639,13 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
    };
    alias->alias         = attr->model.oid;
    alias->attributetype = attr;
-   if ((ldapschema_insert(lsd, (void ***)&lsd->attrs, &lsd->attrs_len, alias, ldapschema_compar_aliases)) != LDAP_SUCCESS)
+   if ((err = ldapschema_insert(lsd, (void ***)&lsd->attrs, &lsd->attrs_len, alias, ldapschema_compar_aliases)) > 0)
    {
       free(alias);
       return(NULL);
    };
+   if (err == -1)
+      ldapschema_schema_err(lsd,  &attr->model, " attributeType with duplicate oid '%s' found", attr->model.oid);
    for(pos = 0; (size_t)pos < attr->names_len; pos++)
    {
       if ((alias = malloc(sizeof(LDAPSchemaAlias *))) == NULL)
@@ -653,11 +655,13 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
       };
       alias->alias         = attr->names[pos];
       alias->attributetype = attr;
-      if ((ldapschema_insert(lsd, (void ***)&lsd->attrs, &lsd->attrs_len, alias, ldapschema_compar_aliases)) != LDAP_SUCCESS)
+      if ((ldapschema_insert(lsd, (void ***)&lsd->attrs, &lsd->attrs_len, alias, ldapschema_compar_aliases)) > 0)
       {
          free(alias);
          return(NULL);
       };
+      if (err == -1)
+         ldapschema_schema_err(lsd,  &attr->model, " attributeType with duplicate name '%s' found", attr->names[pos]);
    };
 
    return(attr);
@@ -979,6 +983,8 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
       free(alias);
       return(NULL);
    };
+   if (err == -1)
+      ldapschema_schema_err(lsd,  &objcls->model, " objectClasses with duplicate oid '%s' found", objcls->model.oid);
    for(pos = 0; (size_t)pos < objcls->names_len; pos++)
    {
       if ((alias = malloc(sizeof(LDAPSchemaAlias *))) == NULL)
@@ -994,7 +1000,7 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
          return(NULL);
       };
       if (err == -1)
-         ldapschema_schema_err(lsd,  &objcls->model, " objectClasses with duplicate oid '%s' found", objcls->model.oid);
+         ldapschema_schema_err(lsd,  &objcls->model, " objectClasses with duplicate name '%s' found", objcls->names[pos]);
    };
 
    return(objcls);
@@ -1230,11 +1236,13 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
    };
    alias->alias  = syntax->model.oid;
    alias->syntax = syntax;
-   if ((ldapschema_insert(lsd, (void ***)&lsd->syntaxes, &lsd->syntaxes_len, alias, ldapschema_compar_aliases)) != LDAP_SUCCESS)
+   if ((err = ldapschema_insert(lsd, (void ***)&lsd->syntaxes, &lsd->syntaxes_len, alias, ldapschema_compar_aliases)) > 0)
    {
       free(alias);
       return(NULL);
    };
+   if (err == -1)
+      ldapschema_schema_err(lsd,  &syntax->model, " ldapSyntax with duplicate oid '%s' found", syntax->model.oid);
    if ((syntax->model.desc))
    {
       if ((alias = malloc(sizeof(LDAPSchemaAlias *))) == NULL)
@@ -1244,11 +1252,13 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
       };
       alias->alias  = syntax->model.desc;
       alias->syntax = syntax;
-      if ((ldapschema_insert(lsd, (void ***)&lsd->syntaxes, &lsd->syntaxes_len, alias, ldapschema_compar_aliases)) != LDAP_SUCCESS)
+      if ((ldapschema_insert(lsd, (void ***)&lsd->syntaxes, &lsd->syntaxes_len, alias, ldapschema_compar_aliases)) > 0)
       {
          free(alias);
          return(NULL);
       };
+      if (err == -1)
+         ldapschema_schema_err(lsd,  &syntax->model, " ldapSyntax with duplicate desc '%s' found", syntax->model.desc);
    };
 
 

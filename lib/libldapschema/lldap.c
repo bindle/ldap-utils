@@ -132,7 +132,8 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
    {
       for(x = 0; ((vals[x])); x++)
       {
-         if ((ptr = ldapschema_parse_syntax(lsd, vals[x])) == NULL)
+         if ( ((ptr = ldapschema_parse_syntax(lsd, vals[x])) == NULL) &&
+              (lsd->errcode != LDAPSCHEMA_SCHEMA_ERROR) )
          {
             ldap_value_free_len(vals);
             ldap_msgfree(res);
@@ -147,7 +148,8 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
    {
       for(x = 0; ((vals[x])); x++)
       {
-         if ((ptr = ldapschema_parse_attributetype(lsd, vals[x])) == NULL)
+         if ( ((ptr = ldapschema_parse_attributetype(lsd, vals[x])) == NULL) &&
+              (lsd->errcode != LDAPSCHEMA_SCHEMA_ERROR) )
          {
             ldap_value_free_len(vals);
             ldap_msgfree(res);
