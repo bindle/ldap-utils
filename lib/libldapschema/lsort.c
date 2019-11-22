@@ -55,6 +55,12 @@
 #pragma mark - Inline Functions
 
 extern inline int
+ldapschema_alias_cmp(
+         const void * ap,
+         const void * bp );
+
+
+extern inline int
 ldapschema_extension_cmp(
          const void * ap,
          const void * bp );

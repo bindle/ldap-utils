@@ -70,6 +70,38 @@
 ////////////////////////
 #pragma mark - Inline Functions
 
+/// compares the alias field of `ap` and `bp`
+/// @param[in]    ap          reference to LDAP model
+/// @param[in]    bp          reference to LDAP model
+///
+/// @return    ldapschema_alias_cmp() returns an integer greater than, equal
+///            to, or less than 0, according as the alias of `ap` is
+///            lexicographically greater than, equal to, or less than the alias
+///            of `bp`.
+/// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
+_LDAPSCHEMA_I int ldapschema_alias_cmp( const void * ap, const void * bp )
+{
+   const LDAPSchemaAlias * a = *(const LDAPSchemaAlias * const *)ap;
+   const LDAPSchemaAlias * b = *(const LDAPSchemaAlias * const *)bp;
+
+   if ( (!(a)) && (!(b)) )
+      return(0);
+   if (!(a))
+      return(1);
+   if (!(b))
+      return(-1);
+
+   if ( (!(a->alias)) && (!(b->alias)) )
+      return(0);
+   if (!(a->alias))
+      return(1);
+   if (!(b->alias))
+      return(-1);
+
+   return(strcasecmp(a->alias, b->alias));
+}
+
+
 /// compares the OIDs of `m1` and `m2`
 /// @param[in]    ap          reference to LDAP model
 /// @param[in]    bp          reference to LDAP model
