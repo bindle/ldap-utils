@@ -50,6 +50,8 @@
 #include <stdlib.h>
 
 #include "llexer.h"
+#include "lquery.h"
+#include "lerror.h"
 
 
 /////////////////
@@ -70,6 +72,10 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
    char              ** attrs;
    struct berval     ** vals;
    void               * ptr;
+   size_t               idx;
+   LDAPSchemaAlias    * alias;
+   LDAPSchemaAttributeType     * attr;
+   LDAPSchemaAttributeType     * attrsup;
 
    assert(lsd != NULL);
    assert(ld  != NULL);
@@ -146,6 +152,7 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
    // process attributeTypes
    if ((vals = ldap_get_values_len(ld, msg, "attributeTypes")) != NULL)
    {
+      // initial parsing of definition
       for(x = 0; ((vals[x])); x++)
       {
          if ( ((ptr = ldapschema_parse_attributetype(lsd, vals[x])) == NULL) &&
@@ -157,6 +164,36 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
          };
       };
       ldap_value_free_len(vals);
+
+      // maps superior
+      for(idx = 0; (idx < lsd->oids_len); idx++)
+      {
+         // checks for superior
+         attr = lsd->oids[idx].attributetype;
+         if (attr->model.type != LDAPSCHEMA_ATTRIBUTETYPE)
+            continue;
+         if (!(attr->sup_name))
+            continue;
+         if ((alias = ldapschema_get_alias(lsd, attr->sup_name, lsd->attrs, lsd->attrs_len)) == NULL)
+         {
+            ldapschema_schema_err(lsd, &attr->model, "specified invalid superior '%s'", attr->sup_name);
+            continue;
+         };
+
+         // saves superior
+         attr->sup = alias->attributetype;
+
+         // inherent specs from superior
+         attrsup   = attr;
+         while((attrsup = attrsup->sup) != NULL)
+         {
+            attr->model.flags |= attrsup->model.flags;
+            if (!(attr->syntax))
+               attr->syntax = attrsup->syntax;
+            if (!(attr->usage))
+               attr->usage = attrsup->usage;
+         };
+      };
    };
 
    // process objectClasses

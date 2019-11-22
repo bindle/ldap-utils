@@ -139,6 +139,7 @@ struct ldap_schema_attributetype
    size_t                                 allowed_by_len;
    size_t                                 required_by_len;
    uint64_t                               min_upper;
+   LDAPSchemaAttributeType              * sup;
    char                                 * sup_name;
    char                                ** names;
    LDAPSchemaObjectclass               ** allowed_by;
