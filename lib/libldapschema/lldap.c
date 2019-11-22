@@ -150,6 +150,22 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
       ldap_value_free_len(vals);
    };
 
+   // process objectClasses
+   if ((vals = ldap_get_values_len(ld, msg, "objectClasses")) != NULL)
+   {
+      for(x = 0; ((vals[x])); x++)
+      {
+         if ( ((ptr = ldapschema_parse_objectclass(lsd, vals[x])) == NULL) &&
+              (lsd->errcode != LDAPSCHEMA_SCHEMA_ERROR) )
+         {
+            ldap_value_free_len(vals);
+            ldap_msgfree(res);
+            return(-1);
+         };
+      };
+      ldap_value_free_len(vals);
+   };
+
    ldap_msgfree(res);
 
    return(LDAP_SUCCESS);

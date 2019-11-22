@@ -182,6 +182,7 @@ int main(int argc, char * argv[])
 
    ldapschema_print_syntaxes(cnf->lsd);
    ldapschema_print_attributetypes(cnf->lsd);
+   ldapschema_print_objectclasses(cnf->lsd);
 
    // frees resources
    my_unbind(cnf);

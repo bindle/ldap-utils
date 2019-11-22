@@ -69,5 +69,13 @@ ldapschema_append(
          size_t                * lenp,
          void                  * obj );
 
+void
+ldapschema_objectclass_free(
+         LDAPSchemaObjectclass * objectclass );
+
+LDAPSchemaObjectclass *
+ldapschema_objectclass_initialize(
+         LDAPSchema            * lsd );
+
 
 #endif /* end of header file */

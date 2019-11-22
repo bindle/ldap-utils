@@ -436,6 +436,54 @@ void ldapschema_object_free(LDAPSchemaModel * obj)
 }
 
 
+void ldapschema_objectclass_free(LDAPSchemaObjectclass * objectclass)
+{
+   assert(objectclass != NULL);
+
+   ldapschema_object_free(&objectclass->model);
+
+   if ((objectclass->sup_name))
+      free(objectclass->sup_name);
+
+   if ((objectclass->names))
+      ldapschema_value_free(objectclass->names);
+
+   if ((objectclass->must))
+      free(objectclass->must);
+   if ((objectclass->may))
+      free(objectclass->may);
+
+   if ((objectclass->all_must))
+      free(objectclass->all_must);
+   if ((objectclass->all_may))
+      free(objectclass->all_may);
+
+   free(objectclass);
+
+   return;
+}
+
+
+LDAPSchemaObjectclass * ldapschema_objectclass_initialize(LDAPSchema * lsd)
+{
+   LDAPSchemaObjectclass * objectclass;
+
+   assert(lsd != NULL);
+
+   // initialize syntax
+   if ((objectclass = malloc(sizeof(LDAPSchemaObjectclass))) == NULL)
+   {
+      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+      return(objectclass);
+   };
+   bzero(objectclass, sizeof(LDAPSchemaObjectclass));
+   objectclass->model.size = sizeof(LDAPSchemaObjectclass);
+   objectclass->model.type = LDAPSCHEMA_OBJECTCLASS;
+
+   return(objectclass);
+}
+
+
 void * ldapschema_oid(LDAPSchema * lsd, const char * oid, size_t type)
 {
    size_t               low;

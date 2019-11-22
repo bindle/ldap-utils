@@ -69,7 +69,7 @@ const char * ldapschema_err2string( int err )
    {
       case LDAPSCHEMA_SUCCESS:                  return("success");
       case LDAPSCHEMA_NO_MEMORY:                return("out of virtual memory");
-      case LDAPSCHEMA_INVALID_DEFINITION:       return("invalid definition");
+      case LDAPSCHEMA_SCHEMA_ERROR:             return("schema error");
       case LDAPSCHEMA_DUPLICATE:                return("duplicate definition");
       default:                                  return("unknown error");
    };
@@ -125,6 +125,8 @@ int ldapschema_schema_err(LDAPSchema * lsd, const char * fmt, ... )
       free(str);
       return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
    };
+
+   lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR;
 
    return(0);
 }

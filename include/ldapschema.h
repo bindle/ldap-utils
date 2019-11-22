@@ -111,7 +111,7 @@
 
 // result codes
 #define LDAPSCHEMA_SUCCESS                            0x00     ///< operation was successful
-#define LDAPSCHEMA_INVALID_DEFINITION                 0x7001   ///< invalid defintion
+#define LDAPSCHEMA_SCHEMA_ERROR                       0x7001   ///< schema error
 #define LDAPSCHEMA_DUPLICATE                          0x7002   ///< duplicate defintion
 #define LDAPSCHEMA_NO_MEMORY                          (-10)    ///< an memory allocation failed
 
@@ -333,6 +333,15 @@ ldapschema_print_model(
 
 _LDAPSCHEMA_F void
 ldapschema_print_models(
+         LDAPSchema            * lsd );
+
+_LDAPSCHEMA_F void
+ldapschema_print_objectclass(
+         LDAPSchema            * lsd,
+         LDAPSchemaObjectclass * objcls );
+
+_LDAPSCHEMA_F void
+ldapschema_print_objectclasses(
          LDAPSchema            * lsd );
 
 _LDAPSCHEMA_F void

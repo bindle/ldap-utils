@@ -207,7 +207,7 @@ const LDAPSchemaSpec * ldapschema_spec_search(const char * oid)
    assert(oid  != NULL);
 
    low      = 0;
-   high     = ldapschema_oidspecs_len;
+   high     = ldapschema_oidspecs_len - 1;
 
    // finds position in array
    while ((high - low) > 1)
