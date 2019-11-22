@@ -52,6 +52,7 @@ All rights reserved.
    - [x] libldapschema
      - [ ] add support for multiple objectClass superiors
      - [ ] write man pages
+     - [ ] add support for OID specs to attributeTypes and objectClasses
 
    - [x] libldaputils
      - [ ] add support for auth mechanisms other than simple auth.
@@ -59,3 +60,34 @@ All rights reserved.
      - [ ] write shema parser
      - [ ] write LDAPUtilsEntries to CSV file
 
+   - [x] oidspectool
+      - [ ] complete README.md
+      - [ ] review OID specs in rfc/rfc2252.oidspec
+      - [ ] review OID specs in rfc/rfc4517.oidspec
+      - [ ] review OID specs in rfc/rfc4523.oidspec
+      - [ ] review OID specs in rfc/rfc4530.oidspec
+      - [ ] extract OID specs from RFC 2589: Lightweight Directory Access Protocol (v3): Extensions for Dynamic Directory Services
+      - [ ] extract OID specs from RFC 2696: LDAP Control Extension for Simple Paged Results Manipulation
+      - [ ] extract OID specs from RFC 2891: LDAP Control Extension for Server Side Sorting of Search Results
+      - [ ] extract OID specs from RFC 3062: LDAP Password Modify Extended Operation
+      - [ ] extract OID specs from RFC 3296: Named Subordinate References in Lightweight Directory Access Protocol (LDAP) Directories
+      - [ ] extract OID specs from RFC 3672: Subentries in the Lightweight Directory Access Protocol (LDAP)
+      - [ ] extract OID specs from RFC 3673: Lightweight Directory Access Protocol version 3 (LDAPv3): All Operational Attributes
+      - [ ] extract OID specs from RFC 3829: Lightweight Directory Access Protocol (LDAP) Authorization Identity Request and Response Controls
+      - [ ] extract OID specs from RFC 3866: Language Tags and Ranges in the Lightweight Directory Access Protocol (LDAP)
+      - [ ] extract OID specs from RFC 3876: Returning Matched Values with the Lightweight Directory Access Protocol version 3 (LDAPv3)
+      - [ ] extract OID specs from RFC 3909: Lightweight Directory Access Protocol (LDAP) Cancel Operation
+      - [ ] extract OID specs from RFC 3928: Lightweight Directory Access Protocol (LDAP) Client Update Protocol (LCUP)
+      - [ ] extract OID specs from RFC 4370: Lightweight Directory Access Protocol (LDAP) Proxied Authorization Control
+      - [ ] extract OID specs from RFC 4373: Lightweight Directory Access Protocol (LDAP) Bulk Update/Replication Protocol (LBURP)
+      - [ ] extract OID specs from RFC 4511: Lightweight Directory Access Protocol (LDAP): The Protocol
+      - [ ] extract OID specs from RFC 4525: Lightweight Directory Access Protocol (LDAP) Modify-Increment Extension
+      - [ ] extract OID specs from RFC 4526: Lightweight Directory Access Protocol (LDAP) Absolute True and False Filters
+      - [ ] extract OID specs from RFC 4527: Lightweight Directory Access Protocol (LDAP) Read Entry Controls
+      - [ ] extract OID specs from RFC 4528: Lightweight Directory Access Protocol (LDAP) Assertion Control
+      - [ ] extract OID specs from RFC 4529: Requesting Attributes by Object Class in the Lightweight Directory Access Protocol (LDAP)
+      - [ ] extract OID specs from RFC 4531: Lightweight Directory Access Protocol (LDAP) Turn Operation
+      - [ ] extract OID specs from RFC 4532: Lightweight Directory Access Protocol (LDAP) "Who am I?" Operation
+      - [ ] extract OID specs from RFC 4533: The Lightweight Directory Access Protocol (LDAP) Content Synchronization Operation
+      - [ ] extract OID specs from RFC 5805: Lightweight Directory Access Protocol (LDAP) Transactions
+      - [ ] extract OID specs from RFC 6171: The Lightweight Directory Access Protocol (LDAP) Don't Use Copy Control
