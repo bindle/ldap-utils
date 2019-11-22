@@ -360,6 +360,43 @@ _LDAPSCHEMA_F void
 ldapschema_print_syntaxes(
          LDAPSchema            * lsd );
 
+//------------------//
+// output functions //
+//------------------//
+#pragma mark sort comparison functions
+
+#ifndef _LIB_LIBLDAPSCHEMA_H
+
+_LDAPSCHEMA_F int
+ldapschema_compar_aliases(
+         const void * ap,
+         const void * bp );
+
+
+_LDAPSCHEMA_F int
+ldapschema_compar_extensions(
+         const void * ap,
+         const void * bp );
+
+
+_LDAPSCHEMA_F int
+ldapschema_compar_models(
+         const void * ap,
+         const void * bp );
+
+
+_LDAPSCHEMA_F int
+ldapschema_compar_syntaxes(
+         const void * ap,
+         const void * bp );
+
+
+_LDAPSCHEMA_F int
+ldapschema_compar_values(
+         const void * ap,
+         const void * bp );
+
+#endif
 
 LDAPSCHEMA_END_C_DECLS
 #endif /* end of header */
