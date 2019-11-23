@@ -394,6 +394,26 @@ int ldapschema_insert(LDAPSchema * lsd, void *** listp, size_t * lenp, void * ob
    return(LDAPSCHEMA_SUCCESS);
 }
 
+void ldapschema_memfree(void * p)
+{
+   if (!(p))
+      return;
+   free(p);
+   return;
+}
+
+
+void ldapschema_memvfree(void ** v)
+{
+   size_t idx;
+   if (!(v))
+      return;
+   for(idx = 0; ((v[idx])); idx++)
+      free(v[idx]);
+   free(v);
+   return;
+}
+
 
 void ldapschema_model_free(LDAPSchemaModel * model)
 {

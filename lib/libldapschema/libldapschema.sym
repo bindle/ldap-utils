@@ -78,6 +78,8 @@ ldap_count_values
 ldap_count_values_len
 ldapschema_free
 ldapschema_initialize
+ldapschema_memfree
+ldapschema_memvfree
 ldapschema_value_free
 ldapschema_value_free_len
 # OID Specification functions

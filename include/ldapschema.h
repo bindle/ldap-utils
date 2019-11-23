@@ -289,6 +289,14 @@ ldapschema_initialize(
          LDAPSchema           ** lsdp );
 
 _LDAPSCHEMA_F void
+ldapschema_memfree(
+         void                  * p );
+
+_LDAPSCHEMA_F void
+ldapschema_memvfree(
+         void                 ** v );
+
+_LDAPSCHEMA_F void
 ldapschema_value_free(
          char                 ** vals );
 
