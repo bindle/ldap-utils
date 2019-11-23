@@ -69,6 +69,10 @@ ldapschema_append(
          size_t                * lenp,
          void                  * obj );
 
+LDAPSchemaCur
+ldapschema_curalloc(
+         LDAPSchema            * lsd );
+
 void
 ldapschema_objectclass_free(
          LDAPSchemaObjectclass * objectclass );
@@ -76,6 +80,10 @@ ldapschema_objectclass_free(
 LDAPSchemaObjectclass *
 ldapschema_objectclass_initialize(
          LDAPSchema            * lsd );
+
+char **
+ldapschema_value_dup(
+         char                 ** vals );
 
 
 #endif /* end of header file */

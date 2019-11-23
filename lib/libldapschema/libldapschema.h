@@ -90,6 +90,13 @@ struct ldap_schema
 };
 
 
+/// tracks progress of queries
+struct ldapschema_cursor
+{
+   size_t                                 cursor;
+};
+
+
 /// LDAP schema extension
 struct ldap_schema_extension
 {
@@ -182,6 +189,12 @@ struct ldap_schema_syntax
 {
    LDAPSchemaModel                        model;
    regex_t                                re;
+};
+
+
+struct ldap_schema_matchingrule
+{
+   LDAPSchemaModel                        model;
 };
 
 

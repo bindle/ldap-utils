@@ -62,7 +62,7 @@
 #pragma mark - Prototypes
 
 LDAPSchemaAlias *
-ldapschema_get_alias(
+ldapschema_find_alias(
          LDAPSchema               * lsd,
          const char               * alias,
          LDAPSchemaAlias         ** list,

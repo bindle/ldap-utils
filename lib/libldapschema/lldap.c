@@ -177,7 +177,7 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
             continue;
          if (!(attr->sup_name))
             continue;
-         if ((alias = ldapschema_get_alias(lsd, attr->sup_name, lsd->attrs, lsd->attrs_len)) == NULL)
+         if ((alias = ldapschema_find_alias(lsd, attr->sup_name, lsd->attrs, lsd->attrs_len)) == NULL)
          {
             ldapschema_schema_err(lsd, &attr->model, "specified invalid superior '%s'", attr->sup_name);
             continue;
@@ -224,7 +224,7 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
             continue;
          if (!(objcls->sup_name))
             continue;
-         if ((alias = ldapschema_get_alias(lsd, objcls->sup_name, lsd->objclses, lsd->objclses_len)) == NULL)
+         if ((alias = ldapschema_find_alias(lsd, objcls->sup_name, lsd->objclses, lsd->objclses_len)) == NULL)
          {
             ldapschema_schema_err(lsd, &objcls->model, "specified invalid superior '%s'", objcls->sup_name);
             continue;

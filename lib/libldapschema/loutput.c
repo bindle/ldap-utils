@@ -143,6 +143,14 @@ void ldapschema_print_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeType *
    };
    printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "usage:", str);
 
+   if ((attr->syntax))
+   {
+      if ((attr->syntax->model.desc))
+         printf("%*s%-*s %s  ( %s )\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "syntax:", attr->syntax->model.oid, attr->syntax->model.desc);
+      else
+         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "syntax:", attr->syntax->model.oid);
+   };
+
    if ((sup = attr->sup) != NULL)
    {
       printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "superior(s):", (((sup->names))?sup->names[0]:sup->model.oid) );
@@ -539,7 +547,7 @@ void ldapschema_print_objectclasses( LDAPSchema * lsd )
 }
 
 
-void ldapschema_print_syntax(LDAPSchema * lsd, LDAPSchemaSyntax * syntax)
+void ldapschema_print_ldapsyntax(LDAPSchema * lsd, LDAPSchemaSyntax * syntax)
 {
    assert(lsd    != NULL);
    assert(syntax != NULL);
@@ -550,7 +558,7 @@ void ldapschema_print_syntax(LDAPSchema * lsd, LDAPSchemaSyntax * syntax)
 }
 
 
-void ldapschema_print_syntaxes( LDAPSchema * lsd )
+void ldapschema_print_ldapsyntaxes( LDAPSchema * lsd )
 {
    size_t x;
    assert(lsd != NULL);
@@ -558,7 +566,7 @@ void ldapschema_print_syntaxes( LDAPSchema * lsd )
    {
       if (lsd->oids[x].model->type == LDAPSCHEMA_SYNTAX)
       {
-         ldapschema_print_syntax(lsd, lsd->oids[x].syntax);
+         ldapschema_print_ldapsyntax(lsd, lsd->oids[x].syntax);
          printf("\n");
       };
    };

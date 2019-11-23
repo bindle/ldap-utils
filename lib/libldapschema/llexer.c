@@ -1107,7 +1107,7 @@ int ldapschema_parse_objectclass_attrs(LDAPSchema * lsd, const char * field,
    // adds attribute to objectclass and objectclass to attribute
    for(idx = 0; idx < attrnames_len; idx++)
    {
-      if ((alias = ldapschema_get_alias(lsd, attrnames[idx], lsd->attrs, lsd->attrs_len)) == NULL)
+      if ((alias = ldapschema_find_alias(lsd, attrnames[idx], lsd->attrs, lsd->attrs_len)) == NULL)
       {
          ldapschema_schema_err(lsd,  &objcls->model, "'%s' contains invalid attributeType '%s'", field, attrnames[idx]);
          lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR;

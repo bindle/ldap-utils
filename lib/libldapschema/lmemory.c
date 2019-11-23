@@ -139,6 +139,27 @@ int ldapschema_count_values_len( struct berval ** vals )
 }
 
 
+void ldapschema_curfree(LDAPSchemaCur cur)
+{
+   assert(cur != NULL);
+   free(cur);
+   return;
+}
+
+
+LDAPSchemaCur ldapschema_curalloc(LDAPSchema * lsd)
+{
+   LDAPSchemaCur cur;
+   if ((cur = malloc(sizeof(LDAPSchemaCur))) == NULL)
+   {
+      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+      return(NULL);
+   };
+   bzero(cur, sizeof(struct ldapschema_cursor));
+   return(cur);
+}
+
+
 void ldapschema_ext_free(LDAPSchemaExtension * ext)
 {
    if (!(ext))
@@ -623,6 +644,32 @@ char ** ldapschema_value_add( char ** vals, const char * val, int * countp)
       *countp = count;
 
    return(vals);
+}
+
+char ** ldapschema_value_dup(char ** vals)
+{
+   size_t      len;
+   size_t      idx;
+   char     ** dups;
+
+   assert(vals != NULL);
+
+   for(len = 0; ((vals[len])); len++);
+
+   if ((dups = malloc(sizeof(char *)*(len+1))) == NULL)
+      return(NULL);
+
+   for(idx = 0; (idx < len); idx++)
+   {
+      if ((dups[idx] = strdup(vals[idx])) == NULL)
+      {
+         ldapschema_value_free(dups);
+         return(NULL);
+      };
+   };
+   dups[idx] = NULL;
+
+   return(dups);
 }
 
 

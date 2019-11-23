@@ -51,6 +51,7 @@
 
 #include "lsort.h"
 #include "lspec.h"
+#include "lmemory.h"
 
 
 //////////////////
@@ -68,7 +69,63 @@
 /////////////////
 #pragma mark - Functions
 
-LDAPSchemaAlias * ldapschema_get_alias(LDAPSchema * lsd,
+//-----------------------//
+// ldapschema_count_XXXX //
+//-----------------------//
+#pragma mark ldapschema_count_XXXX functions
+
+size_t ldapschema_count_attributetypes(LDAPSchema * lsd)
+{
+   size_t idx;
+   size_t cnt;
+   assert(lsd != NULL);
+   cnt = 0;
+   for(idx = 0; (idx < lsd->oids_len); idx++)
+      if (lsd->oids[idx].model->type == LDAPSCHEMA_ATTRIBUTETYPE)
+         cnt++;
+   return(cnt);
+}
+
+
+size_t ldapschema_count_ldapsyntaxes(LDAPSchema * lsd)
+{
+   size_t idx;
+   size_t cnt;
+   assert(lsd != NULL);
+   cnt = 0;
+   for(idx = 0; (idx < lsd->oids_len); idx++)
+      if (lsd->oids[idx].model->type == LDAPSCHEMA_SYNTAX)
+         cnt++;
+   return(cnt);
+}
+
+
+size_t ldapschema_count_matchingrules(LDAPSchema * lsd)
+{
+   assert(lsd != NULL);
+   return(0);
+}
+
+
+size_t ldapschema_count_objectclasses(LDAPSchema * lsd)
+{
+   size_t idx;
+   size_t cnt;
+   assert(lsd != NULL);
+   cnt = 0;
+   for(idx = 0; (idx < lsd->oids_len); idx++)
+      if (lsd->oids[idx].model->type == LDAPSCHEMA_OBJECTCLASS)
+         cnt++;
+   return(cnt);
+}
+
+
+//----------------------//
+// ldapschema_find_XXXX //
+//----------------------//
+#pragma mark ldapschema_find_XXXX functions
+
+LDAPSchemaAlias * ldapschema_find_alias(LDAPSchema * lsd,
    const char * alias, LDAPSchemaAlias ** list, size_t list_len)
 {
    size_t         low;
@@ -116,7 +173,7 @@ LDAPSchemaAlias * ldapschema_get_alias(LDAPSchema * lsd,
 ///            attributetype.  NULL is returned if the attributeType does not
 ///            exist.
 /// @see       ldapschema_errno, ldapschema_value_free
-const LDAPSchemaAttributeType * ldapschema_get_attributetype(LDAPSchema * lsd,
+LDAPSchemaAttributeType * ldapschema_find_attributetype(LDAPSchema * lsd,
    const char * name)
 {
    const LDAPSchemaAlias   * alias;
@@ -124,7 +181,7 @@ const LDAPSchemaAttributeType * ldapschema_get_attributetype(LDAPSchema * lsd,
    assert(lsd     != NULL);
    assert(name    != NULL);
 
-   if ((alias = ldapschema_get_alias(lsd, name, lsd->attrs, lsd->attrs_len)) == NULL)
+   if ((alias = ldapschema_find_alias(lsd, name, lsd->attrs, lsd->attrs_len)) == NULL)
       return(NULL);
 
    return(alias->attributetype);
@@ -139,7 +196,7 @@ const LDAPSchemaAttributeType * ldapschema_get_attributetype(LDAPSchema * lsd,
 ///            attributetype.  NULL is returned if the attributeType does not
 ///            exist.
 /// @see       ldapschema_errno, ldapschema_value_free
-const LDAPSchemaSyntax * ldapschema_get_ldapsyntax(LDAPSchema * lsd,
+LDAPSchemaSyntax * ldapschema_find_ldapsyntax(LDAPSchema * lsd,
    const char * name)
 {
    const LDAPSchemaAlias   * alias;
@@ -147,11 +204,342 @@ const LDAPSchemaSyntax * ldapschema_get_ldapsyntax(LDAPSchema * lsd,
    assert(lsd     != NULL);
    assert(name    != NULL);
 
-   if ((alias = ldapschema_get_alias(lsd, name, lsd->syntaxes, lsd->syntaxes_len)) == NULL)
+   if ((alias = ldapschema_find_alias(lsd, name, lsd->syntaxes, lsd->syntaxes_len)) == NULL)
       return(NULL);
 
    return(alias->syntax);
 }
 
+
+LDAPSchemaMatchingRule * ldapschema_find_matchingrule(LDAPSchema * lsd,
+   const char * name)
+{
+   assert(lsd     != NULL);
+   assert(name    != NULL);
+   return(NULL);
+}
+
+
+LDAPSchemaObjectclass * ldapschema_find_objectclass(LDAPSchema * lsd,
+   const char * name)
+{
+   const LDAPSchemaAlias   * alias;
+
+   assert(lsd     != NULL);
+   assert(name    != NULL);
+
+   if ((alias = ldapschema_find_alias(lsd, name, lsd->objclses, lsd->objclses_len)) == NULL)
+      return(NULL);
+
+   return(alias->objectclass);
+}
+
+
+//-----------------------//
+// ldapschema_first_XXXX //
+//-----------------------//
+#pragma mark ldapschema_first_XXXX functions
+
+const LDAPSchemaAttributeType * ldapschema_first_attributetype(LDAPSchema * lsd,
+   LDAPSchemaCur * curp)
+{
+   LDAPSchemaCur cur;
+
+   assert(lsd  != NULL);
+   assert(curp != NULL);
+
+   if ((cur = ldapschema_curalloc(lsd)) == NULL)
+      return(NULL);
+   *curp = cur;
+
+   for(cur->cursor = 0; (cur->cursor < lsd->oids_len); cur->cursor++)
+      if (lsd->oids[cur->cursor].model->type == LDAPSCHEMA_ATTRIBUTETYPE)
+         return(lsd->oids[cur->cursor].attributetype);
+
+   return(NULL);
+}
+
+
+const LDAPSchemaSyntax * ldapschema_first_ldapsyntax(LDAPSchema * lsd,
+   LDAPSchemaCur * curp)
+{
+   LDAPSchemaCur cur;
+
+   assert(lsd  != NULL);
+   assert(curp != NULL);
+
+   if ((cur = ldapschema_curalloc(lsd)) == NULL)
+      return(NULL);
+   *curp = cur;
+
+   for(cur->cursor = 0; (cur->cursor < lsd->oids_len); cur->cursor++)
+      if (lsd->oids[cur->cursor].model->type == LDAPSCHEMA_SYNTAX)
+         return(lsd->oids[cur->cursor].syntax);
+
+   return(NULL);
+}
+
+
+const LDAPSchemaMatchingRule * ldapschema_first_matchingrule(LDAPSchema * lsd,
+   LDAPSchemaCur * curp)
+{
+   LDAPSchemaCur cur;
+
+   assert(lsd  != NULL);
+   assert(curp != NULL);
+
+   if ((cur = ldapschema_curalloc(lsd)) == NULL)
+      return(NULL);
+   *curp = cur;
+
+   return(NULL);
+}
+
+
+const LDAPSchemaObjectclass * ldapschema_first_objectclass(LDAPSchema * lsd,
+   LDAPSchemaCur * curp)
+{
+   LDAPSchemaCur cur;
+
+   assert(lsd  != NULL);
+   assert(curp != NULL);
+
+   if ((cur = ldapschema_curalloc(lsd)) == NULL)
+      return(NULL);
+   *curp = cur;
+
+   for(cur->cursor = 0; (cur->cursor < lsd->oids_len); cur->cursor++)
+      if (lsd->oids[cur->cursor].model->type == LDAPSCHEMA_OBJECTCLASS)
+         return(lsd->oids[cur->cursor].objectclass);
+
+   return(NULL);
+}
+
+
+//--------------------------//
+// ldapschema_get_info_XXXX //
+//--------------------------//
+#pragma mark ldapschema_get_info_XXXX functions
+
+int ldapschema_get_info_attributetype(LDAPSchema * lsd,
+   const LDAPSchemaAttributeType * attr, int field, void * outvalue)
+{
+   int       * oi;   // output int (flags/types/etc)
+   char    *** oa;   // output char ** (array of strings)
+
+   assert(lsd        != NULL);
+   assert(attr       != NULL);
+   assert(field      != 0);
+   assert(outvalue   != 0);
+
+   oi = outvalue;
+   oa = outvalue;
+
+   switch(field)
+   {
+      // int values (flags/types/etc)
+      case LDAPSCHEMA_FLD_USAGE: *oi = (int)attr->usage;   return(0);
+
+      // char * values (strings)
+
+      // char ** values (arrays of strings)
+      case LDAPSCHEMA_FLD_NAME:  if ((*oa = ldapschema_value_dup(attr->names)) == NULL) return(LDAPSCHEMA_NO_MEMORY); return(0);
+
+      // misc
+      case LDAPSCHEMA_FLD_SUPERIOR: *(LDAPSchemaAttributeType **)outvalue = attr->sup; return(0);
+
+      default:
+      break;
+   };
+
+   return(ldapschema_get_info_model(lsd, &attr->model, field, outvalue));
+}
+
+
+int ldapschema_get_info_ldapsyntax(LDAPSchema * lsd,
+   const LDAPSchemaSyntax * syntax, int field, void * outvalue )
+{
+   assert(lsd        != NULL);
+   assert(syntax     != NULL);
+   assert(field      != 0);
+   assert(outvalue   != 0);
+   return(ldapschema_get_info_model(lsd, &syntax->model, field, outvalue));
+}
+
+
+int ldapschema_get_info_matchingrule(LDAPSchema * lsd,
+   const LDAPSchemaMatchingRule * matchingrule, int field, void * outvalue )
+{
+   assert(lsd           != NULL);
+   assert(matchingrule  != NULL);
+   assert(field         != 0);
+   assert(outvalue      != 0);
+   return(ldapschema_get_info_model(lsd, &matchingrule->model, field, outvalue));
+}
+
+
+int ldapschema_get_info_model(LDAPSchema * lsd,
+   const LDAPSchemaModel * mod, int field, void * outvalue )
+{
+   int       * oi;   // output int
+   char     ** os;   // output char * (string)
+
+   assert(lsd        != NULL);
+   assert(mod        != NULL);
+   assert(field      != 0);
+   assert(outvalue   != 0);
+
+   oi = outvalue;
+   os = outvalue;
+
+   switch(field)
+   {
+      // int values (flags/types/etc)
+      case LDAPSCHEMA_FLD_TYPE:  *oi = (int)mod->type;     return(0);
+      case LDAPSCHEMA_FLD_FLAGS: *oi = (int)mod->flags;    return(0);
+
+      // char * values (strings)
+      case LDAPSCHEMA_FLD_OID:  if ((*os = strdup(mod->oid))         == NULL) return(LDAPSCHEMA_NO_MEMORY); return(0);
+      case LDAPSCHEMA_FLD_DESC: if ((*os = strdup(mod->desc))        == NULL) return(LDAPSCHEMA_NO_MEMORY); return(0);
+      case LDAPSCHEMA_FLD_DEF:  if ((*os = strdup(mod->definition))  == NULL) return(LDAPSCHEMA_NO_MEMORY); return(0);
+
+      // char ** values (arrays of strings)
+
+      default:
+      break;
+   };
+
+   return(LDAPSCHEMA_UNKNOWN_FIELD);
+}
+
+
+int ldapschema_get_info_objectclass(LDAPSchema * lsd,
+   const LDAPSchemaObjectclass * objcls, int field, void * outvalue )
+{
+   int       * oi;   // output int (flags/types/etc)
+   char    *** oa;   // output char ** (array of strings)
+
+   assert(lsd        != NULL);
+   assert(objcls     != NULL);
+   assert(field      != 0);
+   assert(outvalue   != 0);
+
+   oi = outvalue;
+   oa = outvalue;
+
+   switch(field)
+   {
+      // int values (flags/types/etc)
+      case LDAPSCHEMA_FLD_KIND: *oi = (int)objcls->kind;   return(0);
+
+      // char * values (strings)
+
+      // char ** values (arrays of strings)
+      case LDAPSCHEMA_FLD_NAME:  if ((*oa = ldapschema_value_dup(objcls->names)) == NULL) return(LDAPSCHEMA_NO_MEMORY); return(0);
+
+      // misc
+      case LDAPSCHEMA_FLD_SUPERIOR: *(LDAPSchemaObjectclass **)outvalue = objcls->sup; return(0);
+
+      default:
+      break;
+   };
+
+   return(ldapschema_get_info_model(lsd, &objcls->model, field, outvalue));
+}
+
+
+//----------------------//
+// ldapschema_model_XXXX //
+//----------------------//
+#pragma mark ldapschema_model_XXXX functions
+
+const LDAPSchemaModel * ldapschema_model_attributetype(
+   const LDAPSchemaAttributeType * attr )
+{
+   assert(attr != NULL);
+   return(&attr->model);
+}
+
+const LDAPSchemaModel * ldapschema_model_ldapsyntax(
+   const LDAPSchemaSyntax * syntax )
+{
+   assert(syntax != NULL);
+   return(&syntax->model);
+}
+
+const LDAPSchemaModel * ldapschema_model_matchingrule(
+   const LDAPSchemaMatchingRule * matchingrule )
+{
+   assert(matchingrule != NULL);
+   return(&matchingrule->model);
+}
+
+const LDAPSchemaModel * ldapschema_model_objectclass(
+   const LDAPSchemaObjectclass * objcls )
+{
+   assert(objcls != NULL);
+   return(&objcls->model);
+}
+
+
+//----------------------//
+// ldapschema_next_XXXX //
+//----------------------//
+#pragma mark ldapschema_next_XXXX functions
+
+const LDAPSchemaAttributeType * ldapschema_next_attributetype(LDAPSchema * lsd,
+   LDAPSchemaCur cur)
+{
+   assert(lsd != NULL);
+   assert(cur != NULL);
+
+   for(cur->cursor++; (cur->cursor < lsd->oids_len); cur->cursor++)
+      if (lsd->oids[cur->cursor].model->type == LDAPSCHEMA_ATTRIBUTETYPE)
+         return(lsd->oids[cur->cursor].attributetype);
+
+   return(NULL);
+}
+
+
+const LDAPSchemaSyntax * ldapschema_next_ldapsyntax(LDAPSchema * lsd,
+   LDAPSchemaCur cur)
+{
+   assert(lsd != NULL);
+   assert(cur != NULL);
+
+   for(cur->cursor++; (cur->cursor < lsd->oids_len); cur->cursor++)
+      if (lsd->oids[cur->cursor].model->type == LDAPSCHEMA_SYNTAX)
+         return(lsd->oids[cur->cursor].syntax);
+
+   return(NULL);
+}
+
+
+const LDAPSchemaMatchingRule * ldapschema_next_matchingrule(LDAPSchema * lsd,
+   LDAPSchemaCur cur)
+{
+   assert(lsd != NULL);
+   assert(cur != NULL);
+
+   for(cur->cursor++; (cur->cursor < lsd->oids_len); cur->cursor++)
+      if (lsd->oids[cur->cursor].model->type == LDAPSCHEMA_MATCHINGRULE)
+         return(lsd->oids[cur->cursor].matchingrule);
+
+   return(NULL);
+}
+
+
+const LDAPSchemaObjectclass * ldapschema_next_objectclass(LDAPSchema * lsd,
+   LDAPSchemaCur cur)
+{
+   assert(lsd != NULL);
+   assert(cur != NULL);
+
+   for(cur->cursor++; (cur->cursor < lsd->oids_len); cur->cursor++)
+      if (lsd->oids[cur->cursor].model->type == LDAPSCHEMA_OBJECTCLASS)
+         return(lsd->oids[cur->cursor].objectclass);
+
+   return(NULL);
+}
 
 /* end of source file */
