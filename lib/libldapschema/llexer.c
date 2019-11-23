@@ -476,6 +476,7 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
    int64_t                       pos;
    int                           argc;
    int                           err;
+   char                        * stridx;
    LDAPSchemaAttributeType     * attr;
    LDAPSchemaAlias             * alias;
 
@@ -626,7 +627,13 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
       else if (!(strcasecmp(argv[pos], "SYNTAX")))
       {
          pos++;
-         attr->syntax = ldapschema_oid(lsd, argv[pos], LDAPSCHEMA_SYNTAX);
+         if ((stridx = index(argv[pos], '{')) != NULL)
+         {
+            stridx[0] = '\0';
+            attr->min_upper = strtoull(&stridx[1], NULL, 10);
+         };
+         if ((attr->syntax = ldapschema_oid(lsd, argv[pos], LDAPSCHEMA_SYNTAX)) != NULL)
+            attr->model.flags |= attr->syntax->model.flags;
       }
 
       // inteprets attributeType SINGLE-VALUE
@@ -1259,7 +1266,11 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
    ldapschema_value_free(argv);
 
    // adds specification to syntax
-   syntax->model.spec = ldapschema_spec_search(syntax->model.oid);
+   if ((syntax->model.spec = ldapschema_spec_search(syntax->model.oid)) != NULL)
+   {
+      syntax->model.flags |= syntax->model.spec->flags;
+      syntax->data_class   = syntax->model.spec->subtype;
+   };
 
    // compiles regular expression, if available
    if ( ((syntax->model.spec)) && ((syntax->model.spec->re_posix)) )

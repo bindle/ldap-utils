@@ -145,7 +145,7 @@ struct ldap_schema_attributetype
    size_t                                 names_len;
    size_t                                 allowed_by_len;
    size_t                                 required_by_len;
-   uint64_t                               min_upper;
+   size_t                                 min_upper;
    LDAPSchemaAttributeType              * sup;
    char                                 * sup_name;
    char                                ** names;
@@ -188,6 +188,7 @@ union ldap_schema_pointer
 struct ldap_schema_syntax
 {
    LDAPSchemaModel                        model;
+   size_t                                 data_class;
    regex_t                                re;
 };
 

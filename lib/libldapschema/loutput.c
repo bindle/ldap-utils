@@ -103,6 +103,16 @@ ldapschema_print_multiline(
          const char            * field,
          const char            * input );
 
+void
+ldapschema_print_ldapsyntax_class(
+         LDAPSchema            * lsd,
+         size_t                  classid );
+
+void
+ldapschema_print_spec(
+         LDAPSchema            * lsd,
+         const LDAPSchemaSpec  * spec );
+
 
 /////////////////
 //             //
@@ -116,6 +126,7 @@ void ldapschema_print_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeType *
    size_t                     x;
    const char               * str;
    LDAPSchemaAttributeType  * sup;
+   size_t                     flags;
 
    assert(lsd  != NULL);
    assert(attr != NULL);
@@ -143,14 +154,6 @@ void ldapschema_print_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeType *
    };
    printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "usage:", str);
 
-   if ((attr->syntax))
-   {
-      if ((attr->syntax->model.desc))
-         printf("%*s%-*s %s  ( %s )\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "syntax:", attr->syntax->model.oid, attr->syntax->model.desc);
-      else
-         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "syntax:", attr->syntax->model.oid);
-   };
-
    if ((sup = attr->sup) != NULL)
    {
       printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "superior(s):", (((sup->names))?sup->names[0]:sup->model.oid) );
@@ -158,19 +161,31 @@ void ldapschema_print_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeType *
          printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", (((sup->names))?sup->names[0]:sup->model.oid));
    };
 
-   ldapschema_print_attributetype_objcls(lsd, "required by:", attr->required_by, attr->required_by_len);
-   ldapschema_print_attributetype_objcls(lsd, "allowed by:",  attr->allowed_by,  attr->allowed_by_len);
+   ldapschema_print_spec(lsd, attr->model.spec);
 
    if ((attr->syntax))
    {
-      printf("%*s%-*s %s (%s)\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "syntax:", attr->syntax->model.oid, attr->syntax->model.desc);
-      if ((attr->syntax->model.spec))
+      if ((attr->syntax->model.desc))
+         printf("%*s%-*s %s  ( %s )\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "syntax:", attr->syntax->model.oid, attr->syntax->model.desc);
+      else
+         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "syntax:", attr->syntax->model.oid);
+      if ((attr->min_upper))
+         printf("%*s%-*s %zu\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "min upper bound:", attr->min_upper);
+      ldapschema_print_ldapsyntax_class(lsd, attr->syntax->data_class);
+      if ( ((attr->syntax->model.spec)) && ((attr->syntax->model.spec->abnf)) )
       {
+         flags = (size_t)attr->syntax->model.spec->flags;
+         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "common abnf:",  ((flags & LDAPSCHEMA_O_COMMON_ABNF) != 0) ? "yes" : "no");
+         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "schema abnf:",  ((flags & LDAPSCHEMA_O_SCHEMA_ABNF) != 0) ? "yes" : "no");
          ldapschema_print_multiline("abnf:", attr->syntax->model.spec->abnf);
       };
+   } else if ((attr->min_upper))
+   {
+      printf("%*s%-*s %zu\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "min upper bound:", attr->min_upper);
    };
-
    ldapschema_print_model_ext(lsd, &attr->model);
+   ldapschema_print_attributetype_objcls(lsd, "required by:", attr->required_by, attr->required_by_len);
+   ldapschema_print_attributetype_objcls(lsd, "allowed by:",  attr->allowed_by,  attr->allowed_by_len);
    ldapschema_print_model_def(lsd, &attr->model);
 
    return;
@@ -552,7 +567,40 @@ void ldapschema_print_ldapsyntax(LDAPSchema * lsd, LDAPSchemaSyntax * syntax)
    assert(lsd    != NULL);
    assert(syntax != NULL);
 
-   ldapschema_print_model(lsd, &syntax->model);
+   ldapschema_print_model_type(lsd, &syntax->model);
+   ldapschema_print_multiline("description:", syntax->model.desc);
+   ldapschema_print_ldapsyntax_class(lsd, syntax->data_class);
+   ldapschema_print_model_flags(lsd, &syntax->model);
+   ldapschema_print_model_ext(lsd, &syntax->model);
+   ldapschema_print_spec(lsd, syntax->model.spec);
+   ldapschema_print_model_def(lsd, &syntax->model);
+
+   return;
+}
+
+
+void ldapschema_print_ldapsyntax_class(LDAPSchema * lsd, size_t classid )
+{
+   const char * data_class;
+
+   assert(lsd != NULL);
+
+   switch(classid)
+   {
+      case LDAPSCHEMA_CLASS_ASCII:           data_class = "ASCII";         break;
+      case LDAPSCHEMA_CLASS_UTF8:            data_class = "UTF8";          break;
+      case LDAPSCHEMA_CLASS_INTEGER:         data_class = "integer";       break;
+      case LDAPSCHEMA_CLASS_UNSIGNED:        data_class = "unsigned";      break;
+      case LDAPSCHEMA_CLASS_BOOLEAN:         data_class = "boolean";       break;
+      case LDAPSCHEMA_CLASS_DATA:            data_class = "binary data";   break;
+      case LDAPSCHEMA_CLASS_IMAGE:           data_class = "image";         break;
+      case LDAPSCHEMA_CLASS_AUDIO:           data_class = "audio";         break;
+      case LDAPSCHEMA_CLASS_UTF8_MULTILINE:  data_class = "audio";         break;
+      default:
+      return;
+   };
+
+   printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "data class:", data_class);
 
    return;
 }
@@ -570,6 +618,22 @@ void ldapschema_print_ldapsyntaxes( LDAPSchema * lsd )
          printf("\n");
       };
    };
+   return;
+}
+
+
+void ldapschema_print_spec( LDAPSchema * lsd, const LDAPSchemaSpec * spec)
+{
+   assert(lsd != NULL);
+   if (!(spec))
+      return;
+   ldapschema_print_multiline("spec name:",     spec->spec);
+   ldapschema_print_multiline("spec chapter:",  spec->spec_section);
+   ldapschema_print_multiline("spec vendor:",   spec->spec_vendor);
+   ldapschema_print_multiline("spec source:",   spec->spec_source);
+   ldapschema_print_multiline("spec text:",     spec->spec_text);
+   ldapschema_print_multiline("spec notes:",    spec->notes);
+   ldapschema_print_multiline("abnf:",          spec->abnf);
    return;
 }
 
