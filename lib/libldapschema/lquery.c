@@ -346,7 +346,8 @@ int ldapschema_get_info_attributetype(LDAPSchema * lsd,
       case LDAPSCHEMA_FLD_NAME:  if ((*oa = ldapschema_value_dup(attr->names)) == NULL) return(LDAPSCHEMA_NO_MEMORY); return(0);
 
       // misc
-      case LDAPSCHEMA_FLD_SUPERIOR: *(LDAPSchemaAttributeType **)outvalue = attr->sup; return(0);
+      case LDAPSCHEMA_FLD_SUPERIOR: *(LDAPSchemaAttributeType **)outvalue = attr->sup;    return(0);
+      case LDAPSCHEMA_FLD_SYNTAX:   *(LDAPSchemaSyntax **)outvalue        = attr->syntax; return(0);
 
       default:
       break;

@@ -200,6 +200,7 @@
 #define LDAPSCHEMA_FLD_USAGE                          22
 #define LDAPSCHEMA_FLD_KIND                           23
 #define LDAPSCHEMA_FLD_SUPERIOR                       24
+#define LDAPSCHEMA_FLD_SYNTAX                         25
 
 
 /////////////////

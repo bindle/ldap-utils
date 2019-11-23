@@ -555,6 +555,8 @@ int my_run_list(MyConfig * cnf)
    char                              * oid;
    char                              * desc;
    char                             ** names;
+   char                                buff[256];
+   size_t                              len;
 
    if ((cnf->types & MY_OBJ_SYNTAX) != 0)
    {
@@ -564,7 +566,7 @@ int my_run_list(MyConfig * cnf)
       {
          ldapschema_get_info_ldapsyntax(cnf->lsd, syntax, LDAPSCHEMA_FLD_OID,  &oid);
          ldapschema_get_info_ldapsyntax(cnf->lsd, syntax, LDAPSCHEMA_FLD_DESC, &desc);
-         printf("ldapsyntax: %s   DESC ( %s )\n", oid, desc);
+         printf("%-15s %-35s DESC ( %s )\n", "ldapsyntax:", oid, desc);
          ldapschema_memfree(oid);
          ldapschema_memfree(desc);
          syntax = ldapschema_next_ldapsyntax(cnf->lsd, cur);
@@ -580,12 +582,28 @@ int my_run_list(MyConfig * cnf)
       {
          ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_OID,  &oid);
          ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_NAME, &names);
-         printf("attributeType: %s  NAME ( %s", oid, names[0]);
+         ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SYNTAX, &syntax);
+         snprintf(buff, sizeof(buff), "( %s", names[0]);
          for(idx = 1; ((names[idx])); idx++)
-            printf(" $ %s", names[idx]);
-         printf(" )\n");
+         {
+            len = strlen(buff);
+            snprintf(&buff[len], (sizeof(buff)-len-2), " $ %s", names[idx]);
+         };
+         len = strlen(buff);
+         snprintf(&buff[len], (sizeof(buff)-len-2), " )");
+         if ((syntax))
+            printf("%-15s %-35s NAME %-30s", "attributeType:", oid, buff);
+         else
+            printf("%-15s %-35s NAME %s", "attributeType:", oid, buff);
          ldapschema_memfree(oid);
          ldapschema_memfree(names);
+         if ((syntax))
+         {
+            ldapschema_get_info_ldapsyntax(cnf->lsd, syntax, LDAPSCHEMA_FLD_DESC, &desc);
+            printf("   [ %s ]", desc);
+            ldapschema_memfree(desc);
+         };
+         printf("\n");
          attr = ldapschema_next_attributetype(cnf->lsd, cur);
       };
       ldapschema_curfree(cur);
@@ -599,7 +617,7 @@ int my_run_list(MyConfig * cnf)
       {
          ldapschema_get_info_objectclass(cnf->lsd, objcls, LDAPSCHEMA_FLD_OID,  &oid);
          ldapschema_get_info_objectclass(cnf->lsd, objcls, LDAPSCHEMA_FLD_NAME, &names);
-         printf("objectClass: %s  NAME ( %s", oid, names[0]);
+         printf("%-15s %-35s NAME ( %s", "objectClass:", oid, names[0]);
          for(idx = 1; ((names[idx])); idx++)
             printf(" $ %s", names[idx]);
          printf(" )\n");
