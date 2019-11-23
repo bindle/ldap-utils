@@ -104,7 +104,6 @@ int ldapschema_schema_err(LDAPSchema * lsd, LDAPSchemaModel * mod, const char * 
    va_list     args;
    char      * str;
    const char  * type;
-   const char  * def;
    size_t        len;
 
    assert(lsd != NULL);
@@ -120,7 +119,6 @@ int ldapschema_schema_err(LDAPSchema * lsd, LDAPSchemaModel * mod, const char * 
    };
 
    // determine object type
-   def = NULL;
    if ((mod))
    {
       switch(mod->type)
@@ -131,7 +129,6 @@ int ldapschema_schema_err(LDAPSchema * lsd, LDAPSchemaModel * mod, const char * 
          case LDAPSCHEMA_MATCHINGRULE:    type = "matchingRules";    break;
          default:                         type = "unknown";          break;
       };
-      def = mod->definition;
    } else
    {
       type = "";
