@@ -129,7 +129,7 @@ int ldapschema_spec_field(const LDAPSchemaSpec * s, int field, void * outvalue)
       default:
       break;
    };
-   return(-1);
+   return(LDAPSCHEMA_UNKNOWN_FIELD);
 }
 
 

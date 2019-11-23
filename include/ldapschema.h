@@ -113,6 +113,7 @@
 #define LDAPSCHEMA_SUCCESS                            0x00     ///< operation was successful
 #define LDAPSCHEMA_SCHEMA_ERROR                       0x7001   ///< schema error
 #define LDAPSCHEMA_DUPLICATE                          0x7002   ///< duplicate defintion
+#define LDAPSCHEMA_UNKNOWN_FIELD                      0x7003   ///< unknown field
 #define LDAPSCHEMA_NO_MEMORY                          (-10)    ///< an memory allocation failed
 
 // model flags
