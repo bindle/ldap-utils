@@ -267,7 +267,75 @@ ldapinfo
 --------
 
 ldapinfo is a shell utilty which queries the LDAP server for server information and
-displays the information in human readble form.
+displays the information in human readable form.
+
+The following example uses a priviledged bind DN to obtain server stats:
+
+      $ ldapinfo -W
+      Enter LDAP Password:
+      Vendor name:                 OpenLDAP
+      Vendor version:              slapd 2.4.46 (Dec  5 2018 16:21:32)
+      LDAP version:                3
+      Subschema Subentry:          cn=Subschema
+      Configuration context:       cn=config
+      Monitoring context:          cn=Monitor
+
+      Schema:                      ldapSyntaxes: 32
+                                   matchingRules: 37
+                                   matchingRuleUse: 31
+                                   attributeTypes: 693
+                                   objectClasses: 145
+
+      Operations:                  Bind initiated: 529432; completed 529432
+                                   Unbind initiated: 378252; completed 378252
+                                   Search initiated: 3900266; completed 3900265
+                                   Compare initiated: 6254; completed 6254
+                                   Modify initiated: 0; completed 0
+                                   Modrdn initiated: 0; completed 0
+                                   Add initiated: 0; completed 0
+                                   Delete initiated: 1; completed 1
+                                   Abandon initiated: 174; completed 174
+                                   Extended initiated: 439445; completed 439445
+
+      Connections:                 Max File Descriptors: 1024
+                                   Total: 459982
+                                   Current: 143
+
+      Naming contexts:             cn=config (config)
+                                   dc=example,dc=org (mdb) [ memberof ppolicy refint syncprov ]
+                                   o=subscribers (mdb) [ memberof ppolicy refint syncprov ]
+                                   o=metadata (mdb) [ syncprov ]
+                                   o=registry (mdb) [ memberof ppolicy refint syncprov ]
+
+      Supported controls:          1.2.826.0.1.3344810.2.3 (Matched Values Control)
+                                   1.2.840.113556.1.4.319 (LDAP Simple Paged Results Control)
+                                   1.3.6.1.1.12 (Assertion Control)
+                                   1.3.6.1.1.13.1 (LDAP Pre-read Control)
+                                   1.3.6.1.1.13.2 (LDAP Post-read Control)
+                                   1.3.6.1.1.22 (LDAP Don't Use Copy Control)
+                                   1.3.6.1.4.1.4203.1.10.1 (Subentries)
+                                   1.3.6.1.4.1.4203.1.9.1.1 (LDAP Content Synchronization Control)
+                                   2.16.840.1.113730.3.4.18 (Proxy Authorization Control)
+                                   2.16.840.1.113730.3.4.2 (ManageDsaIT)
+
+      Supported extension:         1.3.6.1.1.8 (Cancel Operation)
+                                   1.3.6.1.4.1.1466.20037 (StartTLS)
+                                   1.3.6.1.4.1.4203.1.11.1 (Modify Password)
+                                   1.3.6.1.4.1.4203.1.11.3 (Who am I?)
+
+      Supported features:          1.3.6.1.1.14 (Modify-Increment)
+                                   1.3.6.1.4.1.4203.1.5.1 (All Op Attrs)
+                                   1.3.6.1.4.1.4203.1.5.2 (OC AD Lists)
+                                   1.3.6.1.4.1.4203.1.5.3 (True/False filters)
+                                   1.3.6.1.4.1.4203.1.5.4 (Language Tag Options)
+                                   1.3.6.1.4.1.4203.1.5.5 (Language Range Options)
+
+      Supported SASL mechanisms:   CRAM-MD5
+                                   DIGEST-MD5
+                                   LOGIN
+                                   OTP
+                                   PLAIN
+                                   SCRAM-SHA-1
 
 
 ldapschema
