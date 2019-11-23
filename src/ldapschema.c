@@ -90,6 +90,7 @@
 #define MY_SHORT_OPTIONS LDAPUTILS_OPTIONS_COMMON LDAPUTILS_OPTIONS_SEARCH "87:6:5:4:3"
 
 #define MY_EXIT_SCHEMAERR     2
+#define MY_EXIT_NOT_FOUND     3
 
 #define MY_OBJ_ATTR          0x01
 #define MY_OBJ_SYNTAX        0x02
@@ -452,6 +453,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
 
 int my_run_details(MyConfig * cnf)
 {
+   int                        found;
    size_t                     idx;
    LDAPSchemaSyntax         * syntax;
    LDAPSchemaAttributeType  * attr;
@@ -461,9 +463,12 @@ int my_run_details(MyConfig * cnf)
 
    for(idx = 0; ((cnf->args[idx])); idx++)
    {
+      found = 0;
+
       // look for matching ldapSyntax
       if ((syntax = ldapschema_find_ldapsyntax(cnf->lsd, cnf->args[idx])) != NULL)
       {
+         found++;
          ldapschema_print_ldapsyntax(cnf->lsd, syntax);
          printf("\n\n");
       };
@@ -471,6 +476,7 @@ int my_run_details(MyConfig * cnf)
       // look for matching attributeType
       if ((attr = ldapschema_find_attributetype(cnf->lsd, cnf->args[idx])) != NULL)
       {
+         found++;
          ldapschema_print_attributetype(cnf->lsd, attr);
          ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SUPERIOR, &attrsup);
          printf("\n\n");
@@ -486,6 +492,7 @@ int my_run_details(MyConfig * cnf)
       // look for matching attributeType
       if ((objcls = ldapschema_find_objectclass(cnf->lsd, cnf->args[idx])) != NULL)
       {
+         found++;
          ldapschema_print_objectclass(cnf->lsd, objcls);
          ldapschema_get_info_objectclass(cnf->lsd, objcls, LDAPSCHEMA_FLD_SUPERIOR, &objclssup);
          printf("\n\n");
@@ -496,6 +503,12 @@ int my_run_details(MyConfig * cnf)
             ldapschema_get_info_objectclass(cnf->lsd, objcls, LDAPSCHEMA_FLD_SUPERIOR, &objclssup);
             printf("\n\n");
          };
+      };
+
+      if (!(found))
+      {
+         fprintf(stderr, "%s: %s: object not found in schema\n", PROGRAM_NAME, cnf->args[idx]);
+         return(MY_EXIT_NOT_FOUND);
       };
    };
 
