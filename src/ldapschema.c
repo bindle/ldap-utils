@@ -128,12 +128,12 @@ struct my_config
 //             //
 /////////////////
 
-struct
+static struct
 {
    const char *   type;
    uint64_t       flag;
    const char *   desc;
-} const static my_obj_types[] =
+} my_obj_types[] =
 {
    { "attributeTypes",  MY_OBJ_ATTR,     NULL },
    { "ldapSyntaxes",    MY_OBJ_SYNTAX,   NULL },
