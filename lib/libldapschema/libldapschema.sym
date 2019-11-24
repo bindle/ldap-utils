@@ -90,14 +90,8 @@ ldapschema_spec_field
 ldapschema_spec_list
 ldapschema_spec_search
 # output functions
-ldapschema_print_attributetype
-ldapschema_print_attributetypes
-ldapschema_print_model
-ldapschema_print_models
-ldapschema_print_objectclass
-ldapschema_print_objectclasses
-ldapschema_print_ldapsyntax
-ldapschema_print_ldapsyntaxes
+ldapschema_print
+ldapschema_printall
 # query functions
 ldapschema_count_attributetype
 ldapschema_count_ldapsyntax

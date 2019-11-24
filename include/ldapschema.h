@@ -354,40 +354,14 @@ ldapschema_spec_search(
 #pragma mark output functions
 
 _LDAPSCHEMA_F void
-ldapschema_print_attributetype(
-         LDAPSchema            * lsd,
-         LDAPSchemaAttributeType * attr );
-
-_LDAPSCHEMA_F void
-ldapschema_print_attributetypes(
-         LDAPSchema            * lsd );
-
-_LDAPSCHEMA_F void
-ldapschema_print_model(
+ldapschema_print(
          LDAPSchema            * lsd,
          LDAPSchemaModel       * model );
 
 _LDAPSCHEMA_F void
-ldapschema_print_models(
-         LDAPSchema            * lsd );
-
-_LDAPSCHEMA_F void
-ldapschema_print_objectclass(
+ldapschema_printall(
          LDAPSchema            * lsd,
-         LDAPSchemaObjectclass * objcls );
-
-_LDAPSCHEMA_F void
-ldapschema_print_objectclasses(
-         LDAPSchema            * lsd );
-
-_LDAPSCHEMA_F void
-ldapschema_print_ldapsyntax(
-         LDAPSchema            * lsd,
-         LDAPSchemaSyntax * syntax );
-
-_LDAPSCHEMA_F void
-ldapschema_print_ldapsyntaxes(
-         LDAPSchema            * lsd );
+         int                     type );
 
 
 //-----------------//

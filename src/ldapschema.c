@@ -469,7 +469,7 @@ int my_run_details(MyConfig * cnf)
       if ((syntax = ldapschema_find_ldapsyntax(cnf->lsd, cnf->args[idx])) != NULL)
       {
          found++;
-         ldapschema_print_ldapsyntax(cnf->lsd, syntax);
+         ldapschema_print(cnf->lsd, (LDAPSchemaModel *)syntax);
          printf("\n\n");
       };
 
@@ -477,13 +477,13 @@ int my_run_details(MyConfig * cnf)
       if ((attr = ldapschema_find_attributetype(cnf->lsd, cnf->args[idx])) != NULL)
       {
          found++;
-         ldapschema_print_attributetype(cnf->lsd, attr);
+         ldapschema_print(cnf->lsd, (LDAPSchemaModel *)attr);
          ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SUPERIOR, &attrsup);
          printf("\n\n");
          while ((attrsup))
          {
             attr = attrsup;
-            ldapschema_print_attributetype(cnf->lsd, attr);
+            ldapschema_print(cnf->lsd, (LDAPSchemaModel *)attr);
             ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SUPERIOR, &attrsup);
             printf("\n\n");
          };
@@ -493,13 +493,13 @@ int my_run_details(MyConfig * cnf)
       if ((objcls = ldapschema_find_objectclass(cnf->lsd, cnf->args[idx])) != NULL)
       {
          found++;
-         ldapschema_print_objectclass(cnf->lsd, objcls);
+         ldapschema_print(cnf->lsd, (LDAPSchemaModel *)objcls);
          ldapschema_get_info_objectclass(cnf->lsd, objcls, LDAPSCHEMA_FLD_SUPERIOR, &objclssup);
          printf("\n\n");
          while ((objclssup))
          {
             objcls = objclssup;
-            ldapschema_print_objectclass(cnf->lsd, objcls);
+            ldapschema_print(cnf->lsd, (LDAPSchemaModel *)objcls);
             ldapschema_get_info_objectclass(cnf->lsd, objcls, LDAPSCHEMA_FLD_SUPERIOR, &objclssup);
             printf("\n\n");
          };
@@ -519,13 +519,13 @@ int my_run_details(MyConfig * cnf)
 int my_run_dump(MyConfig * cnf)
 {
    if ((cnf->types & MY_OBJ_SYNTAX) != 0)
-      ldapschema_print_ldapsyntaxes(cnf->lsd);
+      ldapschema_printall(cnf->lsd, LDAPSCHEMA_SYNTAX);
 
    if ((cnf->types & MY_OBJ_ATTR) != 0)
-      ldapschema_print_attributetypes(cnf->lsd);
+      ldapschema_printall(cnf->lsd, LDAPSCHEMA_ATTRIBUTETYPE);
 
    if ((cnf->types & MY_OBJ_OBJCLS) != 0)
-      ldapschema_print_objectclasses(cnf->lsd);
+      ldapschema_printall(cnf->lsd, LDAPSCHEMA_OBJECTCLASS);
 
    return(0);
 }
