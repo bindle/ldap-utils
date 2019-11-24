@@ -440,7 +440,7 @@ void ldapschema_print_obj_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeTy
       flags = (size_t)syntax->model.flags;
       ldapschema_print_line("common abnf:", ((flags & LDAPSCHEMA_O_COMMON_ABNF) != 0) ? "yes" : "no");
       ldapschema_print_line("schema abnf:", ((flags & LDAPSCHEMA_O_SCHEMA_ABNF) != 0) ? "yes" : "no");
-      ldapschema_print_line("abnf:",        attr->syntax->model.spec->abnf);
+      ldapschema_print_line("abnf:",        ((!(syntax->model.spec)) ? NULL : syntax->model.spec->abnf));
    };
 
    ldapschema_print_extensions(lsd, &attr->model);
