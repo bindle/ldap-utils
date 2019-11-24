@@ -420,33 +420,29 @@ void ldapschema_print_models( LDAPSchema * lsd )
 }
 
 
-void ldapschema_print_multiline(const char * field, const char * input)
+void ldapschema_print_multiline(const char * field, const char * str)
 {
-   char         * bol;
-   char         * eol;
-   char         * str;
+   const char         * bol;
+   const char         * eol;
 
    assert(field != NULL);
-   if (!(input))
-      return;
 
-   if ((str = strdup(input)) == NULL)
+   if (!(str))
       return;
 
    bol = str;
    while((eol = index(bol, '\n')) != NULL)
    {
-      eol[0] = '\0';
       if (bol == str)
-         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, field, str);
+         printf("%*s%-*s %.*s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, field, (int)(eol-bol), str);
       else
-         printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", bol);
+         printf("%*s %.*s\n", LDAPSCHEMA_WIDTH_HEADER, "", (int)(eol-bol), bol);
       bol = &eol[1];
    };
    if (bol == str)
-      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, field, str);
-
-   free(str);
+      printf("%*s%-*s %.*s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, field, (int)(eol-bol), str);
+   else if ((strlen(bol)))
+      printf("%*s %.*s\n", LDAPSCHEMA_WIDTH_HEADER, "", (int)(eol-bol), bol);
 
    return;
 }
