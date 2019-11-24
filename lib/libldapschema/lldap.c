@@ -193,6 +193,8 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
             attr->model.flags |= attrsup->model.flags;
             if (!(attr->syntax))
                attr->syntax = attrsup->syntax;
+            if (!(attr->min_upper))
+               attr->min_upper = attrsup->min_upper;
             if (!(attr->usage))
                attr->usage = attrsup->usage;
          };
