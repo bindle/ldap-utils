@@ -264,69 +264,13 @@ void ldapschema_print_model(LDAPSchema * lsd, LDAPSchemaModel * model)
 
 void ldapschema_print_model_def(LDAPSchema * lsd, LDAPSchemaModel * model)
 {
-   char      * str;
-   size_t      len;
-   size_t      pos;
-   size_t      bol;
+   char buff[4096];
 
    assert(lsd   != NULL);
    assert(model != NULL);
 
-   // initialize values
-   len      = strlen(model->definition) - 2;
-   if ((str = strdup(&model->definition[1])) == NULL)
-      return;
-
-   // strips leading white space
-   for (pos = 0; ((pos < len) && ((str[pos] == ' ') || (str[pos] == '\t'))); pos++);
-   bol = pos;
-
-   // print formatted definition
-   printf("%*s%-*s (\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "definition:");
-   while(pos < len)
-   {
-      // process quoted strings
-      if (str[pos] == '\'')
-      {
-         for(pos += 1; ((pos < len) && (str[pos] != '\'')); pos++); // fast forward to closing quotation
-         pos++;
-      }
-
-      // processed grouped values
-      else if (str[pos] == '(')
-      {
-         for(pos += 1; ((pos < len) && (str[pos] != ')')); pos++); // fast forward to closing parentheses
-         pos++;
-      }
-
-      // process white space
-      else if ((str[pos] == ' ') || (str[pos] == '\t'))
-      {
-         for(pos += 1; ((pos < len) && ((str[pos] == ' ') || (str[pos] == '\t'))); pos++); // fast forward to end of white space
-      }
-
-      // process key words
-      else if ((str[pos] >= 'A') && (str[pos] <= 'Z'))
-      {
-         str[pos-1] = '\0';
-         printf("%*s    %s\n", LDAPSCHEMA_WIDTH_HEADER, "", &str[bol]);
-         bol = pos;
-         for(pos += 1; ((pos < len) && (str[pos] != ' ') && (str[pos] != '\t')); pos++); // fast forward to white space
-         pos++;
-      }
-
-      // process unquoted values
-      else
-      {
-         for(pos += 1; ((pos < len) && (str[pos] != ' ') && (str[pos] != '\t')); pos++); // fast forward to white space
-         pos++;
-      };
-   };
-   str[pos-1] = '\0';
-   printf("%*s    %s\n", LDAPSCHEMA_WIDTH_HEADER, "", &str[bol]);
-   printf("%*s )\n", LDAPSCHEMA_WIDTH_HEADER, "");
-
-   free(str);
+   ldapschema_fmt_definition(buff, sizeof(buff), model->definition, 30);
+   ldapschema_print_multiline("definition:", buff);
 
    return;
 }
