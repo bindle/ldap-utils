@@ -42,7 +42,7 @@ AC_PREREQ(2.65)
 
 AC_COPYRIGHT([Copyright (C) 2015, 2019 David M. Syzdek <david@syzdek.net>.])
 AC_REVISION(0.1)
-AC_INIT([LDAP Utilities],[0.3],[david@syzdek.net],[ldap-utils])
+AC_INIT([LDAP Utilities],[0.4],[david@syzdek.net],[ldap-utils])
 
 AC_SUBST([RELEASE_MONTH],["October 2019"])
 

@@ -6,6 +6,7 @@ Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>
 
 0.4
 ---
+  Released 2019/11/24
   - libldapschema: adding library (syzdek)
   - libldaputils: fixing copyright notice in `ldaputils_version()` (syzdek)
   - ldap2csv: adding ability to specify default values (syzdek)
