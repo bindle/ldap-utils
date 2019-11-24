@@ -150,6 +150,8 @@ lib_libldapschema_a_SOURCES		= $(noinst_HEADERS) \
 					  lib/libldapschema/libldapschema.h \
 					  lib/libldapschema/lerror.c \
 					  lib/libldapschema/lerror.h \
+					  lib/libldapschema/lformat.c \
+					  lib/libldapschema/lformat.h \
 					  lib/libldapschema/lldap.c \
 					  lib/libldapschema/lldap.h \
 					  lib/libldapschema/llexer.c \
@@ -184,6 +186,8 @@ lib_libldapschema_la_SOURCES		= $(noinst_HEADERS) \
 					  lib/libldapschema/libldapschema.h \
 					  lib/libldapschema/lerror.c \
 					  lib/libldapschema/lerror.h \
+					  lib/libldapschema/lformat.c \
+					  lib/libldapschema/lformat.h \
 					  lib/libldapschema/lldap.c \
 					  lib/libldapschema/lldap.h \
 					  lib/libldapschema/llexer.c \

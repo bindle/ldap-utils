@@ -262,12 +262,25 @@ ldapschema_schema_errors(
          LDAPSchema            * lsd );
 
 
+//------------------//
+// format functions //
+//------------------//
+#pragma mark format functions
+
+_LDAPSCHEMA_F int
+ldapschema_fmt_definition(
+         char * restrict         str,
+         size_t                  size,
+         const char * restrict   def,
+         size_t                  width );
+
+
 //-----------------//
 // LDAP functions //
 //-----------------//
 #pragma mark LDAP functions
 
-int
+_LDAPSCHEMA_F int
 ldapschema_fetch(
          LDAPSchema            * lsd,
          LDAP                  * ld );

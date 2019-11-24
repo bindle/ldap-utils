@@ -73,6 +73,8 @@
 ldapschema_err2string
 ldapschema_errno
 ldapschema_schema_errors
+# format functions
+ldapschema_fmt_definition
 # memory functions
 ldap_count_values
 ldap_count_values_len
