@@ -117,6 +117,7 @@ struct my_config
 {
    LDAPUtils          * lud;
    LDAPSchema         * lsd;
+   int                  noextra;
    int                  action;
    uint64_t             types;
    char               ** args;
@@ -159,6 +160,7 @@ int main(int argc, char * argv[]);
 // parses configuration
 int my_config(int argc, char * argv[], MyConfig ** cnfp);
 
+int my_list_add(LDAPSchemaModel *** listp, size_t * lenp, LDAPSchemaModel * mod);
 int my_run_details(MyConfig * cnf);
 int my_run_dump(MyConfig * cnf);
 int my_run_lint(MyConfig * cnf);
@@ -191,6 +193,7 @@ void ldaputils_usage(void)
    printf("  --dump                    list details of objects in schema\n");
    printf("  --lint                    display schema errors\n");
    printf("  --list                    list objects in schema\n");
+   printf("  --noextra                 do not include related objects or data\n");
    printf("  --type=type               restrict operations to specific object types\n");
    printf("Object types\n");
    for(idx = 0; ((my_obj_types[idx].type)); idx++)
@@ -276,6 +279,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
       {"type",          required_argument, 0, '8'},
       {"list",          no_argument,       0, '7'},
       {"dump",          no_argument,       0, '6'},
+      {"noextra",       no_argument,       0, '5'},
       {"help",          no_argument,       0, 'h'},
       {"verbose",       no_argument,       0, 'v'},
       {"version",       no_argument,       0, 'V'},
@@ -392,6 +396,11 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
          cnf->action = MY_ACTION_DUMP;
          break;
 
+         // --noextra option
+         case '5':
+         cnf->noextra++;
+         break;
+
          // argument error
          case '?':
          fprintf(stderr, "Try `%s --help' for more information.\n", PROGRAM_NAME);
@@ -451,65 +460,114 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
 }
 
 
+int my_list_add(LDAPSchemaModel *** listp, size_t * lenp, LDAPSchemaModel * mod)
+{
+   void *               ptr;
+   size_t               idx;
+   LDAPSchemaModel **   list;
+
+   if (!(mod))
+      return(0);
+
+   list = *listp;
+
+   for(idx = 0; (idx < (*lenp)); idx++)
+      if (!(ldapschema_compar_models(&mod, &list[idx])))
+         return(0);
+
+   if ((ptr = realloc(*listp, (sizeof(LDAPSchemaModel *)*(*lenp +2)))) == NULL)
+   {
+      fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
+      return(1);
+   };
+   *listp            = ptr;
+   list              = *listp;
+   listp[0][*lenp]   = mod;
+   (*lenp)++;
+   listp[0][*lenp]   = NULL;
+
+   return(0);
+}
+
+
 int my_run_details(MyConfig * cnf)
 {
-   int                        found;
    size_t                     idx;
+   size_t                     list_len;
+   LDAPSchemaModel         ** list;
    LDAPSchemaSyntax         * syntax;
    LDAPSchemaAttributeType  * attr;
    LDAPSchemaAttributeType  * attrsup;
    LDAPSchemaObjectclass    * objcls;
    LDAPSchemaObjectclass    * objclssup;
 
+   list     = NULL;
+   list_len = 0;
+
+   // look for matching ldapSyntax
    for(idx = 0; ((cnf->args[idx])); idx++)
-   {
-      found = 0;
-
-      // look for matching ldapSyntax
       if ((syntax = ldapschema_find_ldapsyntax(cnf->lsd, cnf->args[idx])) != NULL)
-      {
-         found++;
-         ldapschema_print(cnf->lsd, (LDAPSchemaModel *)syntax);
-         printf("\n\n");
-      };
+         my_list_add(&list, &list_len, (LDAPSchemaModel *)syntax);
 
-      // look for matching attributeType
+   // look for matching attributeType and add syntaxes
+   for(idx = 0; (((cnf->args[idx])) && (!(cnf->noextra))); idx++)
+   {
       if ((attr = ldapschema_find_attributetype(cnf->lsd, cnf->args[idx])) != NULL)
       {
-         found++;
-         ldapschema_print(cnf->lsd, (LDAPSchemaModel *)attr);
+         ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SYNTAX,   &syntax);
+         my_list_add(&list, &list_len, (LDAPSchemaModel *)syntax);
          ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SUPERIOR, &attrsup);
-         printf("\n\n");
          while ((attrsup))
          {
             attr = attrsup;
-            ldapschema_print(cnf->lsd, (LDAPSchemaModel *)attr);
+            ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SYNTAX,   &syntax);
+            my_list_add(&list, &list_len, (LDAPSchemaModel *)syntax);
             ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SUPERIOR, &attrsup);
-            printf("\n\n");
          };
       };
+   };
 
-      // look for matching attributeType
+   // look for matching attributeType and add attributes
+   for(idx = 0; (((cnf->args[idx])) && (!(cnf->noextra))); idx++)
+   {
+      if ((attr = ldapschema_find_attributetype(cnf->lsd, cnf->args[idx])) != NULL)
+      {
+         ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SUPERIOR, &attrsup);
+         while ((attrsup))
+         {
+            attr = attrsup;
+            my_list_add(&list, &list_len, (LDAPSchemaModel *)attr);
+            ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SUPERIOR, &attrsup);
+         };
+      };
+   };
+   for(idx = 0; ((cnf->args[idx])); idx++)
+      if ((attr = ldapschema_find_attributetype(cnf->lsd, cnf->args[idx])) != NULL)
+         my_list_add(&list, &list_len, (LDAPSchemaModel *)attr);
+
+   // look for matching objectclasses
+   for(idx = 0; (((cnf->args[idx])) && (!(cnf->noextra))); idx++)
+   {
       if ((objcls = ldapschema_find_objectclass(cnf->lsd, cnf->args[idx])) != NULL)
       {
-         found++;
-         ldapschema_print(cnf->lsd, (LDAPSchemaModel *)objcls);
          ldapschema_get_info_objectclass(cnf->lsd, objcls, LDAPSCHEMA_FLD_SUPERIOR, &objclssup);
-         printf("\n\n");
          while ((objclssup))
          {
             objcls = objclssup;
-            ldapschema_print(cnf->lsd, (LDAPSchemaModel *)objcls);
+            my_list_add(&list, &list_len, (LDAPSchemaModel *)objcls);
             ldapschema_get_info_objectclass(cnf->lsd, objcls, LDAPSCHEMA_FLD_SUPERIOR, &objclssup);
-            printf("\n\n");
          };
       };
+   };
+   for(idx = 0; ((cnf->args[idx])); idx++)
+      if ((objcls = ldapschema_find_objectclass(cnf->lsd, cnf->args[idx])) != NULL)
+         my_list_add(&list, &list_len, (LDAPSchemaModel *)objcls);
 
-      if (!(found))
-      {
-         fprintf(stderr, "%s: %s: object not found in schema\n", PROGRAM_NAME, cnf->args[idx]);
-         return(MY_EXIT_NOT_FOUND);
-      };
+   // print results
+   for(idx = 0; (idx < list_len); idx++)
+   {
+      ldapschema_print(cnf->lsd, list[idx]);
+      printf("\n\n");
    };
 
    return(0);
@@ -604,13 +662,13 @@ int my_run_list(MyConfig * cnf)
          };
          len = strlen(buff);
          snprintf(&buff[len], (sizeof(buff)-len-2), " )");
-         if ((syntax))
+         if ( ((syntax)) && (!(cnf->noextra)) )
             printf("%-15s %-35s NAME %-30s", "attributeType:", oid, buff);
          else
             printf("%-15s %-35s NAME %s", "attributeType:", oid, buff);
          ldapschema_memfree(oid);
          ldapschema_memfree(names);
-         if ((syntax))
+         if ( ((syntax)) && (!(cnf->noextra)) )
          {
             ldapschema_get_info_ldapsyntax(cnf->lsd, syntax, LDAPSCHEMA_FLD_DESC, &desc);
             printf("   [ %s ]", desc);
