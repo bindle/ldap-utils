@@ -72,40 +72,56 @@
 #pragma mark - Prototypes
 
 void
-ldapschema_print_attributetype_objcls(
+ldapschema_print_data_class(
+         LDAPSchema *               lsd,
+         size_t                     classid );
+
+void
+ldapschema_print_definition(
+         LDAPSchema *               lsd,
+         LDAPSchemaModel *          model );
+
+void
+ldapschema_print_extensions(
+         LDAPSchema *               lsd,
+         LDAPSchemaModel *          model );
+
+void
+ldapschema_print_flags(
+         LDAPSchema *               lsd,
+         LDAPSchemaModel *          model );
+
+void
+ldapschema_print_line(
+         const char *               field,
+         const char *               input );
+
+void
+ldapschema_print_list(
+         const char *               field,
+         char **                    vals );
+
+void
+ldapschema_print_list_attrs(
+         LDAPSchema *               lsd,
+         const char *               name,
+         LDAPSchemaAttributeType ** list,
+         size_t                     len );
+
+void
+ldapschema_print_list_objcls(
          LDAPSchema *               lsd,
          const char *               name,
          LDAPSchemaObjectclass **   list,
          size_t                     len );
 
 void
-ldapschema_print_model_def(
-         LDAPSchema *               lsd,
-         LDAPSchemaModel *          model );
-
-void
-ldapschema_print_model_ext(
-         LDAPSchema *               lsd,
-         LDAPSchemaModel *          model );
-
-void
-ldapschema_print_model_flags(
-         LDAPSchema *               lsd,
-         LDAPSchemaModel *          model );
-
-void
-ldapschema_print_model_type(
-         LDAPSchema *               lsd,
-         LDAPSchemaModel *          model );
-
-void
-ldapschema_print_multiline(
+ldapschema_print_unsigned(
          const char *               field,
-         const char *               input );
+         uintmax_t                  u );
 
-void
-ldapschema_print_ldapsyntax_class(
-         LDAPSchema *               lsd,
+const char *
+ldapschema_print_get_dataclass(
          size_t                     classid );
 
 void
@@ -114,25 +130,13 @@ ldapschema_print_obj_attributetype(
          LDAPSchemaAttributeType *  attr );
 
 void
-ldapschema_print_obj_attributetypes(
-         LDAPSchema *               lsd );
-
-void
 ldapschema_print_obj_model(
          LDAPSchema *               lsd,
          LDAPSchemaModel *          model );
-
-void ldapschema_print_obj_models(
-         LDAPSchema *               lsd );
-
 void
 ldapschema_print_obj_objectclass(
          LDAPSchema *               lsd,
          LDAPSchemaObjectclass *    objcls );
-
-void
-ldapschema_print_obj_objectclasses(
-         LDAPSchema *               lsd );
 
 void
 ldapschema_print_obj_syntax(
@@ -140,13 +144,14 @@ ldapschema_print_obj_syntax(
          LDAPSchemaSyntax *         syntax );
 
 void
-ldapschema_print_obj_syntaxes(
-         LDAPSchema *               lsd );
-
-void
 ldapschema_print_spec(
          LDAPSchema *               lsd,
          const LDAPSchemaSpec *     spec );
+
+void
+ldapschema_print_type(
+         LDAPSchema *               lsd,
+         LDAPSchemaModel *          model );
 
 
 /////////////////
@@ -190,66 +195,62 @@ void ldapschema_print( LDAPSchema * lsd, LDAPSchemaModel * mod )
 
 void ldapschema_printall( LDAPSchema * lsd, int type )
 {
+   size_t x;
+
    assert(lsd != NULL);
-   switch(type)
+
+   for(x = 0; x < lsd->oids_len; x++)
    {
-      case LDAPSCHEMA_ATTRIBUTETYPE: ldapschema_print_obj_attributetypes(lsd); return;
-      case LDAPSCHEMA_OBJECTCLASS:   ldapschema_print_obj_objectclasses(lsd); return;
-      case LDAPSCHEMA_SYNTAX:        ldapschema_print_obj_syntaxes(lsd); return;
-      default:
-      break;
+      if ((type))
+         if (lsd->oids[x].model->type != (size_t)type)
+            continue;
+      ldapschema_print(lsd, lsd->oids[x].model);
+      printf("\n");
    };
-   if ((type))
-      return;
-   ldapschema_print_obj_attributetypes(lsd);
-   ldapschema_print_obj_objectclasses(lsd);
-   ldapschema_print_obj_syntaxes(lsd);
+
    return;
 }
 
 
-void ldapschema_print_attributetype_objcls(LDAPSchema * lsd,
-   const char * name, LDAPSchemaObjectclass ** list, size_t len)
+void ldapschema_print_data_class(LDAPSchema * lsd, size_t classid )
 {
-   size_t pos;
+   const char * data_class;
 
    assert(lsd != NULL);
 
-   if ( (!(list)) || (!(len)) )
-      return;
-
-   if ((list[0]->names))
-      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, name, list[0]->names[0]);
-   else
-      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, name, list[0]->model.oid);
-
-   for(pos = 1; (pos < len); pos++)
+   switch(classid)
    {
-      if ((list[pos]->names))
-         printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", list[pos]->names[0]);
-      else
-         printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", list[pos]->model.oid);
+      case LDAPSCHEMA_CLASS_ASCII:           data_class = "ASCII";         break;
+      case LDAPSCHEMA_CLASS_UTF8:            data_class = "UTF8";          break;
+      case LDAPSCHEMA_CLASS_INTEGER:         data_class = "integer";       break;
+      case LDAPSCHEMA_CLASS_UNSIGNED:        data_class = "unsigned";      break;
+      case LDAPSCHEMA_CLASS_BOOLEAN:         data_class = "boolean";       break;
+      case LDAPSCHEMA_CLASS_DATA:            data_class = "binary data";   break;
+      case LDAPSCHEMA_CLASS_IMAGE:           data_class = "image";         break;
+      case LDAPSCHEMA_CLASS_AUDIO:           data_class = "audio";         break;
+      case LDAPSCHEMA_CLASS_UTF8_MULTILINE:  data_class = "audio";         break;
+      default:
+      return;
    };
+
+   printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "data class:", data_class);
 
    return;
 }
 
 
-void ldapschema_print_model_def(LDAPSchema * lsd, LDAPSchemaModel * model)
+void ldapschema_print_definition(LDAPSchema * lsd, LDAPSchemaModel * model)
 {
    char buff[4096];
-
    assert(lsd   != NULL);
    assert(model != NULL);
-
    ldapschema_fmt_definition(buff, sizeof(buff), model->definition, 30);
-   ldapschema_print_multiline("definition:", buff);
-
+   ldapschema_print_line("definition:", buff);
    return;
 }
 
 
-void ldapschema_print_model_ext(LDAPSchema * lsd, LDAPSchemaModel * model)
+void ldapschema_print_extensions(LDAPSchema * lsd, LDAPSchemaModel * model)
 {
    size_t                  x;
    size_t                  y;
@@ -283,7 +284,7 @@ void ldapschema_print_model_ext(LDAPSchema * lsd, LDAPSchemaModel * model)
 }
 
 
-void ldapschema_print_model_flags(LDAPSchema * lsd, LDAPSchemaModel * model)
+void ldapschema_print_flags(LDAPSchema * lsd, LDAPSchemaModel * model)
 {
    assert(lsd   != NULL);
    assert(model != NULL);
@@ -307,30 +308,13 @@ void ldapschema_print_model_flags(LDAPSchema * lsd, LDAPSchemaModel * model)
 }
 
 
-void ldapschema_print_model_type(LDAPSchema * lsd, LDAPSchemaModel * model)
-{
-   const char * str;
-   assert(lsd   != NULL);
-   assert(model != NULL);
-   switch(model->type)
-   {
-      case LDAPSCHEMA_ATTRIBUTETYPE: str = "attributeType:"; break;
-      case LDAPSCHEMA_MATCHINGRULE:  str = "matchingRule:"; break;
-      case LDAPSCHEMA_OBJECTCLASS:   str = "objectClass:"; break;
-      case LDAPSCHEMA_SYNTAX:        str = "ldapSyntax:"; break;
-      default:                       str = "unknown:"; break;
-   };
-   printf("%-*s %s\n", LDAPSCHEMA_WIDTH_HEADER, str, model->oid);
-   return;
-}
-
-
-void ldapschema_print_multiline(const char * field, const char * str)
+void ldapschema_print_line(const char * field, const char * str)
 {
    const char         * bol;
    const char         * eol;
 
-   assert(field != NULL);
+   if (!(field))
+      field = "";
 
    if (!(str))
       return;
@@ -353,28 +337,73 @@ void ldapschema_print_multiline(const char * field, const char * str)
 }
 
 
+void ldapschema_print_list(const char * field, char ** vals)
+{
+   size_t idx;
+
+   if (!(vals))
+      return;
+
+   for(idx = 0; ((vals[idx])); idx++)
+      ldapschema_print_line( ((!(idx))?field:""), vals[idx]);
+
+   return;
+}
+
+
+void ldapschema_print_list_attrs(LDAPSchema * lsd,
+   const char * name, LDAPSchemaAttributeType ** list, size_t len)
+{
+   size_t pos;
+
+   assert(lsd != NULL);
+   if ( (!(list)) || (!(len)) )
+      return;
+
+   for(pos = 0; (pos < len); pos++)
+      ldapschema_print_line(
+         ((!(pos))?name:""),
+         (((list[pos]->names))?list[pos]->names[0]:list[pos]->model.oid)
+      );
+
+   return;
+}
+
+
+void ldapschema_print_list_objcls(LDAPSchema * lsd,
+   const char * name, LDAPSchemaObjectclass ** list, size_t len)
+{
+   size_t pos;
+
+   assert(lsd != NULL);
+   if ( (!(list)) || (!(len)) )
+      return;
+
+   for(pos = 0; (pos < len); pos++)
+      ldapschema_print_line(
+         ((!(pos))?name:""),
+         (((list[pos]->names))?list[pos]->names[0]:list[pos]->model.oid)
+      );
+
+   return;
+}
+
+
 void ldapschema_print_obj_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeType * attr )
 {
-   size_t                     x;
-   const char               * str;
-   LDAPSchemaAttributeType  * sup;
+   const char *               str;
+   LDAPSchemaAttributeType *  sup;
    size_t                     flags;
+   char                       buff[256];
+   LDAPSchemaSyntax *         syntax;
 
    assert(lsd  != NULL);
    assert(attr != NULL);
 
-   ldapschema_print_model_type(lsd, &attr->model);
-
-   for(x = 0; x < attr->names_len; x++)
-   {
-      if (x == 0)
-         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "name(s):", attr->names[x]);
-      else
-         printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", attr->names[x]);
-   };
-
-   ldapschema_print_multiline("description:", attr->model.desc);
-   ldapschema_print_model_flags(lsd, &attr->model);
+   ldapschema_print_type(lsd, &attr->model);
+   ldapschema_print_list("name(s):",     attr->names);
+   ldapschema_print_line("description:", attr->model.desc);
+   ldapschema_print_flags(lsd, &attr->model);
 
    switch(attr->usage)
    {
@@ -384,95 +413,56 @@ void ldapschema_print_obj_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeTy
       case LDAPSCHEMA_DSA_OP:          str = "dSAOperation";         break;
       default:                         str = "unknown:";             break;
    };
-   printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "usage:", str);
+   ldapschema_print_line("usage:", str);
 
    if ((sup = attr->sup) != NULL)
    {
-      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "superior(s):", (((sup->names))?sup->names[0]:sup->model.oid) );
+      ldapschema_print_line("superior(s):", (((sup->names))?sup->names[0]:sup->model.oid)  );
       while ((sup = sup->sup) != NULL)
-         printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", (((sup->names))?sup->names[0]:sup->model.oid));
+         ldapschema_print_line(NULL, (((sup->names))?sup->names[0]:sup->model.oid)  );
    };
 
    ldapschema_print_spec(lsd, attr->model.spec);
 
-   if ((attr->syntax))
+   // print syntax information
+   ldapschema_print_unsigned("min upper bound:", attr->min_upper);
+   if ((syntax = attr->syntax)  != NULL)
    {
-      if ((attr->syntax->model.desc))
-         printf("%*s%-*s %s  ( %s )\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "syntax:", attr->syntax->model.oid, attr->syntax->model.desc);
+      // syntax OID/desc
+      if ((syntax->model.desc))
+         snprintf(buff, sizeof(buff), "%s ( %s )", syntax->model.oid, syntax->model.desc);
       else
-         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "syntax:", attr->syntax->model.oid);
-      if ((attr->min_upper))
-         printf("%*s%-*s %zu\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "min upper bound:", attr->min_upper);
-      ldapschema_print_ldapsyntax_class(lsd, attr->syntax->data_class);
-      if ( ((attr->syntax->model.spec)) && ((attr->syntax->model.spec->abnf)) )
-      {
-         flags = (size_t)attr->syntax->model.spec->flags;
-         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "common abnf:",  ((flags & LDAPSCHEMA_O_COMMON_ABNF) != 0) ? "yes" : "no");
-         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "schema abnf:",  ((flags & LDAPSCHEMA_O_SCHEMA_ABNF) != 0) ? "yes" : "no");
-         ldapschema_print_multiline("abnf:", attr->syntax->model.spec->abnf);
-      };
-   } else if ((attr->min_upper))
-   {
-      printf("%*s%-*s %zu\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "min upper bound:", attr->min_upper);
+         snprintf(buff, sizeof(buff), "%s", syntax->model.oid);
+      ldapschema_print_line("syntax:", buff);
+
+      ldapschema_print_data_class(lsd, syntax->data_class);
+
+      flags = (size_t)syntax->model.flags;
+      ldapschema_print_line("common abnf:", ((flags & LDAPSCHEMA_O_COMMON_ABNF) != 0) ? "yes" : "no");
+      ldapschema_print_line("schema abnf:", ((flags & LDAPSCHEMA_O_SCHEMA_ABNF) != 0) ? "yes" : "no");
+      ldapschema_print_line("abnf:",        attr->syntax->model.spec->abnf);
    };
-   ldapschema_print_model_ext(lsd, &attr->model);
-   ldapschema_print_attributetype_objcls(lsd, "required by:", attr->required_by, attr->required_by_len);
-   ldapschema_print_attributetype_objcls(lsd, "allowed by:",  attr->allowed_by,  attr->allowed_by_len);
-   ldapschema_print_model_def(lsd, &attr->model);
 
-   return;
-}
+   ldapschema_print_extensions(lsd, &attr->model);
+   ldapschema_print_list_objcls(lsd, "required by:", attr->required_by, attr->required_by_len);
+   ldapschema_print_list_objcls(lsd, "allowed by:",  attr->allowed_by,  attr->allowed_by_len);
+   ldapschema_print_definition(lsd, &attr->model);
 
-
-void ldapschema_print_obj_attributetypes( LDAPSchema * lsd )
-{
-   size_t x;
-   assert(lsd != NULL);
-   for(x = 0; x < lsd->oids_len; x++)
-   {
-      if (lsd->oids[x].model->type == LDAPSCHEMA_ATTRIBUTETYPE)
-      {
-         ldapschema_print_obj_attributetype(lsd, lsd->oids[x].attributetype);
-         printf("\n");
-      };
-   };
    return;
 }
 
 
 void ldapschema_print_obj_model(LDAPSchema * lsd, LDAPSchemaModel * model)
 {
-
    assert(lsd   != NULL);
    assert(model != NULL);
 
-   ldapschema_print_model_type(lsd, model);
-   ldapschema_print_multiline("description:", model->desc);
-   ldapschema_print_model_flags(lsd, model);
-   ldapschema_print_model_ext(lsd, model);
-   ldapschema_print_model_def(lsd, model);
-   if ((model->spec))
-   {
-      ldapschema_print_multiline("spec name:",     model->spec->spec);
-      ldapschema_print_multiline("spec chapter:",  model->spec->spec_section);
-      ldapschema_print_multiline("spec vendor:",   model->spec->spec_vendor);
-      ldapschema_print_multiline("spec source:",   model->spec->spec_source);
-      ldapschema_print_multiline("spec text:",     model->spec->spec_text);
-      ldapschema_print_multiline("spec notes:",    model->spec->notes);
-      ldapschema_print_multiline("abnf:",          model->spec->abnf);
-   };
-
-   return;
-}
-
-
-void ldapschema_print_obj_models( LDAPSchema * lsd )
-{
-   size_t x;
-   assert(lsd != NULL);
-
-   for(x = 0; x < lsd->oids_len; x++)
-      ldapschema_print_obj_model(lsd, lsd->oids[x].model);
+   ldapschema_print_type(lsd, model);
+   ldapschema_print_line("description:", model->desc);
+   ldapschema_print_flags(lsd, model);
+   ldapschema_print_extensions(lsd, model);
+   ldapschema_print_definition(lsd, model);
+   ldapschema_print_spec(lsd, model->spec);
 
    return;
 }
@@ -480,26 +470,16 @@ void ldapschema_print_obj_models( LDAPSchema * lsd )
 
 void ldapschema_print_obj_objectclass(LDAPSchema * lsd, LDAPSchemaObjectclass * objcls)
 {
-   size_t                     x;
    const char               * str;
-   char                     * attrname;
    LDAPSchemaObjectclass    * sup;
 
    assert(lsd    != NULL);
    assert(objcls != NULL);
 
-   ldapschema_print_model_type(lsd, &objcls->model);
-
-   for(x = 0; x < objcls->names_len; x++)
-   {
-      if (x == 0)
-         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "name(s):", objcls->names[x]);
-      else
-         printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", objcls->names[x]);
-   };
-
-   ldapschema_print_multiline("description:", objcls->model.desc);
-   ldapschema_print_model_flags(lsd, &objcls->model);
+   ldapschema_print_type(lsd, &objcls->model);
+   ldapschema_print_list("name(s):",     objcls->names);
+   ldapschema_print_line("description:", objcls->model.desc);
+   ldapschema_print_flags(lsd, &objcls->model);
 
    switch(objcls->kind)
    {
@@ -508,82 +488,22 @@ void ldapschema_print_obj_objectclass(LDAPSchema * lsd, LDAPSchemaObjectclass * 
       case LDAPSCHEMA_ABSTRACT:        str = "abstract";    break;
       default:                         str = "unknown:";    break;
    };
-   printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "usage:", str);
+   ldapschema_print_line("usage:", str);
 
    if ((sup = objcls->sup) != NULL)
    {
-      printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "superior(s):", (((sup->names))?sup->names[0]:sup->model.oid) );
+      ldapschema_print_line("superior(s):", (((sup->names))?sup->names[0]:sup->model.oid)  );
       while ((sup = sup->sup) != NULL)
-         printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", (((sup->names))?sup->names[0]:sup->model.oid));
+         ldapschema_print_line(NULL, (((sup->names))?sup->names[0]:sup->model.oid)  );
    };
 
-   for(x = 0; x < objcls->may_len; x++)
-   {
-      if ((objcls->may[x]->names))
-         attrname = objcls->may[x]->names[0];
-      else
-         attrname = objcls->may[x]->model.oid;
-      if (x == 0)
-         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "may:", attrname);
-      else
-         printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", attrname);
-   };
+   ldapschema_print_list_attrs(lsd, "may:",            objcls->may,          objcls->may_len);
+   ldapschema_print_list_attrs(lsd, "must:",           objcls->must,         objcls->must_len);
+   ldapschema_print_list_attrs(lsd, "inherited may:",  objcls->inherit_may,  objcls->inherit_may_len);
+   ldapschema_print_list_attrs(lsd, "inherited must:", objcls->inherit_must, objcls->inherit_must_len);
+   ldapschema_print_extensions(lsd, &objcls->model);
+   ldapschema_print_definition(lsd, &objcls->model);
 
-   for(x = 0; x < objcls->must_len; x++)
-   {
-      if ((objcls->must[x]->names))
-         attrname = objcls->must[x]->names[0];
-      else
-         attrname = objcls->must[x]->model.oid;
-      if (x == 0)
-         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "must:", attrname);
-      else
-         printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", attrname);
-   };
-
-   for(x = 0; x < objcls->inherit_may_len; x++)
-   {
-      if ((objcls->inherit_may[x]->names))
-         attrname = objcls->inherit_may[x]->names[0];
-      else
-         attrname = objcls->inherit_may[x]->model.oid;
-      if (x == 0)
-         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "inherited may:", attrname);
-      else
-         printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", attrname);
-   };
-
-   for(x = 0; x < objcls->inherit_must_len; x++)
-   {
-      if ((objcls->inherit_must[x]->names))
-         attrname = objcls->inherit_must[x]->names[0];
-      else
-         attrname = objcls->inherit_must[x]->model.oid;
-      if (x == 0)
-         printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "inherited must:", attrname);
-      else
-         printf("%*s %s\n", LDAPSCHEMA_WIDTH_HEADER, "", attrname);
-   };
-
-   ldapschema_print_model_ext(lsd, &objcls->model);
-   ldapschema_print_model_def(lsd, &objcls->model);
-
-   return;
-}
-
-
-void ldapschema_print_obj_objectclasses( LDAPSchema * lsd )
-{
-   size_t x;
-   assert(lsd != NULL);
-   for(x = 0; x < lsd->oids_len; x++)
-   {
-      if (lsd->oids[x].model->type == LDAPSCHEMA_OBJECTCLASS)
-      {
-         ldapschema_print_obj_objectclass(lsd, lsd->oids[x].objectclass);
-         printf("\n");
-      };
-   };
    return;
 }
 
@@ -593,56 +513,13 @@ void ldapschema_print_obj_syntax(LDAPSchema * lsd, LDAPSchemaSyntax * syntax)
    assert(lsd    != NULL);
    assert(syntax != NULL);
 
-   ldapschema_print_model_type(lsd, &syntax->model);
-   ldapschema_print_multiline("description:", syntax->model.desc);
-   ldapschema_print_ldapsyntax_class(lsd, syntax->data_class);
-   ldapschema_print_model_flags(lsd, &syntax->model);
-   ldapschema_print_model_ext(lsd, &syntax->model);
+   ldapschema_print_type(lsd, &syntax->model);
+   ldapschema_print_line("description:", syntax->model.desc);
+   ldapschema_print_data_class(lsd, syntax->data_class);
+   ldapschema_print_flags(lsd, &syntax->model);
+   ldapschema_print_extensions(lsd, &syntax->model);
    ldapschema_print_spec(lsd, syntax->model.spec);
-   ldapschema_print_model_def(lsd, &syntax->model);
-
-   return;
-}
-
-
-void ldapschema_print_obj_syntaxes( LDAPSchema * lsd )
-{
-   size_t x;
-   assert(lsd != NULL);
-   for(x = 0; x < lsd->oids_len; x++)
-   {
-      if (lsd->oids[x].model->type == LDAPSCHEMA_SYNTAX)
-      {
-         ldapschema_print_obj_syntax(lsd, lsd->oids[x].syntax);
-         printf("\n");
-      };
-   };
-   return;
-}
-
-
-void ldapschema_print_ldapsyntax_class(LDAPSchema * lsd, size_t classid )
-{
-   const char * data_class;
-
-   assert(lsd != NULL);
-
-   switch(classid)
-   {
-      case LDAPSCHEMA_CLASS_ASCII:           data_class = "ASCII";         break;
-      case LDAPSCHEMA_CLASS_UTF8:            data_class = "UTF8";          break;
-      case LDAPSCHEMA_CLASS_INTEGER:         data_class = "integer";       break;
-      case LDAPSCHEMA_CLASS_UNSIGNED:        data_class = "unsigned";      break;
-      case LDAPSCHEMA_CLASS_BOOLEAN:         data_class = "boolean";       break;
-      case LDAPSCHEMA_CLASS_DATA:            data_class = "binary data";   break;
-      case LDAPSCHEMA_CLASS_IMAGE:           data_class = "image";         break;
-      case LDAPSCHEMA_CLASS_AUDIO:           data_class = "audio";         break;
-      case LDAPSCHEMA_CLASS_UTF8_MULTILINE:  data_class = "audio";         break;
-      default:
-      return;
-   };
-
-   printf("%*s%-*s %s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, "data class:", data_class);
+   ldapschema_print_definition(lsd, &syntax->model);
 
    return;
 }
@@ -653,13 +530,41 @@ void ldapschema_print_spec( LDAPSchema * lsd, const LDAPSchemaSpec * spec)
    assert(lsd != NULL);
    if (!(spec))
       return;
-   ldapschema_print_multiline("spec name:",     spec->spec);
-   ldapschema_print_multiline("spec chapter:",  spec->spec_section);
-   ldapschema_print_multiline("spec vendor:",   spec->spec_vendor);
-   ldapschema_print_multiline("spec source:",   spec->spec_source);
-   ldapschema_print_multiline("spec text:",     spec->spec_text);
-   ldapschema_print_multiline("spec notes:",    spec->notes);
-   ldapschema_print_multiline("abnf:",          spec->abnf);
+   ldapschema_print_line("spec name:",     spec->spec);
+   ldapschema_print_line("spec chapter:",  spec->spec_section);
+   ldapschema_print_line("spec vendor:",   spec->spec_vendor);
+   ldapschema_print_line("spec source:",   spec->spec_source);
+   ldapschema_print_line("spec text:",     spec->spec_text);
+   ldapschema_print_line("spec notes:",    spec->notes);
+   ldapschema_print_line("abnf:",          spec->abnf);
+   return;
+}
+
+
+void ldapschema_print_type(LDAPSchema * lsd, LDAPSchemaModel * model)
+{
+   const char * str;
+   assert(lsd   != NULL);
+   assert(model != NULL);
+   switch(model->type)
+   {
+      case LDAPSCHEMA_ATTRIBUTETYPE: str = "attributeType:"; break;
+      case LDAPSCHEMA_MATCHINGRULE:  str = "matchingRule:"; break;
+      case LDAPSCHEMA_OBJECTCLASS:   str = "objectClass:"; break;
+      case LDAPSCHEMA_SYNTAX:        str = "ldapSyntax:"; break;
+      default:                       str = "unknown:"; break;
+   };
+   printf("%-*s %s\n", LDAPSCHEMA_WIDTH_HEADER, str, model->oid);
+   return;
+}
+
+
+void ldapschema_print_unsigned(const char * field, uintmax_t u)
+{
+   if (!(u))
+      return;
+   if ((field))   printf("%*s%-*s %ju\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, field, u);
+   else           printf("%*s %ju\n", LDAPSCHEMA_WIDTH_HEADER, "", u);
    return;
 }
 
