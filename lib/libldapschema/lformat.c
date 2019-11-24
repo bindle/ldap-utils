@@ -64,7 +64,7 @@
 #define IS_UPPER( c )   ((c >= 'A') && (c <= 'Z'))
 #define IS_LOWER( c )   ((c >= 'a') && (c <= 'z'))
 #define IS_DIGIT( c )   ((c >= '0') && (c <= '9'))
-#define IS_ALNUM( c )   ( IS_UPPER(c) || IS_LOWER(c) || IS_DIGIT(c) || (c == '_') || (c == '.') )
+#define IS_STRNG( c )   ( IS_UPPER(c) || IS_LOWER(c) || IS_DIGIT(c) || (c=='_') || (c=='.') || (c=='{') || (c=='}') )
 
 
 //////////////////
@@ -173,7 +173,7 @@ int ldapschema_fmt_definition( char * restrict str, size_t size, const char * re
                INDENT( );
             };
          };
-         for(; (IS_ALNUM(def[defpos+1])); defpos++)
+         for(; (IS_STRNG(def[defpos+1])); defpos++)
             APPEND( def[defpos] );
          APPEND( def[defpos] );
          break;
