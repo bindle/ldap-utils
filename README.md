@@ -133,7 +133,7 @@ ldap2json
 ---------
 
 ldap2json is a shell utilty which performs an LDAP search and prints the results
-in JSON format.  
+in JSON format.
 
 ldap2json supports psuedo attributes which return the DN of returned entries in
 various formats.  The following are the supported psuedo attributes and examples
@@ -216,9 +216,6 @@ ldapdebug, the flag `--enable-ldapdebug` must be passed to configure.
 
 ldapdn2str
 ----------
-
-ldapdn2str is a shell-accessible interface to the ldap_dn2str() interface which
-outputs user supplied 
 
 ldapdn2str parses LDAP distinguished names and prints the parsed DN using the
 requested format.  The OpenLDAP function ldap_dn2str() is used to perform
@@ -351,7 +348,7 @@ information of the objects requested and any related objects such as superiors.
 
 The following is an example of a schema search for an objectclass:
 
-      $ ldapschema 2.5.6.9
+      $ ldapschema  2.5.6.9
       objectClass:        2.5.6.9
          name(s):         groupOfNames
          description:     RFC2256: a group of names (DNs)
@@ -366,24 +363,27 @@ The following is an example of a schema search for an objectclass:
          must:            cn
                           member
          inherited must:  objectClass
-         definition:      (
-                             2.5.6.9
+         definition:      (  2.5.6.9
                              NAME 'groupOfNames'
                              DESC 'RFC2256: a group of names (DNs)'
                              SUP top
                              STRUCTURAL
-                             MUST ( member $ cn )
-                             MAY ( businessCategory $ seeAlso $ owner $ ou $ o $ description )
+                             MUST
+                             (  member $ cn
+                             )
+                             MAY
+                             (  businessCategory $ seeAlso $
+                                owner $ ou $ o $ description
+                             )
                           )
-      
-      
+
+
       objectClass:        2.5.6.0
          name(s):         top
          description:     top of the superclass chain
          usage:           abstract
          must:            objectClass
-         definition:      (
-                             2.5.6.0
+         definition:      (  2.5.6.0
                              NAME 'top'
                              DESC 'top of the superclass chain'
                              ABSTRACT
@@ -392,7 +392,7 @@ The following is an example of a schema search for an objectclass:
 
 The following is an example of a schema search for an attributeType:
 
-      $ ldapschema pwdChangedTime
+      $ ldapschema  pwdChangedTime
       attributeType:      1.3.6.1.4.1.42.2.27.8.1.16
          name(s):         pwdChangedTime
          description:     The time the password was last changed
@@ -400,7 +400,7 @@ The following is an example of a schema search for an attributeType:
          readable:        yes
          no user mod:     yes
          usage:           directoryOperation
-         syntax:          1.3.6.1.4.1.1466.115.121.1.24  ( Generalized Time )
+         syntax:          1.3.6.1.4.1.1466.115.121.1.24 ( Generalized Time )
          data class:      ASCII
          common abnf:     no
          schema abnf:     no
@@ -430,17 +430,16 @@ The following is an example of a schema search for an attributeType:
                           DOT     = %x2E ; period (".")
                           COMMA   = %x2C ; comma (",")
                           PLUS    = %x2B ; plus sign ("+")
-         definition:      (
-                             1.3.6.1.4.1.42.2.27.8.1.16
+         definition:      (  1.3.6.1.4.1.42.2.27.8.1.16
                              NAME 'pwdChangedTime'
                              DESC 'The time the password was last changed'
                              EQUALITY generalizedTimeMatch
                              ORDERING generalizedTimeOrderingMatch
                              SYNTAX 1.3.6.1.4.1.1466.115.121.1.24
-                             SINGLE-VALUE
-                             NO-USER-MODIFICATION
+                             SINGLE -VALUE NO -USER -MODIFICATION
                              USAGE directoryOperation
                           )
+
 
 ldaptree
 --------
