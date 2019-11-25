@@ -71,7 +71,7 @@ LDADD					=
 # automake targets
 bin_PROGRAMS				=
 check_PROGRAMS				=
-doc_DATA				=
+doc_DATA				= doc/oid.txt
 EXTRA_PROGRAMS				=
 include_HEADERS				=
 info_TEXINFOS				=
@@ -119,6 +119,7 @@ EXTRA_DIST				= $(noinst_HEADERS) \
 					  lib/libldapschema/lspecdata.c \
 					  lib/libldapschema/lspecdata.h \
 					  doc/oidspecs/template.oidspec \
+					  doc/oid.txt \
 					  $(OIDSPEC_FILES)
 CLEANFILES				= \
 					  $(builddir)/a.out   $(srcdir)/a.out \

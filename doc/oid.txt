@@ -1,0 +1,26 @@
+LDAP UTILITIES ENTERPRISE NUMBER
+
+(last updated 2019-11-24)
+
+LDAP Utilities' Private Enterprise Number:
+   1.3.6.1.4.1            - iso.org.dod.internet.private.enterprise
+   1.3.6.1.4.1.27893      - DMS, "David M. Syzdek" <oid&syzdek.net>
+   1.3.6.1.4.1.27893.4    - Software Projects, "David M. Syzdek" <oid&syzdek.net>
+   1.3.6.1.4.1.27893.4.1  - LDAP Utilities, "David M. Syzdek" <david@syzdek.net>
+
+Prefix: iso.org.dod.internet.private.enterprise.dms.software.ldap-utils (1.3.6.1.4.1.27893.4.1)
+
+References:
+
+   1.3.6.1.4.1            - https://www.iana.org/assignments/enterprise-numbers/enterprise-numbers
+   1.3.6.1.4.1.27893      - https://github.com/syzdek/pen-dms
+   1.3.6.1.4.1.27893.4    - https://github.com/syzdek/pen-dms
+   1.3.6.1.4.1.27893.4.1  - https://github.com/bindle/ldap-utils
+
+This project defines the following OIDs:
+
+1.3.6.1.4.1.27893.4.1.1          - ABNF
+1.3.6.1.4.1.27893.4.1.1.1           - RFC 4512: 1.2. Common ABNF Productions
+1.3.6.1.4.1.27893.4.1.1.2           - RFC 4517: 3.2. Common Definitions
+
+End of Document
