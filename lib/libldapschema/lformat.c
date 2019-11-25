@@ -60,11 +60,12 @@
 //////////////
 #pragma mark - Macros
 
-#define IS_SPACE( c )   ((c == ' ') || (c == '\t') || (c == '\n'))
-#define IS_UPPER( c )   ((c >= 'A') && (c <= 'Z'))
-#define IS_LOWER( c )   ((c >= 'a') && (c <= 'z'))
-#define IS_DIGIT( c )   ((c >= '0') && (c <= '9'))
-#define IS_STRNG( c )   ( IS_UPPER(c) || IS_LOWER(c) || IS_DIGIT(c) || (c=='_') || (c=='.') || (c=='{') || (c=='}') )
+#define IS_SPACE( c )   ( (c == ' ') || (c == '\t') || (c == '\n') )
+#define IS_UPPER( c )   ( (c >= 'A') && (c <= 'Z') )
+#define IS_LOWER( c )   ( (c >= 'a') && (c <= 'z') )
+#define IS_DIGIT( c )   ( (c >= '0') && (c <= '9') )
+#define IS_KEYWORD( c ) ( IS_UPPER(c) || (c == '-') )
+#define IS_STRNG( c )   ( IS_UPPER(c) || IS_LOWER(c) || IS_DIGIT(c) || (c=='_') || (c=='.') || (c=='{') || (c=='}') || (c == '-') )
 
 
 //////////////////
@@ -153,7 +154,7 @@ int ldapschema_fmt_definition( char * restrict str, size_t size, const char * re
          break;
 
          default:
-         for(tmppos = defpos; IS_UPPER( def[tmppos] ); tmppos++);
+         for(tmppos = defpos; IS_KEYWORD( def[tmppos] ); tmppos++);
          if ( (tmppos != defpos) && (IS_SPACE(def[tmppos]) || (def[tmppos] == '\0')) )
          {
             // styling for upper case keywords
