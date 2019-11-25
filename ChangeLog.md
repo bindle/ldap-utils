@@ -6,6 +6,11 @@ Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>
 
 0.5
 ---
+  - docs: expanding RFC collection (syzdek)
+  - docs: documenting assigned enterprise number (syzdek)
+  - libldapschema: misc bug fixes (syzdek)
+  - libldapschema: adding initial ABNF oidspecs (syzdek)
+  - oidspectool: adding ABNF oidspec type (syzdek)
 
 0.4
 ---
