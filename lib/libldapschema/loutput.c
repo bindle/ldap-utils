@@ -407,6 +407,7 @@ void ldapschema_print_obj_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeTy
 
    switch(attr->usage)
    {
+      case 0: // assume LDAPSCHEMA_USER_APP if value is not set
       case LDAPSCHEMA_USER_APP:        str = "userApplications";     break;
       case LDAPSCHEMA_DIRECTORY_OP:    str = "directoryOperation";   break;
       case LDAPSCHEMA_DISTRIBUTED_OP:  str = "distributedOperation"; break;

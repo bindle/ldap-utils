@@ -128,15 +128,15 @@
 #define LDAPSCHEMA_O_DEPRECATED                       0x0100   ///< object deprecated or removed by RFC
 
 // objectclass types
-#define LDAPSCHEMA_STRUCTURAL                         0x0000
-#define LDAPSCHEMA_ABSTRACT                           0x0001
-#define LDAPSCHEMA_AUXILIARY                          0x0002
+#define LDAPSCHEMA_STRUCTURAL                         0x0001
+#define LDAPSCHEMA_ABSTRACT                           0x0002
+#define LDAPSCHEMA_AUXILIARY                          0x0003
 
 // attribute type usage
-#define LDAPSCHEMA_USER_APP                           0x0000   ///< AttributeType usage User Applications
-#define LDAPSCHEMA_DIRECTORY_OP                       0x0001   ///< AttributeType usage Directory Operation
-#define LDAPSCHEMA_DISTRIBUTED_OP                     0x0002   ///< AttributeType usage Distributed Operation
-#define LDAPSCHEMA_DSA_OP                             0x0003   ///< AttributeType usage DSA Operation
+#define LDAPSCHEMA_USER_APP                           0x0001   ///< AttributeType usage User Applications
+#define LDAPSCHEMA_DIRECTORY_OP                       0x0002   ///< AttributeType usage Directory Operation
+#define LDAPSCHEMA_DISTRIBUTED_OP                     0x0003   ///< AttributeType usage Distributed Operation
+#define LDAPSCHEMA_DSA_OP                             0x0004   ///< AttributeType usage DSA Operation
 
 // LDAP schema data type
 #define LDAPSCHEMA_TYPE_MASK                          0xFF000000
