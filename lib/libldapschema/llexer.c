@@ -976,7 +976,7 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
       }
       else if (!(strcasecmp(argv[pos], "AUXILIARY")))
       {
-         objcls->kind = LDAPSCHEMA_STRUCTURAL;
+         objcls->kind = LDAPSCHEMA_AUXILIARY;
       }
 
       // inteprets MUST
