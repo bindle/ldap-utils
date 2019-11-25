@@ -153,6 +153,7 @@
 #define LDAPSCHEMA_CONTROL                            0x42
 #define LDAPSCHEMA_EXTENSION                          0x43
 #define LDAPSCHEMA_UNSOLICITED                        0x44     ///< Unsolicited Notice
+#define LDAPSCHEMA_ABNF                               0x45
 #define LDAPSCHEMA_TYPE( val )                        (val & LDAPSCHEMA_TYPE_MASK )
 #define LDAPSCHEMA_SUBTYPE( val )                     (val & LDAPSCHEMA_SUBTYPE_MASK )
 #define LDAPSCHEMA_IS_TYPE( val, type )               ( LDAPSCHEMA_TYPE(val)    == type )
@@ -332,6 +333,11 @@ ldapschema_value_free_len(
 // OID Specification functions //
 //-----------------------------//
 #pragma mark OID Specification functions
+
+_LDAPSCHEMA_F
+const LDAPSchemaSpec *
+ldapschema_spec_abnf(
+         int                     abnf_type );
 
 _LDAPSCHEMA_F int
 ldapschema_spec_field(

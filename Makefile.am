@@ -90,6 +90,7 @@ noinst_LIBRARIES			=
 # lists
 OIDSPEC_FILES				= $(srcdir)/doc/oidspecs/iana-ldap-parameters.oidspec \
 					  $(srcdir)/doc/oidspecs/rfc/rfc2252.oidspec \
+					  $(srcdir)/doc/oidspecs/rfc/rfc4512.oidspec \
 					  $(srcdir)/doc/oidspecs/rfc/rfc4517.oidspec \
 					  $(srcdir)/doc/oidspecs/rfc/rfc4523.oidspec \
 					  $(srcdir)/doc/oidspecs/rfc/rfc4530.oidspec

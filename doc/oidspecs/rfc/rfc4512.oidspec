@@ -1,0 +1,155 @@
+{
+   //
+   // RFC 4512                      LDAP Models                      June 2006
+   //
+   // 1.4.  Common ABNF Productions
+   //
+   //    A number of syntaxes in this document are described using Augmented
+   //    Backus-Naur Form (ABNF) [RFC4234].  These syntaxes (as well as a
+   //    number of syntaxes defined in other documents) rely on the following
+   //    common productions:
+   //
+   //       keystring = leadkeychar *keychar
+   //       leadkeychar = ALPHA
+   //       keychar = ALPHA / DIGIT / HYPHEN
+   //       number  = DIGIT / ( LDIGIT 1*DIGIT )
+   //
+   //       ALPHA   = %x41-5A / %x61-7A   ; "A"-"Z" / "a"-"z"
+   //       DIGIT   = %x30 / LDIGIT       ; "0"-"9"
+   //       LDIGIT  = %x31-39             ; "1"-"9"
+   //       HEX     = DIGIT / %x41-46 / %x61-66 ; "0"-"9" / "A"-"F" / "a"-"f"
+   //
+   //       SP      = 1*SPACE  ; one or more " "
+   //       WSP     = 0*SPACE  ; zero or more " "
+   //
+   //       NULL    = %x00 ; null (0)
+   //       SPACE   = %x20 ; space (" ")
+   //       DQUOTE  = %x22 ; quote (""")
+   //       SHARP   = %x23 ; octothorpe (or sharp sign) ("#")
+   //       DOLLAR  = %x24 ; dollar sign ("$")
+   //       SQUOTE  = %x27 ; single quote ("'")
+   //       LPAREN  = %x28 ; left paren ("(")
+   //       RPAREN  = %x29 ; right paren (")")
+   //       PLUS    = %x2B ; plus sign ("+")
+   //       COMMA   = %x2C ; comma (",")
+   //       HYPHEN  = %x2D ; hyphen ("-")
+   //       DOT     = %x2E ; period (".")
+   //       SEMI    = %x3B ; semicolon (";")
+   //       LANGLE  = %x3C ; left angle bracket ("<")
+   //       EQUALS  = %x3D ; equals sign ("=")
+   //       RANGLE  = %x3E ; right angle bracket (">")
+   //       ESC     = %x5C ; backslash ("\")
+   //       USCORE  = %x5F ; underscore ("_")
+   //       LCURLY  = %x7B ; left curly brace "{"
+   //       RCURLY  = %x7D ; right curly brace "}"
+   //
+   //       ; Any UTF-8 [RFC3629] encoded Unicode [Unicode] character
+   //       UTF8    = UTF1 / UTFMB
+   //       UTFMB   = UTF2 / UTF3 / UTF4
+   //       UTF0    = %x80-BF
+   //       UTF1    = %x00-7F
+   //       UTF2    = %xC2-DF UTF0
+   //       UTF3    = %xE0 %xA0-BF UTF0 / %xE1-EC 2(UTF0) /
+   //                 %xED %x80-9F UTF0 / %xEE-EF 2(UTF0)
+   //       UTF4    = %xF0 %x90-BF 2(UTF0) / %xF1-F3 3(UTF0) /
+   //                 %xF4 %x80-8F 2(UTF0)
+   //
+   //       OCTET   = %x00-FF ; Any octet (8-bit data unit)
+   //
+   //    Object identifiers (OIDs) [X.680] are represented in LDAP using a
+   //    dot-decimal format conforming to the ABNF:
+   //
+   //       numericoid = number 1*( DOT number )
+   //
+   //    Short names, also known as descriptors, are used as more readable
+   //    aliases for object identifiers.  Short names are case insensitive and
+   //    conform to the ABNF:
+   //
+   //       descr = keystring
+   //
+   //    Where either an object identifier or a short name may be specified,
+   //    the following production is used:
+   //
+   //       oid = descr / numericoid
+   //
+   //    While the <descr> form is generally preferred when the usage is
+   //    restricted to short names referring to object identifiers that
+   //    identify like kinds of objects (e.g., attribute type descriptions,
+   //    matching rule descriptions, object class descriptions), the
+   //    <numericoid> form should be used when the object identifiers may
+   //    identify multiple kinds of objects or when an unambiguous short name
+   //    (descriptor) is not available.
+   //
+   //    Implementations SHOULD treat short names (descriptors) used in an
+   //    ambiguous manner (as discussed above) as unrecognized.
+   //
+   //    Short Names (descriptors) are discussed further in Section 6.2.
+   //
+   .oid           =  "1.3.6.1.4.1.27893.4.1.1.1",
+   .desc          =  "RFC 4512: 1.2. Common ABNF Productions",
+   .type          =  LDAPSCHEMA_ABNF,
+   //.subtype       =  LDAPSCHEMA_ABNF_COMMON,
+   .def           =  "",
+   .abnf          =  "; RFC 4512: LDAP Models\n"
+                     "; Section: 1.2. Common ABNF Productions\n"
+                     "keystring = leadkeychar *keychar\n"
+                     "leadkeychar = ALPHA\n"
+                     "keychar = ALPHA / DIGIT / HYPHEN\n"
+                     "number  = DIGIT / ( LDIGIT 1*DIGIT )\n"
+                     "\n"
+                     "ALPHA   = %x41-5A / %x61-7A   ; \"A\"-\"Z\" / \"a\"-\"z\"\n"
+                     "DIGIT   = %x30 / LDIGIT       ; \"0\"-\"9\"\n"
+                     "LDIGIT  = %x31-39             ; \"1\"-\"9\"\n"
+                     "HEX     = DIGIT / %x41-46 / %x61-66 ; \"0\"-\"9\" / \"A\"-\"F\" / \"a\"-\"f\"\n"
+                     "\n"
+                     "SP      = 1*SPACE  ; one or more \" \"\n"
+                     "WSP     = 0*SPACE  ; zero or more \" \"\n"
+                     "\n"
+                     "NULL    = %x00 ; null (0)\n"
+                     "SPACE   = %x20 ; space (\" \")\n"
+                     "DQUOTE  = %x22 ; quote (\"\"\")\n"
+                     "SHARP   = %x23 ; octothorpe (or sharp sign) (\"#\")\n"
+                     "DOLLAR  = %x24 ; dollar sign (\"$\")\n"
+                     "SQUOTE  = %x27 ; single quote (\"'\")\n"
+                     "LPAREN  = %x28 ; left paren (\"(\")\n"
+                     "RPAREN  = %x29 ; right paren (\")\")\n"
+                     "PLUS    = %x2B ; plus sign (\"+\")\n"
+                     "COMMA   = %x2C ; comma (\",\")\n"
+                     "HYPHEN  = %x2D ; hyphen (\"-\")\n"
+                     "DOT     = %x2E ; period (\".\")\n"
+                     "SEMI    = %x3B ; semicolon (\";\")\n"
+                     "LANGLE  = %x3C ; left angle bracket (\"<\")\n"
+                     "EQUALS  = %x3D ; equals sign (\"=\")\n"
+                     "RANGLE  = %x3E ; right angle bracket (\">\")\n"
+                     "ESC     = %x5C ; backslash (\"\\\")\n"
+                     "USCORE  = %x5F ; underscore (\"_\")\n"
+                     "LCURLY  = %x7B ; left curly brace \"{\"\n"
+                     "RCURLY  = %x7D ; right curly brace \"}\"\n"
+                     "\n"
+                     "; Any UTF-8 [RFC3629] encoded Unicode [Unicode] character\n"
+                     "UTF8    = UTF1 / UTFMB\n"
+                     "UTFMB   = UTF2 / UTF3 / UTF4\n"
+                     "UTF0    = %x80-BF\n"
+                     "UTF1    = %x00-7F\n"
+                     "UTF2    = %xC2-DF UTF0\n"
+                     "UTF3    = %xE0 %xA0-BF UTF0 / %xE1-EC 2(UTF0) /\n"
+                     "          %xED %x80-9F UTF0 / %xEE-EF 2(UTF0)\n"
+                     "UTF4    = %xF0 %x90-BF 2(UTF0) / %xF1-F3 3(UTF0) /\n"
+                     "          %xF4 %x80-8F 2(UTF0)\n"
+                     "\n"
+                     "OCTET   = %x00-FF ; Any octet (8-bit data unit)\n"
+                     "\n"
+                     "numericoid = number 1*( DOT number )\n"
+                     "\n"
+                     "descr = keystring\n"
+                     "\n"
+                     "oid = descr / numericoid\n",
+   .spec          =  "RFC 4512: LDAP Models",
+   .spec_type     =  LDAPSCHEMA_SPEC_RFC,
+   .spec_name     =  "4512",
+   .spec_section  =  "1.2",
+   .spec_vendor   =  "IETF",
+};
+
+
+// end of OID spec file

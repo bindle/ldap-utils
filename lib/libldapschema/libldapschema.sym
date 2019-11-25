@@ -86,6 +86,7 @@ ldapschema_memvfree
 ldapschema_value_free
 ldapschema_value_free_len
 # OID Specification functions
+ldapschema_spec_abnf
 ldapschema_spec_field
 ldapschema_spec_list
 ldapschema_spec_search

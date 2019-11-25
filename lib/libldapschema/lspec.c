@@ -80,6 +80,24 @@ ldapschema_spec_field_list(
 /////////////////
 #pragma mark - Functions
 
+/// retrieves shared ABNF strings
+/// @param[in]    abnf_type   ABNF identifier
+///
+/// @return    Upon successful completetion, this function returns the
+///            spec object containing the requested ABNF
+/// @see       ldapschema_spec_search, ldapschema_spec_field_list
+const LDAPSchemaSpec * ldapschema_spec_abnf(int abnf_type)
+{
+   switch(abnf_type)
+   {
+      case LDAPSCHEMA_O_COMMON_ABNF: return(ldapschema_spec_search("1.3.6.1.4.1.27893.4.1.1.1"));
+      case LDAPSCHEMA_O_SCHEMA_ABNF: return(ldapschema_spec_search("1.3.6.1.4.1.27893.4.1.1.2"));
+      default: break;
+   };
+   return(NULL);
+}
+
+
 /// retrieve field of OID specification
 /// @param[in]    s           Reference to OID specification
 /// @param[in]    field       field value to return
@@ -180,7 +198,7 @@ int ldapschema_spec_field_list(void * outvalue, const char ** values)
 ///
 /// @return    Upon successful completetion, this function returns a reference
 ///            to an array of OID specifications otherwise NULL is returned.
-/// @see       ldapschema_spec_search, ldapschema_spec_field
+/// @see       ldapschema_spec_search, ldapschema_spec_field, ldapschema_spec_abnf
 const LDAPSchemaSpec * const * ldapschema_spec_list(size_t * lenp)
 {
    if ((lenp))
@@ -195,7 +213,7 @@ const LDAPSchemaSpec * const * ldapschema_spec_list(size_t * lenp)
 /// @return    Upon successful completetion, this function returns a reference
 ///            to the specification of the requestd OID otherwise NULL is
 ///            returned.
-/// @see       ldapschema_spec_list, ldapschema_spec_field
+/// @see       ldapschema_spec_list, ldapschema_spec_field, ldapschema_spec_abnf
 const LDAPSchemaSpec * ldapschema_spec_search(const char * oid)
 {
    assert(oid != NULL);
