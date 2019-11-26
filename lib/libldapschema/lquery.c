@@ -137,6 +137,10 @@ LDAPSchemaAlias * ldapschema_find_alias(LDAPSchema * lsd,
    assert(alias   != NULL);
    assert(list    != NULL);
 
+   // verify there is data in the list
+   if (list_len == 0)
+      return(NULL);
+
    low   = 0;
    high  = list_len - 1;
 
