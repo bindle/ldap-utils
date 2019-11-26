@@ -237,6 +237,15 @@ void ldapschema_free(LDAPSchema * lsd)
    };
    lsd->attrs = NULL;
 
+   // frees objectclass list
+   if ((lsd->objclses))
+   {
+      for(pos = 0; pos < lsd->objclses_len; pos++)
+         free(lsd->objclses[pos]);
+      free(lsd->objclses);
+   };
+   lsd->objclses = NULL;
+
    if ((lsd->schema_errs))
       ldapschema_value_free(lsd->schema_errs);
 
