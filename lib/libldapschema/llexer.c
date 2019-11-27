@@ -618,7 +618,10 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
             attr->min_upper = strtoull(&stridx[1], NULL, 10);
          };
          if ((attr->syntax = ldapschema_oid(lsd, argv[pos], LDAPSCHEMA_SYNTAX)) != NULL)
+         {
             attr->model.flags |= attr->syntax->model.flags;
+            ldapschema_insert(lsd, (void ***)&attr->syntax->attrs, &attr->syntax->attrs_len, attr, ldapschema_compar_models);
+         };
       }
 
       // inteprets attributeType SINGLE-VALUE
@@ -884,7 +887,8 @@ LDAPSchemaMatchingRule * ldapschema_parse_matchingrule(LDAPSchema * lsd, const s
       else if (!(strcasecmp(argv[pos], "SYNTAX")))
       {
          pos++;
-         rule->syntax = ldapschema_oid(lsd, argv[pos], LDAPSCHEMA_SYNTAX);
+         if ((rule->syntax = ldapschema_oid(lsd, argv[pos], LDAPSCHEMA_SYNTAX)) != NULL)
+            ldapschema_insert(lsd, (void ***)&rule->syntax->mtchngrls, &rule->syntax->mtchngrls_len, rule, ldapschema_compar_models);
       }
 
       // handle unknown parameters

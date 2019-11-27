@@ -52,6 +52,8 @@
 #include "llexer.h"
 #include "lquery.h"
 #include "lerror.h"
+#include "lmemory.h"
+#include "lsort.h"
 
 
 /////////////////
@@ -206,7 +208,8 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
          {
             attr->model.flags |= attrsup->model.flags;
             if (!(attr->syntax))
-               attr->syntax = attrsup->syntax;
+               if ((attr->syntax = attrsup->syntax) != NULL)
+                  ldapschema_insert(lsd, (void ***)&attr->syntax->attrs, &attr->syntax->attrs_len, attr, ldapschema_compar_models);
             if (!(attr->min_upper))
                attr->min_upper = attrsup->min_upper;
             if (!(attr->usage))

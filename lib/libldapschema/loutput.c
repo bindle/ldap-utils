@@ -62,7 +62,7 @@
 #define LDAPSCHEMA_WIDTH_HEADER    19
 #define LDAPSCHEMA_WIDTH_INDENT    3
 #define LDAPSCHEMA_WIDTH_FIELD     (LDAPSCHEMA_WIDTH_HEADER-LDAPSCHEMA_WIDTH_INDENT)
-#define LDAPSCHEMA_WIDTH_VALUE      30
+#define LDAPSCHEMA_WIDTH_VALUE      45
 
 
 //////////////////
@@ -416,6 +416,11 @@ void ldapschema_print_list_models(LDAPSchema * lsd,
             key = ((LDAPSchemaAttributeType *)list[pos])->names[0];
          break;
 
+         case LDAPSCHEMA_MATCHINGRULE:
+         if ((((LDAPSchemaMatchingRule *)list[pos])->names))
+            key = ((LDAPSchemaMatchingRule *)list[pos])->names[0];
+         break;
+
          case LDAPSCHEMA_OBJECTCLASS:
          if ((((LDAPSchemaObjectclass *)list[pos])->names))
             key = ((LDAPSchemaObjectclass *)list[pos])->names[0];
@@ -623,6 +628,8 @@ void ldapschema_print_obj_syntax(LDAPSchema * lsd, LDAPSchemaSyntax * syntax)
    ldapschema_print_data_class(lsd, syntax->data_class);
    ldapschema_print_flags(lsd, &syntax->model);
    ldapschema_print_extensions(lsd, &syntax->model);
+   ldapschema_print_list_models(lsd, "attributeTypes:",  (LDAPSchemaModel **)syntax->attrs,     syntax->attrs_len);
+   ldapschema_print_list_models(lsd, "matchingRules:",   (LDAPSchemaModel **)syntax->mtchngrls, syntax->mtchngrls_len);
    ldapschema_print_spec(lsd, syntax->model.spec);
    ldapschema_print_definition(lsd, &syntax->model);
    ldapschema_print_issues(lsd, &syntax->model);

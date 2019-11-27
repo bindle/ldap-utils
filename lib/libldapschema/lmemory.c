@@ -780,6 +780,12 @@ void ldapschema_syntax_free(LDAPSchemaSyntax * syntax)
    regfree(&syntax->re);
    ldapschema_object_free(&syntax->model);
 
+   if ((syntax->attrs))
+      free(syntax->attrs);
+
+   if ((syntax->mtchngrls))
+      free(syntax->mtchngrls);
+
    free(syntax);
 
    return;

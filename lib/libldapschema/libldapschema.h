@@ -196,6 +196,10 @@ struct ldap_schema_syntax
    LDAPSchemaModel                        model;
    size_t                                 data_class;
    regex_t                                re;
+   LDAPSchemaMatchingRule **              mtchngrls;
+   size_t                                 mtchngrls_len;
+   LDAPSchemaAttributeType **             attrs;
+   size_t                                 attrs_len;
 };
 
 
