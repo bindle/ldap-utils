@@ -248,9 +248,6 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
          if (attr->model.type != LDAPSCHEMA_ATTRIBUTETYPE)
             continue;
 
-         if (!(attr->names))
-            ldapschema_schema_err(lsd, (LDAPSchemaModel *)attr, "missing NAME");
-
          if (!(attr->syntax))
             ldapschema_schema_err(lsd, (LDAPSchemaModel *)attr, "missing or unknown SYNTAX");
       };

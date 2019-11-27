@@ -719,6 +719,9 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
    };
    ldapschema_value_free(argv);
 
+   if (!(attr->names))
+      ldapschema_schema_err(lsd, (LDAPSchemaModel *)attr, "missing NAME");
+
    // register attributeType
    if ((err = ldapschema_model_register(lsd, &attr->model)) != LDAP_SUCCESS)
    {
@@ -1053,6 +1056,11 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
       else if (!(strcasecmp(argv[pos], "NAME")))
       {
          pos++;
+         if ((objcls->model.desc))
+         {
+            ldapschema_schema_err_kw_dup(lsd, (LDAPSchemaModel *)objcls, "NAME");
+            continue;
+         };
          if (argv[pos][0] == '(')
          {
             if ((err = ldapschema_definition_split(lsd, &objcls->model, argv[pos], strlen(argv[pos]), &objcls->names)) == -1)
@@ -1088,6 +1096,11 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
       else if (!(strcasecmp(argv[pos], "DESC")))
       {
          pos++;
+         if ((objcls->model.desc))
+         {
+            ldapschema_schema_err_kw_dup(lsd, (LDAPSchemaModel *)objcls, "DESC");
+            continue;
+         };
          if (pos >= argc)
          {
             lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR;
@@ -1117,6 +1130,11 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
       {
          pos++;
          if ((objcls->sup_name))
+         {
+            ldapschema_schema_err_kw_dup(lsd, (LDAPSchemaModel *)objcls, "SUP");
+            continue;
+         };
+         if ((objcls->sup_name))
             free(objcls->sup_name);
          if ((objcls->sup_name = strdup(argv[pos])) == NULL)
          {
@@ -1145,6 +1163,11 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
       else if (!(strcasecmp(argv[pos], "MUST")))
       {
          pos++;
+         if ((objcls->must))
+         {
+            ldapschema_schema_err_kw_dup(lsd, (LDAPSchemaModel *)objcls, "MUST");
+            continue;
+         };
          if ((err = ldapschema_parse_objectclass_attrs(lsd, "MUST", objcls, argv[pos], 1)) > 0)
          {
             ldapschema_value_free(argv);
@@ -1157,6 +1180,11 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
       else if (!(strcasecmp(argv[pos], "MAY")))
       {
          pos++;
+         if ((objcls->may))
+         {
+            ldapschema_schema_err_kw_dup(lsd, (LDAPSchemaModel *)objcls, "MAY");
+            continue;
+         };
          if ((err = ldapschema_parse_objectclass_attrs(lsd, "MAY", objcls, argv[pos], 0)) > 0)
          {
             ldapschema_value_free(argv);
@@ -1168,13 +1196,16 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
       // handle unknown parameters
       else
       {
-         ldapschema_schema_err(lsd, &objcls->model, "invalid term '%s' in definition", argv[pos]);
-         ldapschema_value_free(argv);
-         ldapschema_objectclass_free(objcls);
-         return(NULL);
+         ldapschema_schema_err_kw_unknown(lsd, (LDAPSchemaModel *)objcls, argv[pos]);
       };
    };
    ldapschema_value_free(argv);
+
+   if (!(objcls->names))
+      ldapschema_schema_err(lsd, (LDAPSchemaModel *)objcls, "missing 'NAME'");
+
+   if ( (!(objcls->may)) && (!(objcls->must)) )
+      ldapschema_schema_err(lsd, (LDAPSchemaModel *)objcls, "missing 'MUST' and 'MAY'");
 
    // register objectClass
    if ((err = ldapschema_model_register(lsd, &objcls->model)) != LDAP_SUCCESS)
