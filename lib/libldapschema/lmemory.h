@@ -73,6 +73,13 @@ LDAPSchemaCur
 ldapschema_curalloc(
          LDAPSchema            * lsd );
 
+LDAPSchemaModel *
+ldapschema_model_initialize(
+         LDAPSchema *               lsd,
+         const char *               oid,
+         uint32_t                   type,
+         const struct berval *      def);
+
 int
 ldapschema_model_register(
          LDAPSchema *               lsd,

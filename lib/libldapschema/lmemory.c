@@ -456,6 +456,72 @@ void ldapschema_model_free(LDAPSchemaModel * model)
 }
 
 
+LDAPSchemaModel * ldapschema_model_initialize(LDAPSchema * lsd,
+   const char * oid, uint32_t type, const struct berval * def)
+{
+   size_t               size;
+   LDAPSchemaModel *    mod;
+
+   assert(lsd != NULL);
+   assert(oid != NULL);
+
+   switch(type)
+   {
+      case LDAPSCHEMA_ATTRIBUTETYPE:   size = sizeof(LDAPSchemaAttributeType);   break;
+      case LDAPSCHEMA_SYNTAX:          size = sizeof(LDAPSchemaSyntax);          break;
+      case LDAPSCHEMA_MATCHINGRULE:    size = sizeof(LDAPSchemaMatchingRule);    break;
+      case LDAPSCHEMA_OBJECTCLASS:     size = sizeof(LDAPSchemaObjectclass);     break;
+      default: assert(0); return(NULL);
+   };
+
+   // initialize syntax
+   if ((mod = malloc(size)) == NULL)
+   {
+      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+      return(NULL);
+   };
+   bzero(mod, size);
+
+   mod->size = size;
+   mod->type = type;
+
+   // copy OID into model
+   if ((mod->oid = strdup(oid)) == NULL)
+   {
+      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+      ldapschema_model_free(mod);
+      return(NULL);
+   };
+
+   // copy definition into model
+   if ((def))
+   {
+      if ((mod->definition = malloc(def->bv_len+1)) == NULL)
+      {
+         lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+         ldapschema_model_free(mod);
+         return(NULL);
+      };
+      memcpy(mod->definition, def->bv_val, def->bv_len);
+      mod->definition[def->bv_len] = '\0';
+   };
+
+   // reference OID specification
+   mod->spec = ldapschema_spec_search(oid);
+   if ((mod->spec))
+   {
+      if (mod->spec->type != type)
+      {
+         mod->spec = NULL;
+         return(mod);
+      };
+      mod->flags = mod->spec->flags;
+   };
+
+   return(mod);
+}
+
+
 int ldapschema_model_register(LDAPSchema * lsd, LDAPSchemaModel * mod)
 {
    int                     err;
