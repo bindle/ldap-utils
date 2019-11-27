@@ -152,6 +152,22 @@ int ldapschema_schema_err(LDAPSchema * lsd, LDAPSchemaModel * mod, const char * 
 }
 
 
+int ldapschema_schema_err_kw_dup(LDAPSchema * lsd, LDAPSchemaModel * mod,
+   const char * keyword )
+{
+   assert(lsd != NULL);
+   return(ldapschema_schema_err(lsd, mod, "definition contains duplicate keyword '%s'", keyword));
+}
+
+
+int ldapschema_schema_err_kw_unknown(LDAPSchema * lsd, LDAPSchemaModel * mod,
+   const char * keyword )
+{
+   assert(lsd != NULL);
+   return(ldapschema_schema_err(lsd, mod, "definition contains unknown keyword '%s'", keyword));
+}
+
+
 char ** ldapschema_schema_errors(LDAPSchema * lsd )
 {
    int                  len;

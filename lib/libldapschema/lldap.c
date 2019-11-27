@@ -225,6 +225,20 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
                   ldapschema_insert(lsd, (void ***)&attr->substr->used_by, &attr->substr->used_by_len, attr, ldapschema_compar_models);
          };
       };
+
+      // checks attribute
+      for(idx = 0; (idx < lsd->oids_len); idx++)
+      {
+         attr = lsd->oids[idx].attributetype;
+         if (attr->model.type != LDAPSCHEMA_ATTRIBUTETYPE)
+            continue;
+
+         if (!(attr->names))
+            ldapschema_schema_err(lsd, (LDAPSchemaModel *)attr, "missing NAME");
+
+         if (!(attr->syntax))
+            ldapschema_schema_err(lsd, (LDAPSchemaModel *)attr, "missing or unknown SYNTAX");
+      };
    };
 
    // process objectClasses

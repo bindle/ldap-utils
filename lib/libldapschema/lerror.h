@@ -70,5 +70,17 @@ ldapschema_schema_err(
                                        ... )
          __attribute__((format(printf, 3, 4)) );
 
+int
+ldapschema_schema_err_kw_dup(
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             mod,
+         const char *                  keyword );
+
+int
+ldapschema_schema_err_kw_unknown(
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             mod,
+         const char *                  keyword );
+
 
 #endif /* end of header file */

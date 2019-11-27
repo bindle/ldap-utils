@@ -510,6 +510,11 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
       else if (!(strcasecmp(argv[pos], "NAME")))
       {
          pos++;
+         if ((attr->names))
+         {
+            ldapschema_schema_err_kw_dup(lsd, (LDAPSchemaModel *)attr, "NAME");
+            continue;
+         };
          if (argv[pos][0] == '(')
          {
             if ((err = ldapschema_definition_split(lsd, &attr->model, argv[pos], strlen(argv[pos]), &attr->names)) == -1)
@@ -545,6 +550,11 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
       else if (!(strcasecmp(argv[pos], "DESC")))
       {
          pos++;
+         if ((attr->model.desc))
+         {
+            ldapschema_schema_err_kw_dup(lsd, (LDAPSchemaModel *)attr, "DESC");
+            continue;
+         };
          if (pos >= argc)
          {
             lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR;
@@ -573,8 +583,11 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
       else if (!(strcasecmp(argv[pos], "SUP")))
       {
          pos++;
-         if ((attr->sup_name))
-            free(attr->sup_name);
+         if ((attr->sup))
+         {
+            ldapschema_schema_err_kw_dup(lsd, (LDAPSchemaModel *)attr, "SUP");
+            continue;
+         };
          if ((attr->sup_name = strdup(argv[pos])) == NULL)
          {
             lsd->errcode = LDAPSCHEMA_NO_MEMORY;
@@ -588,39 +601,65 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
       else if (!(strcasecmp(argv[pos], "EQUALITY")))
       {
          pos++;
-         if ((alias = ldapschema_find_alias(lsd, argv[pos], lsd->mtchngrls, lsd->mtchngrls_len)) != NULL)
+         if ((attr->equality))
          {
-            attr->equality = alias->matchingrule;
-            ldapschema_insert(lsd, (void ***)&attr->equality->used_by, &attr->equality->used_by_len, attr, ldapschema_compar_models);
+            ldapschema_schema_err_kw_dup(lsd, (LDAPSchemaModel *)attr, "EQUALITY");
+            continue;
          };
+         if ((alias = ldapschema_find_alias(lsd, argv[pos], lsd->mtchngrls, lsd->mtchngrls_len)) == NULL)
+         {
+            ldapschema_schema_err(lsd, (LDAPSchemaModel *)attr, "specifies undefined EQUALITY matchingRule '%s'", argv[pos]);
+            continue;
+         };
+         attr->equality = alias->matchingrule;
+         ldapschema_insert(lsd, (void ***)&attr->equality->used_by, &attr->equality->used_by_len, attr, ldapschema_compar_models);
       }
 
       // inteprets attributeType ORDERING
       else if (!(strcasecmp(argv[pos], "ORDERING")))
       {
          pos++;
-         if ((alias = ldapschema_find_alias(lsd, argv[pos], lsd->mtchngrls, lsd->mtchngrls_len)) != NULL)
+         if ((attr->ordering))
          {
-            attr->ordering = alias->matchingrule;
-            ldapschema_insert(lsd, (void ***)&attr->ordering->used_by, &attr->ordering->used_by_len, attr, ldapschema_compar_models);
+            ldapschema_schema_err_kw_dup(lsd, (LDAPSchemaModel *)attr, "ORDERING");
+            continue;
          };
+         if ((alias = ldapschema_find_alias(lsd, argv[pos], lsd->mtchngrls, lsd->mtchngrls_len)) == NULL)
+         {
+            ldapschema_schema_err(lsd, (LDAPSchemaModel *)attr, "specifies undefined ORDERING matchingRule '%s'", argv[pos]);
+            continue;
+         };
+         attr->ordering = alias->matchingrule;
+         ldapschema_insert(lsd, (void ***)&attr->ordering->used_by, &attr->ordering->used_by_len, attr, ldapschema_compar_models);
       }
 
       // inteprets attributeType SUBSTR
       else if (!(strcasecmp(argv[pos], "SUBSTR")))
       {
          pos++;
-         if ((alias = ldapschema_find_alias(lsd, argv[pos], lsd->mtchngrls, lsd->mtchngrls_len)) != NULL)
+         if ((attr->substr))
          {
-            attr->substr = alias->matchingrule;
-            ldapschema_insert(lsd, (void ***)&attr->substr->used_by, &attr->substr->used_by_len, attr, ldapschema_compar_models);
+            ldapschema_schema_err_kw_dup(lsd, (LDAPSchemaModel *)attr, "SUBSTR");
+            continue;
          };
+         if ((alias = ldapschema_find_alias(lsd, argv[pos], lsd->mtchngrls, lsd->mtchngrls_len)) == NULL)
+         {
+            ldapschema_schema_err(lsd, (LDAPSchemaModel *)attr, "specifies undefined SUBSTR matchingRule '%s'", argv[pos]);
+            continue;
+         };
+         attr->substr = alias->matchingrule;
+         ldapschema_insert(lsd, (void ***)&attr->substr->used_by, &attr->substr->used_by_len, attr, ldapschema_compar_models);
       }
 
       // inteprets attributeType SYNTAX
       else if (!(strcasecmp(argv[pos], "SYNTAX")))
       {
          pos++;
+         if ((attr->syntax))
+         {
+            ldapschema_schema_err_kw_dup(lsd, (LDAPSchemaModel *)attr, "SYNTAX");
+            continue;
+         };
          if ((stridx = index(argv[pos], '{')) != NULL)
          {
             stridx[0] = '\0';
@@ -655,6 +694,11 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
       else if (!(strcasecmp(argv[pos], "USAGE")))
       {
          pos++;
+         if ((attr->usage))
+         {
+            ldapschema_schema_err_kw_dup(lsd, (LDAPSchemaModel *)attr, "USAGE");
+            continue;
+         };
          if (!(strcasecmp(argv[pos], "userApplications")))
             attr->usage = LDAPSCHEMA_USER_APP;
          else if (!(strcasecmp(argv[pos], "directoryOperation")))
@@ -664,21 +708,13 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
          else if (!(strcasecmp(argv[pos], "dSAOperation")))
             attr->usage = LDAPSCHEMA_DSA_OP;
          else
-         {
-            lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR;
-            ldapschema_value_free(argv);
-            ldapschema_attributetype_free(attr);
-            return(NULL);
-         };
+            ldapschema_schema_err(lsd, (LDAPSchemaModel *)attr, "specifies unknown USAGE '%s'", argv[pos]);
       }
 
       // handle unknown parameters
       else
       {
-         lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR;
-         ldapschema_value_free(argv);
-         ldapschema_attributetype_free(attr);
-         return(NULL);
+         ldapschema_schema_err_kw_unknown(lsd, (LDAPSchemaModel *)attr, argv[pos]);
       };
    };
    ldapschema_value_free(argv);
