@@ -241,11 +241,25 @@ void ldapschema_print_data_class(LDAPSchema * lsd, size_t classid )
 
 void ldapschema_print_definition(LDAPSchema * lsd, LDAPSchemaModel * model)
 {
-   char buff[4096];
+   char           buff[4096];
+   const char   * def;
+   const char   * name;
+
    assert(lsd   != NULL);
    assert(model != NULL);
+
+   name = "definition:";
+   if ((def = model->definition) == NULL)
+   {
+      name = "spec definition:";
+      ldapschema_print_line("definition:", "<not defined by server>");
+      if ((def = model->spec->def) == NULL)
+      return;
+   };
+
    ldapschema_fmt_definition(buff, sizeof(buff), model->definition, 30);
-   ldapschema_print_line("definition:", buff);
+   ldapschema_print_line(name, buff);
+
    return;
 }
 
@@ -556,6 +570,8 @@ void ldapschema_print_type(LDAPSchema * lsd, LDAPSchemaModel * model)
       default:                       str = "unknown:"; break;
    };
    printf("%-*s %s\n", LDAPSCHEMA_WIDTH_HEADER, str, model->oid);
+   if (!(model->definition))
+      ldapschema_print_line("notice:", "** NOT DEFINED BY SERVER **");
    return;
 }
 

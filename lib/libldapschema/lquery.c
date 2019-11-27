@@ -61,6 +61,11 @@
 //////////////////
 #pragma mark - Prototypes
 
+int
+ldapschema_get_info_model_str(
+         char **                    os,
+         const char *               src );
+
 
 /////////////////
 //             //
@@ -404,9 +409,9 @@ int ldapschema_get_info_model(LDAPSchema * lsd,
       case LDAPSCHEMA_FLD_FLAGS: *oi = (int)mod->flags;    return(0);
 
       // char * values (strings)
-      case LDAPSCHEMA_FLD_OID:  if ((*os = strdup(mod->oid))         == NULL) return(LDAPSCHEMA_NO_MEMORY); return(0);
-      case LDAPSCHEMA_FLD_DESC: if ((*os = strdup(mod->desc))        == NULL) return(LDAPSCHEMA_NO_MEMORY); return(0);
-      case LDAPSCHEMA_FLD_DEF:  if ((*os = strdup(mod->definition))  == NULL) return(LDAPSCHEMA_NO_MEMORY); return(0);
+      case LDAPSCHEMA_FLD_OID:  return(ldapschema_get_info_model_str(os, mod->oid));
+      case LDAPSCHEMA_FLD_DESC: return(ldapschema_get_info_model_str(os, mod->desc));
+      case LDAPSCHEMA_FLD_DEF:  return(ldapschema_get_info_model_str(os, mod->definition));
 
       // char ** values (arrays of strings)
 
@@ -415,6 +420,20 @@ int ldapschema_get_info_model(LDAPSchema * lsd,
    };
 
    return(LDAPSCHEMA_UNKNOWN_FIELD);
+}
+
+
+int ldapschema_get_info_model_str(char ** os, const char * src)
+{
+   assert(os != NULL);
+   if (!(src))
+   {
+      *os = NULL;
+      return(0);
+   };
+   if ((*os = strdup(src)) == NULL)
+      return(LDAPSCHEMA_NO_MEMORY);
+   return(0);
 }
 
 

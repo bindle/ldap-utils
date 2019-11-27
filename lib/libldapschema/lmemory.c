@@ -675,13 +675,16 @@ void ldapschema_objectclass_free(LDAPSchemaObjectclass * objectclass)
 }
 
 
-void * ldapschema_oid(LDAPSchema * lsd, const char * oid, size_t type)
+void * ldapschema_oid(LDAPSchema * lsd, const char * oid, uint32_t type)
 {
-   size_t               low;
-   size_t               mid;
-   size_t               high;
-   int                  res;
-   LDAPSchemaModel   ** models;
+   size_t                  low;
+   size_t                  mid;
+   size_t                  high;
+   int                     res;
+   LDAPSchemaModel **      models;
+   const LDAPSchemaSpec *  spec;
+   LDAPSchemaModel *       mod;
+   int                     err;
 
    assert(lsd  != NULL);
    assert(oid  != NULL);
@@ -716,7 +719,20 @@ void * ldapschema_oid(LDAPSchema * lsd, const char * oid, size_t type)
       if ((models[high]->type == type) || (!(type)))
          return(models[high]);
 
-   return(NULL);
+   // look for matching spec and build requested OID from spec
+   if ((spec = ldapschema_spec_search(oid)) == NULL)
+      return(NULL);
+   if ( (spec->type != type) && ((type)) )
+      return(NULL);
+   if ((mod = ldapschema_model_initialize(lsd, oid, spec->type, NULL)) == NULL)
+      return(NULL);
+   if ((err = ldapschema_model_register(lsd, mod)) != LDAP_SUCCESS)
+   {
+      ldapschema_model_free(mod);
+      return(NULL);
+   };
+
+   return(mod);
 }
 
 

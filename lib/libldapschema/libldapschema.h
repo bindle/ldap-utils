@@ -248,7 +248,7 @@ void *
 ldapschema_oid(
          LDAPSchema            * lsd,
          const char            * oid,
-         size_t                  type );
+         uint32_t                type );
 
 char **
 ldapschema_value_add(
