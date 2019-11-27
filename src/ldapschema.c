@@ -513,30 +513,66 @@ int my_run_details(MyConfig * cnf)
    // look for matching matchingRules and add ldapSyntax
    for(idx = 0; ((cnf->args[idx])); idx++)
    {
-      if ((mtchngrl = ldapschema_find_matchingrule(cnf->lsd, cnf->args[idx])) != NULL)
-      {
-         ldapschema_get_info_matchingrule(cnf->lsd, mtchngrl, LDAPSCHEMA_FLD_SYNTAX, &syntax);
-         if ((syntax))
-            my_list_add(&list, &list_len, (LDAPSchemaModel *)syntax);
-      };
+      if ((mtchngrl = ldapschema_find_matchingrule(cnf->lsd, cnf->args[idx])) == NULL)
+         continue;
+      ldapschema_get_info_matchingrule(cnf->lsd, mtchngrl, LDAPSCHEMA_FLD_SYNTAX, &syntax);
+      my_list_add(&list, &list_len, (LDAPSchemaModel *)syntax);
    };
 
    // look for matching attributeType and add syntaxes
    for(idx = 0; (((cnf->args[idx])) && (!(cnf->noextra))); idx++)
    {
-      if ((attr = ldapschema_find_attributetype(cnf->lsd, cnf->args[idx])) != NULL)
+      if ((attr = ldapschema_find_attributetype(cnf->lsd, cnf->args[idx])) == NULL)
+         continue;
+      ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SYNTAX,   &syntax);
+      my_list_add(&list, &list_len, (LDAPSchemaModel *)syntax);
+      ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SUPERIOR, &attrsup);
+      while ((attrsup))
       {
+         attr = attrsup;
          ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SYNTAX,   &syntax);
          my_list_add(&list, &list_len, (LDAPSchemaModel *)syntax);
          ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SUPERIOR, &attrsup);
-         while ((attrsup))
-         {
-            attr = attrsup;
-            ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SYNTAX,   &syntax);
-            my_list_add(&list, &list_len, (LDAPSchemaModel *)syntax);
-            ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SUPERIOR, &attrsup);
-         };
       };
+   };
+
+   // look for matching attributeType and add matchingRules
+   for(idx = 0; (((cnf->args[idx])) && (!(cnf->noextra))); idx++)
+   {
+      if ((attr = ldapschema_find_attributetype(cnf->lsd, cnf->args[idx])) == NULL)
+         continue;
+
+      // add syntaxes
+      ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_EQUALITY,   &mtchngrl);
+      if ((mtchngrl))
+      {
+         ldapschema_get_info_matchingrule(cnf->lsd, mtchngrl, LDAPSCHEMA_FLD_SYNTAX, &syntax);
+         my_list_add(&list, &list_len, (LDAPSchemaModel *)syntax);
+      };
+
+      ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_ORDERING,   &mtchngrl);
+      if ((mtchngrl))
+      {
+         ldapschema_get_info_matchingrule(cnf->lsd, mtchngrl, LDAPSCHEMA_FLD_SYNTAX, &syntax);
+         my_list_add(&list, &list_len, (LDAPSchemaModel *)syntax);
+      };
+
+      ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SUBSTR,   &mtchngrl);
+      if ((mtchngrl))
+      {
+         ldapschema_get_info_matchingrule(cnf->lsd, mtchngrl, LDAPSCHEMA_FLD_SYNTAX, &syntax);
+         my_list_add(&list, &list_len, (LDAPSchemaModel *)syntax);
+      };
+
+      // add matching rules
+      ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_EQUALITY,   &mtchngrl);
+      my_list_add(&list, &list_len, (LDAPSchemaModel *)mtchngrl);
+
+      ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_ORDERING,   &mtchngrl);
+      my_list_add(&list, &list_len, (LDAPSchemaModel *)mtchngrl);
+
+      ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SUBSTR,   &mtchngrl);
+      my_list_add(&list, &list_len, (LDAPSchemaModel *)mtchngrl);
    };
 
    // look for matching matchingRule
@@ -547,15 +583,14 @@ int my_run_details(MyConfig * cnf)
    // look for matching attributeType and add attributes
    for(idx = 0; (((cnf->args[idx])) && (!(cnf->noextra))); idx++)
    {
-      if ((attr = ldapschema_find_attributetype(cnf->lsd, cnf->args[idx])) != NULL)
+      if ((attr = ldapschema_find_attributetype(cnf->lsd, cnf->args[idx])) == NULL)
+         continue;
+      ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SUPERIOR, &attrsup);
+      while ((attrsup))
       {
+         attr = attrsup;
+         my_list_add(&list, &list_len, (LDAPSchemaModel *)attr);
          ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SUPERIOR, &attrsup);
-         while ((attrsup))
-         {
-            attr = attrsup;
-            my_list_add(&list, &list_len, (LDAPSchemaModel *)attr);
-            ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SUPERIOR, &attrsup);
-         };
       };
    };
    for(idx = 0; ((cnf->args[idx])); idx++)
@@ -565,15 +600,14 @@ int my_run_details(MyConfig * cnf)
    // look for matching objectclasses
    for(idx = 0; (((cnf->args[idx])) && (!(cnf->noextra))); idx++)
    {
-      if ((objcls = ldapschema_find_objectclass(cnf->lsd, cnf->args[idx])) != NULL)
+      if ((objcls = ldapschema_find_objectclass(cnf->lsd, cnf->args[idx])) == NULL)
+         continue;
+      ldapschema_get_info_objectclass(cnf->lsd, objcls, LDAPSCHEMA_FLD_SUPERIOR, &objclssup);
+      while ((objclssup))
       {
+         objcls = objclssup;
+         my_list_add(&list, &list_len, (LDAPSchemaModel *)objcls);
          ldapschema_get_info_objectclass(cnf->lsd, objcls, LDAPSCHEMA_FLD_SUPERIOR, &objclssup);
-         while ((objclssup))
-         {
-            objcls = objclssup;
-            my_list_add(&list, &list_len, (LDAPSchemaModel *)objcls);
-            ldapschema_get_info_objectclass(cnf->lsd, objcls, LDAPSCHEMA_FLD_SUPERIOR, &objclssup);
-         };
       };
    };
    for(idx = 0; ((cnf->args[idx])); idx++)
