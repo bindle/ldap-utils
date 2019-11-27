@@ -81,6 +81,7 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
    LDAPSchemaAttributeType     * attrsup;
    LDAPSchemaObjectclass       * objcls;
    LDAPSchemaObjectclass       * objclssup;
+   LDAPSchemaMatchingRule *      mtchngrl;
 
    assert(lsd != NULL);
    assert(ld  != NULL);
@@ -166,6 +167,20 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
          };
       };
       ldap_value_free_len(vals);
+
+      // checks attribute
+       for(idx = 0; (idx < lsd->oids_len); idx++)
+       {
+          mtchngrl = lsd->oids[idx].matchingrule;
+          if (mtchngrl->model.type != LDAPSCHEMA_MATCHINGRULE)
+             continue;
+
+          if (!(mtchngrl->names))
+             ldapschema_schema_err(lsd, (LDAPSchemaModel *)mtchngrl, "missing NAME");
+
+          if (!(mtchngrl->syntax))
+             ldapschema_schema_err(lsd, (LDAPSchemaModel *)mtchngrl, "missing or unknown SYNTAX");
+       };
    };
 
    // process attributeTypes

@@ -869,6 +869,11 @@ LDAPSchemaMatchingRule * ldapschema_parse_matchingrule(LDAPSchema * lsd, const s
       else if (!(strcasecmp(argv[pos], "NAME")))
       {
          pos++;
+         if ((rule->names))
+         {
+            ldapschema_schema_err_kw_dup(lsd, (LDAPSchemaModel *)rule, "NAMES");
+            continue;
+         };
          if (argv[pos][0] == '(')
          {
             if ((err = ldapschema_definition_split(lsd, &rule->model, argv[pos], strlen(argv[pos]), &rule->names)) == -1)
@@ -904,6 +909,11 @@ LDAPSchemaMatchingRule * ldapschema_parse_matchingrule(LDAPSchema * lsd, const s
       else if (!(strcasecmp(argv[pos], "DESC")))
       {
          pos++;
+         if ((rule->names))
+         {
+            ldapschema_schema_err_kw_dup(lsd, (LDAPSchemaModel *)rule, "DESC");
+            continue;
+         };
          if (pos >= argc)
          {
             lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR;
@@ -932,6 +942,11 @@ LDAPSchemaMatchingRule * ldapschema_parse_matchingrule(LDAPSchema * lsd, const s
       else if (!(strcasecmp(argv[pos], "SYNTAX")))
       {
          pos++;
+         if ((rule->syntax))
+         {
+            ldapschema_schema_err_kw_dup(lsd, (LDAPSchemaModel *)rule, "SYNTAX");
+            continue;
+         };
          if ((rule->syntax = ldapschema_oid(lsd, argv[pos], LDAPSCHEMA_SYNTAX)) != NULL)
             ldapschema_insert(lsd, (void ***)&rule->syntax->mtchngrls, &rule->syntax->mtchngrls_len, rule, ldapschema_compar_models);
       }
@@ -939,10 +954,7 @@ LDAPSchemaMatchingRule * ldapschema_parse_matchingrule(LDAPSchema * lsd, const s
       // handle unknown parameters
       else
       {
-         lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR;
-         ldapschema_value_free(argv);
-         ldapschema_matchingrule_free(rule);
-         return(NULL);
+         ldapschema_schema_err_kw_unknown(lsd, (LDAPSchemaModel *)rule, argv[pos]);
       };
    };
    ldapschema_value_free(argv);
