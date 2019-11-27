@@ -629,8 +629,10 @@ int my_run_lint(MyConfig * cnf)
    };
 
    for(pos = 0; ((errs[pos])); pos++)
-      printf("schema error %zu: %s\n", (pos+1), errs[pos]);
+      printf("%s\n", errs[pos]);
    ldapschema_value_free(errs);
+
+   printf("%zu issues reported\n", pos);
 
    return(MY_EXIT_SCHEMAERR);
 }
