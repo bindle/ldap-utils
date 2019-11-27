@@ -688,44 +688,11 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
    // adds specification to syntax
    attr->model.spec = ldapschema_spec_search(attr->model.oid);
 
-   // adds syntax into OID list
-   if ((ldapschema_insert(lsd, (void ***)&lsd->oids, &lsd->oids_len, attr, ldapschema_compar_models)) != LDAP_SUCCESS)
+   // register attributeType
+   if ((err = ldapschema_model_register(lsd, &attr->model)) != LDAP_SUCCESS)
    {
       ldapschema_attributetype_free(attr);
       return(NULL);
-   };
-
-   // adds attributeType into attributeType list using OID and names
-   if ((alias = malloc(sizeof(LDAPSchemaAlias *))) == NULL)
-   {
-      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
-      return(NULL);
-   };
-   alias->alias         = attr->model.oid;
-   alias->attributetype = attr;
-   if ((err = ldapschema_insert(lsd, (void ***)&lsd->attrs, &lsd->attrs_len, alias, ldapschema_compar_aliases)) > 0)
-   {
-      free(alias);
-      return(NULL);
-   };
-   if (err == -1)
-      ldapschema_schema_err(lsd,  &attr->model, " attributeType with duplicate oid '%s' found", attr->model.oid);
-   for(pos = 0; (size_t)pos < attr->names_len; pos++)
-   {
-      if ((alias = malloc(sizeof(LDAPSchemaAlias *))) == NULL)
-      {
-         lsd->errcode = LDAPSCHEMA_NO_MEMORY;
-         return(NULL);
-      };
-      alias->alias         = attr->names[pos];
-      alias->attributetype = attr;
-      if ((ldapschema_insert(lsd, (void ***)&lsd->attrs, &lsd->attrs_len, alias, ldapschema_compar_aliases)) > 0)
-      {
-         free(alias);
-         return(NULL);
-      };
-      if (err == -1)
-         ldapschema_schema_err(lsd,  &attr->model, " attributeType with duplicate name '%s' found", attr->names[pos]);
    };
 
    return(attr);
