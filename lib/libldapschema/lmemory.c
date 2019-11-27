@@ -767,6 +767,7 @@ void * ldapschema_oid(LDAPSchema * lsd, const char * oid, uint32_t type)
       ldapschema_model_free(mod);
       return(NULL);
    };
+   ldapschema_schema_err(lsd, mod, "not defined by server");
 
    return(mod);
 }
