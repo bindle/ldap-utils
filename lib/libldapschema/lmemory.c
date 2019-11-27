@@ -301,22 +301,6 @@ int ldapschema_initialize(LDAPSchema ** lsdp)
       return(LDAPSCHEMA_NO_MEMORY);
    bzero(lsd, sizeof(LDAPSchema));
 
-   // allocate array for OIDs
-   if ((lsd->oids = malloc(sizeof(void *))) == NULL)
-   {
-      ldapschema_free(lsd);
-      return(LDAPSCHEMA_NO_MEMORY);
-   };
-   bzero(lsd->oids, sizeof(void *));
-
-   // allocate array for OIDs
-   if ((lsd->syntaxes = malloc(sizeof(void *))) == NULL)
-   {
-      ldapschema_free(lsd);
-      return(LDAPSCHEMA_NO_MEMORY);
-   };
-   bzero(lsd->oids, sizeof(void *));
-
    // saves structure
    *lsdp = lsd;
 
