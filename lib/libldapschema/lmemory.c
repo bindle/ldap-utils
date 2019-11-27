@@ -94,25 +94,6 @@ void ldapschema_attributetype_free( LDAPSchemaAttributeType  * attr )
 }
 
 
-LDAPSchemaAttributeType * ldapschema_attributetype_initialize(LDAPSchema * lsd)
-{
-   LDAPSchemaAttributeType   * attr;
-
-   assert(lsd  != NULL);
-
-   if ((attr = malloc(sizeof(LDAPSchemaAttributeType))) == NULL)
-   {
-      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
-      return(NULL);
-   };
-   bzero(attr, sizeof(LDAPSchemaAttributeType));
-   attr->model.size = sizeof(LDAPSchemaAttributeType);
-   attr->model.type = LDAPSCHEMA_ATTRIBUTETYPE;
-
-   return(attr);
-}
-
-
 /// counts number of values in list
 /// @param[in]  vals   Reference to allocated ldap_schema struct
 ///

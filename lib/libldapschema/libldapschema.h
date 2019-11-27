@@ -215,10 +215,6 @@ void
 ldapschema_attributetype_free(
          LDAPSchemaAttributeType  * attr );
 
-LDAPSchemaAttributeType *
-ldapschema_attributetype_initialize(
-         LDAPSchema            * lsd );
-
 void
 ldapschema_ext_free(
          LDAPSchemaExtension   * ext );

@@ -479,37 +479,17 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
    LDAPSchemaAttributeType     * attr;
    LDAPSchemaAlias             * alias;
 
-   attr     = NULL;
-   argv     = NULL;
-
-   // initialize attributeType
-   if ((attr = ldapschema_attributetype_initialize(lsd)) == NULL)
-      return(NULL);
-
    // parses definition
-   if ((argc = ldapschema_definition_split_len(lsd, &attr->model, def, &argv)) == -1)
-   {
-      ldapschema_attributetype_free(attr);
+   argv = NULL;
+   if ((argc = ldapschema_definition_split_len(lsd, NULL, def, &argv)) == -1)
       return(NULL);
-   };
 
-   // copy definition and oid into syntax
-   if ((attr->model.oid = strdup(argv[0])) == NULL)
+   // initialize syntax
+   if ((attr = (LDAPSchemaAttributeType *)ldapschema_model_initialize(lsd, argv[0], LDAPSCHEMA_ATTRIBUTETYPE, def)) == NULL)
    {
-      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
       ldapschema_value_free(argv);
-      ldapschema_attributetype_free(attr);
       return(NULL);
    };
-   if ((attr->model.definition = malloc(def->bv_len+1)) == NULL)
-   {
-      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
-      ldapschema_value_free(argv);
-      ldapschema_attributetype_free(attr);
-      return(NULL);
-   };
-   memcpy(attr->model.definition, def->bv_val, def->bv_len);
-   attr->model.definition[def->bv_len] = '\0';
 
    // processes attribute definition
    for(pos = 1; pos < argc; pos++)
@@ -684,9 +664,6 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
       };
    };
    ldapschema_value_free(argv);
-
-   // adds specification to syntax
-   attr->model.spec = ldapschema_spec_search(attr->model.oid);
 
    // register attributeType
    if ((err = ldapschema_model_register(lsd, &attr->model)) != LDAP_SUCCESS)
