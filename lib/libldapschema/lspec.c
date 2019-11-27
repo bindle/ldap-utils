@@ -69,8 +69,8 @@
 
 int
 ldapschema_spec_field_list(
-         void                  * outvalue,
-         const char           ** values );
+         void *                        outvalue,
+         const char **                 values );
 
 
 /////////////////

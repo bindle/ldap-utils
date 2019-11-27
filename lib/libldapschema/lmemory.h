@@ -64,10 +64,10 @@
 
 int
 ldapschema_append(
-         LDAPSchema            * lsd,
-         void                *** listp,
-         size_t                * lenp,
-         void                  * obj );
+         LDAPSchema *                  lsd,
+         void ***                      listp,
+         size_t *                      lenp,
+         void *                        obj );
 
 void
 ldapschema_attributetype_free(
@@ -75,7 +75,7 @@ ldapschema_attributetype_free(
 
 LDAPSchemaCur
 ldapschema_curalloc(
-         LDAPSchema            * lsd );
+         LDAPSchema *                  lsd );
 
 void
 ldapschema_ext_free(
@@ -96,7 +96,7 @@ ldapschema_insert(
 
 void
 ldapschema_matchingrule_free(
-         LDAPSchemaMatchingRule *   rule);
+         LDAPSchemaMatchingRule *      rule);
 
 void
 ldapschema_model_free(
@@ -104,15 +104,15 @@ ldapschema_model_free(
 
 LDAPSchemaModel *
 ldapschema_model_initialize(
-         LDAPSchema *               lsd,
-         const char *               oid,
-         uint32_t                   type,
-         const struct berval *      def);
+         LDAPSchema *                  lsd,
+         const char *                  oid,
+         uint32_t                      type,
+         const struct berval *         def);
 
 int
 ldapschema_model_register(
-         LDAPSchema *               lsd,
-         LDAPSchemaModel *          mod );
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             mod );
 
 void
 ldapschema_object_free(
@@ -120,7 +120,7 @@ ldapschema_object_free(
 
 void
 ldapschema_objectclass_free(
-         LDAPSchemaObjectclass * objectclass );
+         LDAPSchemaObjectclass *       objectclass );
 
 void *
 ldapschema_oid(
@@ -134,7 +134,7 @@ ldapschema_syntax_free(
 
 char **
 ldapschema_value_dup(
-         char                 ** vals );
+         char **                       vals );
 
 char **
 ldapschema_value_add(

@@ -252,15 +252,15 @@ LDAPSCHEMA_BEGIN_C_DECLS
 
 _LDAPSCHEMA_F const char *
 ldapschema_err2string(
-         int                     err );
+         int                           err );
 
 _LDAPSCHEMA_F int
 ldapschema_errno(
-         LDAPSchema            * lsd );
+         LDAPSchema *                  lsd );
 
 _LDAPSCHEMA_F char **
 ldapschema_schema_errors(
-         LDAPSchema            * lsd );
+         LDAPSchema *                  lsd );
 
 
 //------------------//
@@ -270,10 +270,10 @@ ldapschema_schema_errors(
 
 _LDAPSCHEMA_F int
 ldapschema_fmt_definition(
-         char * restrict         str,
-         size_t                  size,
-         const char * restrict   def,
-         size_t                  width );
+         char * restrict               str,
+         size_t                        size,
+         const char * restrict         def,
+         size_t                        width );
 
 
 //-----------------//
@@ -283,8 +283,8 @@ ldapschema_fmt_definition(
 
 _LDAPSCHEMA_F int
 ldapschema_fetch(
-         LDAPSchema            * lsd,
-         LDAP                  * ld );
+         LDAPSchema *                  lsd,
+         LDAP *                        ld );
 
 
 //------------------//
@@ -294,39 +294,39 @@ ldapschema_fetch(
 
 _LDAPSCHEMA_F int
 ldapschema_count_values(
-         char ** vals );
+         char **                       vals );
 
 _LDAPSCHEMA_F int
 ldapschema_count_values_len(
-         struct berval        ** vals );
+         struct berval **              vals );
 
 _LDAPSCHEMA_F void
 ldapschema_curfree(
-         LDAPSchemaCur           cur );
+         LDAPSchemaCur                 cur );
 
 _LDAPSCHEMA_F void
 ldapschema_free(
-         LDAPSchema            * lsd );
+         LDAPSchema *                  lsd );
 
 _LDAPSCHEMA_F int
 ldapschema_initialize(
-         LDAPSchema           ** lsdp );
+         LDAPSchema **                 lsdp );
 
 _LDAPSCHEMA_F void
 ldapschema_memfree(
-         void                  * p );
+         void *                        p );
 
 _LDAPSCHEMA_F void
 ldapschema_memvfree(
-         void                 ** v );
+         void **                       v );
 
 _LDAPSCHEMA_F void
 ldapschema_value_free(
-         char                 ** vals );
+         char **                       vals );
 
 _LDAPSCHEMA_F void
 ldapschema_value_free_len(
-         struct berval        ** vals );
+         struct berval **              vals );
 
 
 //-----------------------------//
@@ -334,24 +334,23 @@ ldapschema_value_free_len(
 //-----------------------------//
 #pragma mark OID Specification functions
 
-_LDAPSCHEMA_F
-const LDAPSchemaSpec *
+_LDAPSCHEMA_F const LDAPSchemaSpec *
 ldapschema_spec_abnf(
-         int                     abnf_type );
+         int                           abnf_type );
 
 _LDAPSCHEMA_F int
 ldapschema_spec_field(
-         const LDAPSchemaSpec  * spec,
-         int                     field,
-         void                  * outvalue );
+         const LDAPSchemaSpec *        spec,
+         int                           field,
+         void *                        outvalue );
 
 _LDAPSCHEMA_F const LDAPSchemaSpec * const *
 ldapschema_spec_list(
-         size_t                * lenp );
+         size_t *                      lenp );
 
 _LDAPSCHEMA_F const LDAPSchemaSpec *
 ldapschema_spec_search(
-         const char            * oid);
+         const char *                  oid);
 
 
 //------------------//
@@ -361,13 +360,13 @@ ldapschema_spec_search(
 
 _LDAPSCHEMA_F void
 ldapschema_print(
-         LDAPSchema            * lsd,
-         LDAPSchemaModel       * model );
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             model );
 
 _LDAPSCHEMA_F void
 ldapschema_printall(
-         LDAPSchema            * lsd,
-         int                     type );
+         LDAPSchema *                  lsd,
+         int                           type );
 
 
 //-----------------//
@@ -378,135 +377,135 @@ ldapschema_printall(
 // ldapchema_count_XXXX()
 _LDAPSCHEMA_F size_t
 ldapschema_count_attributetypes(
-         LDAPSchema            * lsd );
+         LDAPSchema *                  lsd );
 
 _LDAPSCHEMA_F size_t
 ldapschema_count_ldapsyntaxes(
-         LDAPSchema            * lsd );
+         LDAPSchema *                  lsd );
 
 _LDAPSCHEMA_F size_t
 ldapschema_count_matchingrules(
-         LDAPSchema            * lsd );
+         LDAPSchema *                  lsd );
 
 _LDAPSCHEMA_F size_t
 ldapschema_count_objectclasses(
-         LDAPSchema            * lsd );
+         LDAPSchema *                  lsd );
 
 // ldapschema_find_XXXX()
 _LDAPSCHEMA_F LDAPSchemaAttributeType *
 ldapschema_find_attributetype(
-         LDAPSchema            * lsd,
-         const char            * name );
+         LDAPSchema *                  lsd,
+         const char *                  name );
 
 _LDAPSCHEMA_F LDAPSchemaSyntax *
 ldapschema_find_ldapsyntax(
-         LDAPSchema            * lsd,
-         const char            * name );
+         LDAPSchema *                  lsd,
+         const char *                  name );
 
 _LDAPSCHEMA_F LDAPSchemaMatchingRule *
 ldapschema_find_matchingrule(
-         LDAPSchema            * lsd,
-         const char            * name );
+         LDAPSchema *                  lsd,
+         const char *                  name );
 
 _LDAPSCHEMA_F LDAPSchemaObjectclass *
 ldapschema_find_objectclass(
-         LDAPSchema            * lsd,
-         const char            * name );
+         LDAPSchema *                  lsd,
+         const char *                  name );
 
 // ldapchema_first_XXXX()
 _LDAPSCHEMA_F const LDAPSchemaAttributeType *
 ldapschema_first_attributetype(
-         LDAPSchema            * lsd,
-         LDAPSchemaCur         * curp);
+         LDAPSchema *                  lsd,
+         LDAPSchemaCur *               curp);
 
 _LDAPSCHEMA_F const LDAPSchemaSyntax *
 ldapschema_first_ldapsyntax(
-         LDAPSchema            * lsd,
-         LDAPSchemaCur         * curp);
+         LDAPSchema *                  lsd,
+         LDAPSchemaCur *               curp);
 
 _LDAPSCHEMA_F const LDAPSchemaMatchingRule *
 ldapschema_first_matchingrule(
-         LDAPSchema            * lsd,
-         LDAPSchemaCur         * curp);
+         LDAPSchema *                  lsd,
+         LDAPSchemaCur *               curp);
 
 _LDAPSCHEMA_F const LDAPSchemaObjectclass *
 ldapschema_first_objectclass(
-         LDAPSchema            * lsd,
-         LDAPSchemaCur         * curp);
+         LDAPSchema *                  lsd,
+         LDAPSchemaCur *               curp);
 
 // ldapchema_get_info_XXXX()
 _LDAPSCHEMA_F int
 ldapschema_get_info_attributetype(
-         LDAPSchema            * lsd,
+         LDAPSchema *                  lsd,
          const LDAPSchemaAttributeType * attr,
-         int                     field,
-         void                  * outvalue );
+         int                           field,
+         void *                        outvalue );
 
 _LDAPSCHEMA_F int
 ldapschema_get_info_ldapsyntax(
-         LDAPSchema            * lsd,
-         const LDAPSchemaSyntax * syntax,
-         int                     field,
-         void                  * outvalue );
+         LDAPSchema *                  lsd,
+         const LDAPSchemaSyntax *      syntax,
+         int                           field,
+         void *                        outvalue );
 
 _LDAPSCHEMA_F int
 ldapschema_get_info_matchingrule(
-         LDAPSchema            * lsd,
+         LDAPSchema *                  lsd,
          const LDAPSchemaMatchingRule * matchingrule,
-         int                     field,
-         void                  * outvalue );
+         int                           field,
+         void *                        outvalue );
 
 _LDAPSCHEMA_F int
 ldapschema_get_info_model(
-         LDAPSchema            * lsd,
-         const LDAPSchemaModel * mod,
-         int                     field,
-         void                  * outvalue );
+         LDAPSchema *                  lsd,
+         const LDAPSchemaModel *       mod,
+         int                           field,
+         void *                        outvalue );
 
 _LDAPSCHEMA_F int
 ldapschema_get_info_objectclass(
-         LDAPSchema            * lsd,
+         LDAPSchema *                  lsd,
          const LDAPSchemaObjectclass * objcls,
-         int                     field,
-         void                  * outvalue );
+         int                           field,
+         void *                        outvalue );
 
 // ldapchema_model_XXXX()
 _LDAPSCHEMA_F const LDAPSchemaModel *
 ldapschema_model_attributetype(
-         const LDAPSchemaAttributeType * attr );
+         const LDAPSchemaAttributeType *  attr );
 
 _LDAPSCHEMA_F const LDAPSchemaModel *
 ldapschema_model_ldapsyntax(
-         const LDAPSchemaSyntax * syntax );
+         const LDAPSchemaSyntax *         syntax );
 
 _LDAPSCHEMA_F const LDAPSchemaModel *
 ldapschema_model_matchingrule(
-         const LDAPSchemaMatchingRule * matchingrule );
+         const LDAPSchemaMatchingRule *   matchingrule );
 
 _LDAPSCHEMA_F const LDAPSchemaModel *
 ldapschema_model_objectclass(
-         const LDAPSchemaObjectclass * objcls );
+         const LDAPSchemaObjectclass *    objcls );
 
 // ldapschema_next_XXXX()
 _LDAPSCHEMA_F const LDAPSchemaAttributeType *
 ldapschema_next_attributetype(
-         LDAPSchema            * lsd,
-         LDAPSchemaCur           cur);
+         LDAPSchema *                  lsd,
+         LDAPSchemaCur                 cur);
 
 _LDAPSCHEMA_F const LDAPSchemaSyntax *
 ldapschema_next_ldapsyntax(
-         LDAPSchema            * lsd,
-         LDAPSchemaCur           cur);
+         LDAPSchema *                  lsd,
+         LDAPSchemaCur                 cur);
 
 _LDAPSCHEMA_F const LDAPSchemaMatchingRule *
 ldapschema_next_matchingrule(
-         LDAPSchema            * lsd,
-         LDAPSchemaCur           cur);
+         LDAPSchema *                  lsd,
+         LDAPSchemaCur                 cur);
 
 _LDAPSCHEMA_F const LDAPSchemaObjectclass *
 ldapschema_next_objectclass(
-         LDAPSchema            * lsd,
-         LDAPSchemaCur           cur);
+         LDAPSchema *                  lsd,
+         LDAPSchemaCur                 cur);
 
 
 //---------------------------//

@@ -63,8 +63,8 @@
 
 int
 ldapschema_get_info_model_str(
-         char **                    os,
-         const char *               src );
+         char **                       os,
+         const char *                  src );
 
 
 /////////////////

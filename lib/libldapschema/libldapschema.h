@@ -74,21 +74,21 @@ struct ldap_schema
 {
    int32_t                                errcode;          ///< last error code
    int32_t                                pad32;
-   LDAPSchemaPointer                    * dups;             ///< array of duplicate oids
+   LDAPSchemaPointer *                    dups;             ///< array of duplicate oids
    size_t                                 dups_len;         ///< length of duplicate array
-   LDAPSchemaPointer                    * oids;             ///< array of all known oids
+   LDAPSchemaPointer *                    oids;             ///< array of all known oids
    size_t                                 oids_len;         ///< length of oids array
-   LDAPSchemaAlias                     ** syntaxes;         ///< array of syntaxes
+   LDAPSchemaAlias **                     syntaxes;         ///< array of syntaxes
    size_t                                 syntaxes_len;     ///< length of syntaxes array
-   LDAPSchemaAlias                     ** attrs;            ///< array of attributeTypes
+   LDAPSchemaAlias **                     attrs;            ///< array of attributeTypes
    size_t                                 attrs_len;        ///< length of attributeTypes array
-   LDAPSchemaAlias                     ** mtchngrls;        ///< array of objectClasses
+   LDAPSchemaAlias **                     mtchngrls;        ///< array of objectClasses
    size_t                                 mtchngrls_len;    ///< length of objectClasses array
-   LDAPSchemaAlias                     ** objclses;         ///< array of objectClasses
+   LDAPSchemaAlias **                     objclses;         ///< array of objectClasses
    size_t                                 objclses_len;     ///< length of objectClasses array
-   char                                ** schema_errs;      ///< list of schema errors discovered
+   char **                                schema_errs;      ///< list of schema errors discovered
    size_t                                 schema_errs_cnt;  ///< number of objects with errors
-   LDAPSchemaModel                      * schema_errs_cur;  ///< reference to current object being reported (may contain multiple errors)
+   LDAPSchemaModel   *                    schema_errs_cur;  ///< reference to current object being reported (may contain multiple errors)
 };
 
 
@@ -102,8 +102,8 @@ struct ldapschema_cursor
 /// LDAP schema extension
 struct ldap_schema_extension
 {
-   char                                 * extension;
-   char                                ** values;
+   char *                                 extension;
+   char **                                values;
    size_t                                 values_len;
 };
 
@@ -114,11 +114,11 @@ struct ldap_schema_model
    size_t                                 size;             ///< size of data struct
    uint32_t                               type;             ///< LDAP schema data type
    uint32_t                               flags;
-   char                                 * definition;       ///< defintion of object
-   char                                 * oid;              ///< oid of object
-   char                                 * desc;             ///< description of object;
-   const LDAPSchemaSpec                 * spec;
-   LDAPSchemaExtension                 ** extensions;
+   char  *                                definition;       ///< defintion of object
+   char  *                                oid;              ///< oid of object
+   char  *                                desc;             ///< description of object;
+   const LDAPSchemaSpec *                 spec;
+   LDAPSchemaExtension  **                extensions;
    size_t                                 extensions_len;
 };
 
@@ -126,14 +126,14 @@ struct ldap_schema_model
 /// LDAP schema object alias
 struct ldap_schema_alias
 {
-   const char                           * alias;
+   const char *                           alias;
    union
    {
-      LDAPSchemaModel                   * model;
-      LDAPSchemaObjectclass             * objectclass;
-      LDAPSchemaAttributeType           * attributetype;
-      LDAPSchemaMatchingRule            * matchingrule;
-      LDAPSchemaSyntax                  * syntax;
+      LDAPSchemaModel *                   model;
+      LDAPSchemaObjectclass *             objectclass;
+      LDAPSchemaAttributeType *           attributetype;
+      LDAPSchemaMatchingRule *            matchingrule;
+      LDAPSchemaSyntax *                  syntax;
    };
 };
 
@@ -142,20 +142,20 @@ struct ldap_schema_alias
 struct ldap_schema_attributetype
 {
    LDAPSchemaModel                        model;
-   LDAPSchemaSyntax                     * syntax;
+   LDAPSchemaSyntax *                     syntax;
    uint64_t                               usage;
    size_t                                 names_len;
    size_t                                 allowed_by_len;
    size_t                                 required_by_len;
    size_t                                 min_upper;
-   LDAPSchemaAttributeType              * sup;
-   char                                 * sup_name;
-   LDAPSchemaMatchingRule               * equality;
-   LDAPSchemaMatchingRule               * ordering;
-   LDAPSchemaMatchingRule               * substr;
-   char                                ** names;
-   LDAPSchemaObjectclass               ** allowed_by;
-   LDAPSchemaObjectclass               ** required_by;
+   LDAPSchemaAttributeType *              sup;
+   char *                                 sup_name;
+   LDAPSchemaMatchingRule *               equality;
+   LDAPSchemaMatchingRule *               ordering;
+   LDAPSchemaMatchingRule *               substr;
+   char **                                names;
+   LDAPSchemaObjectclass **               allowed_by;
+   LDAPSchemaObjectclass **               required_by;
 };
 
 
@@ -169,23 +169,23 @@ struct ldap_schema_objectclass
    size_t                                 may_len;
    size_t                                 inherit_must_len;
    size_t                                 inherit_may_len;
-   char                                 * sup_name;
-   LDAPSchemaObjectclass                * sup;
-   char                                ** names;
-   LDAPSchemaAttributeType             ** must;
-   LDAPSchemaAttributeType             ** may;
-   LDAPSchemaAttributeType             ** inherit_must;
-   LDAPSchemaAttributeType             ** inherit_may;
+   char *                                 sup_name;
+   LDAPSchemaObjectclass *                sup;
+   char **                                names;
+   LDAPSchemaAttributeType **             must;
+   LDAPSchemaAttributeType **             may;
+   LDAPSchemaAttributeType **             inherit_must;
+   LDAPSchemaAttributeType **             inherit_may;
 };
 
 
 union ldap_schema_pointer
 {
-   LDAPSchemaModel                      * model;
-   LDAPSchemaSyntax                     * syntax;
-   LDAPSchemaObjectclass                * objectclass;
-   LDAPSchemaAttributeType              * attributetype;
-   LDAPSchemaMatchingRule               * matchingrule;
+   LDAPSchemaModel *                      model;
+   LDAPSchemaSyntax *                     syntax;
+   LDAPSchemaObjectclass *                objectclass;
+   LDAPSchemaAttributeType *              attributetype;
+   LDAPSchemaMatchingRule *               matchingrule;
 };
 
 

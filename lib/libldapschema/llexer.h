@@ -63,53 +63,53 @@
 
 int
 ldapschema_definition_split(
-         LDAPSchema            * lsd,
-         LDAPSchemaModel       * mod,
-         const char            * str,
-         size_t                  strlen,
-         char                *** argvp );
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             mod,
+         const char *                  str,
+         size_t                        strlen,
+         char ***                      argvp );
 
 int
 ldapschema_definition_split_len(
-         LDAPSchema            * lsd,
-         LDAPSchemaModel       * mod,
-         const struct berval   * def,
-         char                *** argvp );
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             mod,
+         const struct berval *         def,
+         char ***                      argvp );
 
 int
 ldapschema_objectclass_attribute(
-         LDAPSchema                  * lsd,
-         LDAPSchemaObjectclass       * objcls,
-         LDAPSchemaAttributeType     * attr,
+         LDAPSchema *                  lsd,
+         LDAPSchemaObjectclass *       objcls,
+         LDAPSchemaAttributeType *     attr,
          int                           must,
          int                           inherited );
 
 LDAPSchemaAttributeType *
 ldapschema_parse_attributetype(
-         LDAPSchema            * lsd,
-         const struct berval   * def );
+         LDAPSchema *                  lsd,
+         const struct berval *         def );
 
 int
 ldapschema_parse_ext(
-         LDAPSchema            * lsd,
-         LDAPSchemaModel       * model,
-         const char            * key,
-         const char            * valstr );
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             model,
+         const char *                  key,
+         const char *                  valstr );
 
 LDAPSchemaMatchingRule *
 ldapschema_parse_matchingrule(
-         LDAPSchema *            lsd,
-         const struct berval *   def );
+         LDAPSchema *                  lsd,
+         const struct berval *         def );
 
 LDAPSchemaObjectclass *
 ldapschema_parse_objectclass(
-         LDAPSchema            * lsd,
-         const struct berval   * def );
+         LDAPSchema *                  lsd,
+         const struct berval *         def );
 
 LDAPSchemaSyntax *
 ldapschema_parse_syntax(
-         LDAPSchema            * lsd,
-         const struct berval   * def );
+         LDAPSchema *                  lsd,
+         const struct berval *         def );
 
 
 #endif /* end of header file */

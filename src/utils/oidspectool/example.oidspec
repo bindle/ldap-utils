@@ -35,7 +35,7 @@
    .desc          =  "X.509 Algorithm Identifier",
    .flags         =  LDAPSCHEMA_O_READABLE,
    .type          =  LDAPSCHEMA_SYNTAX,
-   .class         =  LDAPSCHEMA_CLASS_ASCII,
+   .subtype       =  LDAPSCHEMA_CLASS_ASCII,
    .def           =  "( 1.3.6.1.1.15.7 DESC 'X.509 Algorithm Identifier' )",
    .abnf          =  "AlgorithmIdentifier = \"{\" sp ai-algorithm\n"
                      "     [ \",\" sp ai-parameters ] sp \"}\"\n"
@@ -95,7 +95,7 @@
    .desc          =  "Facsimile Telephone Number",
    .flags         =  LDAPSCHEMA_O_READABLE | LDAPSCHEMA_O_COMMON_ABNF,
    .type          =  LDAPSCHEMA_SYNTAX,
-   .class         =  LDAPSCHEMA_CLASS_ASCII,
+   .subtype       =  LDAPSCHEMA_CLASS_ASCII,
    .def           =  "( 2.5.4.23 NAME 'facsimileTelephoneNumber' SYNTAX 1.3.6.1.4.1.1466.115.121.1.22 )",
    .abnf          =  "fax-number       = telephone-number\n"
                      "                   *( DOLLAR fax-parameter )\n"

@@ -63,10 +63,10 @@
 
 LDAPSchemaAlias *
 ldapschema_find_alias(
-         LDAPSchema               * lsd,
-         const char               * alias,
-         LDAPSchemaAlias         ** list,
-         size_t                     list_len );
+         LDAPSchema *                  lsd,
+         const char *                  alias,
+         LDAPSchemaAlias **            list,
+         size_t                        list_len );
 
 
 #endif /* end of header file */
