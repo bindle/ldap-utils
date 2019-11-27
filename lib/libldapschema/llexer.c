@@ -804,7 +804,6 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
    int                                 argc;
    int                                 err;
    LDAPSchemaObjectclass             * objcls;
-   LDAPSchemaAlias                   * alias;
 
    objcls   = NULL;
    argv     = NULL;
@@ -983,53 +982,11 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
    // adds specification to syntax
    objcls->model.spec = ldapschema_spec_search(objcls->model.oid);
 
-   // adds objectClass into OID list
-   if ((err = ldapschema_insert(lsd, (void ***)&lsd->oids, &lsd->oids_len, objcls, ldapschema_compar_models)) > 0)
+   // register objectClass
+   if ((err = ldapschema_model_register(lsd, &objcls->model)) != LDAP_SUCCESS)
    {
       ldapschema_objectclass_free(objcls);
       return(NULL);
-   };
-   if (err == -1)
-   {
-      ldapschema_schema_err(lsd,  &objcls->model, "LDAP definition defines duplicate OID '%s'", objcls->model.oid);
-      if ((err = ldapschema_append(lsd,(void ***)&lsd->dups, &lsd->dups_len, objcls)) != LDAP_SUCCESS)
-      {
-         ldapschema_objectclass_free(objcls);
-         return(NULL);
-      };
-   };
-
-   // adds objectclass into objectclass list using OID and names
-   if ((alias = malloc(sizeof(LDAPSchemaAlias *))) == NULL)
-   {
-      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
-      return(NULL);
-   };
-   alias->alias         = objcls->model.oid;
-   alias->objectclass   = objcls;
-   if ((err = ldapschema_insert(lsd, (void ***)&lsd->objclses, &lsd->objclses_len, alias, ldapschema_compar_aliases)) > 0)
-   {
-      free(alias);
-      return(NULL);
-   };
-   if (err == -1)
-      ldapschema_schema_err(lsd,  &objcls->model, " objectClasses with duplicate oid '%s' found", objcls->model.oid);
-   for(pos = 0; (size_t)pos < objcls->names_len; pos++)
-   {
-      if ((alias = malloc(sizeof(LDAPSchemaAlias *))) == NULL)
-      {
-         lsd->errcode = LDAPSCHEMA_NO_MEMORY;
-         return(NULL);
-      };
-      alias->alias         = objcls->names[pos];
-      alias->objectclass   = objcls;
-      if ((err = ldapschema_insert(lsd, (void ***)&lsd->objclses, &lsd->objclses_len, alias, ldapschema_compar_aliases)) > 0)
-      {
-         free(alias);
-         return(NULL);
-      };
-      if (err == -1)
-         ldapschema_schema_err(lsd,  &objcls->model, " objectClasses with duplicate name '%s' found", objcls->names[pos]);
    };
 
    return(objcls);
