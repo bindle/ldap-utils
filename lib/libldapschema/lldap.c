@@ -215,11 +215,14 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
             if (!(attr->usage))
                attr->usage = attrsup->usage;
             if (!(attr->equality))
-               attr->equality = attrsup->equality;
+               if ((attr->equality = attrsup->equality) != NULL)
+                  ldapschema_insert(lsd, (void ***)&attr->equality->used_by, &attr->equality->used_by_len, attr, ldapschema_compar_models);
             if (!(attr->ordering))
-               attr->ordering = attrsup->ordering;
+               if ((attr->ordering = attrsup->ordering) != NULL)
+                  ldapschema_insert(lsd, (void ***)&attr->ordering->used_by, &attr->ordering->used_by_len, attr, ldapschema_compar_models);
             if (!(attr->substr))
-               attr->substr = attrsup->substr;
+               if ((attr->substr = attrsup->substr) != NULL)
+                  ldapschema_insert(lsd, (void ***)&attr->substr->used_by, &attr->substr->used_by_len, attr, ldapschema_compar_models);
          };
       };
    };

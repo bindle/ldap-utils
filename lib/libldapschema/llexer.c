@@ -589,7 +589,10 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
       {
          pos++;
          if ((alias = ldapschema_find_alias(lsd, argv[pos], lsd->mtchngrls, lsd->mtchngrls_len)) != NULL)
+         {
             attr->equality = alias->matchingrule;
+            ldapschema_insert(lsd, (void ***)&attr->equality->used_by, &attr->equality->used_by_len, attr, ldapschema_compar_models);
+         };
       }
 
       // inteprets attributeType ORDERING
@@ -597,7 +600,10 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
       {
          pos++;
          if ((alias = ldapschema_find_alias(lsd, argv[pos], lsd->mtchngrls, lsd->mtchngrls_len)) != NULL)
+         {
             attr->ordering = alias->matchingrule;
+            ldapschema_insert(lsd, (void ***)&attr->ordering->used_by, &attr->ordering->used_by_len, attr, ldapschema_compar_models);
+         };
       }
 
       // inteprets attributeType SUBSTR
@@ -605,7 +611,10 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
       {
          pos++;
          if ((alias = ldapschema_find_alias(lsd, argv[pos], lsd->mtchngrls, lsd->mtchngrls_len)) != NULL)
+         {
             attr->substr = alias->matchingrule;
+            ldapschema_insert(lsd, (void ***)&attr->substr->used_by, &attr->substr->used_by_len, attr, ldapschema_compar_models);
+         };
       }
 
       // inteprets attributeType SYNTAX

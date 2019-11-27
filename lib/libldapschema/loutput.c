@@ -553,6 +553,7 @@ void ldapschema_print_obj_matchingrule(LDAPSchema * lsd, LDAPSchemaMatchingRule 
       ldapschema_print_line("syntax:", buff);
    };
 
+   ldapschema_print_list_models(lsd, "used by:",  (LDAPSchemaModel **)mtchngrl->used_by, mtchngrl->used_by_len);
    ldapschema_print_extensions(lsd, &mtchngrl->model);
    ldapschema_print_definition(lsd, &mtchngrl->model);
    ldapschema_print_issues(lsd, &mtchngrl->model);
@@ -628,8 +629,8 @@ void ldapschema_print_obj_syntax(LDAPSchema * lsd, LDAPSchemaSyntax * syntax)
    ldapschema_print_data_class(lsd, syntax->data_class);
    ldapschema_print_flags(lsd, &syntax->model);
    ldapschema_print_extensions(lsd, &syntax->model);
-   ldapschema_print_list_models(lsd, "attributeTypes:",  (LDAPSchemaModel **)syntax->attrs,     syntax->attrs_len);
    ldapschema_print_list_models(lsd, "matchingRules:",   (LDAPSchemaModel **)syntax->mtchngrls, syntax->mtchngrls_len);
+   ldapschema_print_list_models(lsd, "used by:",  (LDAPSchemaModel **)syntax->attrs,     syntax->attrs_len);
    ldapschema_print_spec(lsd, syntax->model.spec);
    ldapschema_print_definition(lsd, &syntax->model);
    ldapschema_print_issues(lsd, &syntax->model);
