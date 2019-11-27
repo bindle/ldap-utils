@@ -523,7 +523,6 @@ int ldapschema_model_register(LDAPSchema * lsd, LDAPSchemaModel * mod)
    size_t                  idx;
    size_t *                list_lenp;
    char **                 names;
-   const char *            spec_name;
    const char *            desc;
    LDAPSchemaAlias *       alias;
    LDAPSchemaAlias ***     listp;
@@ -535,7 +534,6 @@ int ldapschema_model_register(LDAPSchema * lsd, LDAPSchemaModel * mod)
    desc           = NULL;
    names          = NULL;
    names_len      = 0;
-   spec_name      = NULL;
    objptr.model   = mod;
 
    // determines model specific list and search keys
@@ -546,7 +544,6 @@ int ldapschema_model_register(LDAPSchema * lsd, LDAPSchemaModel * mod)
       list_lenp   = &lsd->attrs_len;
       names       = objptr.attributetype->names;
       names_len   = objptr.attributetype->names_len;
-      spec_name   = ((mod->spec)) ? mod->spec->name : NULL;
       break;
 
       case LDAPSCHEMA_SYNTAX:
@@ -560,7 +557,6 @@ int ldapschema_model_register(LDAPSchema * lsd, LDAPSchemaModel * mod)
       list_lenp   = &lsd->mtchngrls_len;
       names       = objptr.matchingrule->names;
       names_len   = objptr.matchingrule->names_len;
-      spec_name   = ((mod->spec)) ? mod->spec->name : NULL;
       break;
 
       case LDAPSCHEMA_OBJECTCLASS:
@@ -568,7 +564,6 @@ int ldapschema_model_register(LDAPSchema * lsd, LDAPSchemaModel * mod)
       list_lenp   = &lsd->objclses_len;
       names       = objptr.objectclass->names;
       names_len   = objptr.objectclass->names_len;
-      spec_name   = ((mod->spec)) ? mod->spec->name : NULL;
       break;
 
       default:
