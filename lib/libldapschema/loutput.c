@@ -62,6 +62,7 @@
 #define LDAPSCHEMA_WIDTH_HEADER    19
 #define LDAPSCHEMA_WIDTH_INDENT    3
 #define LDAPSCHEMA_WIDTH_FIELD     (LDAPSCHEMA_WIDTH_HEADER-LDAPSCHEMA_WIDTH_INDENT)
+#define LDAPSCHEMA_WIDTH_VALUE      30
 
 
 //////////////////
@@ -257,7 +258,7 @@ void ldapschema_print_definition(LDAPSchema * lsd, LDAPSchemaModel * model)
       return;
    };
 
-   ldapschema_fmt_definition(buff, sizeof(buff), model->definition, 30);
+   ldapschema_fmt_definition(buff, sizeof(buff), def, LDAPSCHEMA_WIDTH_VALUE);
    ldapschema_print_line(name, buff);
 
    return;
