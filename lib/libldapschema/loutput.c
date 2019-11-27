@@ -93,6 +93,11 @@ ldapschema_print_flags(
          LDAPSchemaModel *             model );
 
 void
+ldapschema_print_issues(
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             model );
+
+void
 ldapschema_print_line(
          const char *                  field,
          const char *                  input );
@@ -327,6 +332,19 @@ void ldapschema_print_flags(LDAPSchema * lsd, LDAPSchemaModel * model)
 }
 
 
+void ldapschema_print_issues(LDAPSchema * lsd, LDAPSchemaModel * model)
+{
+   size_t idx;
+   assert(lsd   != NULL);
+   assert(model != NULL);
+   if (!(model->errors))
+      return;
+   for(idx = 0; ((model->errors[idx])); idx++)
+      ldapschema_print_line( ((!(idx))?"issues:":NULL), model->errors[idx]);
+   return;
+}
+
+
 void ldapschema_print_line(const char * field, const char * str)
 {
    const char         * bol;
@@ -503,6 +521,7 @@ void ldapschema_print_obj_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeTy
    ldapschema_print_list_models(lsd, "required by:", (LDAPSchemaModel **)attr->required_by, attr->required_by_len);
    ldapschema_print_list_models(lsd, "allowed by:",  (LDAPSchemaModel **)attr->allowed_by, attr->allowed_by_len);
    ldapschema_print_definition(lsd, &attr->model);
+   ldapschema_print_issues(lsd, &attr->model);
 
    return;
 }
@@ -531,6 +550,7 @@ void ldapschema_print_obj_matchingrule(LDAPSchema * lsd, LDAPSchemaMatchingRule 
 
    ldapschema_print_extensions(lsd, &mtchngrl->model);
    ldapschema_print_definition(lsd, &mtchngrl->model);
+   ldapschema_print_issues(lsd, &mtchngrl->model);
 
    return;
 }
@@ -587,6 +607,7 @@ void ldapschema_print_obj_objectclass(LDAPSchema * lsd, LDAPSchemaObjectclass * 
    ldapschema_print_list_models(lsd, "inherited must:",  (LDAPSchemaModel **)objcls->inherit_must, objcls->inherit_must_len);
    ldapschema_print_extensions(lsd, &objcls->model);
    ldapschema_print_definition(lsd, &objcls->model);
+   ldapschema_print_issues(lsd, &objcls->model);
 
    return;
 }
@@ -604,6 +625,7 @@ void ldapschema_print_obj_syntax(LDAPSchema * lsd, LDAPSchemaSyntax * syntax)
    ldapschema_print_extensions(lsd, &syntax->model);
    ldapschema_print_spec(lsd, syntax->model.spec);
    ldapschema_print_definition(lsd, &syntax->model);
+   ldapschema_print_issues(lsd, &syntax->model);
 
    return;
 }
