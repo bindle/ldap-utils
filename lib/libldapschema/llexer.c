@@ -1332,6 +1332,11 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
       else if (!(strcasecmp(argv[pos], "DESC")))
       {
          pos++;
+         if ((syntax->model.desc))
+         {
+            ldapschema_schema_err_kw_dup(lsd, (LDAPSchemaModel *)syntax, "DESC");
+            continue;
+         };
          if (pos >= argc)
          {
             lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR;
@@ -1353,13 +1358,14 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
       // handle unknown parameters
       else
       {
-         lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR;
-         ldapschema_value_free(argv);
-         ldapschema_syntax_free(syntax);
-         return(NULL);
+         ldapschema_schema_err_kw_unknown(lsd, (LDAPSchemaModel *)syntax, argv[pos]);
       };
    };
    ldapschema_value_free(argv);
+
+   // checks syntax
+   if (!(syntax->model.desc))
+      ldapschema_schema_err(lsd, (LDAPSchemaModel *)syntax, "missing DESC");
 
    // copies information from specification
    if ((syntax->model.spec))
