@@ -1106,7 +1106,6 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
    int                     argc;
    int                     err;
    LDAPSchemaSyntax      * syntax;
-   LDAPSchemaAlias       * alias;
 
    syntax   = NULL;
    argv     = NULL;
@@ -1205,46 +1204,12 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
       };
    };
 
-   // adds syntax into OID list
-   if ((ldapschema_insert(lsd, (void ***)&lsd->oids, &lsd->oids_len, syntax, ldapschema_compar_models)) != LDAP_SUCCESS)
+   // register ldapSyntax
+   if ((err = ldapschema_model_register(lsd, &syntax->model)) != LDAP_SUCCESS)
    {
       ldapschema_syntax_free(syntax);
       return(NULL);
    };
-
-   // adds syntax into syntax list using OID and desc
-   if ((alias = malloc(sizeof(LDAPSchemaAlias *))) == NULL)
-   {
-      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
-      return(NULL);
-   };
-   alias->alias  = syntax->model.oid;
-   alias->syntax = syntax;
-   if ((err = ldapschema_insert(lsd, (void ***)&lsd->syntaxes, &lsd->syntaxes_len, alias, ldapschema_compar_aliases)) > 0)
-   {
-      free(alias);
-      return(NULL);
-   };
-   if (err == -1)
-      ldapschema_schema_err(lsd,  &syntax->model, " ldapSyntax with duplicate oid '%s' found", syntax->model.oid);
-   if ((syntax->model.desc))
-   {
-      if ((alias = malloc(sizeof(LDAPSchemaAlias *))) == NULL)
-      {
-         lsd->errcode = LDAPSCHEMA_NO_MEMORY;
-         return(NULL);
-      };
-      alias->alias  = syntax->model.desc;
-      alias->syntax = syntax;
-      if ((ldapschema_insert(lsd, (void ***)&lsd->syntaxes, &lsd->syntaxes_len, alias, ldapschema_compar_aliases)) > 0)
-      {
-         free(alias);
-         return(NULL);
-      };
-      if (err == -1)
-         ldapschema_schema_err(lsd,  &syntax->model, " ldapSyntax with duplicate desc '%s' found", syntax->model.desc);
-   };
-
 
    return(syntax);
 }
