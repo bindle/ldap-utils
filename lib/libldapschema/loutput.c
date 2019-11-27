@@ -103,18 +103,11 @@ ldapschema_print_list(
          char **                    vals );
 
 void
-ldapschema_print_list_attrs(
+ldapschema_print_list_models(
          LDAPSchema *               lsd,
          const char *               name,
-         LDAPSchemaAttributeType ** list,
-         size_t                     len );
-
-void
-ldapschema_print_list_objcls(
-         LDAPSchema *               lsd,
-         const char *               name,
-         LDAPSchemaObjectclass **   list,
-         size_t                     len );
+         LDAPSchemaModel   **       list,
+         size_t                     list_len );
 
 void
 ldapschema_print_unsigned(
@@ -366,39 +359,67 @@ void ldapschema_print_list(const char * field, char ** vals)
 }
 
 
-void ldapschema_print_list_attrs(LDAPSchema * lsd,
-   const char * name, LDAPSchemaAttributeType ** list, size_t len)
+void ldapschema_print_list_models(LDAPSchema * lsd,
+   const char * name, LDAPSchemaModel ** list, size_t list_len)
 {
-   size_t pos;
+   size_t            pos;
+   const char *      key;
+   size_t            buff_len;
+   char              buff[256];
+   size_t            lineno;
 
    assert(lsd != NULL);
-   if ( (!(list)) || (!(len)) )
+   assert(name != NULL);
+   if ( (!(list)) || (!(list_len)) )
       return;
 
-   for(pos = 0; (pos < len); pos++)
-      ldapschema_print_line(
-         ((!(pos))?name:""),
-         (((list[pos]->names))?list[pos]->names[0]:list[pos]->model.oid)
-      );
+   lineno   = 0;
+   buff_len = 0;
+   buff[0]  = '\0';
 
-   return;
-}
+   for(pos = 0; (pos < list_len); pos++)
+   {
+      key = NULL;
+      switch(list[pos]->type)
+      {
+         case LDAPSCHEMA_ATTRIBUTETYPE:
+         if ((((LDAPSchemaAttributeType *)list[pos])->names))
+            key = ((LDAPSchemaAttributeType *)list[pos])->names[0];
+         break;
 
+         case LDAPSCHEMA_OBJECTCLASS:
+         if ((((LDAPSchemaObjectclass *)list[pos])->names))
+            key = ((LDAPSchemaObjectclass *)list[pos])->names[0];
+         break;
 
-void ldapschema_print_list_objcls(LDAPSchema * lsd,
-   const char * name, LDAPSchemaObjectclass ** list, size_t len)
-{
-   size_t pos;
+         case LDAPSCHEMA_SYNTAX:
+         if ((((LDAPSchemaSyntax *)list[pos])->model.desc))
+            key = ((LDAPSchemaSyntax *)list[pos])->model.desc;
+         break;
 
-   assert(lsd != NULL);
-   if ( (!(list)) || (!(len)) )
-      return;
+         default:
+         key = list[pos]->desc;
+         break;
+      };
+      if (!(key))
+         key = list[pos]->oid;
+      if (!(key))
+         continue;
 
-   for(pos = 0; (pos < len); pos++)
-      ldapschema_print_line(
-         ((!(pos))?name:""),
-         (((list[pos]->names))?list[pos]->names[0]:list[pos]->model.oid)
-      );
+      if ((pos + 1) < list_len)
+         buff_len += (size_t)snprintf(&buff[buff_len], sizeof(buff)-buff_len, "%s, ", key );
+      else
+         buff_len += (size_t)snprintf(&buff[buff_len], sizeof(buff)-buff_len, "%s", key );
+      if (buff_len >= LDAPSCHEMA_WIDTH_VALUE)
+      {
+         ldapschema_print_line( ((!(lineno))?name:NULL), buff);
+         buff_len = 0;
+         buff[0]  = '\0';
+         lineno++;
+      };
+   };
+   if ((buff_len))
+      ldapschema_print_line( ((!(lineno))?name:NULL), buff);
 
    return;
 }
@@ -460,8 +481,8 @@ void ldapschema_print_obj_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeTy
    };
 
    ldapschema_print_extensions(lsd, &attr->model);
-   ldapschema_print_list_objcls(lsd, "required by:", attr->required_by, attr->required_by_len);
-   ldapschema_print_list_objcls(lsd, "allowed by:",  attr->allowed_by,  attr->allowed_by_len);
+   ldapschema_print_list_models(lsd, "required by:", (LDAPSchemaModel **)attr->required_by, attr->required_by_len);
+   ldapschema_print_list_models(lsd, "allowed by:",  (LDAPSchemaModel **)attr->allowed_by, attr->allowed_by_len);
    ldapschema_print_definition(lsd, &attr->model);
 
    return;
@@ -513,10 +534,10 @@ void ldapschema_print_obj_objectclass(LDAPSchema * lsd, LDAPSchemaObjectclass * 
          ldapschema_print_line(NULL, (((sup->names))?sup->names[0]:sup->model.oid)  );
    };
 
-   ldapschema_print_list_attrs(lsd, "may:",            objcls->may,          objcls->may_len);
-   ldapschema_print_list_attrs(lsd, "must:",           objcls->must,         objcls->must_len);
-   ldapschema_print_list_attrs(lsd, "inherited may:",  objcls->inherit_may,  objcls->inherit_may_len);
-   ldapschema_print_list_attrs(lsd, "inherited must:", objcls->inherit_must, objcls->inherit_must_len);
+   ldapschema_print_list_models(lsd, "may:",             (LDAPSchemaModel **)objcls->may,          objcls->may_len);
+   ldapschema_print_list_models(lsd, "must:",            (LDAPSchemaModel **)objcls->must,         objcls->must_len);
+   ldapschema_print_list_models(lsd, "inherited may:",   (LDAPSchemaModel **)objcls->inherit_may,  objcls->inherit_may_len);
+   ldapschema_print_list_models(lsd, "inherited must:",  (LDAPSchemaModel **)objcls->inherit_must, objcls->inherit_must_len);
    ldapschema_print_extensions(lsd, &objcls->model);
    ldapschema_print_definition(lsd, &objcls->model);
 
