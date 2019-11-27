@@ -500,6 +500,7 @@ int my_run_details(MyConfig * cnf)
    LDAPSchemaAttributeType  * attrsup;
    LDAPSchemaObjectclass    * objcls;
    LDAPSchemaObjectclass    * objclssup;
+   LDAPSchemaMatchingRule   * mtchngrl;
 
    list     = NULL;
    list_len = 0;
@@ -508,6 +509,17 @@ int my_run_details(MyConfig * cnf)
    for(idx = 0; ((cnf->args[idx])); idx++)
       if ((syntax = ldapschema_find_ldapsyntax(cnf->lsd, cnf->args[idx])) != NULL)
          my_list_add(&list, &list_len, (LDAPSchemaModel *)syntax);
+
+   // look for matching matchingRules and add ldapSyntax
+   for(idx = 0; ((cnf->args[idx])); idx++)
+   {
+      if ((mtchngrl = ldapschema_find_matchingrule(cnf->lsd, cnf->args[idx])) != NULL)
+      {
+         ldapschema_get_info_matchingrule(cnf->lsd, mtchngrl, LDAPSCHEMA_FLD_SYNTAX, &syntax);
+         if ((syntax))
+            my_list_add(&list, &list_len, (LDAPSchemaModel *)syntax);
+      };
+   };
 
    // look for matching attributeType and add syntaxes
    for(idx = 0; (((cnf->args[idx])) && (!(cnf->noextra))); idx++)
@@ -526,6 +538,11 @@ int my_run_details(MyConfig * cnf)
          };
       };
    };
+
+   // look for matching matchingRule
+   for(idx = 0; ((cnf->args[idx])); idx++)
+      if ((mtchngrl = ldapschema_find_matchingrule(cnf->lsd, cnf->args[idx])) != NULL)
+         my_list_add(&list, &list_len, (LDAPSchemaModel *)mtchngrl);
 
    // look for matching attributeType and add attributes
    for(idx = 0; (((cnf->args[idx])) && (!(cnf->noextra))); idx++)
@@ -579,6 +596,9 @@ int my_run_dump(MyConfig * cnf)
    if ((cnf->types & MY_OBJ_SYNTAX) != 0)
       ldapschema_printall(cnf->lsd, LDAPSCHEMA_SYNTAX);
 
+   if ((cnf->types & MY_OBJ_MATCHING) != 0)
+      ldapschema_printall(cnf->lsd, LDAPSCHEMA_MATCHINGRULE);
+
    if ((cnf->types & MY_OBJ_ATTR) != 0)
       ldapschema_printall(cnf->lsd, LDAPSCHEMA_ATTRIBUTETYPE);
 
@@ -620,12 +640,13 @@ int my_run_list(MyConfig * cnf)
 {
    size_t                              idx;
    LDAPSchemaCur                       cur;
-   const LDAPSchemaAttributeType     * attr;
-   const LDAPSchemaObjectclass       * objcls;
-   const LDAPSchemaSyntax            * syntax;
-   char                              * oid;
-   char                              * desc;
-   char                             ** names;
+   const LDAPSchemaAttributeType *     attr;
+   const LDAPSchemaObjectclass *       objcls;
+   const LDAPSchemaSyntax *            syntax;
+   const LDAPSchemaMatchingRule *      rule;
+   char *                              oid;
+   char *                              desc;
+   char **                             names;
    char                                buff[256];
    size_t                              len;
 
@@ -637,10 +658,41 @@ int my_run_list(MyConfig * cnf)
       {
          ldapschema_get_info_ldapsyntax(cnf->lsd, syntax, LDAPSCHEMA_FLD_OID,  &oid);
          ldapschema_get_info_ldapsyntax(cnf->lsd, syntax, LDAPSCHEMA_FLD_DESC, &desc);
-         printf("%-15s %-35s DESC ( %s )\n", "ldapsyntax:", oid, desc);
+         if ((desc))
+         {
+            printf("%-15s %-35s DESC ( %s )\n", "ldapsyntax:", oid, desc);
+            ldapschema_memfree(desc);
+         } else
+         {
+            printf("%-15s %s\n", "ldapsyntax:", oid);
+         };
          ldapschema_memfree(oid);
-         ldapschema_memfree(desc);
          syntax = ldapschema_next_ldapsyntax(cnf->lsd, cur);
+      };
+      ldapschema_curfree(cur);
+   };
+
+   if ((cnf->types & MY_OBJ_MATCHING) != 0)
+   {
+      cur = NULL;
+      rule = ldapschema_first_matchingrule(cnf->lsd, &cur);
+      while ((rule))
+      {
+         ldapschema_get_info_matchingrule(cnf->lsd, rule, LDAPSCHEMA_FLD_OID,  &oid);
+         ldapschema_get_info_matchingrule(cnf->lsd, rule, LDAPSCHEMA_FLD_NAME, &names);
+         if ((names))
+         {
+            printf("%-15s %-35s NAME ( %s", "matchingRule:", oid, names[0]);
+            for(idx = 1; ((names[idx])); idx++)
+               printf(" $ %s", names[idx]);
+            printf(" )\n");
+            ldapschema_value_free(names);
+         } else
+         {
+            printf("%-15s %-35s", "matchingRule:", oid);
+         };
+         ldapschema_memfree(oid);
+         rule = ldapschema_next_matchingrule(cnf->lsd, cur);
       };
       ldapschema_curfree(cur);
    };
@@ -654,20 +706,24 @@ int my_run_list(MyConfig * cnf)
          ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_OID,  &oid);
          ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_NAME, &names);
          ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_SYNTAX, &syntax);
-         snprintf(buff, sizeof(buff), "( %s", names[0]);
-         for(idx = 1; ((names[idx])); idx++)
+         buff[0] = '\0';
+         if ((names))
          {
+            snprintf(buff, sizeof(buff), "( %s", names[0]);
+            for(idx = 1; ((names[idx])); idx++)
+            {
+               len = strlen(buff);
+               snprintf(&buff[len], (sizeof(buff)-len-2), " $ %s", names[idx]);
+            };
             len = strlen(buff);
-            snprintf(&buff[len], (sizeof(buff)-len-2), " $ %s", names[idx]);
+            snprintf(&buff[len], (sizeof(buff)-len-2), " )");
+            ldapschema_memfree(names);
          };
-         len = strlen(buff);
-         snprintf(&buff[len], (sizeof(buff)-len-2), " )");
          if ( ((syntax)) && (!(cnf->noextra)) )
             printf("%-15s %-35s NAME %-30s", "attributeType:", oid, buff);
          else
             printf("%-15s %-35s NAME %s", "attributeType:", oid, buff);
          ldapschema_memfree(oid);
-         ldapschema_memfree(names);
          if ( ((syntax)) && (!(cnf->noextra)) )
          {
             ldapschema_get_info_ldapsyntax(cnf->lsd, syntax, LDAPSCHEMA_FLD_DESC, &desc);
@@ -688,12 +744,18 @@ int my_run_list(MyConfig * cnf)
       {
          ldapschema_get_info_objectclass(cnf->lsd, objcls, LDAPSCHEMA_FLD_OID,  &oid);
          ldapschema_get_info_objectclass(cnf->lsd, objcls, LDAPSCHEMA_FLD_NAME, &names);
-         printf("%-15s %-35s NAME ( %s", "objectClass:", oid, names[0]);
-         for(idx = 1; ((names[idx])); idx++)
-            printf(" $ %s", names[idx]);
-         printf(" )\n");
+         if ((names))
+         {
+            printf("%-15s %-35s NAME ( %s", "objectClass:", oid, names[0]);
+            for(idx = 1; ((names[idx])); idx++)
+               printf(" $ %s", names[idx]);
+            printf(" )\n");
+            ldapschema_memfree(names);
+         } else
+         {
+            printf("%-15s %-35s", "objectClass:", oid);
+         };
          ldapschema_memfree(oid);
-         ldapschema_memfree(names);
          objcls = ldapschema_next_objectclass(cnf->lsd, cur);
       };
       ldapschema_curfree(cur);
