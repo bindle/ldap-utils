@@ -368,6 +368,11 @@ ldapschema_printall(
          LDAPSchema *                  lsd,
          int                           type );
 
+_LDAPSCHEMA_F
+const char *
+ldapschema_type_name(
+         uint32_t                      type );
+
 
 //-----------------//
 // query functions //

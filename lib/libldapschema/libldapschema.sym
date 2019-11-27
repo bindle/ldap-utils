@@ -90,6 +90,7 @@ ldapschema_spec_abnf
 ldapschema_spec_field
 ldapschema_spec_list
 ldapschema_spec_search
+ldapschema_type_name
 # output functions
 ldapschema_print
 ldapschema_printall

@@ -250,4 +250,19 @@ const LDAPSchemaSpec * ldapschema_spec_search(const char * oid)
 }
 
 
+const char * ldapschema_type_name(uint32_t type)
+{
+   switch(type)
+   {
+      case LDAPSCHEMA_ATTRIBUTETYPE: return("attributeType");
+      case LDAPSCHEMA_MATCHINGRULE:  return("matchingRule");
+      case LDAPSCHEMA_OBJECTCLASS:   return("objectClass");
+      case LDAPSCHEMA_SYNTAX:        return("ldapSyntax");
+      default:
+      break;
+   };
+   return(NULL);
+}
+
+
 /* end of source file */
