@@ -74,6 +74,8 @@ struct ldap_schema
 {
    int32_t                                errcode;          ///< last error code
    int32_t                                pad32;
+   size_t                                 objerrs_len;      ///< number of objects with errors
+   LDAPSchemaPointer *                    objerrs;          ///< objects with errors
    LDAPSchemaPointer *                    dups;             ///< array of duplicate oids
    size_t                                 dups_len;         ///< length of duplicate array
    LDAPSchemaPointer *                    oids;             ///< array of all known oids
@@ -87,8 +89,6 @@ struct ldap_schema
    LDAPSchemaAlias **                     objclses;         ///< array of objectClasses
    size_t                                 objclses_len;     ///< length of objectClasses array
    char **                                schema_errs;      ///< list of schema errors discovered
-   size_t                                 schema_errs_cnt;  ///< number of objects with errors
-   LDAPSchemaModel   *                    schema_errs_cur;  ///< reference to current object being reported (may contain multiple errors)
 };
 
 
@@ -120,6 +120,7 @@ struct ldap_schema_model
    const LDAPSchemaSpec *                 spec;
    LDAPSchemaExtension  **                extensions;
    size_t                                 extensions_len;
+   char **                                errors;
 };
 
 

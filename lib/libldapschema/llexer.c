@@ -1172,7 +1172,7 @@ int ldapschema_parse_objectclass_attrs(LDAPSchema * lsd, const char * field,
    {
       if ((alias = ldapschema_find_alias(lsd, attrnames[idx], lsd->attrs, lsd->attrs_len)) == NULL)
       {
-         ldapschema_schema_err(lsd,  &objcls->model, "'%s' contains invalid attributeType '%s'", field, attrnames[idx]);
+         ldapschema_schema_err(lsd,  &objcls->model, "specifies undefined attributeType '%s' in '%s'", attrnames[idx], field);
          lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR;
       } else
       {
@@ -1182,13 +1182,13 @@ int ldapschema_parse_objectclass_attrs(LDAPSchema * lsd, const char * field,
             return(lsd->errcode);
          };
          if (err == -1)
-            ldapschema_schema_err(lsd, &objcls->model, "'%s' contains duplicate attributeType '%s'", field, attrnames[idx]);
+            ldapschema_schema_err(lsd, &objcls->model, "specifies duplicate attributeType '%s'in '%s'", attrnames[idx], field);
       };
       if ((idx+1) < attrnames_len)
       {
          idx++;
          if ((strcasecmp("$", attrnames[idx])))
-            ldapschema_schema_err(lsd,  &objcls->model, "'%s' contains invalid delimiter", field);
+            ldapschema_schema_err(lsd,  &objcls->model, "uses invalid delimiter in '%s'", field);
       };
    };
 

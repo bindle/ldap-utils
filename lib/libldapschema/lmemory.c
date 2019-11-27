@@ -202,6 +202,11 @@ void ldapschema_free(LDAPSchema * lsd)
 
    assert(lsd != NULL);
 
+   // frees list of errors
+   if ((lsd->objerrs))
+      free(lsd->objerrs);
+   lsd->objerrs = NULL;
+
    // frees syntaxes list
    if ((lsd->syntaxes))
    {
@@ -576,7 +581,7 @@ int ldapschema_model_register(LDAPSchema * lsd, LDAPSchemaModel * mod)
       return(err);
    if (err == -1)
    {
-      ldapschema_schema_err(lsd, mod, "server defines duplicate OID '%s'", mod->oid);
+      ldapschema_schema_err(lsd, mod, "duplicates OID of existing object");
       if ((err = ldapschema_append(lsd,(void ***)&lsd->dups, &lsd->dups_len, mod)) != LDAP_SUCCESS)
          return(err);
    };
@@ -593,7 +598,7 @@ int ldapschema_model_register(LDAPSchema * lsd, LDAPSchemaModel * mod)
    };
    if (err == -1)
    {
-      ldapschema_schema_err(lsd,  mod, " model with duplicate oid '%s' found", mod->oid);
+      ldapschema_schema_err(lsd,  mod, "duplicates oid of existing object");
       free(alias);
    };
 
@@ -611,7 +616,7 @@ int ldapschema_model_register(LDAPSchema * lsd, LDAPSchemaModel * mod)
       };
       if (err == -1)
       {
-         ldapschema_schema_err(lsd,  mod, " model with duplicate desc '%s' found", mod->oid);
+         ldapschema_schema_err(lsd,  mod, "duplicates DESC of existing object");
          free(alias);
       };
    };
@@ -630,7 +635,7 @@ int ldapschema_model_register(LDAPSchema * lsd, LDAPSchemaModel * mod)
       };
       if (err == -1)
       {
-         ldapschema_schema_err(lsd,  mod, " object with duplicate name '%s' found", names[idx]);
+         ldapschema_schema_err(lsd,  mod, "duplicates NAME '%s' of existing object", names[idx]);
          free(alias);
       };
    };
@@ -641,7 +646,7 @@ int ldapschema_model_register(LDAPSchema * lsd, LDAPSchemaModel * mod)
 
 void ldapschema_object_free(LDAPSchemaModel * obj)
 {
-   size_t ext;
+   size_t idx;
 
    assert(obj != NULL);
 
@@ -656,15 +661,22 @@ void ldapschema_object_free(LDAPSchemaModel * obj)
 
    if ((obj->extensions))
    {
-      for(ext = 0; ((obj->extensions[ext])); ext++)
+      for(idx = 0; ((obj->extensions[idx])); idx++)
       {
-         if ((obj->extensions[ext]->extension))
-            free(obj->extensions[ext]->extension);
-         if ((obj->extensions[ext]->values))
-            ldapschema_value_free(obj->extensions[ext]->values);
-         free(obj->extensions[ext]);
+         if ((obj->extensions[idx]->extension))
+            free(obj->extensions[idx]->extension);
+         if ((obj->extensions[idx]->values))
+            ldapschema_value_free(obj->extensions[idx]->values);
+         free(obj->extensions[idx]);
       };
       free(obj->extensions);
+   };
+
+   if ((obj->errors))
+   {
+      for(idx = 0; ((obj->errors[idx])); idx++)
+         free(obj->errors[idx]);
+      free(obj->errors);
    };
 
    return;

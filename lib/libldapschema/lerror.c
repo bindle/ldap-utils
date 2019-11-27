@@ -51,6 +51,7 @@
 #include <stdlib.h>
 
 #include "lmemory.h"
+#include "lsort.h"
 
 
 /////////////////
@@ -102,73 +103,47 @@ int ldapschema_errno( LDAPSchema * lsd )
 /// @see       ldapschema_free, ldapschema_initialize, ldapschema_err2string
 int ldapschema_schema_err(LDAPSchema * lsd, LDAPSchemaModel * mod, const char * fmt, ... )
 {
-   char        buff[512];
-   va_list     args;
-   char      * str;
-   const char  * type;
-   size_t        len;
+   char           buff[512];
+   va_list        args;
+   char *         str;
+   char **        tmplist;
+   char ***       listp;
+   int            err;
 
    assert(lsd != NULL);
    assert(fmt != NULL);
 
+   // determines which list
+   listp = &lsd->schema_errs;
+   if ((mod))
+      listp = &mod->errors;
 
    // initialize errors if first error
-   if (!(lsd->schema_errs))
+   if (!(*listp))
    {
-      if ((lsd->schema_errs = malloc(sizeof(char *)*2)) == NULL)
+      if ((*listp = malloc(sizeof(char *)*2)) == NULL)
          return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
-      lsd->schema_errs[0] = NULL;
+      bzero(*listp, sizeof(char *)*2);
    };
-
-   // determine object type
-   if ((mod))
-   {
-      switch(mod->type)
-      {
-         case LDAPSCHEMA_ATTRIBUTETYPE:   type = "attributeType";    break;
-         case LDAPSCHEMA_OBJECTCLASS:     type = "objectClass";      break;
-         case LDAPSCHEMA_SYNTAX:          type = "ldapSyntax";       break;
-         case LDAPSCHEMA_MATCHINGRULE:    type = "matchingRules";    break;
-         default:                         type = "unknown";          break;
-      };
-   } else
-   {
-      type = "";
-   };
-
-   // save definition if first error for object
-   if (lsd->schema_errs_cur != mod)
-   {
-      lsd->schema_errs_cnt++;
-      snprintf(buff, sizeof(buff), "%s %zu: ", type, lsd->schema_errs_cnt);
-      len = strlen(buff);
-      snprintf(&buff[len], sizeof(buff)-len, "definition: %s", mod->definition);
-      if ((str = strdup(buff)) == NULL)
-         return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
-      if ((lsd->schema_errs = ldapschema_value_add(lsd->schema_errs, str, NULL)) == NULL)
-      {
-         free(str);
-         return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
-      };
-   };
-
-   // create error header
-   snprintf(buff, sizeof(buff), "%s %zu: ", type, lsd->schema_errs_cnt);
-   len = strlen(buff);
 
    // process error message
    va_start(args, fmt);
-   vsnprintf(&buff[len], sizeof(buff)-len, fmt, args);
+   vsnprintf(buff, sizeof(buff), fmt, args);
    va_end(args);
 
    // save error
    if ((str = strdup(buff)) == NULL)
       return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
-   if ((lsd->schema_errs = ldapschema_value_add(lsd->schema_errs, str, NULL)) == NULL)
+   if ((tmplist = ldapschema_value_add(*listp, str, NULL)) == NULL)
    {
       free(str);
       return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
    };
+   *listp = tmplist;
+
+   // adds object to error list
+   if ((err = ldapschema_insert(lsd, (void ***)&lsd->objerrs, &lsd->objerrs_len, mod, ldapschema_compar_models)) > 0)
+      return(lsd->errcode);
 
    // set error code
    lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR;
@@ -179,28 +154,64 @@ int ldapschema_schema_err(LDAPSchema * lsd, LDAPSchemaModel * mod, const char * 
 
 char ** ldapschema_schema_errors(LDAPSchema * lsd )
 {
-   char     ** errs;
-   size_t      len;
-   size_t      pos;
+   int                  len;
+   size_t               x;
+   size_t               y;
+   char                 buff[256];
+   char *               str;
+   char **              errs;
+   char **              tmperrs;
+   LDAPSchemaModel *    mod;
 
    assert(lsd != NULL);
 
-   if (!(lsd->schema_errs))
+   // if not errors, exit
+   if ( (!(lsd->schema_errs)) && (!(lsd->objerrs)) )
       return(NULL);
 
-   for(len = 0; ((lsd->schema_errs[len])); len++);
-   if ((errs = malloc(sizeof(char *)*(len+1))) == NULL)
+   // initialize list
+   if ((errs = malloc(sizeof(char *)*2)) == NULL)
       return(NULL);
+   errs[0]  = NULL;
+   len      = 0;
 
-   for(pos = 0; pos < len; pos++)
+   // copy server errors
+   for(x = 0; (((lsd->schema_errs)) && ((lsd->schema_errs[x]))); x++)
    {
-      if ((errs[pos] = strdup(lsd->schema_errs[pos])) == NULL)
+      snprintf(buff, sizeof(buff), "server: %s", lsd->schema_errs[x]);
+      if ((str = strdup(buff)) == NULL)
       {
          ldapschema_value_free(errs);
          return(NULL);
       };
+      if ((tmperrs = ldapschema_value_add(errs, str, &len)) == NULL)
+      {
+         ldapschema_value_free(errs);
+         return(NULL);
+      };
+      errs = tmperrs;
    };
-   errs[pos] = NULL;
+
+   // loop through objects and copy errors
+   for(x = 0; x < lsd->objerrs_len; x++)
+   {
+      mod = lsd->objerrs[x].model;
+      for(y = 0; ((mod->errors[y])); y++)
+      {
+         snprintf(buff, sizeof(buff), "%s: %s: %s", ldapschema_type_name(mod->type), mod->oid, mod->errors[y]);
+         if ((str = strdup(buff)) == NULL)
+         {
+            ldapschema_value_free(errs);
+            return(NULL);
+         };
+         if ((tmperrs = ldapschema_value_add(errs, str, &len)) == NULL)
+         {
+            ldapschema_value_free(errs);
+            return(NULL);
+         };
+         errs = tmperrs;
+      };
+   };
 
    return(errs);
 }
