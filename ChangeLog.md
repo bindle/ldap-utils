@@ -8,8 +8,10 @@ Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>
 ---
   - docs: expanding RFC collection (syzdek)
   - docs: documenting assigned enterprise number (syzdek)
+  - ldapschema: adding support for matchingRules (syzdek)
   - libldapschema: misc bug fixes (syzdek)
   - libldapschema: adding initial ABNF oidspecs (syzdek)
+  - libldapschema: adding support for matchingRules (syzdek)
   - oidspectool: adding ABNF oidspec type (syzdek)
 
 0.4
