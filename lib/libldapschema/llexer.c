@@ -1107,37 +1107,17 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
    int                     err;
    LDAPSchemaSyntax      * syntax;
 
-   syntax   = NULL;
-   argv     = NULL;
+   // parses definition
+   argv = NULL;
+   if ((argc = ldapschema_definition_split_len(lsd, NULL, def, &argv)) == -1)
+      return(NULL);
 
    // initialize syntax
-   if ((syntax = ldapschema_syntax_initialize(lsd)) == NULL)
-      return(syntax);
-
-   // parses definition
-   if ((argc = ldapschema_definition_split_len(lsd, &syntax->model, def, &argv)) == -1)
+   if ((syntax = (LDAPSchemaSyntax *)ldapschema_model_initialize(lsd, argv[0], LDAPSCHEMA_SYNTAX, def)) == NULL)
    {
-      ldapschema_syntax_free(syntax);
-      return(NULL);
-   };
-
-   // copy definition and oid into syntax
-   if ((syntax->model.oid = strdup(argv[0])) == NULL)
-   {
-      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
       ldapschema_value_free(argv);
-      ldapschema_syntax_free(syntax);
       return(NULL);
    };
-   if ((syntax->model.definition = malloc(def->bv_len+1)) == NULL)
-   {
-      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
-      ldapschema_value_free(argv);
-      ldapschema_syntax_free(syntax);
-      return(NULL);
-   };
-   memcpy(syntax->model.definition, def->bv_val, def->bv_len);
-   syntax->model.definition[def->bv_len] = '\0';
 
    // processes attribute definition
    for(pos = 1; pos < argc; pos++)
@@ -1187,20 +1167,19 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
    };
    ldapschema_value_free(argv);
 
-   // adds specification to syntax
-   if ((syntax->model.spec = ldapschema_spec_search(syntax->model.oid)) != NULL)
+   // copies information from specification
+   if ((syntax->model.spec))
    {
-      syntax->model.flags |= syntax->model.spec->flags;
       syntax->data_class   = syntax->model.spec->subtype;
-   };
 
-   // compiles regular expression, if available
-   if ( ((syntax->model.spec)) && ((syntax->model.spec->re_posix)) )
-   {
-      if ((regcomp(&syntax->re, syntax->model.spec->re_posix, REG_EXTENDED | REG_NOSUB)))
+      // compiles regular expression, if available
+      if ((syntax->model.spec->re_posix))
       {
-         regfree(&syntax->re);
-         bzero(&syntax->re, sizeof(syntax->re));
+         if ((regcomp(&syntax->re, syntax->model.spec->re_posix, REG_EXTENDED | REG_NOSUB)))
+         {
+            regfree(&syntax->re);
+            bzero(&syntax->re, sizeof(syntax->re));
+         };
       };
    };
 

@@ -788,26 +788,6 @@ void ldapschema_syntax_free(LDAPSchemaSyntax * syntax)
 }
 
 
-LDAPSchemaSyntax * ldapschema_syntax_initialize(LDAPSchema * lsd)
-{
-   LDAPSchemaSyntax * syntax;
-
-   assert(lsd != NULL);
-
-   // initialize syntax
-   if ((syntax = malloc(sizeof(LDAPSchemaSyntax))) == NULL)
-   {
-      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
-      return(syntax);
-   };
-   bzero(syntax, sizeof(LDAPSchemaSyntax));
-   syntax->model.size = sizeof(LDAPSchemaSyntax);
-   syntax->model.type = LDAPSCHEMA_SYNTAX;
-
-   return(syntax);
-}
-
-
 char ** ldapschema_value_add( char ** vals, const char * val, int * countp)
 {
    int      count;

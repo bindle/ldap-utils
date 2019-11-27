@@ -254,10 +254,6 @@ ldapschema_oid(
          const char            * oid,
          size_t                  type );
 
-LDAPSchemaSyntax *
-ldapschema_syntax_initialize(
-         LDAPSchema            * lsd );
-
 char **
 ldapschema_value_add(
          char                 ** vals,
