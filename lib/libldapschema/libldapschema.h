@@ -221,50 +221,5 @@ struct ldap_schema_matchingrule
 //-------=----------//
 #pragma mark memory functions
 
-void
-ldapschema_attributetype_free(
-         LDAPSchemaAttributeType  * attr );
-
-void
-ldapschema_ext_free(
-         LDAPSchemaExtension   * ext );
-
-LDAPSchemaExtension *
-ldapschema_ext_initialize(
-         LDAPSchema            * lsd,
-         const char            * name );
-
-int
-ldapschema_insert(
-         LDAPSchema            * lsd,
-         void                *** listp,
-         size_t                * lenp,
-         void                  * obj,
-         int (*compar)(const void *, const void *) );
-
-void
-ldapschema_model_free(
-         LDAPSchemaModel       * model );
-
-void
-ldapschema_object_free(
-         LDAPSchemaModel       * model );
-
-void
-ldapschema_syntax_free(
-         LDAPSchemaSyntax      * syntax );
-
-void *
-ldapschema_oid(
-         LDAPSchema            * lsd,
-         const char            * oid,
-         uint32_t                type );
-
-char **
-ldapschema_value_add(
-         char                 ** vals,
-         const char            * val,
-         int                   * countp );
-
 
 #endif /* end of header file */

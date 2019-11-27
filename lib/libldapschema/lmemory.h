@@ -69,13 +69,38 @@ ldapschema_append(
          size_t                * lenp,
          void                  * obj );
 
+void
+ldapschema_attributetype_free(
+         LDAPSchemaAttributeType *     attr );
+
 LDAPSchemaCur
 ldapschema_curalloc(
          LDAPSchema            * lsd );
 
 void
+ldapschema_ext_free(
+         LDAPSchemaExtension *         ext );
+
+LDAPSchemaExtension *
+ldapschema_ext_initialize(
+         LDAPSchema *                  lsd,
+         const char *                  name );
+
+int
+ldapschema_insert(
+         LDAPSchema *                  lsd,
+         void ***                      listp,
+         size_t *                      lenp,
+         void *                        obj,
+         int (*compar)(const void *, const void *) );
+
+void
 ldapschema_matchingrule_free(
          LDAPSchemaMatchingRule *   rule);
+
+void
+ldapschema_model_free(
+         LDAPSchemaModel *             model );
 
 LDAPSchemaModel *
 ldapschema_model_initialize(
@@ -90,12 +115,31 @@ ldapschema_model_register(
          LDAPSchemaModel *          mod );
 
 void
+ldapschema_object_free(
+         LDAPSchemaModel *             model );
+
+void
 ldapschema_objectclass_free(
          LDAPSchemaObjectclass * objectclass );
+
+void *
+ldapschema_oid(
+         LDAPSchema *                  lsd,
+         const char *                  oid,
+         uint32_t                      type );
+
+void
+ldapschema_syntax_free(
+         LDAPSchemaSyntax *            syntax );
 
 char **
 ldapschema_value_dup(
          char                 ** vals );
 
+char **
+ldapschema_value_add(
+         char **                       vals,
+         const char *                  val,
+         int *                         countp );
 
 #endif /* end of header file */

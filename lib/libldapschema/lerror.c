@@ -50,6 +50,8 @@
 #include <strings.h>
 #include <stdlib.h>
 
+#include "lmemory.h"
+
 
 /////////////////
 //             //
