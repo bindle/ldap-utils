@@ -805,37 +805,17 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
    int                                 err;
    LDAPSchemaObjectclass             * objcls;
 
-   objcls   = NULL;
-   argv     = NULL;
+   // parses definition
+   argv = NULL;
+   if ((argc = ldapschema_definition_split_len(lsd, NULL, def, &argv)) == -1)
+      return(NULL);
 
    // initialize objectClass
-   if ((objcls = ldapschema_objectclass_initialize(lsd)) == NULL)
-      return(NULL);
-
-   // parses definition
-   if ((argc = ldapschema_definition_split_len(lsd, &objcls->model, def, &argv)) == -1)
+   if ((objcls = (LDAPSchemaObjectclass *)ldapschema_model_initialize(lsd, argv[0], LDAPSCHEMA_OBJECTCLASS, def)) == NULL)
    {
-      ldapschema_objectclass_free(objcls);
-      return(NULL);
-   };
-
-   // copy definition and oid into syntax
-   if ((objcls->model.oid = strdup(argv[0])) == NULL)
-   {
-      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
       ldapschema_value_free(argv);
-      ldapschema_objectclass_free(objcls);
       return(NULL);
    };
-   if ((objcls->model.definition = malloc(def->bv_len+1)) == NULL)
-   {
-      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
-      ldapschema_value_free(argv);
-      ldapschema_objectclass_free(objcls);
-      return(NULL);
-   };
-   memcpy(objcls->model.definition, def->bv_val, def->bv_len);
-   objcls->model.definition[def->bv_len] = '\0';
 
    // processes attribute definition
    for(pos = 1; pos < argc; pos++)
@@ -978,9 +958,6 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
       };
    };
    ldapschema_value_free(argv);
-
-   // adds specification to syntax
-   objcls->model.spec = ldapschema_spec_search(objcls->model.oid);
 
    // register objectClass
    if ((err = ldapschema_model_register(lsd, &objcls->model)) != LDAP_SUCCESS)

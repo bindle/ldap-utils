@@ -89,10 +89,6 @@ void
 ldapschema_objectclass_free(
          LDAPSchemaObjectclass * objectclass );
 
-LDAPSchemaObjectclass *
-ldapschema_objectclass_initialize(
-         LDAPSchema            * lsd );
-
 char **
 ldapschema_value_dup(
          char                 ** vals );

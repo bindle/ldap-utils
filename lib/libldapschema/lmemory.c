@@ -710,26 +710,6 @@ void ldapschema_objectclass_free(LDAPSchemaObjectclass * objectclass)
 }
 
 
-LDAPSchemaObjectclass * ldapschema_objectclass_initialize(LDAPSchema * lsd)
-{
-   LDAPSchemaObjectclass * objectclass;
-
-   assert(lsd != NULL);
-
-   // initialize syntax
-   if ((objectclass = malloc(sizeof(LDAPSchemaObjectclass))) == NULL)
-   {
-      lsd->errcode = LDAPSCHEMA_NO_MEMORY;
-      return(objectclass);
-   };
-   bzero(objectclass, sizeof(LDAPSchemaObjectclass));
-   objectclass->model.size = sizeof(LDAPSchemaObjectclass);
-   objectclass->model.type = LDAPSCHEMA_OBJECTCLASS;
-
-   return(objectclass);
-}
-
-
 void * ldapschema_oid(LDAPSchema * lsd, const char * oid, size_t type)
 {
    size_t               low;
