@@ -202,6 +202,9 @@
 #define LDAPSCHEMA_FLD_KIND                           23
 #define LDAPSCHEMA_FLD_SUPERIOR                       24
 #define LDAPSCHEMA_FLD_SYNTAX                         25
+#define LDAPSCHEMA_FLD_EQUALITY                       26
+#define LDAPSCHEMA_FLD_ORDERING                       27
+#define LDAPSCHEMA_FLD_SUBSTR                         28
 
 
 /////////////////
