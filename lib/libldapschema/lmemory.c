@@ -50,6 +50,8 @@
 #include <stdlib.h>
 
 #include "lspec.h"
+#include "lsort.h"
+#include "lerror.h"
 
 
 /////////////////
@@ -451,6 +453,134 @@ void ldapschema_model_free(LDAPSchemaModel * model)
    ldapschema_object_free(model);
    free(model);
    return;
+}
+
+
+int ldapschema_model_register(LDAPSchema * lsd, LDAPSchemaModel * mod)
+{
+   int                     err;
+   size_t                  names_len;
+   size_t                  idx;
+   size_t *                list_lenp;
+   char **                 names;
+   const char *            spec_name;
+   const char *            desc;
+   LDAPSchemaAlias *       alias;
+   LDAPSchemaAlias ***     listp;
+   LDAPSchemaPointer       objptr;
+
+   assert(lsd != NULL);
+   assert(mod != NULL);
+
+   desc           = NULL;
+   names          = NULL;
+   names_len      = 0;
+   spec_name      = NULL;
+   objptr.model   = mod;
+
+   // determines model specific list and search keys
+   switch(mod->type)
+   {
+      case LDAPSCHEMA_ATTRIBUTETYPE:
+      listp       = &lsd->attrs;
+      list_lenp   = &lsd->attrs_len;
+      names       = objptr.attributetype->names;
+      names_len   = objptr.attributetype->names_len;
+      spec_name   = ((mod->spec)) ? mod->spec->name : NULL;
+      break;
+
+      case LDAPSCHEMA_SYNTAX:
+      listp       = &lsd->syntaxes;
+      list_lenp   = &lsd->syntaxes_len;
+      desc        = mod->desc;
+      break;
+
+      case LDAPSCHEMA_MATCHINGRULE:
+      listp       = &lsd->mtchngrls;
+      list_lenp   = &lsd->mtchngrls_len;
+      names       = objptr.matchingrule->names;
+      names_len   = objptr.matchingrule->names_len;
+      spec_name   = ((mod->spec)) ? mod->spec->name : NULL;
+      break;
+
+      case LDAPSCHEMA_OBJECTCLASS:
+      listp       = &lsd->objclses;
+      list_lenp   = &lsd->objclses_len;
+      names       = objptr.objectclass->names;
+      names_len   = objptr.objectclass->names_len;
+      spec_name   = ((mod->spec)) ? mod->spec->name : NULL;
+      break;
+
+      default:
+      assert(0);
+      return(0);
+   };
+
+   // adds model to OID list
+   if ((err = ldapschema_insert(lsd, (void ***)&lsd->oids, &lsd->oids_len, mod, ldapschema_compar_models)) > 0)
+      return(err);
+   if (err == -1)
+   {
+      ldapschema_schema_err(lsd, mod, "server defines duplicate OID '%s'", mod->oid);
+      if ((err = ldapschema_append(lsd,(void ***)&lsd->dups, &lsd->dups_len, mod)) != LDAP_SUCCESS)
+         return(err);
+   };
+
+   // adds model into model specific list using OID
+   if ((alias = malloc(sizeof(LDAPSchemaAlias *))) == NULL)
+      return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
+   alias->alias   = mod->oid;
+   alias->model   = mod;
+   if ((err = ldapschema_insert(lsd, (void ***)listp, list_lenp, alias, ldapschema_compar_aliases)) > 0)
+   {
+      free(alias);
+      return(err);
+   };
+   if (err == -1)
+   {
+      ldapschema_schema_err(lsd,  mod, " model with duplicate oid '%s' found", mod->oid);
+      free(alias);
+   };
+
+   // adds model into model specific list using desc
+   if ((desc))
+   {
+      if ((alias = malloc(sizeof(LDAPSchemaAlias *))) == NULL)
+         return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
+      alias->alias   = desc;
+      alias->model   = mod;
+      if ((err = ldapschema_insert(lsd, (void ***)listp, list_lenp, alias, ldapschema_compar_aliases)) > 0)
+      {
+         free(alias);
+         return(err);
+      };
+      if (err == -1)
+      {
+         ldapschema_schema_err(lsd,  mod, " model with duplicate desc '%s' found", mod->oid);
+         free(alias);
+      };
+   };
+
+   // adds model into model specific list using names
+   for(idx = 0; (idx < names_len); idx++)
+   {
+      if ((alias = malloc(sizeof(LDAPSchemaAlias *))) == NULL)
+         return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
+      alias->alias   = names[idx];
+      alias->model   = mod;
+      if ((err = ldapschema_insert(lsd, (void ***)listp, list_lenp, alias, ldapschema_compar_aliases)) > 0)
+      {
+         free(alias);
+         return(err);
+      };
+      if (err == -1)
+      {
+         ldapschema_schema_err(lsd,  mod, " object with duplicate name '%s' found", names[idx]);
+         free(alias);
+      };
+   };
+
+   return(0);
 }
 
 

@@ -73,6 +73,11 @@ LDAPSchemaCur
 ldapschema_curalloc(
          LDAPSchema            * lsd );
 
+int
+ldapschema_model_register(
+         LDAPSchema *               lsd,
+         LDAPSchemaModel *          mod );
+
 void
 ldapschema_objectclass_free(
          LDAPSchemaObjectclass * objectclass );
