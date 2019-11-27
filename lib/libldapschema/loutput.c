@@ -124,6 +124,11 @@ ldapschema_print_obj_attributetype(
          LDAPSchemaAttributeType *  attr );
 
 void
+ldapschema_print_obj_matchingrule(
+         LDAPSchema *               lsd,
+         LDAPSchemaMatchingRule *   mtchngrl );
+
+void
 ldapschema_print_obj_model(
          LDAPSchema *               lsd,
          LDAPSchemaModel *          model );
@@ -165,6 +170,12 @@ void ldapschema_print( LDAPSchema * lsd, LDAPSchemaModel * mod )
       if (mod->size != sizeof(LDAPSchemaAttributeType))
          return;
       ldapschema_print_obj_attributetype(lsd, (LDAPSchemaAttributeType *)mod);
+      return;
+
+      case LDAPSCHEMA_MATCHINGRULE:
+      if (mod->size != sizeof(LDAPSchemaMatchingRule))
+         return;
+      ldapschema_print_obj_matchingrule(lsd, (LDAPSchemaMatchingRule *)mod);
       return;
 
       case LDAPSCHEMA_OBJECTCLASS:
@@ -432,6 +443,7 @@ void ldapschema_print_obj_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeTy
    size_t                     flags;
    char                       buff[256];
    LDAPSchemaSyntax *         syntax;
+   LDAPSchemaMatchingRule *   mtchngrl;
 
    assert(lsd  != NULL);
    assert(attr != NULL);
@@ -461,6 +473,13 @@ void ldapschema_print_obj_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeTy
 
    ldapschema_print_spec(lsd, attr->model.spec);
 
+   if ((mtchngrl = attr->equality) != NULL)
+      ldapschema_print_line("equality:", ((mtchngrl->names)) ? mtchngrl->names[0] : mtchngrl->model.oid);
+   if ((mtchngrl = attr->ordering) != NULL)
+      ldapschema_print_line("ordering:", ((mtchngrl->names)) ? mtchngrl->names[0] : mtchngrl->model.oid);
+   if ((mtchngrl = attr->substr) != NULL)
+      ldapschema_print_line("substr:", ((mtchngrl->names)) ? mtchngrl->names[0] : mtchngrl->model.oid);
+
    // print syntax information
    ldapschema_print_unsigned("min upper bound:", attr->min_upper);
    if ((syntax = attr->syntax)  != NULL)
@@ -484,6 +503,34 @@ void ldapschema_print_obj_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeTy
    ldapschema_print_list_models(lsd, "required by:", (LDAPSchemaModel **)attr->required_by, attr->required_by_len);
    ldapschema_print_list_models(lsd, "allowed by:",  (LDAPSchemaModel **)attr->allowed_by, attr->allowed_by_len);
    ldapschema_print_definition(lsd, &attr->model);
+
+   return;
+}
+
+
+void ldapschema_print_obj_matchingrule(LDAPSchema * lsd, LDAPSchemaMatchingRule * mtchngrl)
+{
+   char buff[256];
+
+   assert(lsd        != NULL);
+   assert(mtchngrl   != NULL);
+
+   ldapschema_print_type(lsd, &mtchngrl->model);
+   ldapschema_print_list("name(s):",     mtchngrl->names);
+   ldapschema_print_line("description:", mtchngrl->model.desc);
+   ldapschema_print_flags(lsd, &mtchngrl->model);
+
+   if ((mtchngrl->syntax))
+   {
+      if ((mtchngrl->syntax->model.desc))
+         snprintf(buff, sizeof(buff), "%s ( %s )", mtchngrl->syntax->model.oid, mtchngrl->syntax->model.desc);
+   else
+         snprintf(buff, sizeof(buff), "%s", mtchngrl->syntax->model.oid);
+      ldapschema_print_line("syntax:", buff);
+   };
+
+   ldapschema_print_extensions(lsd, &mtchngrl->model);
+   ldapschema_print_definition(lsd, &mtchngrl->model);
 
    return;
 }

@@ -73,6 +73,10 @@ LDAPSchemaCur
 ldapschema_curalloc(
          LDAPSchema            * lsd );
 
+void
+ldapschema_matchingrule_free(
+         LDAPSchemaMatchingRule *   rule);
+
 LDAPSchemaModel *
 ldapschema_model_initialize(
          LDAPSchema *               lsd,

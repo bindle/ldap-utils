@@ -82,6 +82,8 @@ struct ldap_schema
    size_t                                 syntaxes_len;     ///< length of syntaxes array
    LDAPSchemaAlias                     ** attrs;            ///< array of attributeTypes
    size_t                                 attrs_len;        ///< length of attributeTypes array
+   LDAPSchemaAlias                     ** mtchngrls;        ///< array of objectClasses
+   size_t                                 mtchngrls_len;    ///< length of objectClasses array
    LDAPSchemaAlias                     ** objclses;         ///< array of objectClasses
    size_t                                 objclses_len;     ///< length of objectClasses array
    char                                ** schema_errs;      ///< list of schema errors discovered
@@ -148,6 +150,9 @@ struct ldap_schema_attributetype
    size_t                                 min_upper;
    LDAPSchemaAttributeType              * sup;
    char                                 * sup_name;
+   LDAPSchemaMatchingRule               * equality;
+   LDAPSchemaMatchingRule               * ordering;
+   LDAPSchemaMatchingRule               * substr;
    char                                ** names;
    LDAPSchemaObjectclass               ** allowed_by;
    LDAPSchemaObjectclass               ** required_by;
@@ -196,6 +201,11 @@ struct ldap_schema_syntax
 struct ldap_schema_matchingrule
 {
    LDAPSchemaModel                        model;
+   LDAPSchemaSyntax *                     syntax;
+   LDAPSchemaAttributeType **             used_by;
+   size_t                                 used_by_len;
+   char **                                names;
+   size_t                                 names_len;
 };
 
 

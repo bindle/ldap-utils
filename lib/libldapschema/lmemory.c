@@ -220,6 +220,15 @@ void ldapschema_free(LDAPSchema * lsd)
    };
    lsd->attrs = NULL;
 
+   // frees matching rules list
+   if ((lsd->mtchngrls))
+   {
+      for(pos = 0; pos < lsd->mtchngrls_len; pos++)
+         free(lsd->mtchngrls[pos]);
+      free(lsd->mtchngrls);
+   };
+   lsd->mtchngrls = NULL;
+
    // frees objectclass list
    if ((lsd->objclses))
    {
@@ -390,6 +399,21 @@ int ldapschema_insert(LDAPSchema * lsd, void *** listp, size_t * lenp, void * ob
 
    return(LDAPSCHEMA_SUCCESS);
 }
+
+
+void ldapschema_matchingrule_free(LDAPSchemaMatchingRule * rule)
+{
+   assert(rule != NULL);
+
+   if ((rule->used_by))
+      free(rule->used_by);
+   ldapschema_object_free(&rule->model);
+
+   free(rule);
+
+   return;
+}
+
 
 void ldapschema_memfree(void * p)
 {

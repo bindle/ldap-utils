@@ -107,8 +107,14 @@ size_t ldapschema_count_ldapsyntaxes(LDAPSchema * lsd)
 
 size_t ldapschema_count_matchingrules(LDAPSchema * lsd)
 {
+   size_t idx;
+   size_t cnt;
    assert(lsd != NULL);
-   return(0);
+   cnt = 0;
+   for(idx = 0; (idx < lsd->oids_len); idx++)
+      if (lsd->oids[idx].model->type == LDAPSCHEMA_MATCHINGRULE)
+         cnt++;
+   return(cnt);
 }
 
 
@@ -223,9 +229,15 @@ LDAPSchemaSyntax * ldapschema_find_ldapsyntax(LDAPSchema * lsd,
 LDAPSchemaMatchingRule * ldapschema_find_matchingrule(LDAPSchema * lsd,
    const char * name)
 {
+   const LDAPSchemaAlias   * alias;
+
    assert(lsd     != NULL);
    assert(name    != NULL);
-   return(NULL);
+
+   if ((alias = ldapschema_find_alias(lsd, name, lsd->mtchngrls, lsd->mtchngrls_len)) == NULL)
+      return(NULL);
+
+   return(alias->matchingrule);
 }
 
 
@@ -300,6 +312,10 @@ const LDAPSchemaMatchingRule * ldapschema_first_matchingrule(LDAPSchema * lsd,
    if ((cur = ldapschema_curalloc(lsd)) == NULL)
       return(NULL);
    *curp = cur;
+
+   for(cur->cursor = 0; (cur->cursor < lsd->oids_len); cur->cursor++)
+      if (lsd->oids[cur->cursor].model->type == LDAPSCHEMA_MATCHINGRULE)
+         return(lsd->oids[cur->cursor].matchingrule);
 
    return(NULL);
 }
@@ -378,13 +394,30 @@ int ldapschema_get_info_ldapsyntax(LDAPSchema * lsd,
 
 
 int ldapschema_get_info_matchingrule(LDAPSchema * lsd,
-   const LDAPSchemaMatchingRule * matchingrule, int field, void * outvalue )
+   const LDAPSchemaMatchingRule * mtchngrl, int field, void * outvalue )
 {
-   assert(lsd           != NULL);
-   assert(matchingrule  != NULL);
-   assert(field         != 0);
-   assert(outvalue      != 0);
-   return(ldapschema_get_info_model(lsd, &matchingrule->model, field, outvalue));
+   char    *** oa;   // output char ** (array of strings)
+
+   assert(lsd        != NULL);
+   assert(mtchngrl   != NULL);
+   assert(field      != 0);
+   assert(outvalue   != 0);
+
+   oa = outvalue;
+
+   switch(field)
+   {
+      // char ** values (arrays of strings)
+      case LDAPSCHEMA_FLD_NAME:  if ((*oa = ldapschema_value_dup(mtchngrl->names)) == NULL) return(LDAPSCHEMA_NO_MEMORY); return(0);
+
+      // misc
+      case LDAPSCHEMA_FLD_SYNTAX: *(LDAPSchemaSyntax **)outvalue = mtchngrl->syntax; return(0);
+
+      default:
+      break;
+   };
+
+   return(ldapschema_get_info_model(lsd, &mtchngrl->model, field, outvalue));
 }
 
 

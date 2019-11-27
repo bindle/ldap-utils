@@ -588,18 +588,24 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
       else if (!(strcasecmp(argv[pos], "EQUALITY")))
       {
          pos++;
+         if ((alias = ldapschema_find_alias(lsd, argv[pos], lsd->mtchngrls, lsd->mtchngrls_len)) != NULL)
+            attr->equality = alias->matchingrule;
       }
 
       // inteprets attributeType ORDERING
       else if (!(strcasecmp(argv[pos], "ORDERING")))
       {
          pos++;
+         if ((alias = ldapschema_find_alias(lsd, argv[pos], lsd->mtchngrls, lsd->mtchngrls_len)) != NULL)
+            attr->ordering = alias->matchingrule;
       }
 
       // inteprets attributeType SUBSTR
       else if (!(strcasecmp(argv[pos], "SUBSTR")))
       {
          pos++;
+         if ((alias = ldapschema_find_alias(lsd, argv[pos], lsd->mtchngrls, lsd->mtchngrls_len)) != NULL)
+            attr->substr = alias->matchingrule;
       }
 
       // inteprets attributeType SYNTAX
@@ -730,6 +736,179 @@ int ldapschema_parse_ext(LDAPSchema * lsd, LDAPSchemaModel * model, const char *
 
    return(0);
 }
+
+
+/// parses a matching rule definition string
+/// @param[in]    lsd         Reference to pointer used to store allocated ldap_schema struct.
+/// @param[in]    def         Reference to pointer used to store allocated ldap_schema struct.
+///
+/// @return    If the definition was successfully parsed, an LDAPSchemaMatchingRule
+///            object is added to the schema returned. NULL is returned if
+///            an error was encountered.  Use ldapschema_errno() to obtain
+///            the error.
+/// @see       ldapschema_errno, ldapschema_syntax_free
+LDAPSchemaMatchingRule * ldapschema_parse_matchingrule(LDAPSchema * lsd, const struct berval * def)
+{
+   //
+   // RFC 4512                      LDAP Models                      June 2006
+   //
+   // 4.1.3.  Matching Rules
+   //
+   //    Matching rules are used in performance of attribute value assertions,
+   //    such as in performance of a Compare operation.  They are also used in
+   //    evaluating search filters, determining which individual values are to
+   //    be added or deleted during performance of a Modify operation, and in
+   //    comparing distinguished names.
+   //
+   //    Each matching rule is identified by an object identifier (OID) and,
+   //    optionally, one or more short names (descriptors).
+   //
+   //    Matching rule definitions are written according to the ABNF:
+   //
+   //      MatchingRuleDescription = LPAREN WSP
+   //          numericoid                 ; object identifier
+   //          [ SP "NAME" SP qdescrs ]   ; short names (descriptors)
+   //          [ SP "DESC" SP qdstring ]  ; description
+   //          [ SP "OBSOLETE" ]          ; not active
+   //          SP "SYNTAX" SP numericoid  ; assertion syntax
+   //          extensions WSP RPAREN      ; extensions
+   //
+   //    where:
+   //      <numericoid> is object identifier assigned to this matching rule;
+   //      NAME <qdescrs> are short names (descriptors) identifying this
+   //          matching rule;
+   //      DESC <qdstring> is a short descriptive string;
+   //      OBSOLETE indicates this matching rule is not active;
+   //      SYNTAX identifies the assertion syntax (the syntax of the assertion
+   //          value) by object identifier; and
+   //
+   char **                    argv;
+   int64_t                    pos;
+   int                        argc;
+   int                        err;
+   LDAPSchemaMatchingRule *   rule;
+   //LDAPSchemaSyntax *         syntax;
+
+
+   // parses definition
+   argv = NULL;
+   if ((argc = ldapschema_definition_split_len(lsd, NULL, def, &argv)) == -1)
+      return(NULL);
+
+   // initialize matchingRule
+   if ((rule = (LDAPSchemaMatchingRule *)ldapschema_model_initialize(lsd, argv[0], LDAPSCHEMA_MATCHINGRULE, def)) == NULL)
+   {
+      ldapschema_value_free(argv);
+      return(NULL);
+   };
+
+   // processes attribute definition
+   for(pos = 1; pos < argc; pos++)
+   {
+      // inteprets extensions
+      if (!(strncasecmp(argv[pos], "X-", 2)))
+      {
+         if ((err = ldapschema_parse_ext(lsd, &rule->model, argv[pos], argv[pos+1])))
+         {
+            ldapschema_matchingrule_free(rule);
+            ldapschema_value_free(argv);
+            return(NULL);
+         };
+         pos++;
+      }
+
+      // inteprets attributeType NAME
+      else if (!(strcasecmp(argv[pos], "NAME")))
+      {
+         pos++;
+         if (argv[pos][0] == '(')
+         {
+            if ((err = ldapschema_definition_split(lsd, &rule->model, argv[pos], strlen(argv[pos]), &rule->names)) == -1)
+            {
+               ldapschema_value_free(argv);
+               ldapschema_matchingrule_free(rule);
+               return(NULL);
+            };
+            rule->names_len = (size_t)ldapschema_count_values(rule->names);
+         }
+         else
+         {
+            if ((rule->names = malloc(sizeof(char *)*2)) == NULL)
+            {
+               lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+               ldapschema_value_free(argv);
+               ldapschema_matchingrule_free(rule);
+               return(NULL);
+            };
+            rule->names[1]  = NULL;
+            rule->names_len = 1;
+            if ((rule->names[0] = strdup(argv[pos])) == NULL)
+            {
+               lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+               ldapschema_value_free(argv);
+               ldapschema_matchingrule_free(rule);
+               return(NULL);
+            };
+         };
+      }
+
+      // inteprets syntax DESC
+      else if (!(strcasecmp(argv[pos], "DESC")))
+      {
+         pos++;
+         if (pos >= argc)
+         {
+            lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR;
+            ldapschema_value_free(argv);
+            ldapschema_matchingrule_free(rule);
+            return(NULL);
+         };
+         if ((rule->model.desc))
+            free(rule->model.desc);
+         if ((rule->model.desc = strdup(argv[pos])) == NULL)
+         {
+            lsd->errcode = LDAPSCHEMA_NO_MEMORY;
+            ldapschema_value_free(argv);
+            ldapschema_matchingrule_free(rule);
+            return(NULL);
+         };
+      }
+
+      // inteprets matchingRule OBSOLETE
+      else if (!(strcasecmp(argv[pos], "OBSOLETE")))
+      {
+         rule->model.flags |= LDAPSCHEMA_O_OBSOLETE;
+      }
+
+      // inteprets attributeType SYNTAX
+      else if (!(strcasecmp(argv[pos], "SYNTAX")))
+      {
+         pos++;
+         rule->syntax = ldapschema_oid(lsd, argv[pos], LDAPSCHEMA_SYNTAX);
+      }
+
+      // handle unknown parameters
+      else
+      {
+         lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR;
+         ldapschema_value_free(argv);
+         ldapschema_matchingrule_free(rule);
+         return(NULL);
+      };
+   };
+   ldapschema_value_free(argv);
+
+   // register matchingRule
+   if ((err = ldapschema_model_register(lsd, &rule->model)) != LDAP_SUCCESS)
+   {
+      ldapschema_matchingrule_free(rule);
+      return(NULL);
+   };
+
+
+   return(rule);
+}
+
 
 
 /// parses an LDAP objectClass definition string

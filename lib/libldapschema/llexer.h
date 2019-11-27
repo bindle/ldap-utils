@@ -96,6 +96,11 @@ ldapschema_parse_ext(
          const char            * key,
          const char            * valstr );
 
+LDAPSchemaMatchingRule *
+ldapschema_parse_matchingrule(
+         LDAPSchema *            lsd,
+         const struct berval *   def );
+
 LDAPSchemaObjectclass *
 ldapschema_parse_objectclass(
          LDAPSchema            * lsd,

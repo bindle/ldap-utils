@@ -152,6 +152,22 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
       ldap_value_free_len(vals);
    };
 
+   // process matchingRule
+   if ((vals = ldap_get_values_len(ld, msg, "matchingRules")) != NULL)
+   {
+      for(x = 0; ((vals[x])); x++)
+      {
+         if ( ((ptr = ldapschema_parse_matchingrule(lsd, vals[x])) == NULL) &&
+              (lsd->errcode != LDAPSCHEMA_SCHEMA_ERROR) )
+         {
+            ldap_value_free_len(vals);
+            ldap_msgfree(res);
+            return(-1);
+         };
+      };
+      ldap_value_free_len(vals);
+   };
+
    // process attributeTypes
    if ((vals = ldap_get_values_len(ld, msg, "attributeTypes")) != NULL)
    {
@@ -197,6 +213,12 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
                attr->min_upper = attrsup->min_upper;
             if (!(attr->usage))
                attr->usage = attrsup->usage;
+            if (!(attr->equality))
+               attr->equality = attrsup->equality;
+            if (!(attr->ordering))
+               attr->ordering = attrsup->ordering;
+            if (!(attr->substr))
+               attr->substr = attrsup->substr;
          };
       };
    };
