@@ -661,8 +661,6 @@ void ldapschema_print_type(LDAPSchema * lsd, LDAPSchemaModel * model)
       default:                       str = "unknown:"; break;
    };
    printf("%-*s %s\n", LDAPSCHEMA_WIDTH_HEADER, str, model->oid);
-   if (!(model->definition))
-      ldapschema_print_line("notice:", "** NOT DEFINED BY SERVER **");
    return;
 }
 
