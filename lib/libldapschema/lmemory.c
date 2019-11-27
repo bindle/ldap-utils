@@ -483,7 +483,7 @@ LDAPSchemaModel * ldapschema_model_initialize(LDAPSchema * lsd,
    };
 
    // copy definition into model
-   if ((def))
+   if (((def)) && (def->bv_len > 0))
    {
       if ((mod->definition = malloc(def->bv_len+1)) == NULL)
       {
