@@ -266,7 +266,9 @@ AC_DEFUN_ONCE([AC_LDAP_UTILS_LIBLDAPSCHEMA],[dnl
       LDAPUTILS_LIBLDAPSCHEMA="no"
       LDAPUTILS_LIBLDAPSCHEMA_STATUS="skip"
       LDAPUTILS_LTLIBLDAPSCHEMA_STATUS="skip"
-      if test "x${LDAPUTILS_LDAPINFO}" == "xyes" || test "x${LDAPUTILS_LDAPSCHEMA}" == "xyes";then
+      if test "x${LDAPUTILS_LDAP2CSV}" == "xyes" || \
+         test "x${LDAPUTILS_LDAPINFO}" == "xyes" || \
+         test "x${LDAPUTILS_LDAPSCHEMA}" == "xyes";then
          LDAPUTILS_LIBLDAPSCHEMA="yes"
          LDAPUTILS_LIBLDAPSCHEMA_STATUS="build"
       fi

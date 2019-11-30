@@ -236,11 +236,11 @@ if LDAPUTILS_LDAP2CSV
    bin_PROGRAMS				+= src/ldap2csv
    man_MANS				+= doc/ldap2csv.1
 endif
-src_ldap2csv_DEPENDENCIES		= Makefile lib/libldaputils.a
+src_ldap2csv_DEPENDENCIES		= Makefile lib/libldaputils.a lib/libldapschema.a
 src_ldap2csv_CPPFLAGS			= -DPROGRAM_NAME="\"ldap2csv\"" $(AM_CPPFLAGS)
 src_ldap2csv_CFLAGS			= $(AM_CFLAGS)
 src_ldap2csv_LDFLAGS			= $(AM_LDFLAGS)
-src_ldap2csv_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
+src_ldap2csv_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a lib/libldapschema.a
 src_ldap2csv_SOURCES			= src/ldap2csv.c
 
 

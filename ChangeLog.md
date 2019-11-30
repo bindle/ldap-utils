@@ -9,6 +9,7 @@ Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>
   - docs: expanding RFC collection (syzdek)
   - docs: documenting assigned enterprise number (syzdek)
   - ldap2csv: adding support for attribute titles (syzdek)
+  - ldap2csv: incorporating libldapschema.a (syzdek)
   - ldapschema: adding support for matchingRules (syzdek)
   - libldapschema: misc bug fixes (syzdek)
   - libldapschema: adding initial ABNF oidspecs (syzdek)

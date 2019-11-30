@@ -72,6 +72,7 @@
 #define LDAP_DEPRECATED 1
 #include <ldap.h>
 #include <ldaputils.h>
+#include <ldapschema.h>
 
 
 ///////////////////
@@ -104,6 +105,7 @@ typedef struct my_config MyConfig;
 struct my_config
 {
    LDAPUtils   * lud;
+   LDAPSchema  * lsd;
    const char  * filter;
    const char  * prog_name;
    const char ** defvals;
@@ -186,6 +188,14 @@ int main(int argc, char * argv[])
       return(1);
    };
 
+   // fetches schema
+   if ( ((err = ldapschema_fetch(cnf->lsd, cnf->lud->ld)) != LDAP_SUCCESS) && (err != LDAPSCHEMA_SCHEMA_ERROR) )
+   {
+      fprintf(stderr, "%s: ldapschema_fetch(): %s\n", cnf->lud->prog_name, ldapschema_err2string(err));
+      my_unbind(cnf);
+      return(1);
+   };
+
    // performs LDAP search
    if ((err = ldaputils_search(cnf->lud, &res)) != LDAP_SUCCESS)
    {
@@ -248,6 +258,14 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    if ((err = ldaputils_initialize(&cnf->lud, PROGRAM_NAME)) != LDAP_SUCCESS)
    {
       fprintf(stderr, "%s: ldaputils_initialize(): %s\n", PROGRAM_NAME, ldap_err2string(err));
+      my_unbind(cnf);
+      return(1);
+   };
+
+   // initialize ldap schema
+   if ((err = ldapschema_initialize(&cnf->lsd)) != LDAP_SUCCESS)
+   {
+      fprintf(stderr, "%s: ldapschema_initialize(): %s\n", PROGRAM_NAME, ldapschema_err2string(err));
       my_unbind(cnf);
       return(1);
    };
@@ -376,6 +394,8 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
    LDAPMessage     * msg;
    struct berval  ** vals;
    LDAP            * ld;
+   LDAPSchemaAttributeType * attr;
+   char           ** names;
 
    assert(cnf != NULL);
    assert(res != NULL);
@@ -482,7 +502,15 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
          };
 
          // retrieves values
-         if ((vals = ldap_get_values_len(ld, msg, cnf->lud->attrs[x])) == NULL)
+         names = NULL;
+         vals  = NULL;
+         if ((attr = ldapschema_find_attributetype(cnf->lsd, cnf->lud->attrs[x])) != NULL)
+            ldapschema_get_info_attributetype(cnf->lsd, attr, LDAPSCHEMA_FLD_NAME, &names);
+         for(y = 0; (((names)) && ((names[y])) && (!(vals))); y++)
+            vals = ldap_get_values_len(ld, msg, names[y]);
+         if (!(vals))
+            vals = ldap_get_values_len(ld, msg, cnf->lud->attrs[x]);
+         if (!(vals))
          {
             printf("%s", cnf->defvals[x]);
             continue;
@@ -543,6 +571,9 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
 void my_unbind(MyConfig * cnf)
 {
    assert(cnf != NULL);
+
+   if ((cnf->lsd))
+      ldapschema_free(cnf->lsd);
 
    if ((cnf->lud))
       ldaputils_unbind(cnf->lud);
