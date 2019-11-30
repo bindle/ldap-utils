@@ -8,6 +8,7 @@ Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>
 ---
   - docs: expanding RFC collection (syzdek)
   - docs: documenting assigned enterprise number (syzdek)
+  - docs: adding initial support for Doxygen (syzdek)
   - ldap2csv: adding support for attribute titles (syzdek)
   - ldap2csv: incorporating libldapschema.a (syzdek)
   - ldap2csv: misc bug fixes (syzdek)
