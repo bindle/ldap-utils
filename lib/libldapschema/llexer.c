@@ -306,6 +306,58 @@ int ldapschema_definition_split_len(LDAPSchema * lsd, LDAPSchemaModel * mod, con
 }
 
 
+int ldapschema_line_split(LDAPSchema * lsd, const char * str, char *** argvp)
+{
+   char *         line;
+   char *         bol;
+   char *         eol;
+   char **        lines;
+   size_t         pos;
+   size_t         count;
+
+   assert(lsd != NULL);
+   assert(str != NULL);
+   assert(argvp != NULL);
+
+   if ((line = strdup(str)) == NULL)
+      return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
+
+   count = 0;
+   for(pos = 0; ((str[pos])); pos++)
+      if (str[pos] == '\n')
+         count++;
+   count += 2;
+
+   if ((lines = malloc(sizeof(char *)*count)) == NULL)
+   {
+      free(line);
+      return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
+   };
+   bzero(lines, (sizeof(char *)*count));
+
+   bol   = line;
+   count = 0;
+   while ((eol = index(bol, '\n')) != NULL)
+   {
+      eol[0] = '\0';
+      if ((lines[count++] = strdup(bol)) == NULL)
+      {
+         free(line);
+         ldapschema_value_free(lines);
+         return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
+      };
+      lines[count]   = NULL;
+      bol            = &eol[1];
+   };
+
+   free(line);
+
+   *argvp = lines;
+
+   return(0);
+}
+
+
 int ldapschema_objectclass_attribute(LDAPSchema * lsd,
    LDAPSchemaObjectclass * objcls, LDAPSchemaAttributeType * attr,
    int must, int inherited)

@@ -77,6 +77,12 @@ ldapschema_definition_split_len(
          char ***                      argvp );
 
 int
+ldapschema_line_split(
+         LDAPSchema *                  lsd,
+         const char *                  str,
+         char ***                      argvp );
+
+int
 ldapschema_objectclass_attribute(
          LDAPSchema *                  lsd,
          LDAPSchemaObjectclass *       objcls,
