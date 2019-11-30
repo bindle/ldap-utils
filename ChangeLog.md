@@ -12,6 +12,7 @@ Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>
   - libldapschema: misc bug fixes (syzdek)
   - libldapschema: adding initial ABNF oidspecs (syzdek)
   - libldapschema: adding support for matchingRules (syzdek)
+  - libldapschema: refactoring error management (syzdek)
   - oidspectool: adding ABNF oidspec type (syzdek)
 
 0.4
