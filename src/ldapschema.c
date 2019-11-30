@@ -464,15 +464,12 @@ int my_list_add(LDAPSchemaModel *** listp, size_t * lenp, LDAPSchemaModel * mod)
 {
    void *               ptr;
    size_t               idx;
-   LDAPSchemaModel **   list;
 
    if (!(mod))
       return(0);
 
-   list = *listp;
-
    for(idx = 0; (idx < (*lenp)); idx++)
-      if (!(ldapschema_compar_models(&mod, &list[idx])))
+      if (!(ldapschema_compar_models(&mod, &listp[0][idx])))
          return(0);
 
    if ((ptr = realloc(*listp, (sizeof(LDAPSchemaModel *)*(*lenp +2)))) == NULL)
@@ -481,7 +478,6 @@ int my_list_add(LDAPSchemaModel *** listp, size_t * lenp, LDAPSchemaModel * mod)
       return(1);
    };
    *listp            = ptr;
-   list              = *listp;
    listp[0][*lenp]   = mod;
    (*lenp)++;
    listp[0][*lenp]   = NULL;
