@@ -128,6 +128,11 @@ ldapschema_oid(
          const char *                  oid,
          uint32_t                      type );
 
+char *
+ldapschema_stradd(
+         char **                       s1,
+         const char *                  s2 );
+
 void
 ldapschema_syntax_free(
          LDAPSchemaSyntax *            syntax );

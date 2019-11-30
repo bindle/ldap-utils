@@ -768,6 +768,30 @@ void * ldapschema_oid(LDAPSchema * lsd, const char * oid, uint32_t type)
 }
 
 
+char * ldapschema_stradd(char ** s1p, const char * s2)
+{
+   char *   s1;
+   size_t   l1;
+   size_t   l2;
+   void *   ptr;
+
+   assert(s1p  != NULL);
+   assert(*s1p != NULL);
+   assert(s2   != NULL);
+
+   s1 = *s1p;
+   l1 = strlen(s1);
+   l2 = strlen(s2);
+
+   if ((ptr = realloc(s1, (l1+l2+1))) == NULL)
+      return(NULL);
+   s1    = ptr;
+   *s1p  = s1;
+
+   return(strncat(s1, s2, (l1+l2+1)));
+}
+
+
 void ldapschema_syntax_free(LDAPSchemaSyntax * syntax)
 {
    assert(syntax != NULL);
