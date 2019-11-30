@@ -145,7 +145,10 @@ CLEANFILES				= \
 					  @PACKAGE_TARNAME@-*.txz \
 					  @PACKAGE_TARNAME@-*.zip
 DISTCHECK_CONFIGURE_FLAGS		= --enable-strictwarnings \
-					  --enable-doxygen-docs
+					  --enable-doxygen-docs \
+					  --enable-ldapdebug \
+					  --enable-ldapschema \
+					  --enable-libldapschema
 
 
 # macros for doc/doxygen
