@@ -53,8 +53,8 @@ All rights reserved.
    - [x] libldapschema
      - [ ] add support for multiple objectClass superiors
      - [ ] write man pages
-     - [ ] add support for OID specs on attributeTypes and objectClasses
-     - [ ] add support for matchingRules
+     - [x] add support for OID specs on attributeTypes and objectClasses
+     - [x] add support for matchingRules
 
    - [x] libldaputils
      - [ ] add support for auth mechanisms other than simple auth.
