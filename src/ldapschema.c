@@ -617,6 +617,8 @@ int my_run_details(MyConfig * cnf)
       printf("\n\n");
    };
 
+   free(list);
+
    return(0);
 }
 
