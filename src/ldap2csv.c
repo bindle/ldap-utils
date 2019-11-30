@@ -205,7 +205,7 @@ int main(int argc, char * argv[])
 
    // prints attribute names
    printf("\"%s\"", cnf->titles[0]);
-   for(x = 1; cnf->titles[x]; x++)
+   for(x = 1; ((cnf->titles[x])); x++)
       printf(",\"%s\"", cnf->titles[x]);
    printf("\n");
 
@@ -234,6 +234,8 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    int        option_index;
    char     * str;
    MyConfig * cnf;
+   size_t     len;
+   size_t     size;
 
    static char   short_options[] = MY_SHORT_OPTIONS;
    static struct option long_options[] =
@@ -327,24 +329,29 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    };
 
    // configures LDAP attributes to return in results
-   if (!(cnf->lud->attrs = (char **) malloc(sizeof(char *) * (size_t)(argc-optind+1))))
+   len  = (size_t)(argc - optind) + 1;
+   size = sizeof(char *) * len;
+   if (!(cnf->lud->attrs = (char **) malloc(size)))
    {
       fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
       my_unbind(cnf);
       return(1);
    };
-   if (!(cnf->defvals = (const char **) malloc(sizeof(char *) * (size_t)(argc-optind+1))))
+   bzero(cnf->lud->attrs, size);
+   if (!(cnf->defvals = (const char **) malloc(size)))
    {
       fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
       my_unbind(cnf);
       return(1);
    };
-   if (!(cnf->titles = (const char **) malloc(sizeof(char *) * (size_t)(argc-optind+1))))
+   bzero(cnf->defvals, size);
+   if (!(cnf->titles = (const char **) malloc(size)))
    {
       fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
       my_unbind(cnf);
       return(1);
    };
+   bzero(cnf->titles, size);
    for(c = 0; c < (argc-optind); c++)
    {
       cnf->lud->attrs[c] = argv[optind+c];
