@@ -139,6 +139,7 @@ int ldapschema_schema_err(LDAPSchema * lsd, LDAPSchemaModel * mod, const char * 
       free(str);
       return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
    };
+   free(str);
    *listp = tmplist;
 
    // adds object to error list
