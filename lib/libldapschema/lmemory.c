@@ -582,7 +582,7 @@ int ldapschema_model_register(LDAPSchema * lsd, LDAPSchemaModel * mod)
    };
 
    // adds model into model specific list using OID
-   if ((alias = malloc(sizeof(LDAPSchemaAlias *))) == NULL)
+   if ((alias = malloc(sizeof(LDAPSchemaAlias))) == NULL)
       return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
    alias->alias   = mod->oid;
    alias->model   = mod;
@@ -600,7 +600,7 @@ int ldapschema_model_register(LDAPSchema * lsd, LDAPSchemaModel * mod)
    // adds model into model specific list using desc
    if ((desc))
    {
-      if ((alias = malloc(sizeof(LDAPSchemaAlias *))) == NULL)
+      if ((alias = malloc(sizeof(LDAPSchemaAlias))) == NULL)
          return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
       alias->alias   = desc;
       alias->model   = mod;
@@ -619,7 +619,7 @@ int ldapschema_model_register(LDAPSchema * lsd, LDAPSchemaModel * mod)
    // adds model into model specific list using names
    for(idx = 0; (idx < names_len); idx++)
    {
-      if ((alias = malloc(sizeof(LDAPSchemaAlias *))) == NULL)
+      if ((alias = malloc(sizeof(LDAPSchemaAlias))) == NULL)
          return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
       alias->alias   = names[idx];
       alias->model   = mod;
