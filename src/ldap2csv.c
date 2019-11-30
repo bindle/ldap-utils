@@ -363,6 +363,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    };
    cnf->lud->attrs[c] = NULL;
    cnf->defvals[c]    = NULL;
+   cnf->titles[c]     = NULL;
 
    // reads password
    if ((err = ldaputils_pass(cnf->lud)) != 0)
