@@ -170,7 +170,6 @@ int main(int argc, char * argv[])
    int                    err;
    MyConfig             * cnf;
    LDAPMessage          * res;
-   const char * const   * attrs;
 
    cnf = NULL;
 
@@ -205,7 +204,6 @@ int main(int argc, char * argv[])
    };
 
    // prints attribute names
-   attrs = ldaputils_get_attribute_list(cnf->lud);
    printf("\"%s\"", cnf->titles[0]);
    for(x = 1; cnf->titles[x]; x++)
       printf(",\"%s\"", cnf->titles[x]);
