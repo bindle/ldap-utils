@@ -202,9 +202,11 @@ char ** ldapschema_schema_errors(LDAPSchema * lsd )
       };
       if ((tmperrs = ldapschema_value_add(errs, str, &len)) == NULL)
       {
+         free(str);
          ldapschema_value_free(errs);
          return(NULL);
       };
+      free(str);
       errs = tmperrs;
    };
 
@@ -222,9 +224,11 @@ char ** ldapschema_schema_errors(LDAPSchema * lsd )
          };
          if ((tmperrs = ldapschema_value_add(errs, str, &len)) == NULL)
          {
+            free(str);
             ldapschema_value_free(errs);
             return(NULL);
          };
+         free(str);
          errs = tmperrs;
       };
    };
