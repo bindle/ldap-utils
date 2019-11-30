@@ -133,7 +133,7 @@ void ldapschema_curfree(LDAPSchemaCur cur)
 LDAPSchemaCur ldapschema_curalloc(LDAPSchema * lsd)
 {
    LDAPSchemaCur cur;
-   if ((cur = malloc(sizeof(LDAPSchemaCur))) == NULL)
+   if ((cur = malloc(sizeof(struct ldapschema_cursor))) == NULL)
    {
       lsd->errcode = LDAPSCHEMA_NO_MEMORY;
       return(NULL);
