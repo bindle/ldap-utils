@@ -57,7 +57,7 @@ ldap2csv \- LDAP search tool which outputs CSV
 [\fB-z\fR \fIlimit\fR]
 [\fB-Z\fR[\fB-Z\fR]]
 [\fIfilter\fR]
-\fIattributes[:value] ...\fR
+\fIattributes[:value[:title]] ...\fR
 .sp
 \fBldap2csv\fR [ \fB-h\fR | \fB--help\fR ]
 .sp
@@ -132,8 +132,14 @@ The \fIattribute\fR and default value to include in CSV output. The default
 value is displayed if the entry does not contain the specified attribute.
 Psuedo attributes cannot be used with default values.
 .TP
+\fIattribute:value:title\fR
+The \fIattribute\fR, default \fIvalue\fR, and \fItitle\fR of column to include
+in CSV output. The default value is displayed if the entry does not contain
+the specified attribute. Psuedo attributes cannot be used with default values.
+.TP
 \fI...\fR
-List of additional attribute and default values to include in CSV output.
+List of additional attribute, default values, and titles to include in CSV
+output.
 .SH PSUEDO ATTRIBUTES
 .TP
 \fBdn\fR

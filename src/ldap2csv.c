@@ -107,6 +107,7 @@ struct my_config
    const char  * filter;
    const char  * prog_name;
    const char ** defvals;
+   const char ** titles;
    char          output[LDAPUTILS_OPT_LEN];
 };
 
@@ -144,7 +145,7 @@ void my_unbind(MyConfig * cnf);
 /// prints program usage and exits
 void ldaputils_usage(void)
 {
-   printf("Usage: %s [options] [filter] attributes[:values]...\n", PROGRAM_NAME);
+   printf("Usage: %s [options] [filter] attributes[:values[:title]]...\n", PROGRAM_NAME);
    ldaputils_usage_search(MY_SHORT_OPTIONS);
    ldaputils_usage_common(MY_SHORT_OPTIONS);
    printf("Special Attributes:\n");
@@ -195,9 +196,9 @@ int main(int argc, char * argv[])
 
    // prints attribute names
    attrs = ldaputils_get_attribute_list(cnf->lud);
-   printf("\"%s\"", attrs[0]);
-   for(x = 1; attrs[x]; x++)
-      printf(",\"%s\"", attrs[x]);
+   printf("\"%s\"", cnf->titles[0]);
+   for(x = 1; cnf->titles[x]; x++)
+      printf(",\"%s\"", cnf->titles[x]);
    printf("\n");
 
    // prints values
@@ -322,14 +323,26 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
       my_unbind(cnf);
       return(1);
    };
+   if (!(cnf->titles = (const char **) malloc(sizeof(char *) * (size_t)(argc-optind+1))))
+   {
+      fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
+      my_unbind(cnf);
+      return(1);
+   };
    for(c = 0; c < (argc-optind); c++)
    {
       cnf->lud->attrs[c] = argv[optind+c];
       cnf->defvals[c]    = "";
+      cnf->titles[c]     = argv[optind+c];
       if ((str = index(argv[optind+c], ':')) != NULL)
       {
          str[0] = '\0';
          cnf->defvals[c] = &str[1];
+         if ((str = index(&str[1], ':')) != NULL)
+         {
+            str[0] = '\0';
+            cnf->titles[c] = &str[1];
+         };
       };
    };
    cnf->lud->attrs[c] = NULL;
@@ -536,6 +549,9 @@ void my_unbind(MyConfig * cnf)
 
    if ((cnf->defvals))
       free(cnf->defvals);
+
+   if ((cnf->titles))
+      free(cnf->titles);
 
    free(cnf);
 
