@@ -650,6 +650,8 @@ void ldapschema_print_spec( LDAPSchema * lsd, const LDAPSchemaSpec * spec)
    ldapschema_print_line("spec source:",   spec->spec_source);
    ldapschema_print_line("spec text:",     spec->spec_text);
    ldapschema_print_line("spec notes:",    spec->notes);
+   ldapschema_print_line("common abnf:",   ((spec->flags & LDAPSCHEMA_O_COMMON_ABNF) != 0) ? "yes" : "no");
+   ldapschema_print_line("schema abnf:",   ((spec->flags & LDAPSCHEMA_O_SCHEMA_ABNF) != 0) ? "yes" : "no");
    ldapschema_print_line("abnf:",          spec->abnf);
    return;
 }
