@@ -83,15 +83,16 @@
 /////////////////
 #pragma mark - Functions
 
+#define APPEND( c ) { last = c; if (strpos<size) str[strpos] = last; strpos++; }
+#define INDENT() { if ((!IS_SPACE(last))&&((strpos))) { APPEND('\n'); for(x=0; (x<(indent*3));x++) APPEND(' '); bol=strpos; }; }
 /// initializes LDAP schema
-/// @param[out]   str         Numeric error code
-/// @param[in]    size        Numeric error code
-/// @param[in]    def         Numeric error code
+/// @param[out]   str         output buffer to store formatted definition
+/// @param[in]    size        size of output buffer
+/// @param[in]    def         unformatted definition string.
+/// @param[in]    width       column width for line wrapping
 ///
 /// @return    Returns a string representation of the error code.
 /// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
-#define APPEND( c ) { last = c; if (strpos<size) str[strpos] = last; strpos++; }
-#define INDENT() { if ((!IS_SPACE(last))&&((strpos))) { APPEND('\n'); for(x=0; (x<(indent*3));x++) APPEND(' '); bol=strpos; }; }
 int ldapschema_fmt_definition( char * restrict str, size_t size, const char * restrict def, size_t width )
 {
    size_t      defpos;
