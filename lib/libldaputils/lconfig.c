@@ -98,6 +98,9 @@ void ldaputils_param_option_bool(LDAPUtils * lud, const char * key, int option);
 /// @param[in]  lud           reference to LDAP utiles descriptor
 /// @param[in]  c             getopt option
 /// @param[in]  arg           getopt argument
+///
+/// @return    If successfull, returns 0.  If an unknown option, returns the
+///            option value for processing by the program.
 int ldaputils_getopt(LDAPUtils * lud, int c, const char * arg)
 {
    int     rc;
@@ -402,6 +405,10 @@ void ldaputils_params(LDAPUtils * lud)
 
 
 /// prints string to stdout
+/// @param[in] key   name of value
+/// @param[in] val   value of key
+///
+/// @see       ldaputils_param_int, ldaputils_param_option_bool
 void ldaputils_param_print(const char * key, const char * val)
 {
    if ((val))
@@ -410,7 +417,12 @@ void ldaputils_param_print(const char * key, const char * val)
 }
 
 
-/// prints string to stdout
+/// prints integer to stdout
+/// @param[in] lud   reference to LDAP utilities struct
+/// @param[in] key   name of value
+/// @param[in] ival  value of key
+///
+/// @see       ldaputils_param_print, ldaputils_param_option_bool
 void ldaputils_param_int(LDAPUtils * lud, const char * key, int ival)
 {
    char val[16];
@@ -425,7 +437,12 @@ void ldaputils_param_int(LDAPUtils * lud, const char * key, int ival)
 }
 
 
-/// prints string to stdout
+/// prints boolean LDAP option to stdout
+/// @param[in] lud      reference to LDAP utilities struct
+/// @param[in] key      name of option
+/// @param[in] option   LDAP option
+///
+/// @see       ldaputils_param_print, ldaputils_param_option_bool
 void ldaputils_param_option_bool(LDAPUtils * lud, const char * key, int option)
 {
    int  ival;
@@ -443,7 +460,12 @@ void ldaputils_param_option_bool(LDAPUtils * lud, const char * key, int option)
 }
 
 
-/// prints string to stdout
+/// prints integer LDAP option to stdout
+/// @param[in] lud      reference to LDAP utilities struct
+/// @param[in] key      name of option
+/// @param[in] option   LDAP option
+///
+/// @see       ldaputils_param_print, ldaputils_param_option_bool
 void ldaputils_param_option_int(LDAPUtils * lud, const char * key, int option)
 {
    int  ival;
@@ -460,7 +482,12 @@ void ldaputils_param_option_int(LDAPUtils * lud, const char * key, int option)
 }
 
 
-/// prints string to stdout
+/// prints string LDAP option to stdout
+/// @param[in] lud      reference to LDAP utilities struct
+/// @param[in] key      name of option
+/// @param[in] option   LDAP option
+///
+/// @see       ldaputils_param_print, ldaputils_param_option_bool
 void ldaputils_param_option_str(LDAPUtils * lud, const char * key, int option)
 {
    char * val;
@@ -479,7 +506,12 @@ void ldaputils_param_option_str(LDAPUtils * lud, const char * key, int option)
 }
 
 
-/// prints string to stdout
+/// prints string list LDAP option to stdout
+/// @param[in] lud      reference to LDAP utilities struct
+/// @param[in] key      name of option
+/// @param[in] option   LDAP option
+///
+/// @see       ldaputils_param_print, ldaputils_param_option_bool
 void ldaputils_param_option_strlist(LDAPUtils * lud, const char * key, int option)
 {
    int     i;
@@ -500,6 +532,12 @@ void ldaputils_param_option_strlist(LDAPUtils * lud, const char * key, int optio
 }
 
 
+/// prints time LDAP option to stdout
+/// @param[in] lud      reference to LDAP utilities struct
+/// @param[in] key      name of option
+/// @param[in] option   LDAP option
+///
+/// @see       ldaputils_param_print, ldaputils_param_option_bool
 void ldaputils_param_option_time(LDAPUtils * lud, const char * key, int option)
 {
    struct timeval * ival;
@@ -601,6 +639,9 @@ void ldaputils_usage_search(const char * short_options)
 
 
 /// displays usage
+/// @param[in] prog_name   name of running program
+///
+/// @see       ldaputils_param_print, ldaputils_param_option_bool
 void ldaputils_version(const char * prog_name)
 {
    printf("%s (%s) %s\n", prog_name, PACKAGE_NAME, PACKAGE_VERSION);
