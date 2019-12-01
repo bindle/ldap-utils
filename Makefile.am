@@ -380,10 +380,12 @@ doxygen: doc/doxygen/html/index.html
 
 doc/doxygen/html/index.html: doc/Doxyfile $(noinst_HEADERS) $(include_HEADERS)
 	$(MY_V_DOXYGEN) rm -fR doc/doxygen; mkdir -p doc/doxygen; \
-	cd $(top_srcdir) && $(DOXYGEN) $(abs_top_builddir)/doc/Doxyfile > /dev/null
+	cd $(top_srcdir); \
+	$(DOXYGEN) $(abs_top_builddir)/doc/Doxyfile > /dev/null;
 
 doc/Doxyfile: Makefile doc/Doxyfile.in
-	@$(do_subst_dt)
+	$(MY_V_DOXYGEN)$(DOXYGEN) -u $(srcdir)/doc/Doxyfile.in > /dev/null;
+	@$(do_subst_dt);
 
 doc/ldap2csv.1: Makefile $(srcdir)/doc/ldap2csv.1.in
 	@$(do_subst_dt)
