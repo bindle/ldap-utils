@@ -74,6 +74,9 @@
 #endif
 
 /// getpass() replacement -- SUSV 2 deprecated getpass()
+/// @param[in] prompt   prompt to display to end user
+///
+/// @return    Returns string containing user entered password.
 char * ldaputils_getpass(const char * prompt)
 {
    static char    buff[512];
@@ -128,6 +131,9 @@ char * ldaputils_getpass(const char * prompt)
 
 
 /// retrieves password
+/// @param[in] lud   reference to LDAP utilities struct
+///
+/// @return    Returns LDAP_SUCCESS on success or error code if fails
 int ldaputils_pass(LDAPUtils * lud)
 {
    char    * str;
@@ -165,6 +171,12 @@ int ldaputils_pass(LDAPUtils * lud)
 
 
 /// retrieves password from file
+/// @param[in]  lud   reference to LDAP utilities struct
+/// @param[in]  file  password file
+/// @param[out] valp  reference to pointer to store allocate memory
+/// @param[out] lenp  reference to pointer to store size of memory
+///
+/// @return    Returns LDAP_SUCCESS on success or 1 on error
 int ldaputils_passfile(LDAPUtils * lud, const char * file, char ** valp, size_t * lenp)
 {
    int           fd;
