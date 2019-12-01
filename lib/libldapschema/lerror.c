@@ -96,6 +96,7 @@ int ldapschema_errno( LDAPSchema * lsd )
 
 /// adds error to list of schema errors
 /// @param[in]  lsd     reference to allocated ldap_schema struct
+/// @param[in]  mod     reference to LDAP schmea object which generated the error
 /// @param[in]  fmt     error format string
 /// @param[in]  ...     error format arguments
 ///
