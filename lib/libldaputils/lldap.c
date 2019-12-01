@@ -65,6 +65,9 @@
 
 /// connects and binds to LDAP server
 /// @param[in] lud   reference to LDAP utilities struct
+///
+/// @return    Returns the error code from the OpenLDAP library
+/// @see       ldaputils_search, ldaputils_initialize
 int ldaputils_bind_s(LDAPUtils * lud)
 {
    int          err;
@@ -91,6 +94,9 @@ int ldaputils_bind_s(LDAPUtils * lud)
 /// connects and binds to LDAP server
 /// @param[in]  lud    reference to LDAP utilities struct
 /// @param[out] resp   reference for returned LDAPMessage
+///
+/// @return    Returns the error code from the OpenLDAP library
+/// @see       ldaputils_search, ldaputils_initialize
 int ldaputils_search(LDAPUtils * lud, LDAPMessage ** resp)
 {
    int    rc;
