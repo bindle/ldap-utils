@@ -135,6 +135,7 @@ ldapschema_parse_objectclass_attrs(
 
 /// splits string into arguments
 /// @param[in]  lsd    Reference to allocated ldap_schema struct
+/// @param[in]  mod    LDAP schema model providing the definition
 /// @param[in]  str    contains the string representation of an LDAP defintion
 /// @param[in]  strlen length of string
 /// @param[out] argvp  stores the allocate array of definition arguments
@@ -289,6 +290,7 @@ int ldapschema_definition_split(LDAPSchema * lsd, LDAPSchemaModel * mod,
 
 /// splits string into arguments
 /// @param[in]  lsd    Reference to allocated ldap_schema struct
+/// @param[in]  mod    LDAP schema model providing the definition
 /// @param[in]  def    contains the string representation of an LDAP defintion
 /// @param[out] argvp  stores the allocate array of definition arguments
 ///
@@ -786,16 +788,22 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
 
 
 /// parses extension
-/// @param[in]  lsd    Reference to allocated ldap_schema struct
+/// @param[in]  lsd     Reference to allocated ldap_schema struct
+/// @param[in]  mod     LDAP schema model of the extension
+/// @param[in]  key     extension name
+/// @param[in]  valstr  extension values
 ///
+/// @return    If successful, returns 0. The result must be freed using
+///            ldapschema_ext_free(). If an error is encounted, returns -1.
+///            The error code can be retrieved using ldapschema_errno().
 /// @see       ldapschema_initialize
-int ldapschema_parse_ext(LDAPSchema * lsd, LDAPSchemaModel * model, const char * key, const char * valstr)
+int ldapschema_parse_ext(LDAPSchema * lsd, LDAPSchemaModel * mod, const char * key, const char * valstr)
 {
    int                        err;
    LDAPSchemaExtension      * ext;
 
    assert(lsd    != NULL);
-   assert(model  != NULL);
+   assert(mod    != NULL);
    assert(key    != NULL);
    assert(valstr != NULL);
 
@@ -824,14 +832,14 @@ int ldapschema_parse_ext(LDAPSchema * lsd, LDAPSchemaModel * model, const char *
    }
    else
    {
-      if ((err = ldapschema_definition_split(lsd, model, valstr, strlen(valstr), &ext->values)) != LDAPSCHEMA_SUCCESS)
+      if ((err = ldapschema_definition_split(lsd, mod, valstr, strlen(valstr), &ext->values)) != LDAPSCHEMA_SUCCESS)
       {
          ldapschema_ext_free(ext);
          return(-1);
       };
    };
 
-   if ((err = ldapschema_insert(lsd, (void ***)&model->extensions, &model->extensions_len, ext, ldapschema_compar_extensions)) != LDAP_SUCCESS)
+   if ((err = ldapschema_insert(lsd, (void ***)&mod->extensions, &mod->extensions_len, ext, ldapschema_compar_extensions)) != LDAP_SUCCESS)
    {
       ldapschema_ext_free(ext);
       return(-1);
