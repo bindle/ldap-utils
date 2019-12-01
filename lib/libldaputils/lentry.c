@@ -209,6 +209,10 @@ LDAPUtilsAttribute * ldaputils_attribute_initialize(const char * name, struct be
 /// compares two LDAP values for sorting
 /// @param[in] ptr1   pointer to first data item to compare
 /// @param[in] ptr2   pointer to second data item to compare
+///
+/// @return    Return an integer greater than, equal to, or less than 0,
+///            according as the string ptr1 is greater than, equal to, or less
+///            than the string ptr2.
 int ldaputils_berval_cmp(const struct berval ** ptr1, const struct berval ** ptr2)
 {
    int rc;
@@ -316,6 +320,9 @@ LDAPUtilsEntries * ldaputils_entries_initialize(void)
 
 /// sorts values
 /// @param[in] entries   list of attribute values to sort
+/// @param[in] compar    compare function to use for sorting entries
+///
+/// @return    Return 0 on success or -1 on error,
 int ldaputils_entries_sort(LDAPUtilsEntries * entries, int (*compar)(const void *, const void *))
 {
    assert(entries != NULL);
@@ -377,6 +384,10 @@ int ldaputils_entry_add_attribute(LDAPUtilsEntry * entry, const char * name, str
 /// compares two LDAP values for sorting
 /// @param[in] ptr1   pointer to first data item to compare
 /// @param[in] ptr2   pointer to second data item to compare
+///
+/// @return    Return an integer greater than, equal to, or less than 0,
+///            according as the string ptr1 is greater than, equal to, or less
+///            than the string ptr2.
 int ldaputils_entry_cmp(const void * ptr1, const void * ptr2)
 {
    int rc;
@@ -419,6 +430,10 @@ int ldaputils_entry_cmp(const void * ptr1, const void * ptr2)
 /// compares two LDAP values for sorting
 /// @param[in] ptr1   pointer to first data item to compare
 /// @param[in] ptr2   pointer to second data item to compare
+///
+/// @return    Return an integer greater than, equal to, or less than 0,
+///            according as the DN ptr1 is greater than, equal to, or less
+///            than the DN ptr2.
 int ldaputils_entry_cmp_dn(const void * ptr1, const void * ptr2)
 {
    int                      rc;
@@ -610,8 +625,11 @@ LDAPUtilsEntry * ldaputils_next_entry(LDAPUtilsEntries * entries)
 
 
 /// retrieves LDAP entries from result
-/// @param[in] ld      refernce to LDAP socket data
-/// @param[in] res     refernce to LDAP result message
+/// @param[in] ld          refernce to LDAP socket data
+/// @param[in] res         refernce to LDAP result message
+/// @param[in] sortattr    attribute to use for sorting entries
+///
+/// @return    Returns sorted array of LDAPUtilsEntries
 LDAPUtilsEntries * ldaputils_get_entries(LDAP * ld, LDAPMessage * res,
    const char * sortattr)
 {
@@ -751,6 +769,8 @@ struct berval ** ldaputils_values_len_copy(struct berval ** vals)
 
 /// sorts values
 /// @param[in] vals   list of attribute values to sort
+///
+/// @return    Returns 0 on success or 1 on error.
 int ldaputils_values_sort(struct berval ** vals)
 {
    size_t  len;
