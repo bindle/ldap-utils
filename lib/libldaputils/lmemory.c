@@ -63,6 +63,10 @@
 #endif
 
 /// removes newlines and carriage returns
+/// @param[in] str   string to manipulate
+///
+/// @return    Returns a reference to the modified string if successful
+/// @see       ldaputils_initialize
 char * ldaputils_chomp(char * str)
 {
    char * idx;
@@ -122,6 +126,9 @@ int ldaputils_initialize(LDAPUtils ** ludp, const char * prog_name)
 
 
 /// frees common config
+/// @param[in] lud   reference to LDAP utilities struct
+///
+/// @see       ldaputils_initialize
 void ldaputils_unbind(LDAPUtils * lud)
 {
    if (!(lud))
