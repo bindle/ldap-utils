@@ -31,7 +31,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- *   @file src/ldapschema/lerror.c  contains error functions and variables
+ *   @file lib/libldapschema/lldap.c  contains LDAP functions
  */
 #define _LIB_LIBLDAPSCHEMA_LLDAP_C 1
 #include "lldap.h"

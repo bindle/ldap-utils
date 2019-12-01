@@ -30,7 +30,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- *  @file src/ldaputils_ldap.c  contains shared functions and variables
+ *  @file lib/libldaputils/lldap.h contains prototypes for LDAP functions and variables
  */
 #ifndef _LIB_LIBLDAPUTILS_LLDAP_H
 #define _LIB_LIBLDAPUTILS_LLDAP_H 1

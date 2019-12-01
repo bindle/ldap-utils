@@ -31,7 +31,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- *   @file src/ldapschema/lerror.c  contains error functions and variables
+ *   @file lib/libldapschema/lspec.c  contains OID specification functions and variables
  */
 #define _LIB_LIBLDAPSCHEMA_LSPEC_C 1
 #include "lspec.h"

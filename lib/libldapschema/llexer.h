@@ -30,7 +30,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- *   @file src/ldapschema/llexer.h  contains error functions and variables
+ *   @file lib/libldapschema/llexer.h  contains prototypes for lexer functions and variables
  */
 #ifndef _LIB_LIBLDAPSCHEMA_LLEXER_H
 #define _LIB_LIBLDAPSCHEMA_LLEXER_H 1

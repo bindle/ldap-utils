@@ -31,7 +31,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- *   @file src/ldapschema/lerror.h  contains error functions and variables
+ *   @file lib/libldapschema/lformat.h  contains prototypes for string formatting functions
  */
 #ifndef _LIB_LIBLDAPSCHEMA_LERROR_H
 #define _LIB_LIBLDAPSCHEMA_LERROR_H 1

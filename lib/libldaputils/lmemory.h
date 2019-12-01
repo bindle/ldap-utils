@@ -30,7 +30,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- *  @file src/ldaputils_ldap.c  contains shared functions and variables
+ *  @file lib/libldaputils/lmemory.h contains prototypes for memory management functions and variables
  */
 #ifndef _LIB_LIBLDAPUTILS_LMEMORY_H
 #define _LIB_LIBLDAPUTILS_LMEMORY_H 1

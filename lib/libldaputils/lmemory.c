@@ -30,7 +30,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- *  @file src/ldaputils_misc.c contains shared functions and variables
+ *  @file lib/libldaputils/lmemory.c contains for memory management functions and variables
  */
 #define _LIB_LIBLDAPUTILS_LMEMORY_C 1
 #include "lmemory.h"

@@ -30,7 +30,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- *  @file src/ldaputils_ldap.c  contains shared functions and variables
+ *  @file lib/libldapschema/libldapschema.h  contains shared functions and variables
  */
 #ifndef _LIB_LIBLDAPSCHEMA_H
 #define _LIB_LIBLDAPSCHEMA_H 1

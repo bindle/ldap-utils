@@ -30,7 +30,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- *   @file src/ldapschema/lquery.h  contains error functions and variables
+ *   @file lib/libldapschema/lquery.h  contains prototypes for query functions and variables
  */
 #ifndef _LIB_LIBLDAPSCHEMA_LQUERY_H
 #define _LIB_LIBLDAPSCHEMA_LQUERY_H 1

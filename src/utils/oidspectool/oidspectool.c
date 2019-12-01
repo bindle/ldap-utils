@@ -30,7 +30,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- *  @file lib/libldapschema/oidspectool/oidspectool.c creates compilation of
+ *  @file src/utils/oidspectool/oidspectool.c creates compilation of
  *  OID specifications
  */
 /*

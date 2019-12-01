@@ -31,7 +31,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- *  @file src/ldapschema/lmemory.h  contains memory functions and variables
+ *  @file lib/libldapschema/lmemory.h  contains prototypes for memory functions and variables
  */
 #ifndef _LIB_LIBLDAPSCHEMA_LMEMORY_H
 #define _LIB_LIBLDAPSCHEMA_LMEMORY_H 1

@@ -30,7 +30,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- *  @file src/ldaputils_config.c contains shared functions and variables
+ *  @file lib/libldaputils/lconfig.c contains configuration functions and variables
  */
 #define _LIB_LIBLDAPUTILS_LCONFIG_C 1
 #include "lconfig.h"

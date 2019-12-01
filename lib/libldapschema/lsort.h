@@ -31,7 +31,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- *   @file src/ldapschema/llexer.h  contains error functions and variables
+ *   @file lib/libldapschema/lsort.h  contains prototypes for sort functions and variables
  */
 #ifndef _LIB_LIBLDAPSCHEMA_LSORT_H
 #define _LIB_LIBLDAPSCHEMA_LSORT_H 1

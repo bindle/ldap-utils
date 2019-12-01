@@ -31,7 +31,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
-*   @file src/ldapschema/loutput.c  contains output functions
+*   @file lib/libldapschema/loutput.c  contains output functions
 */
 #define _LIB_LIBLDAPSCHEMA_LOUTPUT_C 1
 #include "loutput.h"

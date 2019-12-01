@@ -30,7 +30,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- *   @file src/ldapschema/llexer.c  contains error functions and variables
+ *   @file lib/libldapschema/lquery.c  contains query functions and variables
  */
 #define _LIB_LIBLDAPSCHEMA_LQUERY_C 1
 #include "lquery.h"

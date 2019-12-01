@@ -30,7 +30,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- *  @file lib/libldaputils/lentry.c  contains shared functions and variables
+ *  @file lib/libldaputils/lentry.c  contains entry management functions and variables
  */
 #define _LIB_LIBLDAPUTILS_LENTRY_C 1
 #include "lentry.h"

@@ -30,7 +30,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- *  @file src/ldaputils_config.c contains shared functions and variables
+ *  @file lib/libldaputils/lpasswd.c contains for password management functions and variables
  */
 #define _LIB_LIBLDAPUTILS_LPASSWD_C 1
 #include "lpasswd.h"

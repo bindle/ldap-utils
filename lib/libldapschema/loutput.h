@@ -31,7 +31,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- *  @file src/ldapschema/lmemory.h  contains memory functions and variables
+ *  @file lib/libldapschema/loutput.h  contains prototypes for output functions
  */
 #ifndef _LIB_LIBLDAPSCHEMA_LOUTPUT_H
 #define _LIB_LIBLDAPSCHEMA_LOUTPUT_H 1
