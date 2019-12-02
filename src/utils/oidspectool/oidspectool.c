@@ -473,6 +473,7 @@ int my_fs_parsefile(const char * file)
 
    cur_filename = file;
 
+   yylineno = 1;
    yyrestart(fs);
    err = yyparse();
 
