@@ -5,6 +5,8 @@ All rights reserved.
 
    - [x] ldap2csv
 
+   - [x] ldap2json
+
    - [x] ldapdebug
 
    - [ ] ldapdiff
@@ -14,14 +16,12 @@ All rights reserved.
    - [x] ldapdn2str
      - [ ] write man page
 
-   - [ ] ldapinfo
-     - [ ] write utility which displays LDAP server information
+   - [x] ldapinfo
+     - [x] write utility which displays LDAP server information
      - [ ] write man page
 
-   - [ ] ldapshema
-     - [ ] write utility which displays schema in human readable format
+   - [x] ldapshema
      - [ ] write man page
-     - [ ] add support for matchingRules
 
    - [ ] ldaptlscert
      - [ ] write utility which retrieves LDAP server's TLS certificate
