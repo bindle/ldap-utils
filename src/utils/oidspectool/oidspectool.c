@@ -721,9 +721,6 @@ int my_save_header(FILE * fs)
    fprintf(fs, "\n");
 
    // save OID specs
-   for(pos = 0; pos < oidspeclist_len; pos++)
-      fprintf(fs, "extern %s %s%zu;\n", cfg.type, cfg.name, pos);
-   fprintf(fs, "\n");
    fprintf(fs, "extern const size_t %s_len;\n", cfg.name);
    fprintf(fs, "extern %s * %s[];\n", cfg.type, cfg.name);
    fprintf(fs, "\n\n#endif /* end of header */\n");
@@ -796,7 +793,7 @@ int my_save_source_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx)
 
    fprintf(fs, "// %s\n", oidspec->oid[0]);
    fprintf(fs, "// %s:%i\n", my_fs_prunepath(oidspec->filename), oidspec->lineno);
-   fprintf(fs, "%s %s%zu =\n", cfg.type, cfg.name, idx);
+   fprintf(fs, "static %s %s%zu =\n", cfg.type, cfg.name, idx);
    fprintf(fs, "{\n");
    my_save_source_oidspec_strs(fs, ".oid",            oidspec->oid);
    my_save_source_oidspec_strs(fs, ".name",           oidspec->name);

@@ -49,6 +49,7 @@ int yylex();
 "#"[a-zA-Z0-9]+[^\n]*[\n]           ; /* ignore C preprocessor directives */
 
 "const "[^\n]+"="[^\n]*[\n]         ; /* ignore non-code blocks (allows oidspectool to process its own output) */
+"static "[^\n]+"="[^\n]*[\n]        ; /* ignore non-code blocks (allows oidspectool to process its own output) */
 "&"[_a-zA-Z0-9]+","                 ; /* ignore pointer references (allows oidspectool to process its own output) */
 
 "("[ \t]*"const"[ \t][ \t*\[\]a-zA-Z0-9_]+")"   { return(CONST_CAST); }
