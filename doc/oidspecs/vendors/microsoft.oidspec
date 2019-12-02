@@ -1,0 +1,1635 @@
+//
+//  Microsoft: Open Specifications
+//  3.1.1.3.4.1 LDAP Extended Controls
+//  https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea
+//
+//  LDAP extended controls are an extensibility mechanism in version 3 of LDAP,
+//  as discussed in [RFC2251] section 4.1.12. The following sections describe
+//  the LDAP extended controls implemented by DCs in Windows 2000 operating
+//  system and later (both AD DS and AD LDS).
+//
+//   The LDAP extended controls supported by a DC are exposed as OIDs in the
+//   supportedControl attribute of the rootDSE. Each OID corresponds to a
+//   human-readable name, as shown in the following table.
+//
+//   Extended control name                     | OID
+//  -------------------------------------------+------------------------------
+//   LDAP_PAGED_RESULT_OID_STRING              | 1.2.840.113556.1.4.319
+//   LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID      | 1.2.840.113556.1.4.521
+//   LDAP_SERVER_DIRSYNC_OID                   | 1.2.840.113556.1.4.841
+//   LDAP_SERVER_DOMAIN_SCOPE_OID              | 1.2.840.113556.1.4.1339
+//   LDAP_SERVER_EXTENDED_DN_OID               | 1.2.840.113556.1.4.529
+//   LDAP_SERVER_GET_STATS_OID                 | 1.2.840.113556.1.4.970
+//   LDAP_SERVER_LAZY_COMMIT_OID               | 1.2.840.113556.1.4.619
+//   LDAP_SERVER_PERMISSIVE_MODIFY_OID         | 1.2.840.113556.1.4.1413
+//   LDAP_SERVER_NOTIFICATION_OID              | 1.2.840.113556.1.4.528
+//   LDAP_SERVER_RESP_SORT_OID                 | 1.2.840.113556.1.4.474
+//   LDAP_SERVER_SD_FLAGS_OID                  | 1.2.840.113556.1.4.801
+//   LDAP_SERVER_SEARCH_OPTIONS_OID            | 1.2.840.113556.1.4.1340
+//   LDAP_SERVER_SORT_OID                      | 1.2.840.113556.1.4.473
+//   LDAP_SERVER_SHOW_DELETED_OID              | 1.2.840.113556.1.4.417
+//   LDAP_SERVER_TREE_DELETE_OID               | 1.2.840.113556.1.4.805
+//   LDAP_SERVER_VERIFY_NAME_OID               | 1.2.840.113556.1.4.1338
+//   LDAP_CONTROL_VLVREQUEST                   | 2.16.840.1.113730.3.4.9
+//   LDAP_CONTROL_VLVRESPONSE                  | 2.16.840.1.113730.3.4.10
+//   LDAP_SERVER_ASQ_OID                       | 1.2.840.113556.1.4.1504
+//   LDAP_SERVER_QUOTA_CONTROL_OID             | 1.2.840.113556.1.4.1852
+//   LDAP_SERVER_RANGE_OPTION_OID              | 1.2.840.113556.1.4.802
+//   LDAP_SERVER_SHUTDOWN_NOTIFY_OID           | 1.2.840.113556.1.4.1907
+//   LDAP_SERVER_FORCE_UPDATE_OID              | 1.2.840.113556.1.4.1974
+//   LDAP_SERVER_RANGE_RETRIEVAL_NOERR_OID     | 1.2.840.113556.1.4.1948
+//   LDAP_SERVER_RODC_DCPROMO_OID              | 1.2.840.113556.1.4.1341
+//   LDAP_SERVER_DN_INPUT_OID                  | 1.2.840.113556.1.4.2026
+//   LDAP_SERVER_SHOW_DEACTIVATED_LINK_OID     | 1.2.840.113556.1.4.2065
+//   LDAP_SERVER_SHOW_RECYCLED_OID             | 1.2.840.113556.1.4.2064
+//   LDAP_SERVER_POLICY_HINTS_DEPRECATED_OID   | 1.2.840.113556.1.4.2066
+//   LDAP_SERVER_DIRSYNC_EX_OID                | 1.2.840.113556.1.4.2090
+//   LDAP_SERVER_UPDATE_STATS_OID              | 1.2.840.113556.1.4.2205
+//   LDAP_SERVER_TREE_DELETE_EX_OID            | 1.2.840.113556.1.4.2204
+//   LDAP_SERVER_SEARCH_HINTS_OID              | 1.2.840.113556.1.4.2206
+//   LDAP_SERVER_EXPECTED_ENTRY_COUNT_OID      | 1.2.840.113556.1.4.2211
+//   LDAP_SERVER_POLICY_HINTS_OID              | 1.2.840.113556.1.4.2239
+//   LDAP_SERVER_SET_OWNER_OID                 | 1.2.840.113556.1.4.2255
+//   LDAP_SERVER_BYPASS_QUOTA_OID              | 1.2.840.113556.1.4.2256
+//   LDAP_SERVER_LINK_TTL_OID                  | 1.2.840.113556.1.4.2309
+//   LDAP_SERVER_SET_CORRELATION_ID_OID        | 1.2.840.113556.1.4.2330
+//   LDAP_SERVER_THREAD_TRACE_OVERRIDE_OID     | 1.2.840.113556.1.4.2354
+//
+//  Not all applicable Windows Server releases and Active Directory
+//  Application Mode (ADAM) versions support all the LDAP capabilities.
+//
+{
+   .oid           =  "1.2.840.113556.1.4.521",
+   .name          =  "LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID",
+   .desc          =  "LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID control is"
+                     " used with an LDAP Modify DN operation to instruct the"
+                     " DC to move an object from one domain to another (see"
+                     " the Modify DN operation in section 3.1.1.5). This"
+                     " control is used by the client when moving an object"
+                     " from one domain to another. The client sends the LDAP"
+                     " Modify DN operation to which this control is attached"
+                     " to a DC in the domain containing the object to be moved."
+                     " If the client does not specify the"
+                     " LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID control in the LDAP"
+                     " Modify DN request, then the server interprets the update"
+                     " as an intradomain Modify DN operation.\n"
+                     "\n"
+                     "When operating as AD LDS, a DC rejects this control"
+                     " with the error operationsError / <unrestricted>.\n"
+                     "\n"
+                     "When sending this control to the DC, the controlValue"
+                     " field is set to a UTF-8 string containing the fully"
+                     " qualified domain name (1) of a DC in the domain to"
+                     " which the object is to be moved. The string is not"
+                     " BER-encoded. Sending this control to the DC does not"
+                     " cause the server to include any controls in its"
+                     " response.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.841",
+   .name          =  "LDAP_SERVER_DIRSYNC_OID",
+   .desc          =  "LDAP_SERVER_DIRSYNC_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_DIRSYNC_OID control is used with an"
+                     " LDAP search operation to retrieve the changes made to"
+                     " objects since a previous search with an"
+                     " LDAP_SERVER_DIRSYNC_OID control was performed. The"
+                     " LDAP_SERVER_DIRSYNC_OID control can only be used to"
+                     " monitor for changes across an entire NC replica, not a"
+                     " subtree within an NC replica.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.1339",
+   .name          =  "LDAP_SERVER_DOMAIN_SCOPE_OID",
+   .desc          =  "LDAP_SERVER_DOMAIN_SCOPE_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_DOMAIN_SCOPE_OID control is used to"
+                     " instruct the DC not to generate any LDAP continuation"
+                     " references when performing an LDAP operation. The"
+                     " effect of this is to limit any search using it to the"
+                     " single NC replica in which the object that serves as"
+                     " the root of the search is located.\n"
+                     "\n"
+                     "When sending this control to the DC, the controlValue"
+                     " field of the Control structure is omitted. Sending this"
+                     " control to the DC does not cause the server to include"
+                     " any controls in its response.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.529",
+   .name          =  "LDAP_SERVER_EXTENDED_DN_OID",
+   .desc          =  "LDAP_SERVER_EXTENDED_DN_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_EXTENDED_DN_OID control is used with an"
+                     " LDAP search request to cause the DC to return extended"
+                     " DNs. The extended form of an object's DN includes a"
+                     " string representation of the object's objectGUID"
+                     " attribute; for objects that have an objectSid"
+                     " attribute, the extended form also includes a string"
+                     " representation of that attribute. The DC uses this"
+                     " extended DN for all DNs in the LDAP search response."
+                     " Attributes with Object(OR-Name) syntax are not affected"
+                     " by this control, because in those cases, the DC always"
+                     " uses the DN form as specified in [RFC2253].\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.970",
+   .name          =  "LDAP_SERVER_GET_STATS_OID",
+   .desc          =  "LDAP_SERVER_GET_STATS_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_GET_STATS_OID control is used with an"
+                     " LDAP search operation.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.619",
+   .name          =  "LDAP_SERVER_LAZY_COMMIT_OID",
+   .desc          =  "LDAP_SERVER_LAZY_COMMIT_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_LAZY_COMMIT_OID control is used to"
+                     " modify the behavior of any LDAP operation. The"
+                     " presence of this control instructs the DC that it can"
+                     " sacrifice durability guarantees on updates to improve"
+                     " performance.\n"
+                     "\n"
+                     "When sending this control to the DC, the controlValue"
+                     " field of the Control structure is omitted. Sending this"
+                     " control to the DC does not cause the server to include"
+                     " any controls in its response.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.1413",
+   .name          =  "LDAP_SERVER_PERMISSIVE_MODIFY_OID",
+   .desc          =  "LDAP_SERVER_PERMISSIVE_MODIFY_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_PERMISSIVE_MODIFY_OID control is used to"
+                     " modify the behavior of an LDAP modify operation. An"
+                     " LDAP modify operation normally returns an error if it"
+                     " attempts to add an attribute that already exists on an"
+                     " object to that object (or, in the case of multivalued"
+                     " attributes, it attempts to add a value that is already"
+                     " present in the attribute). An LDAP modify operation will"
+                     " also normally fail if it attempts to delete an attribute"
+                     " that does not exist on the specified object or that does"
+                     " not contain the value specified in the deletion request."
+                     " With this control, adding a value to an attribute that"
+                     " already exists and already contains the value to be"
+                     " added will cause the server to return success even"
+                     " though no modification was actually performed by the"
+                     " server. Similarly, deletion of an attribute that does"
+                     " not exist or does not contain the specified value will"
+                     " return success.\n"
+                     "\n"
+                     "When sending this control to the DC, the controlValue"
+                     " field of the Control structure is omitted. Sending this"
+                     " control to the DC does not cause the server to include"
+                     " any controls in its response.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.528",
+   .name          =  "LDAP_SERVER_NOTIFICATION_OID",
+   .desc          =  "LDAP_SERVER_NOTIFICATION_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_NOTIFICATION_OID control is used with"
+                     " an LDAP search operation to register the client that"
+                     " is to be notified when changes are made to an object"
+                     " in the directory.\n"
+                     "\n"
+                     "Notifications are asynchronous operations. When the DC"
+                     " receives a search request with this control attached,"
+                     " it does not immediately send a response to the request."
+                     " Instead, when an object is modified, if that object"
+                     " falls within the scope of the search request to which"
+                     " the LDAP_SERVER_NOTIFICATION_OID control was attached,"
+                     " the DC sends a SearchEntry response that contains the"
+                     " modified object to the client, using the messageID from"
+                     " the original search request (SearchEntry and messageID"
+                     " are defined in [RFC2251] section 4.1.1). The"
+                     " SearchEntry response will contain those attributes of"
+                     " the object that were requested in the original request."
+                     " These attributes are not necessarily the attributes"
+                     " that were modified. A client indicates that it no"
+                     " longer requires notifications by sending an LDAP"
+                     " abandon operation, specifying the messageID of the"
+                     " original search request.\n"
+                     "\n"
+                     "LDAP search requests that include this control are"
+                     " subject to the following restrictions:\n"
+                     "\n"
+                     "   * The only filter permitted in the search request is"
+                     " \"(objectclass = *)\". The server will return the error"
+                     " unwillingToPerform / <unrestricted> if this is not the"
+                     " case.\n"
+                     "\n"
+                     "   * Base, one-level, and subtree search scopes are"
+                     " permitted. For Windows 2000 operating system DCs, if"
+                     " the base DN specified in a subtree search is not the"
+                     " root of an NC, the server returns the error"
+                     " unwillingToPerform / <unrestricted>. Windows Server"
+                     " 2003 operating system and later DCs do not have this"
+                     " restriction.\n"
+                     "\n"
+                     "When sending this control to the DC, the controlValue"
+                     " field of the Control structure is omitted. Sending"
+                     " this control to the DC does not cause the server to"
+                     " include any controls in its eventual responses.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.801",
+   .name          =  "LDAP_SERVER_SD_FLAGS_OID",
+   .desc          =  "LDAP_SERVER_SD_FLAGS_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_SD_FLAGS_OID control is used with an"
+                     " LDAP Search request to control the portion of a"
+                     " Windows security descriptor to retrieve. The DC"
+                     " returns only the specified portion of the security"
+                     " descriptors. It is also used with LDAP Add and Modify"
+                     " requests to control the portion of a Windows security"
+                     " descriptor to modify. The DC modifies only the"
+                     " specified portion of the security descriptor.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.1340",
+   .name          =  "LDAP_SERVER_SEARCH_OPTIONS_OID",
+   .desc          =  "LDAP_SERVER_SEARCH_OPTIONS_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_SEARCH_OPTIONS_OID control is used with"
+                     " an LDAP Search request to control various behaviors.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.417",
+   .name          =  "LDAP_SERVER_SHOW_DELETED_OID",
+   .desc          =  "LDAP_SERVER_SHOW_DELETED_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_SHOW_DELETED_OID control is used with"
+                     " an LDAP operation to specify that tombstones and"
+                     " deleted-objects must be visible to the operation. For"
+                     " example, when the control is used with an LDAP search"
+                     " operation, the search results include any tombstones"
+                     " or deleted-objects that match the search filter.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.805",
+   .name          =  "LDAP_SERVER_TREE_DELETE_OID",
+   .desc          =  "LDAP_SERVER_TREE_DELETE_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_TREE_DELETE_OID control is used with an"
+                     " LDAP delete operation to cause the server to"
+                     " recursively delete the entire subtree of objects"
+                     " located underneath the object specified in the delete"
+                     " operation. The object specified in the delete operation"
+                     " is also deleted.\n"
+                     "\n"
+                     "The server deletes between 1 and 16,384 objects. If the"
+                     " server does not delete the entire tree in a single LDAP"
+                     " delete request, it MUST NOT delete the root of the tree"
+                     " (the object specified in the delete operation), and MUST"
+                     " return the error code adminLimitExceeded /"
+                     " ERROR_DS_TREE_DELETE_NOT_FINISHED.\n"
+                     "\n"
+                     "When sending this control to the DC, the controlValue"
+                     " field of the Control structure is omitted. Sending this"
+                     " control to the DC does not cause the server to include"
+                     " any controls in its response.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.1338",
+   .name          =  "LDAP_SERVER_VERIFY_NAME_OID",
+   .desc          =  "LDAP_SERVER_VERIFY_NAME_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_VERIFY_NAME_OID control is used with"
+                     " LDAP Add and Modify requests to identify the global"
+                     " catalog server (GC server) that is used to verify the"
+                     " existence of any objects pointed to by DN attribute"
+                     " values (as specified in section 3.1.1.1.6). If the DC"
+                     " needs to call a GC server while processing the Add or"
+                     " Modify request, it calls the GC server specified in"
+                     " this control. If this control is not used, the DC is"
+                     " free to call any GC server in the forest.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "2.16.840.1.113730.3.4.9",
+   .name          =  "LDAP_CONTROL_VLVREQUEST",
+   .desc          =  "LDAP_CONTROL_VLVREQUEST",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_CONTROL_VLVREQUEST control is used with an LDAP"
+                     " search operation to retrieve a subset of the objects"
+                     " that satisfy the search request. This control permits"
+                     " the client to specify a particular object (the \"target"
+                     " object\") in a sorted set of search results, and to"
+                     " request that the server return a specified number of"
+                     " objects before and after the target object, in addition"
+                     " to the target object itself. \"Before\" and \"after\""
+                     " the target object are relative to the sort order of the"
+                     " search result set. The server will not return objects"
+                     " whose attribute value, used as the sort key, is absent."
+                     " This control can only be used if the"
+                     " LDAP_SERVER_SORT_OID (section 3.1.1.3.4.1.13) control"
+                     " is also specified.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "2.16.840.1.113730.3.4.10",
+   .name          =  "LDAP_CONTROL_VLVRESPONSE",
+   .desc          =  "LDAP_CONTROL_VLVRESPONSE",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_CONTROL_VLVREQUEST control is used with an LDAP"
+                     " search operation to retrieve a subset of the objects"
+                     " that satisfy the search request. This control permits"
+                     " the client to specify a particular object (the \"target"
+                     " object\") in a sorted set of search results, and to"
+                     " request that the server return a specified number of"
+                     " objects before and after the target object, in addition"
+                     " to the target object itself. \"Before\" and \"after\""
+                     " the target object are relative to the sort order of the"
+                     " search result set. The server will not return objects"
+                     " whose attribute value, used as the sort key, is absent."
+                     " This control can only be used if the"
+                     " LDAP_SERVER_SORT_OID (section 3.1.1.3.4.1.13) control"
+                     " is also specified.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.1504",
+   .name          =  "LDAP_SERVER_ASQ_OID",
+   .desc          =  "LDAP_SERVER_ASQ_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_ASQ_OID control is used with an LDAP"
+                     " search operation. When this control is used, the"
+                     " search is not performed against the object specified"
+                     " in the search, or the objects located underneath that"
+                     " object, but rather against the set of objects named by"
+                     " an attribute of Object(DS-DN) syntax that is located"
+                     " on the object specified by the base DN of the search"
+                     " request. The specific attribute to use to scope the"
+                     " search is named in the control. Only searches of base"
+                     " object scope can be used with the LDAP_SERVER_ASQ_OID"
+                     " control.\n"
+                     "\n"
+                     "For example, suppose there is an object o and a"
+                     " multivalued attribute A of Object(DS-DN) syntax such"
+                     " that o.A contains the DNs of objects o1, o2, and o3."
+                     " An LDAP base-scope search operation that targets"
+                     " object o, with the LDAP_SERVER_ASQ_OID control"
+                     " attached and specifying the A attribute, will cause"
+                     " the server to perform the search not against object o"
+                     " but against objects o1, o2, and o3.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.1852",
+   .name          =  "LDAP_SERVER_QUOTA_CONTROL_OID",
+   .desc          =  "LDAP_SERVER_QUOTA_CONTROL_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "This control is used with an LDAP search operation to"
+                     " retrieve the quota of a user. When used with an LDAP"
+                     " search operation that queries the constructed"
+                     " attributes msDS-QuotaEffective and msDS-QuotaUsed on"
+                     " the msDS-QuotaContainer object, the server will return"
+                     " the quota of the user who is specified by the control,"
+                     " rather than the quota of the user whom the connection"
+                     " is authenticated as.\n"
+                     "\n"
+                     "If the caller attempts to retrieve the quota of a user"
+                     " other than the user whom the caller is authenticated as,"
+                     " and the caller does not have the RIGHT_DS_READ_PROPERTY"
+                     " right on the Quotas container (described in section"
+                     " 6.1.1.4.3), the server returns an empty result set.\n"
+                     "\n"
+                     "If the caller attempts to retrieve the quota of the user"
+                     " whom the caller is authenticated as, and the caller has"
+                     " neither the RIGHT_DS_READ_PROPERTY right on the Quotas"
+                     " container (described in section 6.1.1.4.3) nor the"
+                     " DS-Query-Self-Quota control access right on the Quotas"
+                     " container, the server returns an empty result set.\n"
+                     "\n"
+                     "These access checks are also specified in section"
+                     " 3.1.1.4.4.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.802",
+   .name          =  "LDAP_SERVER_RANGE_OPTION_OID",
+   .desc          =  "LDAP_SERVER_RANGE_OPTION_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "LDAP_SERVER_RANGE_OPTION_OID, unlike the other controls"
+                     " discussed in this section, does not actually designate"
+                     " an LDAP extended control. Nonetheless, it is included"
+                     " in this discussion because its OID is found in the"
+                     " supportedControl attribute of the DC's rootDSE. The"
+                     " presence of this OID indicates that the DC supports"
+                     " range retrieval of multivalued attributes. Range"
+                     " retrieval is a mechanism that permits attributes that"
+                     " have too many values to be retrieved in a single LDAP"
+                     " search request to be retrieved via multiple LDAP"
+                     " search requests. Range retrieval is documented in"
+                     " section 3.1.1.3.1.3.3.\n"
+                     "\n"
+                     "Note Although this OID is not present in the"
+                     " supportedControl attribute of Windows 2000 operating"
+                     " system DCs, such DCs nonetheless support range"
+                     " retrieval.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.1907",
+   .name          =  "LDAP_SERVER_SHUTDOWN_NOTIFY_OID",
+   .desc          =  "LDAP_SERVER_SHUTDOWN_NOTIFY_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "This control is used with an LDAP Search request. The"
+                     " Search request has base object scope. The base DN of"
+                     " the search is the DN of the DC's nTDSDSA object, and"
+                     " the search filter is \"(objectClass=*)\". If the"
+                     " application sending the search request is not running"
+                     " on the same computer as the DC, the result is the error"
+                     " unwillingToPerform / <unrestricted>.\n"
+                     "\n"
+                     "When sending this control to the DC, the controlValue"
+                     " field of the Control structure is omitted. Sending this"
+                     " control to the DC does not cause the server to include"
+                     " any controls in its response.\n"
+                     "\n"
+                     "This control is only supported on the Small Business"
+                     " Server version of the Windows operating system.\n"
+                     "\n"
+                     "Because this control only has an effect for applications"
+                     " running on the same machine as the DC, the effects of"
+                     " this control are not observable on the network. This"
+                     " control causes the DC to notify the client when the DC"
+                     " is shutting down. When the DC receives a search request"
+                     " with this control attached, it does not immediately"
+                     " send a response to the request. Instead, it sends the"
+                     " SearchResultDone response (see [RFC2251] section 4.5.2)"
+                     " to the request when the DC is shutting down.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.1974",
+   .name          =  "LDAP_SERVER_FORCE_UPDATE_OID",
+   .desc          =  "LDAP_SERVER_FORCE_UPDATE_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "A DC does not perform originating updates that do not"
+                     " affect the state of the DC. For example, given an LDAP"
+                     " Modify operation that sets the value of an attribute A"
+                     " to a value V, if the value of A is already V prior to"
+                     " the Modify operation, the DC skips the update and"
+                     " returns success. The stamp associated with A is not"
+                     " changed, and the Modify operation does not cause"
+                     " replication traffic.\n"
+                     "\n"
+                     "When the LDAP_SERVER_FORCE_UPDATE_OID control is"
+                     " attached to an update operation, the DC does not"
+                     " perform the optimization described in the previous"
+                     " paragraph. The update always generates a new stamp"
+                     " for the attribute or link value and always replicates.\n"
+                     "\n"
+                     "When sending this control to a DC, the controlValue"
+                     " field of the Control structure is omitted. Sending this"
+                     " control to a DC does not cause the DC to include any"
+                     " controls in its response.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.1948",
+   .name          =  "LDAP_SERVER_RANGE_RETRIEVAL_NOERR_OID",
+   .desc          =  "LDAP_SERVER_RANGE_RETRIEVAL_NOERR_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "This control is used to modify the behavior of a range"
+                     " retrieval operation (see section 3.1.1.3.1.3.3). When"
+                     " this control is not specified, if range retrieval is"
+                     " being performed on an attribute whose values are"
+                     " forward link values or back link values, and the value"
+                     " of low is greater than or equal to the number of values"
+                     " in the attribute, the DC will return the error"
+                     " operationsError / <unrestricted>. If this control is"
+                     " specified, no error is returned in this case (and no"
+                     " values are returned). For example, if an object has a"
+                     " member attribute with 500 values, performing the range"
+                     " retrieval \"member;range=500-*\" will return"
+                     " operationsError / <unrestricted> without this control,"
+                     " and success with this control.\n"
+                     "\n"
+                     "When sending this control to a DC, the controlValue"
+                     " field of the Control structure is omitted. Sending this"
+                     " control to a DC does not cause the DC to include any"
+                     " controls in its response.\n",
+   .notes         =  NULL,                          
+};
+{
+   .oid           =  "1.2.840.113556.1.4.1341",
+   .name          =  "LDAP_SERVER_RODC_DCPROMO_OID",
+   .desc          =  "LDAP_SERVER_RODC_DCPROMO_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "If this control is specified and the caller does not"
+                     " have the DS-Install-Replica control access right on"
+                     " the root of the default NC, the result is the error"
+                     " insufficientAccessRights / ERROR_ACCESS_DENIED.\n"
+                     "\n"
+                     "If the request is an Add of an object of class user or"
+                     "a subclass of user, the presence of this control has"
+                     "the following effects:\n"
+                     "\n"
+                     "   * The DC generates a value in the range [1 .. 65535]"
+                     " that is not used as a value of the"
+                     " msDS-SecondaryKrbTgtNumber attribute on an object in"
+                     " this domain, and assigns the generated value to the"
+                     " msDS-SecondaryKrbTgtNumber attribute of the created"
+                     " object. If no such value exists, the result is the"
+                     " error other / ERROR_NO_SYSTEM_RESOURCES.\n"
+                     "\n"
+                     "   * The generated value for msDS-SecondaryKrbTgtNumber"
+                     " is appended (in decimal form) to the string \"krbtgt\","
+                     " and the resulting string is assigned to the"
+                     " sAMAccountName attribute on the created object.\n"
+                     "\n"
+                     "   * The userAccountControl bits ADS_UF_ACCOUNT_DISABLE"
+                     " and ADS_UF_DONT_EXPIRE_PASSWD (section 2.2.16) are set"
+                     " on the object's userAccountControl attribute.\n"
+                     "\n"
+                     "   * The object's account password is set to a randomly"
+                     " generated value that satisfies all criteria in"
+                     " [MS-SAMR] section 3.1.1.7.2 and is processed as"
+                     " described in [MS-SAMR] section 3.1.1.8.5.\n"
+                     "\n"
+                     "   Note In Windows Server 2008 operating system and"
+                     " later, the DC servicing the request need not be the PDC"
+                     " FSMO role owner.\n"
+                     "\n"
+                     "If the request is an Add of an object of class nTDSDSA,"
+                     " the presence of this control has the following effects:\n"
+                     "\n"
+                     "   * The DC creates the nTDSDSA object using the"
+                     " information provided in the Add request. The only"
+                     " special effect of the control is to perform the"
+                     " checking of the DS-Install-Replica control access right"
+                     " (specified previously in this section) to authorize the"
+                     " nTDSDSA object creation. Without this control, an Add"
+                     " that attempts to create an nTDSDSA object will fail"
+                     " because the class is system-only (section 3.1.1.2.4.8).\n"
+                     "\n"
+                     "When sending this control to a DC, the controlValue"
+                     " field of the Control structure is omitted. Sending this"
+                     " control to a DC does not cause the DC to include any"
+                     " controls in its response.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.2026",
+   .name          =  "LDAP_SERVER_DN_INPUT_OID",
+   .desc          =  "LDAP_SERVER_DN_INPUT_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "This control is used to specify the DN of an object"
+                     " during certain LDAP operations.\n"
+                     "\n"
+                     "When used with an LDAP search operation that queries"
+                     " the constructed attribute msDS-IsUserCachableAtRodc on"
+                     " a computer object that represents an RODC, the server"
+                     " will return the administrative policy regarding whether"
+                     " the secret attributes of the security principal"
+                     " represented by the DN specified in the control can be"
+                     " cached on the RODC. If the caller does not have the"
+                     " Read-Only-Replication-Secret-Synchronization control"
+                     " access right on the root of the default NC, the error"
+                     " operationsError / ERROR_DS_CANT_RETRIEVE_ATTRS is"
+                     " returned. This access check is also specified in"
+                     " section 3.1.1.4.4.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.2065",
+   .name          =  "LDAP_SERVER_SHOW_DEACTIVATED_LINK_OID",
+   .desc          =  "LDAP_SERVER_SHOW_DEACTIVATED_LINK_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_SHOW_DEACTIVATED_LINK_OID control is"
+                     " used with an LDAP search operation to specify that"
+                     " link attributes that refer to deleted-objects are"
+                     " visible to the search operation. If used in"
+                     " conjunction with LDAP_SERVER_SHOW_DELETED_OID or"
+                     " LDAP_SERVER_SHOW_RECYCLED_OID, link attributes that"
+                     " are stored on deleted-objects are also visible to the"
+                     " search operation. This applies to both the search"
+                     " filter and the set of attributes returned by the"
+                     " search operation. When this control is not used,"
+                     " linked attribute values referring to deleted-objects"
+                     " and link valued attributes stored on deleted-objects"
+                     " are not visible to search operation filters, and are"
+                     " not returned as requested attributes for the search"
+                     " operation.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.2064",
+   .name          =  "LDAP_SERVER_SHOW_RECYCLED_OID",
+   .desc          =  "LDAP_SERVER_SHOW_RECYCLED_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_SHOW_RECYCLED_OID control is used with"
+                     " an LDAP operation to specify that tombstones,"
+                     " deleted-objects, and recycled-objects must be visible"
+                     " to the operation. For example, when the control is"
+                     " used with an LDAP search operation, the search results"
+                     " include any tombstones, deleted-objects, or"
+                     " recycled-objects that match the search filter.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.2066",
+   .name          =  "LDAP_SERVER_POLICY_HINTS_DEPRECATED_OID",
+   .desc          =  "LDAP_SERVER_POLICY_HINTS_DEPRECATED_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_POLICY_HINTS_DEPRECATED_OID control has"
+                     " the exact semantics and behaviors as"
+                     " LDAP_SERVER_POLICY_HINTS_OID (section 3.1.1.3.4.1.27);"
+                     " this control MAY be used by clients when the server"
+                     " does not support LDAP_SERVER_POLICY_HINTS_OID. Clients"
+                     " SHOULD use LDAP_SERVER_POLICY_HINTS_OID when it is"
+                     " supported by the server\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.2090",
+   .name          =  "LDAP_SERVER_DIRSYNC_EX_OID",
+   .desc          =  "LDAP_SERVER_DIRSYNC_EX_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_DIRSYNC_EX_OID control is used with an"
+                     " LDAP search operation in exactly the same way as the"
+                     " LDAP_SERVER_DIRSYNC_OID control, except for"
+                     " differences specified in this section. All ASN.1"
+                     " structures and the meaning of the fields of those"
+                     " structures are the same.\n"
+                     "\n"
+                     "As with the LDAP_SERVER_DIRSYNC_OID control, any"
+                     " attributes can be requested in the search. Only those"
+                     " objects for which these attributes have been created"
+                     " or modified since the time represented by Cookie will"
+                     " be considered for inclusion in the search. However,"
+                     " where the LDAP_SERVER_DIRSYNC_OID control returns only"
+                     " those attributes that have changed, the"
+                     " LDAP_SERVER_DIRSYNC_EX_OID control also returns"
+                     " unchanged attributes when the attribute name in the"
+                     " request is appended with the string"
+                     " \";dirSyncAlwaysReturn\".\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.2205",
+   .name          =  "LDAP_SERVER_UPDATE_STATS_OID",
+   .desc          =  "LDAP_SERVER_UPDATE_STATS_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_UPDATE_STATS_OID control can be used"
+                     " with any LDAP operation. When sending this control to"
+                     " the DC, the controlValue field of the Control"
+                     " structure is omitted.\n"
+                     "\n"
+                     "When the server receives a request with the"
+                     " LDAP_SERVER_UPDATE_STATS_OID control attached to it,"
+                     " the server includes a response control in the response"
+                     " that contains statistics. The controlType field of the"
+                     " returned Control structure is set to the OID of the"
+                     " LDAP_SERVER_UPDATE_STATS_OID control. The controlValue"
+                     " field is included in the returned Control structure.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.2204",
+   .name          =  "LDAP_SERVER_TREE_DELETE_EX_OID",
+   .desc          =  "LDAP_SERVER_TREE_DELETE_EX_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_TREE_DELETE_EX_OID control is used with"
+                     " an LDAP delete operation to cause the server to"
+                     " recursively delete the entire subtree of objects"
+                     " located underneath the object specified in the delete"
+                     " operation. The object specified in the delete operation"
+                     " is also deleted.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.2206",
+   .name          =  "LDAP_SERVER_SEARCH_HINTS_OID",
+   .desc          =  "LDAP_SERVER_SEARCH_HINTS_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_SEARCH_HINTS_OID control is used with"
+                     " an LDAP search operation. This control supplies hints"
+                     " to the search operation on how to satisfy the search.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.2211",
+   .name          =  "LDAP_SERVER_EXPECTED_ENTRY_COUNT_OID",
+   .desc          =  "LDAP_SERVER_EXPECTED_ENTRY_COUNT_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_EXPECTED_ENTRY_COUNT_OID is used with"
+                     " an LDAP search operation to potentially modify the"
+                     " return code of the operation.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.2239",
+   .name          =  "LDAP_SERVER_POLICY_HINTS_OID",
+   .desc          =  "LDAP_SERVER_POLICY_HINTS_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_POLICY_HINTS_OID control is used with"
+                     " an LDAP operation to enforce the password history"
+                     " length constraint ([MS-SAMR] section 3.1.1.7.1) during"
+                     " password set. The password history policy sets how"
+                     " frequently old passwords can be reused.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.2255",
+   .name          =  "LDAP_SERVER_SET_OWNER_OID",
+   .desc          =  "LDAP_SERVER_SET_OWNER_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_SET_OWNER_OID is used with an LDAP add"
+                     " operation to specify the owner of the object to be"
+                     " created. The owner is to be set into the owner portion"
+                     " of the security descriptor stored in the"
+                     " ntSecurityDescriptor attribute of the object to be"
+                     " created.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.2256",
+   .name          =  "LDAP_SERVER_BYPASS_QUOTA_OID",
+   .desc          =  "LDAP_SERVER_BYPASS_QUOTA_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_BYPASS_QUOTA_OID is used with an LDAP"
+                     " add operation to specify that exceeding quota"
+                     " limitations MUST NOT cause the add to fail. When"
+                     " sending this control to the DC, the controlValue field"
+                     " of the Control structure is omitted. Sending this"
+                     " control to the DC does not cause the server to"
+                     " include any controls in its response.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.2309",
+   .name          =  "LDAP_SERVER_LINK_TTL_OID",
+   .desc          =  "LDAP_SERVER_LINK_TTL_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_LINK_TTL_OID control is used with an"
+                     " LDAP search request to cause the DC to return TTL-DNs"
+                     " for link values with associated expiry times (see"
+                     " section 3.1.1.9.2).\n"
+                     "\n"
+                     "When sending this control to a DC, the controlValue"
+                     " field is omitted.\n"
+                     "\n"
+                     "Sending this control to the DC does not cause the server"
+                     " to include any controls in its response.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.2330",
+   .name          =  "LDAP_SERVER_SET_CORRELATION_ID_OID",
+   .desc          =  "LDAP_SERVER_SET_CORRELATION_ID_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_SET_CORRELATION_ID_OID control is used"
+                     " with any LDAP operation to provide an identifier for"
+                     " the operation that the DC can use for"
+                     " implementation-defined troubleshooting. Additionally,"
+                     " the value can be returned to the caller via the"
+                     " LDAP_SERVER_GET_STATS_OID control (section 3.1.1.3.4.1.6).\n"
+                     "\n"
+                     "When sending this control to a DC, the controlValue"
+                     " field MUST contain 16 bytes. If controlValue does not"
+                     " contain 16 bytes and the control is critical, the DC"
+                     " returns the error unavailableCriticalExtension /"
+                     " <unrestricted>.\n"
+                     "\n"
+                     "Sending this control to the DC does not cause the"
+                     " server to include any controls in its response.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.2354",
+   .name          =  "LDAP_SERVER_THREAD_TRACE_OVERRIDE_OID",
+   .desc          =  "LDAP_SERVER_THREAD_TRACE_OVERRIDE_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_CONTROL,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.1 LDAP Extended Controls",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3c5e87db-4728-4f29-b164-01dd7d7391ea",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The LDAP_SERVER_THREAD_TRACE_OVERRIDE_OID control is"
+                     " used with any LDAP operation to provide an indication"
+                     " to the DC to perform additional"
+                     " implementation-defined troubleshooting.\n"
+                     "\n"
+                     "When sending this control to a DC, the controlValue"
+                     " field is omitted.\n"
+                     "\n"
+                     "Sending this control to the DC does not cause the"
+                     " server to include any controls in its response.\n",
+   .notes         =  NULL,
+};
+
+
+
+//
+//  Microsoft: Open Specifications
+//  3.1.1.3.4.2 LDAP Extended Operations
+//  https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3ed61e6c-cfdc-487d-9f02-5a3397be3772
+//
+//  LDAP extended operations are an extensibility mechanism in version 3 of
+//  LDAP, as discussed in [RFC2251] section 4.12. The following sections
+//  describe the LDAP extended operations that are implemented by DCs in
+//  Windows Server 2003 operating system and later (including Active
+//  Directory Application Mode (ADAM)).
+//
+//  The LDAP extended operations supported by a DC are exposed as OIDs in the
+//  supportedExtension attribute of the rootDSE. Each OID is mapped to a
+//  human-readable name as shown in the following table.
+//
+//   Extended operation name        | OID
+//  --------------------------------+----------------------------
+//   LDAP_SERVER_FAST_BIND_OID      | 1.2.840.113556.1.4.1781
+//   LDAP_SERVER_START_TLS_OID      | 1.3.6.1.4.1.1466.20037
+//   LDAP_TTL_REFRESH_OID           | 1.3.6.1.4.1.1466.101.119.1
+//   LDAP_SERVER_WHO_AM_I_OID       | 1.3.6.1.4.1.4203.1.11.3
+//   LDAP_SERVER_BATCH_REQUEST_OID  | 1.2.840.113556.1.4.2212
+//
+{
+   .oid           =  "1.2.840.113556.1.4.1781",
+   .name          =  "LDAP_SERVER_FAST_BIND_OID",
+   .desc          =  "LDAP_SERVER_FAST_BIND_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_EXTENSION,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.2 LDAP Extended Operations",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/5030ad4b-6bc6-4929-b2ab-67733269c025",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The presence of this OID in the supportedExtension"
+                     " attribute indicates that the DC provides support for"
+                     " fast bind mode. In fast bind mode, the server"
+                     " validates (authenticates) the credentials of LDAP bind"
+                     " requests that are sent on the connection. However,"
+                     " unlike a regular (non–fast bind mode) bind, the DC"
+                     " performs authentication only. The DC does not perform"
+                     " authorization steps, such as computing the group"
+                     " memberships of the authenticated security principal.\n"
+                     "\n"
+                     "The LDAP_SERVER_FAST_BIND_OID operation puts the LDAP"
+                     " connection on which it was sent into fast bind mode on"
+                     " the DC. The server will reject this operation with the"
+                     " error unwillingToPerform / ERROR_DS_UNWILLING_TO_PERFORM"
+                     " if a successful bind has already been performed on the"
+                     " connection.\n"
+                     "\n"
+                     "Note that a client can retrieve the supportedExtension"
+                     " attribute from the root DSE without having first"
+                     " performed a bind (since the supportedExtension"
+                     " attribute is anonymously accessible, and LDAPv3 does"
+                     " not require a bind to be performed for anonymous"
+                     " access). A client MUST NOT specify any control other"
+                     " than LDAP_SERVER_EXTENDED_DN_OID when querying the"
+                     " root DSE anonymously. Thus, a client can determine if"
+                     " the server supports fast bind mode without first"
+                     " having to bind to the server.\n"
+                     "\n"
+                     "Only simple binds are accepted on a connection in this"
+                     " mode. All other types of bind operations are rejected"
+                     " with the error unwillingToPerform /"
+                     " ERROR_DS_INAPPROPRIATE_AUTH. The connection is always"
+                     " treated as if no bind had occurred for the purposes of"
+                     " all other LDAP operations; that is, the connection is"
+                     " treated as the anonymous user (in other words, an"
+                     " anonymous bind).\n"
+                     "\n"
+                     "To send this extended operation to the DC, the client"
+                     " sends an LDAP ExtendedRequest with the requestName"
+                     " field containing the operation's OID. The requestValue"
+                     " field is omitted. The server will return an"
+                     " ExtendedResponse with the responseName field containing"
+                     " the operation's OID and the response field omitted.\n"
+                     "\n"
+                     "The following shows a typical sequence of operations in"
+                     "fast bind:\n"
+                     "\n"
+                     "   1. The client establishes an LDAP connection with the"
+                     " DC.\n"
+                     "\n"
+                     "   2.  (Optional) The client checks the"
+                     " supportedExtension attribute on the root DSE to confirm"
+                     " that the DC supports fast bind mode.\n"
+                     "\n"
+                     "   3. The client sends the LDAP_SERVER_FAST_BIND_OID"
+                     " extended operation to the DC to put the LDAP connection"
+                     " into fast bind mode.\n"
+                     "\n"
+                     "   4. The client performs one or more simple binds on"
+                     " the connection.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.2212",
+   .name          =  "LDAP_SERVER_BATCH_REQUEST_OID",
+   .desc          =  "LDAP_SERVER_BATCH_REQUEST_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_EXTENSION,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.2 LDAP Extended Operations",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/5030ad4b-6bc6-4929-b2ab-67733269c025",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The presence of this OID in the supportedExtension"
+                     " attribute indicates that the DC provides support for"
+                     " the batched LDAP extended operation. In a batched LDAP"
+                     " extended operation, the DC accepts an extended"
+                     " operation that contains a sequence of LDAP messages"
+                     " (that is, LDAP operations) encoded and packed into the"
+                     " operation data and then operates on the individual"
+                     " messages sequentially.\n",
+   .notes         =  NULL,
+};
+
+
+
+//
+//  Microsoft: Open Specifications
+//  3.1.1.3.4.3 LDAP Capabilities
+//  https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3ed61e6c-cfdc-487d-9f02-5a3397be3772
+//
+//  The following sections specify the capabilities exposed by DCs on the
+//  supportedCapabilities attribute of the rootDSE. Capabilities are exposed
+//  in that attribute as OIDs, each of which is mapped to a human-readable
+//  name, as shown in the following table.
+//
+//   Capability name                                | OID
+//  ------------------------------------------------+-------------------------
+//   LDAP_CAP_ACTIVE_DIRECTORY_OID                  | 1.2.840.113556.1.4.800
+//   LDAP_CAP_ACTIVE_DIRECTORY_LDAP_INTEG_OID       | 1.2.840.113556.1.4.1791
+//   LDAP_CAP_ACTIVE_DIRECTORY_V51_OID              | 1.2.840.113556.1.4.1670
+//   LDAP_CAP_ACTIVE_DIRECTORY_ADAM_DIGEST_OID      | 1.2.840.113556.1.4.1880
+//   LDAP_CAP_ACTIVE_DIRECTORY_ADAM_OID             | 1.2.840.113556.1.4.1851
+//   LDAP_CAP_ACTIVE_DIRECTORY_PARTIAL_SECRETS_OID  | 1.2.840.113556.1.4.1920
+//   LDAP_CAP_ACTIVE_DIRECTORY_V60_OID              | 1.2.840.113556.1.4.1935
+//   LDAP_CAP_ACTIVE_DIRECTORY_V61_R2_OID           | 1.2.840.113556.1.4.2080
+//   LDAP_CAP_ACTIVE_DIRECTORY_W8_OID               | 1.2.840.113556.1.4.2237
+//
+//  Not all applicable Windows Server releases and Active Directory
+//  Application Mode (ADAM) versions support all the LDAP capabilities. 
+//
+{
+   .oid           =  "1.2.840.113556.1.4.800",
+   .name          =  "LDAP_CAP_ACTIVE_DIRECTORY_OID",
+   .desc          =  "LDAP_CAP_ACTIVE_DIRECTORY_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_FEATURE,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.3 LDAP Capabilities",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/5030ad4b-6bc6-4929-b2ab-67733269c025",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The presence of this capability indicates that the LDAP"
+                     " server is running Active Directory and is running as AD"
+                     " DS.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.1791",
+   .name          =  "LDAP_CAP_ACTIVE_DIRECTORY_LDAP_INTEG_OID",
+   .desc          =  "LDAP_CAP_ACTIVE_DIRECTORY_LDAP_INTEG_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_FEATURE,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,                                   
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.3 LDAP Capabilities",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/5030ad4b-6bc6-4929-b2ab-67733269c025",
+   .spec_vendor   =  "Microsoft",                                                
+   .spec_text     =  "The presence of this capability indicates that the LDAP"
+                     " server on the DC is capable of signing and sealing on"
+                     " an NTLM authenticated connection, and that the server"
+                     " is capable of performing subsequent binds on a signed"
+                     " or sealed connection.\n",
+   .notes         =  NULL,                                                  
+};
+{
+   .oid           =  "1.2.840.113556.1.4.1670",
+   .name          =  "LDAP_CAP_ACTIVE_DIRECTORY_V51_OID",
+   .desc          =  "LDAP_CAP_ACTIVE_DIRECTORY_V51_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_FEATURE,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.3 LDAP Capabilities",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/5030ad4b-6bc6-4929-b2ab-67733269c025",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "On an Active Directory DC operating as AD DS, the"
+                     " presence of this capability indicates that the LDAP"
+                     " server is running at least the Windows Server 2003"
+                     " operating system version of Active Directory.\n"
+                     "\n"
+                     "On an Active Directory DC operating as AD LDS, the"
+                     " presence of this capability indicates that the LDAP"
+                     " server is running at least the Windows Server 2008"
+                     " operating system version of Active Directory.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.1880",
+   .name          =  "LDAP_CAP_ACTIVE_DIRECTORY_ADAM_DIGEST_OID",
+   .desc          =  "LDAP_CAP_ACTIVE_DIRECTORY_ADAM_DIGEST_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_FEATURE,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.3 LDAP Capabilities",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/5030ad4b-6bc6-4929-b2ab-67733269c025",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "On a DC operating as AD LDS, the presence of this"
+                     " capability indicates that the DC accepts DIGEST-MD5"
+                     " binds for AD LDS security principals (section 5.1.1.5)."
+                     " An AD LDS DC's DIGEST-MD5 bind functionality depends"
+                     " upon the value of the ADAMDisableSSI configurable"
+                     " setting as specified in section 3.1.1.3.4.7.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.1851",
+   .name          =  "LDAP_CAP_ACTIVE_DIRECTORY_ADAM_OID",
+   .desc          =  "LDAP_CAP_ACTIVE_DIRECTORY_ADAM_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_FEATURE,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.3 LDAP Capabilities",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/5030ad4b-6bc6-4929-b2ab-67733269c025",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The presence of this capability indicates that the LDAP"
+                     " server is running Active Directory as AD LDS.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.1920",
+   .name          =  "LDAP_CAP_ACTIVE_DIRECTORY_PARTIAL_SECRETS_OID",
+   .desc          =  "LDAP_CAP_ACTIVE_DIRECTORY_PARTIAL_SECRETS_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_FEATURE,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.3 LDAP Capabilities",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/5030ad4b-6bc6-4929-b2ab-67733269c025",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "On an Active Directory DC operating as AD DS, the"
+                     " presence of this capability indicates that the DC is"
+                     " an RODC.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.1935",
+   .name          =  "LDAP_CAP_ACTIVE_DIRECTORY_V60_OID",
+   .desc          =  "LDAP_CAP_ACTIVE_DIRECTORY_V60_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_FEATURE,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.3 LDAP Capabilities",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/5030ad4b-6bc6-4929-b2ab-67733269c025",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The presence of this capability indicates that the LDAP"
+                     " server is running at least the Windows Server 2008"
+                     " operating system version of Active Directory.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.2080",
+   .name          =  "LDAP_CAP_ACTIVE_DIRECTORY_V61_R2_OID",
+   .desc          =  "LDAP_CAP_ACTIVE_DIRECTORY_V61_R2_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_FEATURE,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.3 LDAP Capabilities",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/5030ad4b-6bc6-4929-b2ab-67733269c025",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The presence of this capability indicates that the LDAP"
+                     " server is running at least the Windows Server 2008 R2"
+                     " operating system version of Active Directory.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.2237",
+   .name          =  "LDAP_CAP_ACTIVE_DIRECTORY_W8_OID",
+   .desc          =  "LDAP_CAP_ACTIVE_DIRECTORY_W8_OID",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_FEATURE,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.3 LDAP Capabilities",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/5030ad4b-6bc6-4929-b2ab-67733269c025",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "The presence of this capability indicates that the LDAP"
+                     " server is running at least the Windows Server 2012"
+                     " operating system version of Active Directory.\n",
+   .notes         =  NULL,
+}; 
+
+
+
+//
+//  Microsoft: Open Specifications
+//  3.1.1.3.4.4 LDAP Matching Rules (extensibleMatch)
+//  https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/4e638665-f466-4597-93c4-12f2ebfabab5
+//
+//  The following sections describe the matching rules supported by DCs when
+//  performing LDAP search requests. Unlike, for example, extended controls
+//  and extended operations, there is no attribute exposed by the DC that
+//  specifies which matching rules it supports. The identifiers for these
+//  matching rules are used in an extensibleMatch clause in the filter
+//  portion of a SearchRequest, as described in [RFC2251] section 4.5.1.
+//  Matching rules are identified by an OID that corresponds to a
+//  human-readable name, as shown in the following table.
+//
+//   Capability name                     | OID
+//  -------------------------------------+-------------------------
+//   LDAP_MATCHING_RULE_BIT_AND          | 1.2.840.113556.1.4.803
+//   LDAP_MATCHING_RULE_BIT_OR           | 1.2.840.113556.1.4.804
+//   LDAP_MATCHING_RULE_TRANSITIVE_EVAL  | 1.2.840.113556.1.4.1941
+//   LDAP_MATCHING_RULE_DN_WITH_DATA     | 1.2.840.113556.1.4.2253
+//
+{
+   .oid           =  "1.2.840.113556.1.4.803",
+   .name          =  "LDAP_MATCHING_RULE_BIT_AND",
+   .desc          =  "LDAP_MATCHING_RULE_BIT_AND",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_MATCHINGRULE,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.4 LDAP Matching Rules (extensibleMatch)",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/4e638665-f466-4597-93c4-12f2ebfabab5",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "This rule is equivalent to a bitwise \"AND\" operation."
+                     " When this matching rule is used as a clause in a query"
+                     " filter, the clause is satisfied only if all the bits"
+                     " set to '1' in the value included in the clause"
+                     " correspond to bits set to '1' in the value stored in"
+                     " the directory.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.804",
+   .name          =  "LDAP_MATCHING_RULE_BIT_OR",
+   .desc          =  "LDAP_MATCHING_RULE_BIT_OR",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_MATCHINGRULE,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.4 LDAP Matching Rules (extensibleMatch)",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/4e638665-f466-4597-93c4-12f2ebfabab5",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "This rule is equivalent to a bitwise \"OR\" operation."
+                     " When this matching rule is used as a clause in a query"
+                     " filter, the clause is satisfied only if at least one of"
+                     " the bits set to '1' in the value included in the clause"
+                     " corresponds to a bit set to '1' in the value stored in"
+                     " the directory.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.1941",
+   .name          =  "LDAP_MATCHING_RULE_TRANSITIVE_EVAL",
+   .desc          =  "LDAP_MATCHING_RULE_TRANSITIVE_EVAL",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_MATCHINGRULE,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.4 LDAP Matching Rules (extensibleMatch)",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/4e638665-f466-4597-93c4-12f2ebfabab5",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "This rule provides recursive search of a link attribute."
+                     " A filter F of the form \"(A: 1.2.840.113556.1.4.1941:=V)\","
+                     " where A is a link attribute and V is a value, evaluates to"
+                     " True for an object whose DN is D if the following method"
+                     " EvalTransitiveFilter(A, V, D) returns true, and False"
+                     " if the method returns false. If A is not a link"
+                     " attribute, the filter F evaluates to Undefined.\n"
+                     "\n"
+                     "EvalTransitiveFilter(A: attribute, V: value, D: DN)\n"
+                     "\n"
+                     "   *  If A is of Object(DN-String), Object(DN-Binary),"
+                     " Object(OR-Name), or Object(Access-Point) syntax, let V'"
+                     " equal the object_DN portion of V. Otherwise, let V'"
+                     " equal V\n"
+                     "\n"
+                     "   * Return the value of EvalTransitiveFilterHelper(A,"
+                     " V', D, {})\n"
+                     "\n"
+                     "EvalTransitiveFilterHelper(A: attribute, V': value,"
+                     " ToVisit: DN, Visited: SET OF DN)\n"
+                     "\n"
+                     "   * If A is of Object(DN-String), Object(DN-Binary),"
+                     " Object(OR-Name), or Object(Access-Point) syntax, let C"
+                     " be the set of the object_DN components of the values"
+                     " of ToVisit.A. Otherwise, let C be the set of the"
+                     " values of ToVisit.A. Note that C is a set of DNs.\n"
+                     "\n"
+                     "   * If V' is in C, return true.\n"
+                     "\n"
+                     "   * Let Visited' equal the Visited set plus {ToVisit}.\n"
+                     "\n"
+                     "   * For each DN NextToVisit in C\n"
+                     "\n"
+                     "     - If NextToVisit is in Visited, do nothing.\n"
+                     "\n"
+                     "     - Let Result = EvalTransitiveFilterHelper(A, V', NextToVisit, Visited')\n"
+                     "\n"
+                     "     - If Result is true, return true.\n"
+                     "\n"
+                     "   * Return false.\n",
+   .notes         =  NULL,
+};
+{
+   .oid           =  "1.2.840.113556.1.4.2253",
+   .name          =  "LDAP_MATCHING_RULE_DN_WITH_DATA",
+   .desc          =  "LDAP_MATCHING_RULE_DN_WITH_DATA",
+   .flags         =  0,
+   .type          =  LDAPSCHEMA_MATCHINGRULE,
+   .def           =  NULL,
+   .spec          =  "Microsoft: Open Specifications",
+   .spec_type     =  LDAPSCHEMA_SPEC_URL,
+   .spec_name     =  "Open Specifications",
+   .spec_section  =  "3.1.1.3.4.4 LDAP Matching Rules (extensibleMatch)",
+   .spec_source   =  "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/4e638665-f466-4597-93c4-12f2ebfabab5",
+   .spec_vendor   =  "Microsoft",
+   .spec_text     =  "This rule provides a way to match on portions of values"
+                     " of syntax Object(DN-String) and Object(DN-Binary).\n"
+                     "\n"
+                     "Let F be a filter of the form \"(A: 1.2.840.113556.1.4.2253:=V)\","
+                     " where A is a link attribute and V is a value of syntax"
+                     " Object(DN-String) (section 3.1.1.2.2.2.1) or"
+                     " Object(DN-Binary) (section 3.1.1.2.2.2.3). This filter"
+                     " evaluates to True for an object whose DN is D if the"
+                     " method defined below, EvalDNWithDataFilter(A,V,D),"
+                     " returns true, and False if the method returns false."
+                     " If A is not of syntax Object(DN-String) or"
+                     " Object(DN-Binary), the filter F evaluates to Undefined.\n"
+                     "\n"
+                     "EvalDNWithDataFilter(A: attribute, V: value, D: DN)\n"
+                     "\n"
+                     "   * For either syntax, let O be the DN portion of the"
+                     " value V and B be the string or binary portion of the"
+                     " value V. If the attribute is of syntax"
+                     " Object(DN-String), B is the value of the string"
+                     " considered strictly as the sequence of bytes of the"
+                     " string. Note that O can be the rootDSE. Note also that"
+                     " B can have 0 length.\n"
+                     "\n"
+                     "   * For every V' where V' is a value of attribute A on"
+                     " object D:\n"
+                     "\n"
+                     "     - Let O' be the DN portion of value V' and let B'"
+                     " be the string or binary portion of the value V'.\n"
+                     "\n"
+                     "     - If O is not equal to O' and O is not equal to"
+                     " the rootDSE, continue processing other values of V'.\n"
+                     "\n"
+                     "     - If B is not equal to the initial bytes of B',"
+                     " continue processing other values of V'. Note"
+                     " especially that only byte values are used in this"
+                     " comparison. No special handling of B as a string is"
+                     " performed (for example, no case-insensitivity, locale"
+                     " specific comparisons, etc.).\n"
+                     "\n"
+                     "     - Return true.\n"
+                     "\n"
+                     "   * If this method does not return true, it returns false.\n",
+   .notes         =  NULL,
+};
+
+
+
+// end of OID spec file
