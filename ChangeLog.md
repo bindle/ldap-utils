@@ -19,6 +19,10 @@ Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>
   - libldapschema: adding support for matchingRules (syzdek)
   - libldapschema: refactoring error management (syzdek)
   - oidspectool: adding ABNF oidspec type (syzdek)
+  - oidspectool: resetting line number when changing files (syzdek)
+  - oidspectool: adding static to OID declarations (syzdek)
+  - oidspectool: removing individual OID declarations from header file (syzdek)
+  - oidspecs: adding Microsoft OIDs (syzdek)
 
 0.4
 ---
