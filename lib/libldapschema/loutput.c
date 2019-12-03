@@ -62,7 +62,7 @@
 #define LDAPSCHEMA_WIDTH_HEADER    19
 #define LDAPSCHEMA_WIDTH_INDENT    3
 #define LDAPSCHEMA_WIDTH_FIELD     (LDAPSCHEMA_WIDTH_HEADER-LDAPSCHEMA_WIDTH_INDENT)
-#define LDAPSCHEMA_WIDTH_VALUE      45
+#define LDAPSCHEMA_WIDTH_VALUE      59
 
 
 //////////////////
@@ -393,6 +393,7 @@ void ldapschema_print_list_models(LDAPSchema * lsd,
 {
    size_t            pos;
    const char *      key;
+   size_t            key_len;
    size_t            buff_len;
    char              buff[256];
    size_t            lineno;
@@ -440,17 +441,21 @@ void ldapschema_print_list_models(LDAPSchema * lsd,
       if (!(key))
          continue;
 
-      if ((pos + 1) < list_len)
-         buff_len += (size_t)snprintf(&buff[buff_len], sizeof(buff)-buff_len, "%s, ", key );
-      else
-         buff_len += (size_t)snprintf(&buff[buff_len], sizeof(buff)-buff_len, "%s", key );
-      if (buff_len >= LDAPSCHEMA_WIDTH_VALUE)
+      key_len = strlen(key) + 1;
+      if ( ((buff_len)) && ((buff_len+key_len) > LDAPSCHEMA_WIDTH_VALUE) )
       {
-         ldapschema_print_line( ((!(lineno))?name:NULL), buff);
+         if (buff[buff_len-1] == ' ')
+            buff[buff_len-1] = '\0';
+         ldapschema_print_line( ((!(lineno)) ? name : NULL), buff);
          buff_len = 0;
          buff[0]  = '\0';
          lineno++;
       };
+
+      if ((pos + 1) < list_len)
+         buff_len += (size_t)snprintf(&buff[buff_len], sizeof(buff)-buff_len, "%s, ", key );
+      else
+         buff_len += (size_t)snprintf(&buff[buff_len], sizeof(buff)-buff_len, "%s", key );
    };
    if ((buff_len))
       ldapschema_print_line( ((!(lineno))?name:NULL), buff);

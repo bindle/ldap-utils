@@ -102,6 +102,7 @@ int ldapschema_fmt_definition( char * restrict str, size_t size, const char * re
    size_t      deflen;
    size_t      indent;
    size_t      x;
+   size_t      keylen;
    char        last;
 
    assert(def != NULL);
@@ -156,6 +157,7 @@ int ldapschema_fmt_definition( char * restrict str, size_t size, const char * re
 
          default:
          for(tmppos = defpos; IS_KEYWORD( def[tmppos] ); tmppos++);
+         for(keylen = 0; IS_STRNG(def[keylen+defpos]); keylen++);
          if ( (tmppos != defpos) && (IS_SPACE(def[tmppos]) || (def[tmppos] == '\0')) )
          {
             // styling for upper case keywords
@@ -167,7 +169,7 @@ int ldapschema_fmt_definition( char * restrict str, size_t size, const char * re
          } else
          {
             // styling for unquoted strings
-            if ((strpos - bol) < width)
+            if ((strpos - bol + keylen + 2 + (indent*3)) < width)
             {
                APPEND( ' ' );
             } else
