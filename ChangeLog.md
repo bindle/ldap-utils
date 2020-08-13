@@ -4,6 +4,10 @@ LDAP Utilities
 
 Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>
 
+0.6
+---
+  Not yet released.
+
 0.5
 ---
   Released 2020/08/13
