@@ -3,7 +3,7 @@
 LDAP Utilities
 ==============
 
-Copyright (c) 2012, 2015, 2019 David M. Syzdek <david@syzdek.net>
+Copyright (c) 2012, 2015, 2019, 2020 David M. Syzdek <david@syzdek.net>
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are

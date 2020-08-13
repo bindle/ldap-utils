@@ -40,13 +40,13 @@
 
 AC_PREREQ(2.65)
 
-AC_COPYRIGHT([Copyright (C) 2015, 2019 David M. Syzdek <david@syzdek.net>.])
+AC_COPYRIGHT([Copyright (C) 2015, 2019, 2020 David M. Syzdek <david@syzdek.net>.])
 AC_REVISION(0.1)
-AC_INIT([LDAP Utilities],[0.4],[david@syzdek.net],[ldap-utils])
+AC_INIT([LDAP Utilities],[0.5],[david@syzdek.net],[ldap-utils])
 
-AC_SUBST([RELEASE_MONTH],["October 2019"])
+AC_SUBST([RELEASE_MONTH],["August 2020"])
 
-PACKAGE_COPYRIGHT="Copyright (C) 2008, 2009, 2015, 2019 David M. Syzdek <david@syzdek.net>."
+PACKAGE_COPYRIGHT="Copyright (C) 2008, 2009, 2015, 2019, 2020 David M. Syzdek <david@syzdek.net>."
 AC_DEFINE_UNQUOTED(PACKAGE_COPYRIGHT, ["${PACKAGE_COPYRIGHT}"], [Copyright notice.])
 AC_SUBST([PACKAGE_COPYRIGHT], [${PACKAGE_COPYRIGHT}])
 
