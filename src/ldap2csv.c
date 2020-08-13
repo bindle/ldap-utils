@@ -311,6 +311,17 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
 
    cnf->prog_name = ldaputils_get_prog_name(cnf->lud);
 
+   // saves filter
+   if (argc > optind)
+   {
+      cnf->lud->filter = "(objectclass=*)";
+      if ((index(argv[optind], '=')) != NULL)
+      {
+         cnf->lud->filter = argv[optind];
+         optind++;
+      };
+   };
+
    // checks for required arguments
    if (argc < (optind+1))
    {
@@ -318,14 +329,6 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
       fprintf(stderr, "Try `%s --help' for more information.\n", cnf->prog_name);
       my_unbind(cnf);
       return(1);
-   };
-
-   // saves filter
-   cnf->lud->filter = "(objectclass=*)";
-   if ((index(argv[optind], '=')) != NULL)
-   {
-      cnf->lud->filter = argv[optind];
-      optind++;
    };
 
    // configures LDAP attributes to return in results
