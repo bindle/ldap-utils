@@ -78,6 +78,7 @@ AC_PROG_MAKE_SET
 AC_USE_SYSTEM_EXTENSIONS # replaces AC_AIX AC_GNU_SOURCE AC_MINIX
 AC_C_BIGENDIAN
 AC_C_INLINE
+AC_C_RESTRICT
 
 # Version Info:
 #    Current    -- the current version number of this API
@@ -129,6 +130,7 @@ AC_TYPE_UINT16_T
 AC_TYPE_UINT32_T
 AC_TYPE_UINT64_T
 #AC_CHECK_TYPES([LDAPURLDesc],,         [AC_MSG_ERROR([missing required datatype])],[#include <ldap.h>])
+AC_CHECK_TYPES([ptrdiff_t],,            [AC_MSG_ERROR([missing required datatype])],[#include <stddef.h>])
 
 # check for required functions
 AC_CHECK_FUNCS([bzero],          [], [AC_MSG_ERROR([missing required functions])])
@@ -144,6 +146,7 @@ AC_CHECK_FUNCS([strdup],         [], [AC_MSG_ERROR([missing required functions])
 AC_CHECK_FUNCS([strerror],       [], [AC_MSG_ERROR([missing required functions])])
 AC_CHECK_FUNCS([strncasecmp],    [], [AC_MSG_ERROR([missing required functions])])
 AC_CHECK_FUNCS([strtol],         [], [AC_MSG_ERROR([missing required functions])])
+AC_CHECK_FUNCS([strtoull],       [], [AC_MSG_ERROR([missing required functions])])
 
 # check for required libraries
 AC_SEARCH_LIBS([getopt_long],          c gnugetopt,,AC_MSG_ERROR([missing required function]))
@@ -168,9 +171,14 @@ AC_SEARCH_LIBS([socket],               socket,,AC_MSG_ERROR([missing required fu
 AC_CHECK_HEADER_STDBOOL
 AC_CHECK_HEADERS([fcntl.h],,           [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([getopt.h],,          [AC_MSG_ERROR([missing required header])])
+AC_CHECK_HEADERS([inttypes.h],,        [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([ldap.h],,            [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([signal.h],,          [AC_MSG_ERROR([missing required header])])
+AC_CHECK_HEADERS([stdint.h],,          [AC_MSG_ERROR([missing required header])])
+AC_CHECK_HEADERS([string.h],,          [AC_MSG_ERROR([missing required header])])
+AC_CHECK_HEADERS([strings.h],,         [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([termios.h],,         [AC_MSG_ERROR([missing required header])])
+AC_CHECK_HEADERS([unistd.h],,          [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([libintl.h])
 AC_CHECK_HEADERS([malloc.h])
 AC_CHECK_HEADERS([sgtty.h])
