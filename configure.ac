@@ -167,10 +167,10 @@ AC_SEARCH_LIBS([socket],               socket,,AC_MSG_ERROR([missing required fu
 # check for headers
 AC_CHECK_HEADER_STDBOOL
 AC_CHECK_HEADERS([fcntl.h],,           [AC_MSG_ERROR([missing required header])])
-AC_CHECK_HEADERS([termios.h],,         [AC_MSG_ERROR([missing required header])])
-AC_CHECK_HEADERS([ldap.h],,            [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([getopt.h],,          [AC_MSG_ERROR([missing required header])])
+AC_CHECK_HEADERS([ldap.h],,            [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([signal.h],,          [AC_MSG_ERROR([missing required header])])
+AC_CHECK_HEADERS([termios.h],,         [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([libintl.h])
 AC_CHECK_HEADERS([malloc.h])
 AC_CHECK_HEADERS([sgtty.h])
