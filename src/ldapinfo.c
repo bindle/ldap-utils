@@ -180,8 +180,6 @@ int my_monitor_operations(MyConfig * cnf, const char * base);
 // parses RootDSE
 int my_rootdse(MyConfig * cnf);
 
-int my_results(MyConfig * cnf, LDAPMessage * res);
-
 int my_schema(MyConfig * cnf, const char * base);
 
 // fress resources
