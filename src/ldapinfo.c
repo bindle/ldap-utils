@@ -156,34 +156,86 @@ static const char * ldapinfo_attrs[] =
 #pragma mark - Prototypes
 
 // main statement
-int main(int argc, char * argv[]);
+int
+main(
+         int                           argc,
+         char *                        argv[] );
 
-int my_cmp_strings(const void * ap, const void * bp);
+
+int
+my_cmp_strings(
+         const void *                  ap,
+         const void *                  bp );
+
 
 // parses configuration
-int my_config(int argc, char * argv[], MyConfig ** cnfp);
+int
+my_config(
+         int                           argc,
+         char *                        argv[],
+         MyConfig **                   cnfp );
 
-void my_field(const char * name, const char * val, int isoid);
 
-void my_fields(const char * name, char ** vals, int isoid);
+void
+my_field(
+         const char *                  name,
+         const char *                  val,
+         int                           isoid );
 
-char * my_monitor(MyConfig * cnf, const char * base);
 
-int my_monitor_connections(MyConfig * cnf, const char * base);
+void
+my_fields(
+         const char *                  name,
+         char **                       vals,
+         int                           isoid );
 
-int my_monitor_database(MyConfig * cnf, const char * base);
 
-int my_monitor_listeners(MyConfig * cnf, const char * base);
+char *
+my_monitor(
+         MyConfig *                    cnf,
+         const char *                  base );
 
-int my_monitor_operations(MyConfig * cnf, const char * base);
+
+int
+my_monitor_connections(
+         MyConfig *                    cnf,
+         const char *                  base );
+
+
+int
+my_monitor_database(
+         MyConfig *                    cnf,
+         const char *                  base );
+
+
+int
+my_monitor_listeners(
+         MyConfig *                    cnf,
+         const char *                  base );
+
+
+int
+my_monitor_operations(
+         MyConfig *                    cnf,
+         const char *                  base );
+
 
 // parses RootDSE
-int my_rootdse(MyConfig * cnf);
+int
+my_rootdse(
+         MyConfig *                    cnf );
 
-int my_schema(MyConfig * cnf, const char * base);
+
+int
+my_schema(
+         MyConfig *                    cnf,
+         const char *                  base );
+
 
 // fress resources
-void my_unbind(MyConfig * cnf);
+void
+my_unbind(
+         MyConfig *                    cnf );
 
 
 /////////////////
