@@ -642,7 +642,7 @@ int my_monitor_database(MyConfig * cnf, const char * base)
 }
 
 
-int my_monitor_listeners(MyConfig * cnf, const char * base)
+int my_monitor_operations(MyConfig * cnf, const char * base)
 {
    int               rc;
    int               err;
@@ -746,7 +746,7 @@ int my_monitor_listeners(MyConfig * cnf, const char * base)
 }
 
 
-int my_monitor_operations(MyConfig * cnf, const char * base)
+int my_monitor_listeners(MyConfig * cnf, const char * base)
 {
    int               rc;
    int               err;
@@ -768,7 +768,7 @@ int my_monitor_operations(MyConfig * cnf, const char * base)
    // searches for cn=Connections,<monitor>
    timeout.tv_sec  = 5;
    timeout.tv_usec = 0;
-   strncpy(dn, "cn=Operations,", sizeof(dn));
+   strncpy(dn, "cn=Listeners,", sizeof(dn));
    strncat(dn, base, (sizeof(dn)-strlen(dn)-1));
    if ((err = ldap_search_ext(ld, dn, LDAP_SCOPE_ONE, "(objectclass=*)", cnf->lud->attrs, 0, NULL, NULL, &timeout, -1, &msgid)) != LDAP_SUCCESS)
       return(-1);
@@ -972,6 +972,9 @@ int my_rootdse(MyConfig * cnf)
 
       // connection stats
       my_monitor_connections(cnf, monitor[0]);
+
+      // operations
+      my_monitor_operations(cnf, monitor[0]);
    };
 
    // obtain naming contexts
