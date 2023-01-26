@@ -156,84 +156,84 @@ static const char * ldapinfo_attrs[] =
 #pragma mark - Prototypes
 
 // main statement
-int
+extern int
 main(
          int                           argc,
          char *                        argv[] );
 
 
-int
+static int
 my_cmp_strings(
          const void *                  ap,
          const void *                  bp );
 
 
 // parses configuration
-int
+static int
 my_config(
          int                           argc,
          char *                        argv[],
          MyConfig **                   cnfp );
 
 
-void
+static void
 my_field(
          const char *                  name,
          const char *                  val,
          int                           isoid );
 
 
-void
+static void
 my_fields(
          const char *                  name,
          char **                       vals,
          int                           isoid );
 
 
-char *
+static char *
 my_monitor(
          MyConfig *                    cnf,
          const char *                  base );
 
 
-int
+static int
 my_monitor_connections(
          MyConfig *                    cnf,
          const char *                  base );
 
 
-int
+static int
 my_monitor_database(
          MyConfig *                    cnf,
          const char *                  base );
 
 
-int
+static int
 my_monitor_listeners(
          MyConfig *                    cnf,
          const char *                  base );
 
 
-int
+static int
 my_monitor_operations(
          MyConfig *                    cnf,
          const char *                  base );
 
 
 // parses RootDSE
-int
+static int
 my_rootdse(
          MyConfig *                    cnf );
 
 
-int
+static int
 my_schema(
          MyConfig *                    cnf,
          const char *                  base );
 
 
 // fress resources
-void
+static void
 my_unbind(
          MyConfig *                    cnf );
 
