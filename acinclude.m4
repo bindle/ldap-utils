@@ -32,35 +32,6 @@
 #   acinclude.m4 - custom m4 macros used by configure.ac
 #
 
-# AC_LDAP_UTILS_DOXYGEN
-# ______________________________________________________________________________
-AC_DEFUN_ONCE([AC_LDAP_UTILS_DOXYGEN],[dnl
-
-   # prerequists
-   AC_REQUIRE([AC_BINDLE_WITH_DOXYGEN])
-
-   enableval=""
-   AC_ARG_ENABLE(
-      doxygen-docs,
-      [AS_HELP_STRING([--enable-doxygen-docs], [enable Doxygen documentation])],
-      [ EDOXYGEN=$enableval ],
-      [ EDOXYGEN=$enableval ]
-   )
-
-   if test "x${EDOXYGEN}" != "xyes";then
-      EDOXYGEN="no"
-   fi
-   LDAPUTILS_DOXYGEN=${EDOXYGEN}
-
-   LDAPUTILS_DOXYGEN_STATUS="skip"
-   if test "x${EDOXYGEN}" == "xyes";then
-      LDAPUTILS_DOXYGEN_STATUS="build"
-   fi
-
-   AM_CONDITIONAL([LDAPUTILS_DOXYGEN], [test "x$LDAPUTILS_DOXYGEN" = "xyes"])
-])dnl
-
-
 # AC_LDAP_UTILS_LDAP2CSV
 # ______________________________________________________________________________
 AC_DEFUN_ONCE([AC_LDAP_UTILS_LDAP2CSV],[dnl

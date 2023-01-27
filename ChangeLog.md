@@ -9,6 +9,7 @@ Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>
   Not yet released.
   - ldapinfo: fixing management of listeners branch in monitor context (syzdek)
   - ldapconns: adding program (syzdek)
+  - docs: removing doxygen targets (syzdek)
 
 0.5
 ---

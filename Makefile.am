@@ -39,10 +39,6 @@ SUBDIRS					= $(subdirs)
 DIST_SUBDIRS				= $(subdirs)
 
 
-# directory locations
-doxygendir				= $(docdir)/doxygen
-
-
 # GNU make options
 V					= 0
 
@@ -77,7 +73,6 @@ LDADD					=
 bin_PROGRAMS				=
 check_PROGRAMS				=
 doc_DATA				= doc/oid.txt
-doxygen_DATA				=
 noinst_DATA				=
 EXTRA_PROGRAMS				=
 include_HEADERS				=
@@ -135,9 +130,6 @@ CLEANFILES				= \
 					  $(builddir)/a.out   $(srcdir)/a.out \
 					  $(builddir)/*/a.out $(srcdir)/*/a.out \
 					  config.h.in~ $(srcdir)/config.h.in~ \
-					  doc/Doxyfile \
-					  doc/Doxyfile.make \
-					  doc/doxygen \
 					  $(man_MANS) \
 					  $(pkgdata_DATA) \
 					  $(bin_SCRIPTS) \
@@ -146,16 +138,9 @@ CLEANFILES				= \
 					  @PACKAGE_TARNAME@-*.txz \
 					  @PACKAGE_TARNAME@-*.zip
 DISTCHECK_CONFIGURE_FLAGS		= --enable-strictwarnings \
-					  --enable-doxygen-docs \
 					  --enable-ldapdebug \
 					  --enable-ldapschema \
 					  --enable-libldapschema
-
-
-# macros for doc/doxygen
-if LDAPUTILS_DOXYGEN
-   noinst_DATA				+= doc/doxygen/html/index.html
-endif
 
 
 # macros for lib/libldapschema.a
@@ -379,24 +364,10 @@ MY_V_OIDSPEC				= $(my__v_OIDSPEC_$(V))
 my__v_OIDSPEC_				=
 my__v_OIDSPEC_0				= @echo "  OIDSPEC " $@;
 my__v_OIDSPEC_1				=
-MY_V_DOXYGEN				= $(my__v_DOXYGEN_$(V))
-my__v_DOXYGEN_				=
-my__v_DOXYGEN_0				= @echo "  DOXYGEN " $@;
-my__v_DOXYGEN_1				=
+
 
 # custom targets
-.PHONY: doxygen
-
-doxygen: doc/doxygen/html/index.html
-
-doc/doxygen/html/index.html: doc/Doxyfile $(noinst_HEADERS) $(include_HEADERS)
-	$(MY_V_DOXYGEN) rm -fR doc/doxygen; mkdir -p doc/doxygen; \
-	cd $(top_srcdir); \
-	$(DOXYGEN) $(abs_top_builddir)/doc/Doxyfile > /dev/null;
-
-doc/Doxyfile: Makefile doc/Doxyfile.in
-	$(MY_V_DOXYGEN)$(DOXYGEN) -u $(srcdir)/doc/Doxyfile.in > /dev/null;
-	@$(do_subst_dt);
+.PHONY:
 
 doc/ldap2csv.1: Makefile $(srcdir)/doc/ldap2csv.1.in
 	@$(do_subst_dt)
@@ -438,8 +409,6 @@ install-data-hook:
 uninstall-local:
 
 clean-local:
-	rm -fR $(builddir)/doc/doxygen
-	rm -fR $(srcdir)/doc/doxygen
 
 distclean-local:
 	rm -fR $(srcdir)/autom4te.cache
