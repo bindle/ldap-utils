@@ -7,6 +7,8 @@ Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>
 0.6
 ---
   Not yet released.
+  - ldapinfo: fixing management of listeners branch in monitor context (syzdek)
+  - ldapconns: adding program (syzdek)
 
 0.5
 ---
