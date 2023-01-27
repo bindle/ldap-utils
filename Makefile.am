@@ -370,8 +370,6 @@ src_oidspectool_SOURCES			= src/utils/oidspectool/oidspecparser.y \
 # Makefile includes
 GIT_PACKAGE_VERSION_DIR=include
 SUBST_EXPRESSIONS =
-include $(srcdir)/contrib/bindletools/build-aux/makefile-bindle.am
-include $(srcdir)/contrib/bindletools/build-aux/makefile-autotools.am
 include $(srcdir)/contrib/bindletools/build-aux/makefile-subst.am
 include $(srcdir)/contrib/bindletools/build-aux/makefile-version.am
 
