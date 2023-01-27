@@ -776,7 +776,7 @@ int ldaputils_values_sort(struct berval ** vals)
    size_t  len;
    if (!(vals))
       return(1);
-   for(len = 0; ((vals[len])); len++);
+   len = (size_t)ldap_count_values_len(vals);
    qsort(vals, len, sizeof(char *), (int (*)(const void *, const void *))ldaputils_berval_cmp);
    return(0);
 }
