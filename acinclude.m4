@@ -121,6 +121,36 @@ AC_DEFUN_ONCE([AC_LDAP_UTILS_LDAP2JSON],[dnl
 ])dnl
 
 
+# AC_LDAP_UTILS_LDAPCONNS
+# ______________________________________________________________________________
+AC_DEFUN_ONCE([AC_LDAP_UTILS_LDAPCONNS],[dnl
+
+   # prerequists
+   AC_REQUIRE([AC_LDAP_UTILS_UTILITIES])
+
+   enableval=""
+   AC_ARG_ENABLE(
+      ldapconns,
+      [AS_HELP_STRING([--disable-ldapconns], [disable building ldapconns utility])],
+      [ ELDAPCONNS=$enableval ],
+      [ ELDAPCONNS=$enableval ]
+   )
+
+   if test "x${ELDAPCONNS}" != "x${LDAPUTILS_UTILITIES_ALT}";then
+      ELDAPCONNS=${LDAPUTILS_UTILITIES}
+   fi
+   LDAPUTILS_LDAPCONNS=${ELDAPCONNS}
+
+   LDAPUTILS_LDAPCONNS_STATUS="skip"
+   if test "x${ELDAPCONNS}" == "xyes";then
+      LDAPUTILS_LDAPCONNS_STATUS="install"
+      LDAPUTILS_LIBLDAPUTILS="yes"
+   fi
+
+   AM_CONDITIONAL([LDAPUTILS_LDAPCONNS], [test "x$LDAPUTILS_LDAPCONNS" = "xyes"])
+])dnl
+
+
 # AC_LDAP_UTILS_LDAPDEBUG
 # ______________________________________________________________________________
 AC_DEFUN_ONCE([AC_LDAP_UTILS_LDAPDEBUG],[dnl
@@ -318,6 +348,7 @@ AC_DEFUN_ONCE([AC_LDAP_UTILS_LIBLDAPUTILS],[dnl
 
    AC_REQUIRE([AC_LDAP_UTILS_LDAP2CSV])
    AC_REQUIRE([AC_LDAP_UTILS_LDAP2JSON])
+   AC_REQUIRE([AC_LDAP_UTILS_LDAPCONNS])
    AC_REQUIRE([AC_LDAP_UTILS_LDAPDEBUG])
    AC_REQUIRE([AC_LDAP_UTILS_LDAPDN2STR])
    AC_REQUIRE([AC_LDAP_UTILS_LDAPINFO])

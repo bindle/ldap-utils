@@ -304,6 +304,18 @@ src_ldapdn2str_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
 src_ldapdn2str_SOURCES			= src/ldapdn2str.c
 
 
+# macros for src/ldapconns
+if LDAPUTILS_LDAPCONNS
+   bin_PROGRAMS				+= src/ldapconns
+endif
+src_ldapconns_DEPENDENCIES		= Makefile lib/libldaputils.a lib/libldapschema.a
+src_ldapconns_CPPFLAGS			= -DPROGRAM_NAME="\"ldapconns\"" $(AM_CPPFLAGS)
+src_ldapconns_CFLAGS			= $(AM_CFLAGS)
+src_ldapconns_LDFLAGS			= $(AM_LDFLAGS)
+src_ldapconns_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a lib/libldapschema.a
+src_ldapconns_SOURCES			= src/ldapconns.c
+
+
 # macros for src/ldapinfo
 if LDAPUTILS_LDAPINFO
    bin_PROGRAMS				+= src/ldapinfo
