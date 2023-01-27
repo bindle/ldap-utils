@@ -2,11 +2,11 @@
 LDAP Utilities
 ==============
 
-Copyright (C) 2012, 2019 David M. Syzdek <david@syzdek.net>
+Copyright (C) 2012, 2019, 2023 David M. Syzdek <david@syzdek.net>
 
 0.6
 ---
-  Not yet released.
+  Released 2023/01/26
   - ldapinfo: fixing management of listeners branch in monitor context (syzdek)
   - ldapconns: adding program (syzdek)
   - docs: removing doxygen targets (syzdek)
