@@ -49,6 +49,7 @@
 #include <string.h>
 #include <ldap.h>
 #include <stdlib.h>
+#include <strings.h>
 #include <assert.h>
 
 #include "lconfig.h"
