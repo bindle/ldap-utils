@@ -192,7 +192,7 @@ AC_BINDLE(contrib/bindletools)
 AC_BINDLE_GIT_PACKAGE_VERSION([contrib/bindletools/build-aux/git-package-version.sh])
 
 # custom configure options
-AC_BINDLE_ENABLE_WARNINGS([-Wno-padded -Wno-unknown-pragmas], [-Wpadded])
+AC_BINDLE_ENABLE_WARNINGS([-Wno-padded -Wno-unknown-pragmas], [-Wpadded], [c11])
 AC_LDAP_UTILS_UTILITIES
 AC_LDAP_UTILS_LIBRARIES
 AC_LDAP_UTILS_LIBLDAPSCHEMA

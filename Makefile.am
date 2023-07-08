@@ -84,7 +84,8 @@ EXTRA_LTLIBRARIES			=
 man_MANS				=
 noinst_HEADERS				= include/ldapschema.h \
 					  include/ldaputils.h \
-					  include/ldaputils_cdefs.h
+					  include/ldaputils_cdefs.h \
+					  include/ldaputils_compat.h
 noinst_PROGRAMS				=
 noinst_LIBRARIES			=
 
