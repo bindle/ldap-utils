@@ -47,6 +47,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
+#include <string.h>
 #include <strings.h>
 #include <ldap.h>
 #include <stdlib.h>
@@ -97,7 +98,7 @@ int ldaputils_initialize(LDAPUtils ** ludp, const char * prog_name)
    // allocate initial memory for base struct
    if ((lud = malloc(sizeof(LDAPUtils))) == NULL)
       return(LDAP_NO_MEMORY);
-   bzero(lud, sizeof(LDAPUtils));
+   memset(lud, 0, sizeof(LDAPUtils));
 
    // save program name
    if ((idx = strrchr(prog_name, '/')) != NULL)

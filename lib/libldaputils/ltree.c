@@ -49,6 +49,7 @@
 #include <string.h>
 #include <ldap.h>
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 
 #include "lconfig.h"
@@ -418,7 +419,7 @@ LDAPUtilsTree * ldaputils_tree_child_init(LDAPUtilsTree * tree, const char * rdn
    // initialize child
    if ((child = malloc(sizeof(LDAPUtilsTree))) == NULL)
       return(NULL);
-   bzero(child, sizeof(LDAPUtilsTree));
+   memset(child, 0, sizeof(LDAPUtilsTree));
 
    // copy RDN
    if ((child->rdn = strdup(rdn)) == NULL)
@@ -497,7 +498,7 @@ LDAPUtilsTree * ldaputils_tree_initialize(LDAPUtilsEntries * entries, int copy)
    // initialize root of tree
    if ((tree = malloc(sizeof(LDAPUtilsTree))) == NULL)
       return(NULL);
-   bzero(tree, sizeof(LDAPUtilsTree));
+   memset(tree, 0, sizeof(LDAPUtilsTree));
 
    if ((tree->rdn = strdup("")) == NULL)
    {

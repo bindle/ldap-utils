@@ -49,6 +49,7 @@
 #include <string.h>
 #include <ldap.h>
 #include <stdlib.h>
+#include <string.h>
 #include <strings.h>
 #include <assert.h>
 
@@ -109,7 +110,7 @@ int ldaputils_attribute_add_values(LDAPUtilsAttribute * attr, struct berval ** v
       // allocate berval
       if ((val = malloc(sizeof(struct berval))) == NULL)
          return(LDAP_NO_MEMORY);
-      bzero(val, sizeof(struct berval));
+      memset(val, 0, sizeof(struct berval));
 
       // populate berval
       val->bv_len = vals[u]->bv_len;
@@ -141,7 +142,7 @@ LDAPUtilsAttribute * ldaputils_attribute_copy(LDAPUtilsAttribute * attr)
 
    if ((new = malloc(sizeof(LDAPUtilsAttribute))) == NULL)
       return(NULL);
-   bzero(new, sizeof(LDAPUtilsAttribute));
+   memset(new, 0, sizeof(LDAPUtilsAttribute));
 
    if ((new->vals = ldaputils_values_len_copy(attr->vals)) == NULL)
    {
@@ -185,7 +186,7 @@ LDAPUtilsAttribute * ldaputils_attribute_initialize(const char * name, struct be
 
    if ((attr = malloc(sizeof(LDAPUtilsAttribute))) == NULL)
       return(NULL);
-   bzero(attr, sizeof(LDAPUtilsAttribute));
+   memset(attr, 0, sizeof(LDAPUtilsAttribute));
 
    if ((attr->name = strdup(name)) == NULL)
    {
@@ -305,7 +306,7 @@ LDAPUtilsEntries * ldaputils_entries_initialize(void)
    // initialize memory
    if ((entries = malloc(sizeof(LDAPUtilsEntries))) == NULL)
       return(NULL);
-   bzero(entries, sizeof(LDAPUtilsEntries));
+   memset(entries, 0, sizeof(LDAPUtilsEntries));
 
    // initialize list
    if ((entries->list = malloc(sizeof(LDAPUtilsEntry *))) == NULL)
@@ -313,7 +314,7 @@ LDAPUtilsEntries * ldaputils_entries_initialize(void)
       ldaputils_entries_free(entries);
       return(NULL);
    };
-   bzero(entries->list, sizeof(LDAPUtilsEntry *));
+   memset(entries->list, 0, sizeof(LDAPUtilsEntry *));
 
    return(entries);
 }
@@ -506,7 +507,7 @@ LDAPUtilsEntry * ldaputils_entry_copy(LDAPUtilsEntry * entry)
       ldaputils_entry_free(new);
       return(NULL);
    };
-   bzero(new->attrs, size);
+   memset(new->attrs, 0, size);
 
    // copy attributes
    for(x = 0; x < entry->attrs_count; x++)
@@ -579,7 +580,7 @@ LDAPUtilsEntry * ldaputils_entry_initialize(const char * dn)
    // initialize memory
    if ((entry = malloc(sizeof(LDAPUtilsEntry))) == NULL)
       return(NULL);
-   bzero(entry, sizeof(LDAPUtilsEntry));
+   memset(entry, 0, sizeof(LDAPUtilsEntry));
 
    // copy dn
    if ((entry->dn = strdup(dn)) == NULL)
@@ -741,7 +742,7 @@ struct berval ** ldaputils_values_len_copy(struct berval ** vals)
    size = sizeof(struct berval *) * (len + 1);
    if ((newvals = malloc(size)) == NULL)
       return(NULL);
-   bzero(newvals, size);
+   memset(newvals, 0, size);
 
    // copy values into array
    for(x = 0; ((vals[x])); x++)
