@@ -507,7 +507,7 @@ char * my_monitor(MyConfig * cnf, const char * base)
    };
    ldap_msgfree(res);
 
-   if (!(strcasestr(vars[0], "OpenLDAP: ")))
+   if (!(strstr(vars[0], "OpenLDAP: ")))
    {
       ldap_value_free(vars);
       return(NULL);
