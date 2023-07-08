@@ -46,6 +46,12 @@
 #pragma mark - Functions
 #endif
 
+#include <ldaputils_compat.h>
+
+#ifdef HAVE_CONFIG_H
+#   include <config.h>
+#endif
+
 #define LDAP_DEPRECATED 1
 #include <ldap.h>
 #include <ldaputils.h>
