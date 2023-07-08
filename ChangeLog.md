@@ -4,6 +4,11 @@ LDAP Utilities
 
 Copyright (C) 2012, 2019, 2023 David M. Syzdek <david@syzdek.net>
 
+0.7
+---
+  - project: updating to use POSIX C source 200112L (syzdek)
+  - project: updating to use C dialect c11 (syzdek)
+
 0.6
 ---
   Released 2023/01/26
