@@ -100,7 +100,7 @@ int ldaputils_initialize(LDAPUtils ** ludp, const char * prog_name)
    bzero(lud, sizeof(LDAPUtils));
 
    // save program name
-   if ((idx = rindex(prog_name, '/')) != NULL)
+   if ((idx = strrchr(prog_name, '/')) != NULL)
       if (idx[1] != '\0')
          prog_name = &idx[1];
    lud->prog_name = prog_name;
