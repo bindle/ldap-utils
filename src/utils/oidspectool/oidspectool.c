@@ -72,7 +72,6 @@
 ///////////////
 #pragma mark - Headers
 
-#define _GNU_SOURCE 1
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
