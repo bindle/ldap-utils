@@ -281,7 +281,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    cnf->lud->filter = "(objectclass=*)";
    if (argc > optind)
    {
-      if ((index(argv[optind], '=')) != NULL)
+      if ((strchr(argv[optind], '=')) != NULL)
       {
          cnf->lud->filter = argv[optind];
          optind++;
@@ -308,7 +308,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
       for(c = 0; c < (argc-optind); c++)
       {
          cnf->lud->attrs[c] = argv[optind+c];
-         if ((str = index(argv[optind+c], ':')) != NULL)
+         if ((str = strchr(argv[optind+c], ':')) != NULL)
          {
             str[0] = '\0';
             cnf->defvals[c] = &str[1];
@@ -373,7 +373,7 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
          return(LDAP_NO_MEMORY);
       };
       delim = dn;
-      while((delim = index(delim, '"')) != NULL)
+      while((delim = strchr(delim, '"')) != NULL)
          delim[0] = '\'';
 
       // start entry
