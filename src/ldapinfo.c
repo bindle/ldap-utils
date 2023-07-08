@@ -760,7 +760,7 @@ int my_monitor_listeners(MyConfig * cnf, const char * base)
          continue;
       };
 
-      if ((addr = rindex(addrs[0], '=')) == NULL)
+      if ((addr = strrchr(addrs[0], '=')) == NULL)
       {
          ldap_value_free(addrs);
          ldap_value_free(uris);
