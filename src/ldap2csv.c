@@ -315,7 +315,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    if (argc > optind)
    {
       cnf->lud->filter = "(objectclass=*)";
-      if ((index(argv[optind], '=')) != NULL)
+      if ((strchr(argv[optind], '=')) != NULL)
       {
          cnf->lud->filter = argv[optind];
          optind++;
@@ -360,11 +360,11 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
       cnf->lud->attrs[c] = argv[optind+c];
       cnf->defvals[c]    = "";
       cnf->titles[c]     = argv[optind+c];
-      if ((str = index(argv[optind+c], ':')) != NULL)
+      if ((str = strchr(argv[optind+c], ':')) != NULL)
       {
          str[0] = '\0';
          cnf->defvals[c] = &str[1];
-         if ((str = index(&str[1], ':')) != NULL)
+         if ((str = strchr(&str[1], ':')) != NULL)
          {
             str[0] = '\0';
             cnf->titles[c] = &str[1];
@@ -437,7 +437,7 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
          return(LDAP_NO_MEMORY);
       };
       delim = dn;
-      while((delim = index(delim, '"')) != NULL)
+      while((delim = strchr(delim, '"')) != NULL)
          delim[0] = '\'';
 
       // loop through attributes
@@ -547,10 +547,10 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
 
             // replace double quotation character with single quotation character
             delim = buff;
-            while((delim = index(delim, '"')) != NULL)
+            while((delim = strchr(delim, '"')) != NULL)
                delim[0] = '\'';
             delim = buff;
-            while((delim = index(delim, '|')) != NULL)
+            while((delim = strchr(delim, '|')) != NULL)
                delim[0] = ':';
 
             // print value
