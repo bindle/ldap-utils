@@ -371,7 +371,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
    cnf->lud->filter = "(objectclass=*)";
    if (argc > (optind))
    {
-      if ((index(argv[optind], '=')) != NULL)
+      if ((strchr(argv[optind], '=')) != NULL)
       {
          cnf->lud->filter = argv[optind];
          optind++;
