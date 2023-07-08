@@ -510,7 +510,7 @@ char * my_monitor(MyConfig * cnf, const char * base)
       ldap_value_free(vars);
       return(NULL);
    };
-   str = index(vars[0], ' ');
+   str = strchr(vars[0], ' ');
    str = &str[1];
 
    vers = strdup(str);
@@ -768,7 +768,7 @@ int my_monitor_listeners(MyConfig * cnf, const char * base)
          continue;
       };
       addr++;
-      uri = index(uris[0], '/');
+      uri = strchr(uris[0], '/');
       if ((uri != NULL))
          uri = &uri[2];
       if ((uri))
