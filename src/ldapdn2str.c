@@ -59,6 +59,8 @@
 #pragma mark - Headers
 #endif
 
+#include <ldaputils_compat.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
