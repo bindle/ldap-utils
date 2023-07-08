@@ -52,6 +52,7 @@
 #include <sys/stat.h>
 #include <inttypes.h>
 #include <stdlib.h>
+#include <strings.h>
 #include <fcntl.h>
 #include <assert.h>
 
