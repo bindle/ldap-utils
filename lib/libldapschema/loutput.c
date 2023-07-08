@@ -357,7 +357,7 @@ void ldapschema_print_line(const char * field, const char * str)
       return;
 
    bol = str;
-   while((eol = index(bol, '\n')) != NULL)
+   while((eol = strchr(bol, '\n')) != NULL)
    {
       if (bol == str)
          printf("%*s%-*s %.*s\n", LDAPSCHEMA_WIDTH_INDENT, "", LDAPSCHEMA_WIDTH_FIELD, field, (int)(eol-bol), str);

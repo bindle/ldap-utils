@@ -339,7 +339,7 @@ int ldapschema_line_split(LDAPSchema * lsd, const char * str, char *** argvp)
 
    bol   = line;
    count = 0;
-   while ((eol = index(bol, '\n')) != NULL)
+   while ((eol = strchr(bol, '\n')) != NULL)
    {
       eol[0] = '\0';
       if ((lines[count++] = strdup(bol)) == NULL)
@@ -714,7 +714,7 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
             ldapschema_schema_err_kw_dup(lsd, (LDAPSchemaModel *)attr, "SYNTAX");
             continue;
          };
-         if ((stridx = index(argv[pos], '{')) != NULL)
+         if ((stridx = strchr(argv[pos], '{')) != NULL)
          {
             stridx[0] = '\0';
             attr->min_upper = strtoull(&stridx[1], NULL, 10);
