@@ -138,7 +138,7 @@ LDAPSchemaCur ldapschema_curalloc(LDAPSchema * lsd)
       lsd->errcode = LDAPSCHEMA_NO_MEMORY;
       return(NULL);
    };
-   bzero(cur, sizeof(struct ldapschema_cursor));
+   memset(cur, 0, sizeof(struct ldapschema_cursor));
    return(cur);
 }
 
@@ -170,7 +170,7 @@ LDAPSchemaExtension * ldapschema_ext_initialize(LDAPSchema * lsd, const char * n
       lsd->errcode = LDAPSCHEMA_NO_MEMORY;
       return(NULL);
    };
-   bzero(ext, sizeof(LDAPSchemaExtension));
+   memset(ext, 0, sizeof(LDAPSchemaExtension));
 
    if ((ext->extension = strdup(name)) == NULL)
    {
@@ -313,7 +313,7 @@ int ldapschema_initialize(LDAPSchema ** lsdp)
    // allocate initial memory
    if ((lsd = malloc(sizeof(LDAPSchema))) == NULL)
       return(LDAPSCHEMA_NO_MEMORY);
-   bzero(lsd, sizeof(LDAPSchema));
+   memset(lsd, 0, sizeof(LDAPSchema));
 
    // saves structure
    *lsdp = lsd;
@@ -474,7 +474,7 @@ LDAPSchemaModel * ldapschema_model_initialize(LDAPSchema * lsd,
       lsd->errcode = LDAPSCHEMA_NO_MEMORY;
       return(NULL);
    };
-   bzero(mod, size);
+   memset(mod, 0, size);
 
    mod->size = size;
    mod->type = type;

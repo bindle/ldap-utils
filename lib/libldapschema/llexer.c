@@ -335,7 +335,7 @@ int ldapschema_line_split(LDAPSchema * lsd, const char * str, char *** argvp)
       free(line);
       return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
    };
-   bzero(lines, (sizeof(char *)*count));
+   memset(lines, 0, (sizeof(char *)*count));
 
    bol   = line;
    count = 0;
@@ -1469,7 +1469,7 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
          if ((regcomp(&syntax->re, syntax->model.spec->re_posix, REG_EXTENDED | REG_NOSUB)))
          {
             regfree(&syntax->re);
-            bzero(&syntax->re, sizeof(syntax->re));
+            memset(&syntax->re, 0, sizeof(syntax->re));
          };
       };
    };

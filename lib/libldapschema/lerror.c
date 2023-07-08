@@ -124,7 +124,7 @@ int ldapschema_schema_err(LDAPSchema * lsd, LDAPSchemaModel * mod, const char * 
    {
       if ((*listp = malloc(sizeof(char *)*2)) == NULL)
          return(lsd->errcode = LDAPSCHEMA_NO_MEMORY);
-      bzero(*listp, sizeof(char *)*2);
+      memset(*listp, 0, sizeof(char *)*2);
    };
 
    // process error message
