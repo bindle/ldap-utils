@@ -56,6 +56,8 @@
 ///////////////
 #pragma mark - Headers
 
+#include <ldaputils_compat.h>
+
 #define _GNU_SOURCE 1
 #include <stdio.h>
 #include <stdlib.h>
