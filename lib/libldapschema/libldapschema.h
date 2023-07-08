@@ -43,6 +43,8 @@
 ///////////////
 #pragma mark - Functions
 
+#include <ldaputils_compat.h>
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
