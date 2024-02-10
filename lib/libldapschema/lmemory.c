@@ -154,6 +154,8 @@ void ldapschema_ext_free(LDAPSchemaExtension * ext)
    if ((ext->values))
       ldapschema_value_free(ext->values);
 
+   free(ext);
+
    return;
 }
 
