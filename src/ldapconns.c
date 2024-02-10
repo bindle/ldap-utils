@@ -400,7 +400,6 @@ my_monitor_connections(
    int               rc;
    int               err;
    int               msgid;
-   int               count;
    char **           vals;
    char              dn[256];
    char              ops[128];
@@ -448,7 +447,6 @@ my_monitor_connections(
    };
 
    // retrieves entry
-   count = 0;
    msg   = ldap_first_entry(ld, res);
    while ((msg))
    {
