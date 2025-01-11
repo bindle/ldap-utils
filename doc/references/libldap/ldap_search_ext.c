@@ -116,7 +116,7 @@ int main(void)
 
 
    printf("# ldap_sasl_bind_s ...\n");
-   bzero(&cred, sizeof(cred));
+   memset(&cred, 0, sizeof(cred));
    servercredp = NULL;
    if ((rc = ldap_sasl_bind_s(ld, NULL, (const char *)LDAP_SASL_SIMPLE, &cred, NULL, NULL, &servercredp)) != LDAP_SUCCESS)
    {
