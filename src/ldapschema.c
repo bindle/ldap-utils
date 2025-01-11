@@ -442,7 +442,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
       len = (size_t)(argc-optind);
       if ((cnf->args = malloc(sizeof(char *)*(size_t)(len+2))) == NULL)
          return(1);
-      bzero(cnf->args, (sizeof(char*)*(len+2)));
+      memset(cnf->args, 0, (sizeof(char*)*(len+2)));
 
       for(i = 0; (argc > (optind+i)); i++)
          cnf->args[i] = argv[optind+i];
