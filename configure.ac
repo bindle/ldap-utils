@@ -69,9 +69,8 @@ AM_INIT_AUTOMAKE(gnu std-options subdir-objects foreign)
 # Compilers                                                       
 AC_USE_SYSTEM_EXTENSIONS # replaces AC_AIX AC_GNU_SOURCE AC_MINIX
 AC_PROG_CC
-#AC_PROG_OBJC
 AC_PROG_CXX
-AM_PROG_CC_C_O
+AC_PROG_CPP
 AC_PROG_LEX(yywrap)
 AC_PROG_YACC
 AC_PROG_INSTALL
