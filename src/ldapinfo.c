@@ -400,7 +400,7 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
       my_unbind(cnf);
       return(1);
    };
-   bzero(cnf->lud->attrs, sizeof(char *) * (len+1));
+   memset(cnf->lud->attrs, 0, sizeof(char *) * (len+1));
    for(s = 0; s < len; s++)
    {
       if ((cnf->lud->attrs[s] = strdup(ldapinfo_attrs[s])) == NULL)
