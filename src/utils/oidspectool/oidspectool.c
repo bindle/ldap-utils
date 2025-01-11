@@ -582,7 +582,7 @@ OIDSpec * my_oidspec_alloc(void)
       fprintf(stderr, "%s: out of virtual memory\n", PROGRAM_NAME);
       return(NULL);
    };
-   bzero(oidspec, sizeof(OIDSpec));
+   memset(oidspec, 0, sizeof(OIDSpec));
 
    return(oidspec);
 }
