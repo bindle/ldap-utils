@@ -133,7 +133,6 @@ AC_TYPE_UINT64_T
 AC_CHECK_TYPES([ptrdiff_t],,            [AC_MSG_ERROR([missing required datatype])],[#include <stddef.h>])
 
 # check for required functions
-AC_CHECK_FUNCS([bzero],          [], [AC_MSG_ERROR([missing required functions])])
 AC_CHECK_FUNCS([getpass],        [], [AC_MSG_ERROR([missing required functions])])
 AC_CHECK_FUNCS([gettimeofday],   [], [AC_MSG_ERROR([missing required functions])])
 AC_CHECK_FUNCS([memset],         [], [AC_MSG_ERROR([missing required functions])])
@@ -146,6 +145,7 @@ AC_CHECK_FUNCS([strdup],         [], [AC_MSG_ERROR([missing required functions])
 AC_CHECK_FUNCS([strerror],       [], [AC_MSG_ERROR([missing required functions])])
 AC_CHECK_FUNCS([strncasecmp],    [], [AC_MSG_ERROR([missing required functions])])
 AC_CHECK_FUNCS([strrchr],        [], [AC_MSG_ERROR([missing required functions])])
+AC_CHECK_FUNCS([strstr],         [], [AC_MSG_ERROR([missing required functions])])
 AC_CHECK_FUNCS([strtol],         [], [AC_MSG_ERROR([missing required functions])])
 AC_CHECK_FUNCS([strtoull],       [], [AC_MSG_ERROR([missing required functions])])
 
