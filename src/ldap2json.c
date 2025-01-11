@@ -299,14 +299,14 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
          my_unbind(cnf);
          return(1);
       };
-      bzero(cnf->lud->attrs, sizeof(char *) * (cnf->attrs_len+1));
+      memset(cnf->lud->attrs, 0, sizeof(char *) * (cnf->attrs_len+1));
       if (!(cnf->defvals = (const char **) malloc(sizeof(char *) * (cnf->attrs_len+1))))
       {
          fprintf(stderr, "%s: out of virtual memory\n", cnf->prog_name);
          my_unbind(cnf);
          return(1);
       };
-      bzero(cnf->defvals, sizeof(char *) * (cnf->attrs_len+1));
+      memset(cnf->defvals, 0, sizeof(char *) * (cnf->attrs_len+1));
       for(c = 0; c < (argc-optind); c++)
       {
          cnf->lud->attrs[c] = argv[optind+c];
