@@ -63,6 +63,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <strings.h>
+#include <sys/time.h>
 #include <time.h>
 #include <getopt.h>
 #include <assert.h>
