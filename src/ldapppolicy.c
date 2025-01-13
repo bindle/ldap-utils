@@ -476,6 +476,9 @@ my_field(
 {
    char           desc[32];
 
+   if (!(val))
+      return;
+
    name = ((cnf->attr_name)) ? attr : name;
 
    if ((name))
