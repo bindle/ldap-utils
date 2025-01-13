@@ -546,18 +546,43 @@ source code from the git repository.
 Browse Source:
 
    * https://github.com/bindle/ldap-utils
-   * https://github.com/bindle/ldap-utils.xcodeproj
 
 Git URLs:
 
    * https://github.com/bindle/ldap-utils.git
-   * https://github.com/bindle/ldap-utils.xcodeproj.git
+
+Release Archives:
+
+   * https://github.com/bindle/ldap-utils/releases
+
+
+Compiling Source from Release Archive
+-------------------------------------
+
+Download source from Github.
+
+Preparing Source:
+
+      $ tar -xvf ldap-utils-x.x.x.tar.xz
+      $ mkdir -p ldap-utils-x.x.x/build
+      $ cd ldap-utils-x.x.x/build
+
+Compiling Source:
+
+      $ ../configure
+      $ make all && make install
+
+For more information on building and installing using configure, please
+read the INSTALL file and run `configure --help` for configureation
+options.
+
+
+Compiling Source from Git
+-------------------------
 
 Downloading Source:
 
       $ git clone git://github.com/bindle/ldap-utils.git
-      $ git clone git://github.com/bindle/ldap-utils.xcodeproj.git \
-                  ldap-utils/ldap-utils.xcodeproj
 
 Preparing Source:
 
@@ -567,18 +592,13 @@ Preparing Source:
 Compiling Source:
 
       $ cd build
-      $ ./configure
-      $ make && make install
+      $ ../configure
+      $ make src/oidspectool
+      $ make all && make install
 
 For more information on building and installing using configure, please
-read the INSTALL file.
-
-Git Branches:
-
-   * master - Current release of packages.
-   * next   - changes staged for next release
-   * pu     - proposed updates for next release
-   * xx/yy+ - branch for testing new changes before merging to 'pu' branch
+read the INSTALL file and run `configure --help` for configureation
+options.
 
 
 Package Maintence Notes
@@ -608,5 +628,4 @@ Creating Source Distribution Archives:
       $ make distcheck
       $ make dist-bzip2
       $ make dist-xz
-
 
