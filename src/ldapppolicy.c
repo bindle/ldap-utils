@@ -636,6 +636,8 @@ my_field_quality(
       val = "enabled, ignore errors";
    else if (!(strcmp(attrval, "2")))
       val = "enabled, fail on errors";
+   else
+      val = "unknown code";
 
    my_field(cnf, name, attr, val);
 
