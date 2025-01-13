@@ -54,6 +54,7 @@
 #define LDAP_DEPRECATED 1
 #include <ldap.h>
 #include <ldapschema.h>
+#include <ldaputils.h>
 
 
 ///////////////////

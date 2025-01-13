@@ -145,12 +145,12 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
          if ( ((ptr = ldapschema_parse_syntax(lsd, vals[x])) == NULL) &&
               (lsd->errcode != LDAPSCHEMA_SCHEMA_ERROR) )
          {
-            ldap_value_free_len(vals);
+            ldaputils_value_free_len(vals);
             ldap_msgfree(res);
             return(-1);
          };
       };
-      ldap_value_free_len(vals);
+      ldaputils_value_free_len(vals);
    };
 
    // process matchingRule
@@ -161,12 +161,12 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
          if ( ((ptr = ldapschema_parse_matchingrule(lsd, vals[x])) == NULL) &&
               (lsd->errcode != LDAPSCHEMA_SCHEMA_ERROR) )
          {
-            ldap_value_free_len(vals);
+            ldaputils_value_free_len(vals);
             ldap_msgfree(res);
             return(-1);
          };
       };
-      ldap_value_free_len(vals);
+      ldaputils_value_free_len(vals);
 
       // checks attribute
        for(idx = 0; (idx < lsd->oids_len); idx++)
@@ -192,12 +192,12 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
          if ( ((ptr = ldapschema_parse_attributetype(lsd, vals[x])) == NULL) &&
               (lsd->errcode != LDAPSCHEMA_SCHEMA_ERROR) )
          {
-            ldap_value_free_len(vals);
+            ldaputils_value_free_len(vals);
             ldap_msgfree(res);
             return(-1);
          };
       };
-      ldap_value_free_len(vals);
+      ldaputils_value_free_len(vals);
 
       // maps superior
       for(idx = 0; (idx < lsd->oids_len); idx++)
@@ -262,12 +262,12 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
          if ( ((ptr = ldapschema_parse_objectclass(lsd, vals[x])) == NULL) &&
               (lsd->errcode != LDAPSCHEMA_SCHEMA_ERROR) )
          {
-            ldap_value_free_len(vals);
+            ldaputils_value_free_len(vals);
             ldap_msgfree(res);
             return(-1);
          };
       };
-      ldap_value_free_len(vals);
+      ldaputils_value_free_len(vals);
 
       // maps superior
       for(idx = 0; (idx < lsd->oids_len); idx++)
@@ -298,7 +298,7 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
             {
                if ((err = ldapschema_objectclass_attribute(lsd, objcls, objclssup->may[subidx], 0, 1)) > 0)
                {
-                  ldap_value_free_len(vals);
+                  ldaputils_value_free_len(vals);
                   ldap_msgfree(res);
                   return(lsd->errcode);
                };
@@ -307,7 +307,7 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
             {
                if ((err = ldapschema_objectclass_attribute(lsd, objcls, objclssup->must[subidx], 1, 1)) > 0)
                {
-                  ldap_value_free_len(vals);
+                  ldaputils_value_free_len(vals);
                   ldap_msgfree(res);
                   return(lsd->errcode);
                };
