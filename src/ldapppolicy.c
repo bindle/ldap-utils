@@ -531,7 +531,7 @@ my_field_interval(
    char **     vals;
    char *      endptr;
    char        attrval[128];
-   char        unit[32];
+   char        unit[24];
    char        val[32];
    long long   w;
    long long   d;
