@@ -87,6 +87,7 @@ ldaputils_search
 ldaputils_sort_entries
 ldaputils_sort_values
 ldaputils_value_free
+ldaputils_value_free_len
 ldaputils_unbind
 #
 ldif_package_version

@@ -779,6 +779,20 @@ void ldaputils_value_free(char ** vals)
 }
 
 
+void ldaputils_value_free_len(struct berval ** vals)
+{
+   int pos;
+   for(pos = 0; ((vals[pos])); pos++)
+   {
+      if ((vals[pos]->bv_val))
+         ldap_memfree(vals[pos]->bv_val);
+      ldap_memfree(vals[pos]);
+   };
+   ldap_memfree(vals);
+   return;
+}
+
+
 /// sorts values
 /// @param[in] vals   list of attribute values to sort
 ///

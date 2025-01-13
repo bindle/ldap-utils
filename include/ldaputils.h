@@ -187,6 +187,7 @@ LDAPUtilsEntries * ldaputils_get_entries(LDAP * ld, LDAPMessage * res,
    const char * sortattr);
 
 void ldaputils_value_free(char ** vals);
+void ldaputils_value_free_len(struct berval ** vals);
 
 // sorts values
 int ldaputils_values_sort(struct berval ** vals);
