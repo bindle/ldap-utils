@@ -112,7 +112,7 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
    if ((dns = ldap_get_values(ld, msg, "subschemaSubentry")) == NULL)
    {
       ldap_msgfree(res);
-      ldap_value_free(dns);
+      ldaputils_value_free(dns);
       return(-1);
    };
    ldap_msgfree(res);
@@ -123,11 +123,11 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
    res               = NULL;
    if ((err = ldap_search_ext_s(ld, dns[0], LDAP_SCOPE_BASE, "(objectclass=*)", attrs, 0, NULL, NULL, &timeout, 0, &res)) != LDAP_SUCCESS)
    {
-      ldap_value_free(dns);
+      ldaputils_value_free(dns);
       ldapschema_value_free(attrs);
       return(-1);
    };
-   ldap_value_free(dns);
+   ldaputils_value_free(dns);
    ldapschema_value_free(attrs);
    dns   = NULL;
    attrs = NULL;
