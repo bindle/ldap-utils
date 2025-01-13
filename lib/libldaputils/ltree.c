@@ -193,7 +193,7 @@ LDAPUtilsTree * ldaputils_get_tree(LDAP * ld, LDAPMessage * res,
             if ((vals = ldap_get_values_len(ld, msg, name)) != NULL)
             {
                ldaputils_entry_add_attribute(entry, name, vals);
-               ldap_value_free_len(vals);
+               ldaputils_value_free_len(vals);
             };
 
             name = ldap_next_attribute(ld, msg, ber);

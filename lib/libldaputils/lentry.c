@@ -166,7 +166,7 @@ void ldaputils_attribute_free(LDAPUtilsAttribute * attr)
    assert(attr != NULL);
 
    if ((attr->vals))
-      ldap_value_free_len(attr->vals);
+      ldaputils_value_free_len(attr->vals);
 
    if ((attr->name))
       free(attr->name);
@@ -554,7 +554,7 @@ void ldaputils_entry_free(LDAPUtilsEntry * entry)
 
          // frees attribute values
          if (entry->attrs[y]->vals != NULL)
-            ldap_value_free_len(entry->attrs[y]->vals);
+            ldaputils_value_free_len(entry->attrs[y]->vals);
 
          // frees attribute
          free(entry->attrs[y]);
@@ -680,7 +680,7 @@ LDAPUtilsEntries * ldaputils_get_entries(LDAP * ld, LDAPMessage * res,
                ldaputils_values_sort(vals);
                entry->sortval = strdup(vals[0]->bv_val);
             };
-            ldap_value_free_len(vals);
+            ldaputils_value_free_len(vals);
          };
 
          name = ldap_next_attribute(ld, msg, ber);
@@ -750,14 +750,14 @@ struct berval ** ldaputils_values_len_copy(struct berval ** vals)
       // allocate new berval
       if ((newvals[x] = malloc(sizeof(struct berval))) == NULL)
       {
-         ldap_value_free_len(newvals);
+         ldaputils_value_free_len(newvals);
          return(NULL);
       };
 
       // copy value
       if ((newvals[x]->bv_val = malloc(vals[x]->bv_len+1)) == NULL)
       {
-         ldap_value_free_len(newvals);
+         ldaputils_value_free_len(newvals);
          return(NULL);
       };
       memcpy(newvals[x]->bv_val, vals[x]->bv_val, vals[x]->bv_len);
