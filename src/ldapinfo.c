@@ -660,7 +660,8 @@ int my_monitor_database(MyConfig * cnf, const char * base)
          msg = ldap_next_entry(ld, msg);
          continue;
       };
-      strncpy(buff, vals[0], sizeof(buff));
+      strncpy(buff, vals[0], sizeof(buff)-1);
+      buff[sizeof(buff)-1] = '\0';
       ldap_value_free(vals);
 
       if ((vals = ldap_get_values(ld, msg, "monitoredInfo")) != NULL)
