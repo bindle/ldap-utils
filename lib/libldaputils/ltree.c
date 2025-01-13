@@ -237,11 +237,11 @@ int ldaputils_tree_add_dn(LDAPUtilsTree * tree, const char * dn, LDAPUtilsTree *
    // loop through DN components
    if ((err = ldaputils_tree_add_dn_components(tree, components, components_len, nodep)) != LDAP_SUCCESS)
    {
-      ldap_value_free(components);
+      ldaputils_value_free(components);
       return(LDAP_NO_MEMORY);
    };
 
-   ldap_value_free(components);
+   ldaputils_value_free(components);
 
    return(LDAP_SUCCESS);
 }
@@ -259,7 +259,7 @@ int ldaputils_tree_add_dn_components(LDAPUtilsTree * tree, char ** components, s
 
       if ((child = ldaputils_tree_child_init(tree, components[cur_comp])) == NULL)
       {
-         ldap_value_free(components);
+         ldaputils_value_free(components);
          return(LDAP_NO_MEMORY);
       };
 
