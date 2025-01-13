@@ -315,6 +315,18 @@ src_ldapinfo_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a lib/libldaps
 src_ldapinfo_SOURCES			= src/ldapinfo.c
 
 
+# macros for src/ldappolicy
+if LDAPUTILS_LDAPPPOLICY
+   bin_PROGRAMS                         += src/ldapppolicy
+endif
+src_ldapppolicy_DEPENDENCIES		= Makefile lib/libldaputils.a
+src_ldapppolicy_CPPFLAGS			= -DPROGRAM_NAME="\"ldapppolicy\"" $(AM_CPPFLAGS)
+src_ldapppolicy_CFLAGS			= $(AM_CFLAGS)
+src_ldapppolicy_LDFLAGS			= $(AM_LDFLAGS)
+src_ldapppolicy_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
+src_ldapppolicy_SOURCES			= src/ldapppolicy.c
+
+
 # macros for src/ldapschema
 if LDAPUTILS_LDAPSCHEMA
    bin_PROGRAMS                         += src/ldapschema

@@ -212,6 +212,36 @@ AC_DEFUN_ONCE([AC_LDAP_UTILS_LDAPINFO],[dnl
 ])dnl
 
 
+# AC_LDAP_UTILS_LDAPPPOLICY
+# ______________________________________________________________________________
+AC_DEFUN_ONCE([AC_LDAP_UTILS_LDAPPPOLICY],[dnl
+
+   # prerequists
+   AC_REQUIRE([AC_LDAP_UTILS_UTILITIES])
+
+   enableval=""
+   AC_ARG_ENABLE(
+      ldappolicy,
+      [AS_HELP_STRING([--disable-ldappolicy], [disable building ldappolicy utility])],
+      [ ELDAPPPOLICY=$enableval ],
+      [ ELDAPPPOLICY=$enableval ]
+   )
+
+   if test "x${ELDAPPPOLICY}" != "x${LDAPUTILS_UTILITIES_ALT}";then
+      ELDAPPPOLICY=${LDAPUTILS_UTILITIES}
+   fi
+   LDAPUTILS_LDAPPPOLICY=${ELDAPTREE}
+
+   LDAPUTILS_LDAPPPOLICY_STATUS="skip"
+   if test "x${ELDAPPPOLICY}" == "xyes";then
+      LDAPUTILS_LDAPPPOLICY_STATUS="install"
+      LDAPUTILS_LIBLDAPUTILS="yes"
+   fi
+
+   AM_CONDITIONAL([LDAPUTILS_LDAPPPOLICY], [test "x$LDAPUTILS_LDAPPPOLICY" = "xyes"])
+])dnl
+
+
 # AC_LDAP_UTILS_LDAPSCHEMA
 # ______________________________________________________________________________
 AC_DEFUN_ONCE([AC_LDAP_UTILS_LDAPSCHEMA],[dnl
