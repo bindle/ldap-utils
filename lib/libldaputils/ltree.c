@@ -589,14 +589,18 @@ void ldaputils_tree_print(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts)
    // loops through root DNs
    for(x = 0; x < tree->children_len; x++)
    {
-      snprintf(dn, sizeof(dn), "%s", tree->children[x]->rdn);
+      strncpy(dn, tree->children[x]->rdn, sizeof(dn)-1);
+      dn[sizeof(dn)-1] = '\0';
       child = tree->children[x];
       if (!(opts->expandall))
       {
          while ((child->children_len == 1) && (!(child->entry))  )
          {
-            snprintf(tmp, sizeof(tmp), "%s, %s", child->children[0]->rdn, dn);
-            strncpy(dn, tmp, sizeof(dn));
+            strncpy(tmp,   dn,                        sizeof(tmp));
+            strncpy(dn,    child->children[0]->rdn,   sizeof(dn)-1);
+            strncpy(dn,    ", ",                      sizeof(dn)-1);
+            strncpy(dn,    tmp,                       sizeof(dn)-1);
+            dn[sizeof(dn)-1] = '\0';
             child = child->children[0];
          };
       };
