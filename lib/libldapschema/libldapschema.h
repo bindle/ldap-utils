@@ -222,10 +222,5 @@ struct ldap_schema_matchingrule
 //////////////////
 // MARK: - Prototypes
 
-//------------------//
-// memory functions //
-//-------=----------//
-// MARK: memory functions
-
 
 #endif /* end of header file */
