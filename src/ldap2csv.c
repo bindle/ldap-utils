@@ -105,13 +105,13 @@
 typedef struct my_config MyConfig;
 struct my_config
 {
-   LDAPUtils   * lud;
-   LDAPSchema  * lsd;
-   const char  * filter;
-   const char  * prog_name;
-   const char ** defvals;
-   const char ** titles;
-   char          output[LDAPUTILS_OPT_LEN];
+   LDAPUtils *    lud;
+   LDAPSchema *   lsd;
+   const char *   filter;
+   const char *   prog_name;
+   const char **  defvals;
+   const char **  titles;
+   char           output[LDAPUTILS_OPT_LEN];
 };
 
 
@@ -123,15 +123,30 @@ struct my_config
 // MARK: - Prototypes
 
 // main statement
-int main(int argc, char * argv[]);
+extern int
+main(
+         int                           argc,
+         char *                        argv[] );
+
 
 // parses configuration
-int my_config(int argc, char * argv[], MyConfig ** cnfp);
+static int
+my_config(
+         int                           argc,
+         char *                        argv[],
+         MyConfig **                   cnfp );
 
-int my_results(MyConfig * cnf, LDAPMessage * res);
+
+static int
+my_results(
+         MyConfig *                    cnf,
+         LDAPMessage *                 res );
+
 
 // fress resources
-void my_unbind(MyConfig * cnf);
+static void
+my_unbind(
+         MyConfig *                    cnf );
 
 
 /////////////////
@@ -139,10 +154,12 @@ void my_unbind(MyConfig * cnf);
 //  Functions  //
 //             //
 /////////////////
-// MARK:- Functions
+// MARK: - Functions
 
 /// prints program usage and exits
-void ldaputils_usage(void)
+void
+ldaputils_usage(
+         void )
 {
    printf("Usage: %s [options] [filter] attributes[:values[:title]]...\n", PROGRAM_NAME);
    ldaputils_usage_search(MY_SHORT_OPTIONS);
@@ -161,12 +178,15 @@ void ldaputils_usage(void)
 /// main statement
 /// @param[in] argc   number of arguments
 /// @param[in] argv   array of arguments
-int main(int argc, char * argv[])
+int
+main(
+         int                           argc,
+         char *                        argv[] )
 {
-   int                    x;
-   int                    err;
-   MyConfig             * cnf;
-   LDAPMessage          * res;
+   int                  x;
+   int                  err;
+   MyConfig *           cnf;
+   LDAPMessage *        res;
 
    cnf = NULL;
 
@@ -224,15 +244,19 @@ int main(int argc, char * argv[])
 /// @param[in] argc   number of arguments
 /// @param[in] argv   array of arguments
 /// @param[in] cnfp   reference to configuration pointer
-int my_config(int argc, char * argv[], MyConfig ** cnfp)
+int
+my_config(
+         int                           argc,
+         char *                        argv[],
+         MyConfig **                   cnfp )
 {
-   int        c;
-   int        err;
-   int        option_index;
-   char     * str;
-   MyConfig * cnf;
-   size_t     len;
-   size_t     size;
+   int         c;
+   int         err;
+   int         option_index;
+   char *      str;
+   MyConfig *  cnf;
+   size_t      len;
+   size_t      size;
 
    static char   short_options[] = MY_SHORT_OPTIONS;
    static struct option long_options[] =
@@ -386,27 +410,30 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
 
 
 // prints results
-int my_results(MyConfig * cnf, LDAPMessage * res)
+int
+my_results(
+         MyConfig *                    cnf,
+         LDAPMessage *                 res )
 {
-   int               x;
-   int               y;
-   void            * ptr;
-   char            * buff;
-   size_t            bufflen;
-   char            * dn;
-   char           ** dns;
-   char            * dnstr;
-   char            * delim;
-   LDAPMessage     * msg;
-   struct berval  ** vals;
-   LDAP            * ld;
-   LDAPSchemaAttributeType * attr;
-   char           ** names;
+   int                        x;
+   int                        y;
+   void *                     ptr;
+   char *                     buff;
+   size_t                     bufflen;
+   char *                     dn;
+   char **                    dns;
+   char *                     dnstr;
+   char *                     delim;
+   LDAPMessage *              msg;
+   struct berval **           vals;
+   LDAP *                     ld;
+   LDAPSchemaAttributeType *  attr;
+   char **                    names;
 
    assert(cnf != NULL);
    assert(res != NULL);
 
-   ld      = ldaputils_get_ld(cnf->lud);
+   ld = ldaputils_get_ld(cnf->lud);
 
    // initialize buffer
    bufflen = 32;
@@ -576,7 +603,9 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
 
 
 // fress resources
-void my_unbind(MyConfig * cnf)
+void
+my_unbind(
+         MyConfig *                    cnf )
 {
    assert(cnf != NULL);
 
