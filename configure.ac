@@ -149,6 +149,7 @@ AC_CHECK_FUNCS([strtol],         [], [AC_MSG_ERROR([missing required functions])
 AC_CHECK_FUNCS([strtoull],       [], [AC_MSG_ERROR([missing required functions])])
 
 # check for required libraries
+AC_SEARCH_LIBS([ber_free],             lber,,AC_MSG_ERROR([missing required function]))
 AC_SEARCH_LIBS([getopt_long],          c gnugetopt,,AC_MSG_ERROR([missing required function]))
 AC_SEARCH_LIBS([ldap_dn2str],          ldap,,AC_MSG_ERROR([missing required function]), [-llber])
 AC_SEARCH_LIBS([ldap_dnfree],          ldap,,AC_MSG_ERROR([missing required function]), [-llber])
