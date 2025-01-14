@@ -41,7 +41,7 @@
 //  Headers  //
 //           //
 ///////////////
-#pragma mark - Headers
+// MARK: - Headers
 
 #include <errno.h>
 #include <stdio.h>
@@ -59,7 +59,7 @@
 //  Functions  //
 //             //
 /////////////////
-#pragma mark - Functions
+// MARK: - Functions
 
 int ldapschema_append(LDAPSchema * lsd, void *** listp, size_t * lenp, void * obj)
 {

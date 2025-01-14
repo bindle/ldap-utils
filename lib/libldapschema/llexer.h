@@ -41,7 +41,7 @@
 //  Headers  //
 //           //
 ///////////////
-#pragma mark - Headers
+// MARK: - Headers
 
 #include "libldapschema.h"
 
@@ -51,7 +51,7 @@
 //  Definitions  //
 //               //
 ///////////////////
-#pragma mark - Definitions
+// MARK: - Definitions
 
 
 //////////////////
@@ -59,7 +59,7 @@
 //  Prototypes  //
 //              //
 //////////////////
-#pragma mark - Prototypes
+// MARK: - Prototypes
 
 int
 ldapschema_definition_split(

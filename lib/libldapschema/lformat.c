@@ -41,7 +41,7 @@
 //  Headers  //
 //           //
 ///////////////
-#pragma mark - Headers
+// MARK: - Headers
 
 #include <errno.h>
 #include <stdio.h>
@@ -58,7 +58,7 @@
 //  Macros  //
 //          //
 //////////////
-#pragma mark - Macros
+// MARK: - Macros
 
 #define IS_SPACE( c )   ( (c == ' ') || (c == '\t') || (c == '\n') )
 #define IS_UPPER( c )   ( (c >= 'A') && (c <= 'Z') )
@@ -73,7 +73,7 @@
 //  Prototypes  //
 //              //
 //////////////////
-#pragma mark - Prototypes
+// MARK: - Prototypes
 
 
 /////////////////
@@ -81,7 +81,7 @@
 //  Functions  //
 //             //
 /////////////////
-#pragma mark - Functions
+// MARK: - Functions
 
 #define APPEND( c ) { last = c; if (strpos<size) str[strpos] = last; strpos++; }
 #define INDENT() { if ((!IS_SPACE(last))&&((strpos))) { APPEND('\n'); for(x=0; (x<(indent*3));x++) APPEND(' '); bol=strpos; }; }

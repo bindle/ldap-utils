@@ -41,7 +41,7 @@
 //  Headers  //
 //           //
 ///////////////
-#pragma mark - Headers
+// MARK: - Headers
 
 #include <errno.h>
 #include <stdio.h>
@@ -57,7 +57,7 @@
 //  Variables  //
 //             //
 /////////////////
-#pragma mark - Variables
+// MARK: - Variables
 
 
 //////////////////
@@ -65,7 +65,7 @@
 //  Prototypes  //
 //              //
 //////////////////
-#pragma mark - Prototypes
+// MARK: - Prototypes
 
 int
 ldapschema_spec_field_list(
@@ -78,7 +78,7 @@ ldapschema_spec_field_list(
 //  Functions  //
 //             //
 /////////////////
-#pragma mark - Functions
+// MARK: - Functions
 
 /// retrieves shared ABNF strings
 /// @param[in]    abnf_type   ABNF identifier

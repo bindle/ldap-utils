@@ -40,7 +40,7 @@
 //  Headers  //
 //           //
 ///////////////
-#pragma mark - Headers
+// MARK: - Headers
 
 #ifdef WIN32
 #include <windows.h>
@@ -63,7 +63,7 @@
 //  Macros  //
 //          //
 //////////////
-#pragma mark - Macros
+// MARK: - Macros
 
 // Exports function type
 #undef LDAPSCHEMA_C_DECLS
@@ -107,7 +107,7 @@
 //  Definitions  //
 //               //
 ///////////////////
-#pragma mark - Definitions
+// MARK: - Definitions
 
 // result codes
 #define LDAPSCHEMA_SUCCESS                            0x00     ///< operation was successful
@@ -212,7 +212,7 @@
 //  Datatypes  //
 //             //
 /////////////////
-#pragma mark - Datatypes
+// MARK: - Datatypes
 
 /// LDAP schema descriptor state
 typedef struct ldap_schema LDAPSchema;
@@ -245,13 +245,13 @@ typedef struct ldapschema_cursor * LDAPSchemaCur;
 //  Prototypes  //
 //              //
 //////////////////
-#pragma mark - Prototypes
+// MARK: - Prototypes
 LDAPSCHEMA_BEGIN_C_DECLS
 
 //-----------------//
 // error functions //
 //-----------------//
-#pragma mark error functions
+// MARK: error functions
 
 _LDAPSCHEMA_F const char *
 ldapschema_err2string(
@@ -269,7 +269,7 @@ ldapschema_schema_errors(
 //------------------//
 // format functions //
 //------------------//
-#pragma mark format functions
+// MARK: format functions
 
 _LDAPSCHEMA_F int
 ldapschema_fmt_definition(
@@ -282,7 +282,7 @@ ldapschema_fmt_definition(
 //-----------------//
 // LDAP functions //
 //-----------------//
-#pragma mark LDAP functions
+// MARK: LDAP functions
 
 _LDAPSCHEMA_F int
 ldapschema_fetch(
@@ -293,7 +293,7 @@ ldapschema_fetch(
 //------------------//
 // memory functions //
 //------------------//
-#pragma mark memory functions
+// MARK: memory functions
 
 _LDAPSCHEMA_F int
 ldapschema_count_values(
@@ -335,7 +335,7 @@ ldapschema_value_free_len(
 //-----------------------------//
 // OID Specification functions //
 //-----------------------------//
-#pragma mark OID Specification functions
+// MARK: OID Specification functions
 
 _LDAPSCHEMA_F const LDAPSchemaSpec *
 ldapschema_spec_abnf(
@@ -359,7 +359,7 @@ ldapschema_spec_search(
 //------------------//
 // output functions //
 //------------------//
-#pragma mark output functions
+// MARK: output functions
 
 _LDAPSCHEMA_F void
 ldapschema_print(
@@ -380,7 +380,7 @@ ldapschema_type_name(
 //-----------------//
 // query functions //
 //-----------------//
-#pragma mark query functions
+// MARK: query functions
 
 // ldapchema_count_XXXX()
 _LDAPSCHEMA_F size_t
@@ -519,7 +519,7 @@ ldapschema_next_objectclass(
 //---------------------------//
 // sort comparison functions //
 //---------------------------//
-#pragma mark sort comparison functions
+// MARK: sort comparison functions
 
 #ifndef _LIB_LIBLDAPSCHEMA_H
 

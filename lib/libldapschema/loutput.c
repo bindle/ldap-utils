@@ -41,7 +41,7 @@
 //  Headers  //
 //           //
 ///////////////
-#pragma mark - Headers
+// MARK: - Headers
 
 #include <errno.h>
 #include <stdio.h>
@@ -57,7 +57,7 @@
 //  Definitions  //
 //               //
 ///////////////////
-#pragma mark - Definitions
+// MARK: - Definitions
 
 #define LDAPSCHEMA_WIDTH_HEADER    19
 #define LDAPSCHEMA_WIDTH_INDENT    3
@@ -70,7 +70,7 @@
 //  Prototypes  //
 //              //
 //////////////////
-#pragma mark - Prototypes
+// MARK: - Prototypes
 
 void
 ldapschema_print_data_class(
@@ -163,7 +163,7 @@ ldapschema_print_type(
 //  Functions  //
 //             //
 /////////////////
-#pragma mark - Functions
+// MARK: - Functions
 
 void ldapschema_print( LDAPSchema * lsd, LDAPSchemaModel * mod )
 {

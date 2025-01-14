@@ -41,7 +41,7 @@
 //  Headers  //
 //           //
 ///////////////
-#pragma mark - Headers
+// MARK: - Headers
 
 #include <errno.h>
 #include <stdio.h>
@@ -59,7 +59,7 @@
 //  Prototypes  //
 //              //
 //////////////////
-#pragma mark - Prototypes
+// MARK: - Prototypes
 
 int
 ldapschema_get_info_model_str(
@@ -72,12 +72,12 @@ ldapschema_get_info_model_str(
 //  Functions  //
 //             //
 /////////////////
-#pragma mark - Functions
+// MARK: - Functions
 
 //-----------------------//
 // ldapschema_count_XXXX //
 //-----------------------//
-#pragma mark ldapschema_count_XXXX functions
+// MARK: ldapschema_count_XXXX functions
 
 size_t ldapschema_count_attributetypes(LDAPSchema * lsd)
 {
@@ -134,7 +134,7 @@ size_t ldapschema_count_objectclasses(LDAPSchema * lsd)
 //----------------------//
 // ldapschema_find_XXXX //
 //----------------------//
-#pragma mark ldapschema_find_XXXX functions
+// MARK: ldapschema_find_XXXX functions
 
 LDAPSchemaAlias * ldapschema_find_alias(LDAPSchema * lsd,
    const char * alias, LDAPSchemaAlias ** list, size_t list_len)
@@ -259,7 +259,7 @@ LDAPSchemaObjectclass * ldapschema_find_objectclass(LDAPSchema * lsd,
 //-----------------------//
 // ldapschema_first_XXXX //
 //-----------------------//
-#pragma mark ldapschema_first_XXXX functions
+// MARK: ldapschema_first_XXXX functions
 
 const LDAPSchemaAttributeType * ldapschema_first_attributetype(LDAPSchema * lsd,
    LDAPSchemaCur * curp)
@@ -344,7 +344,7 @@ const LDAPSchemaObjectclass * ldapschema_first_objectclass(LDAPSchema * lsd,
 //--------------------------//
 // ldapschema_get_info_XXXX //
 //--------------------------//
-#pragma mark ldapschema_get_info_XXXX functions
+// MARK: ldapschema_get_info_XXXX functions
 
 int ldapschema_get_info_attributetype(LDAPSchema * lsd,
    const LDAPSchemaAttributeType * attr, int field, void * outvalue)
@@ -511,7 +511,7 @@ int ldapschema_get_info_objectclass(LDAPSchema * lsd,
 //----------------------//
 // ldapschema_model_XXXX //
 //----------------------//
-#pragma mark ldapschema_model_XXXX functions
+// MARK: ldapschema_model_XXXX functions
 
 const LDAPSchemaModel * ldapschema_model_attributetype(
    const LDAPSchemaAttributeType * attr )
@@ -545,7 +545,7 @@ const LDAPSchemaModel * ldapschema_model_objectclass(
 //----------------------//
 // ldapschema_next_XXXX //
 //----------------------//
-#pragma mark ldapschema_next_XXXX functions
+// MARK: ldapschema_next_XXXX functions
 
 const LDAPSchemaAttributeType * ldapschema_next_attributetype(LDAPSchema * lsd,
    LDAPSchemaCur cur)

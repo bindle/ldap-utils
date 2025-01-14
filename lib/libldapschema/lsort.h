@@ -42,17 +42,18 @@
 //  Headers  //
 //           //
 ///////////////
-#pragma mark - Headers
+// MARK: - Headers
 
 #include "libldapschema.h"
 #include "lspec.h"
+
 
 ///////////////////
 //               //
 //  Definitions  //
 //               //
 ///////////////////
-#pragma mark - Definitions
+// MARK: - Definitions
 
 
 //////////////////
@@ -60,7 +61,7 @@
 //  Prototypes  //
 //              //
 //////////////////
-#pragma mark - Prototypes
+// MARK: - Prototypes
 
 
 ////////////////////////
@@ -68,7 +69,7 @@
 //  Inline Functions  //
 //                    //
 ////////////////////////
-#pragma mark - Inline Functions
+// MARK: - Inline Functions
 
 /// compares the alias field of `ap` and `bp`
 /// @param[in]    ap          reference to LDAP model

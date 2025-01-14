@@ -41,7 +41,7 @@
 //  Headers  //
 //           //
 ///////////////
-#pragma mark - Functions
+// MARK: - Functions
 
 #include <ldaputils_compat.h>
 
@@ -60,7 +60,7 @@
 //  Definitions  //
 //               //
 ///////////////////
-#pragma mark - Definitions
+// MARK: - Definitions
 
 
 /////////////////
@@ -68,7 +68,7 @@
 //  Datatypes  //
 //             //
 /////////////////
-#pragma mark - Datatypes
+// MARK: - Datatypes
 
 /// LDAP schema descriptor state
 struct ldap_schema
@@ -220,12 +220,12 @@ struct ldap_schema_matchingrule
 //  Prototypes  //
 //              //
 //////////////////
-#pragma mark - Prototypes
+// MARK: - Prototypes
 
 //------------------//
 // memory functions //
 //-------=----------//
-#pragma mark memory functions
+// MARK: memory functions
 
 
 #endif /* end of header file */

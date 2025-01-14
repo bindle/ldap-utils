@@ -42,7 +42,7 @@
 //  Headers  //
 //           //
 ///////////////
-#pragma mark - Headers
+// MARK: - Headers
 
 #include "libldapschema.h"
 
@@ -52,7 +52,7 @@
 //  Definitions  //
 //               //
 ///////////////////
-#pragma mark - Definitions
+// MARK: - Definitions
 
 
 /////////////////
@@ -60,7 +60,7 @@
 //  Datatypes  //
 //             //
 /////////////////
-#pragma mark - Datatypes
+// MARK: - Datatypes
 
 struct ldapschema_spec
 {
@@ -92,7 +92,7 @@ struct ldapschema_spec
 //  Variables  //
 //             //
 /////////////////
-#pragma mark - Variables
+// MARK: - Variables
 
 extern const struct ldapschema_spec ldapschema_spec[];
 
@@ -102,7 +102,7 @@ extern const struct ldapschema_spec ldapschema_spec[];
 //  Prototypes  //
 //              //
 //////////////////
-#pragma mark - Prototypes
+// MARK: - Prototypes
 
 
 #endif /* end of header file */

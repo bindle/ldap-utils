@@ -41,7 +41,7 @@
 //  Headers  //
 //           //
 ///////////////
-#pragma mark - Headers
+// MARK: - Headers
 
 #include <errno.h>
 #include <stdio.h>
@@ -62,7 +62,7 @@
 //  Prototypes  //
 //              //
 //////////////////
-#pragma mark - Prototypes
+// MARK: - Prototypes
 
 static char ** ldapschema_get_values(LDAP * ld, LDAPMessage * entry, const char * attr);
 
@@ -72,7 +72,7 @@ static char ** ldapschema_get_values(LDAP * ld, LDAPMessage * entry, const char 
 //  Functions  //
 //             //
 /////////////////
-#pragma mark - Functions
+// MARK: - Functions
 
 int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
 {

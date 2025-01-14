@@ -41,7 +41,7 @@
 //  Headers  //
 //           //
 ///////////////
-#pragma mark - Headers
+// MARK: - Headers
 
 #include <string.h>
 #include <strings.h>
@@ -52,7 +52,7 @@
 //  Inline Functions  //
 //                    //
 ////////////////////////
-#pragma mark - Inline Functions
+// MARK: - Inline Functions
 
 extern inline int
 ldapschema_compar_aliases(
@@ -107,7 +107,7 @@ ldapschema_compar_values(
 //  Functions  //
 //             //
 /////////////////
-#pragma mark - Functions
+// MARK: - Functions
 
 
 /* end of source file */

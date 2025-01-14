@@ -95,7 +95,7 @@
 //  Headers  //
 //           //
 ///////////////
-#pragma mark - Headers
+// MARK: - Headers
 
 #include <errno.h>
 #include <stdio.h>
@@ -115,7 +115,7 @@
 //  Prototypes  //
 //              //
 //////////////////
-#pragma mark - Prototypes
+// MARK: - Prototypes
 
 int
 ldapschema_parse_objectclass_attrs(
@@ -131,7 +131,7 @@ ldapschema_parse_objectclass_attrs(
 //  Functions  //
 //             //
 /////////////////
-#pragma mark - Functions
+// MARK: - Functions
 
 /// splits string into arguments
 /// @param[in]  lsd    Reference to allocated ldap_schema struct
