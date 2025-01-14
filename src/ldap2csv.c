@@ -466,7 +466,7 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
                return(LDAP_NO_MEMORY);
             };
             printf("%s", dns[0]);
-            ldap_value_free(dns);
+            ldaputils_value_free(dns);
             continue;
          };
 
