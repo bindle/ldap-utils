@@ -831,7 +831,7 @@ char ** ldapschema_value_add( char ** vals, const char * val, int * countp)
    if ((countp))
       count = *countp;
    else
-      count = ldap_count_values(vals);
+      count = ldaputils_count_values(vals);
 
    // saves value to array
    if ((str = strdup(val)) == NULL)
