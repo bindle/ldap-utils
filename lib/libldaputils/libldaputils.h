@@ -70,29 +70,29 @@
 
 struct ldap_utils_attribute
 {
-   char           * name;
-   size_t           len;
-   struct berval ** vals;
+   char *            name;
+   size_t            len;
+   struct berval **  vals;
 };
 
 
 struct ldap_utils_entry
 {
-   char                * dn;
-   const char          * rdn;
-   char                * sortval;
-   size_t                components_len;
-   size_t                attrs_count;
-   char               ** components;
-   LDAPUtilsAttribute ** attrs;
+   char *                  dn;
+   const char *            rdn;
+   char *                  sortval;
+   size_t                  components_len;
+   size_t                  attrs_count;
+   char **                 components;
+   LDAPUtilsAttribute **   attrs;
 };
 
 
 struct ldap_utils_entries
 {
-   size_t                count;
-   size_t                cursor;
-   LDAPUtilsEntry     ** list;
+   size_t               count;
+   size_t               cursor;
+   LDAPUtilsEntry **    list;
 };
 
 
