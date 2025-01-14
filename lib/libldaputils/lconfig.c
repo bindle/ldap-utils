@@ -252,9 +252,11 @@ int ldaputils_getopt(LDAPUtils * lud, int c, const char * arg)
       };
       return(0);
 
+#ifdef USE_LDAP_DEPRECATED
       case 'S':
       lud->sortattr = arg;
       return(0);
+#endif
 
       case 'z':
       valint = atoi(arg);
@@ -630,7 +632,9 @@ void ldaputils_usage_search(const char * short_options)
          case 'l': printf("  -l limit                  time limit (in seconds) for search\n"); break;
          case 'L': printf("  -LL                       disables comments\n"); break;
          case 's': printf("  -s scope                  one of base, one, or sub (search scope)\n"); break;
+#ifdef USE_LDAP_DEPRECATED
          case 'S': printf("  -S attr                   sort results by attribute `attr'\n"); break;
+#endif
          case 'z': printf("  -z limit                  size limit for search\n"); break;
          default: break;
       };
