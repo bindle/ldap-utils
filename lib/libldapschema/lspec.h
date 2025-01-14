@@ -64,21 +64,21 @@
 
 struct ldapschema_spec
 {
-   const char      * oid;
-   const char      * name;
-   const char      * desc;
-   const char      * def;
-   const char      * abnf;
-   const char      * re_posix;
-   const char      * re_pcre;
-   const char     ** examples;
-   const char      * spec;
-   const char      * spec_section;
-   const char      * spec_name;
-   const char      * spec_source;
-   const char      * spec_vendor;
-   const char      * spec_text;
-   const char      * notes;
+   const char *      oid;
+   const char *      name;
+   const char *      desc;
+   const char *      def;
+   const char *      abnf;
+   const char *      re_posix;
+   const char *      re_pcre;
+   const char **     examples;
+   const char *      spec;
+   const char *      spec_section;
+   const char *      spec_name;
+   const char *      spec_source;
+   const char *      spec_vendor;
+   const char *      spec_text;
+   const char *      notes;
    uint8_t           type;
    uint8_t           subtype;
    uint8_t           spec_type;

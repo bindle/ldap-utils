@@ -67,7 +67,7 @@
 //////////////////
 // MARK: - Prototypes
 
-int
+static int
 ldapschema_spec_field_list(
          void *                        outvalue,
          const char **                 values );
@@ -86,7 +86,9 @@ ldapschema_spec_field_list(
 /// @return    Upon successful completetion, this function returns the
 ///            spec object containing the requested ABNF
 /// @see       ldapschema_spec_search, ldapschema_spec_field_list
-const LDAPSchemaSpec * ldapschema_spec_abnf(int abnf_type)
+const LDAPSchemaSpec *
+ldapschema_spec_abnf(
+         int                           abnf_type )
 {
    switch(abnf_type)
    {
@@ -106,10 +108,14 @@ const LDAPSchemaSpec * ldapschema_spec_abnf(int abnf_type)
 /// @return    Upon successful completetion, this function returns 0,
 ///            otherwise an error code is returned.
 /// @see       ldapschema_spec_search, ldapschema_spec_field_list
-int ldapschema_spec_field(const LDAPSchemaSpec * s, int field, void * outvalue)
+int
+ldapschema_spec_field(
+         const LDAPSchemaSpec *        s,
+         int                           field,
+         void *                        outvalue )
 {
-   int       * oi;   // output int
-   char     ** os;   // output char * (string)
+   int *       oi;   // output int
+   char **     os;   // output char * (string)
 
    assert(s        != NULL);
    assert(outvalue != NULL);
@@ -158,12 +164,15 @@ int ldapschema_spec_field(const LDAPSchemaSpec * s, int field, void * outvalue)
 /// @return    Upon successful completetion, this function returns 0,
 ///            otherwise an error code is returned.
 /// @see       ldapschema_spec_field
-int ldapschema_spec_field_list(void * outvalue, const char ** values)
+int
+ldapschema_spec_field_list(
+         void *                        outvalue,
+         const char **                 values )
 {
-   char    *** oa;   // output char ** (array of strings)
+   char ***    oa;   // output char ** (array of strings)
    size_t      len;
    size_t      pos;
-   char     ** list;
+   char **     list;
 
    assert(outvalue   != NULL);
 
@@ -199,7 +208,9 @@ int ldapschema_spec_field_list(void * outvalue, const char ** values)
 /// @return    Upon successful completetion, this function returns a reference
 ///            to an array of OID specifications otherwise NULL is returned.
 /// @see       ldapschema_spec_search, ldapschema_spec_field, ldapschema_spec_abnf
-const LDAPSchemaSpec * const * ldapschema_spec_list(size_t * lenp)
+const LDAPSchemaSpec * const *
+ldapschema_spec_list(
+         size_t *                      lenp )
 {
    if ((lenp))
       *lenp = ldapschema_oidspecs_len;
@@ -214,7 +225,9 @@ const LDAPSchemaSpec * const * ldapschema_spec_list(size_t * lenp)
 ///            to the specification of the requestd OID otherwise NULL is
 ///            returned.
 /// @see       ldapschema_spec_list, ldapschema_spec_field, ldapschema_spec_abnf
-const LDAPSchemaSpec * ldapschema_spec_search(const char * oid)
+const LDAPSchemaSpec *
+ldapschema_spec_search(
+         const char *                  oid )
 {
    assert(oid != NULL);
    size_t               low;
@@ -250,7 +263,9 @@ const LDAPSchemaSpec * ldapschema_spec_search(const char * oid)
 }
 
 
-const char * ldapschema_type_name(uint32_t type)
+const char *
+ldapschema_type_name(
+         uint32_t                      type )
 {
    switch(type)
    {
