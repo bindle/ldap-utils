@@ -64,7 +64,11 @@
 //////////////////
 // MARK: - Prototypes
 
-static char ** ldapschema_get_values(LDAP * ld, LDAPMessage * entry, const char * attr);
+static char **
+ldapschema_get_values(
+         LDAP *                        ld,
+         LDAPMessage *                 entry,
+         const char *                  attr );
 
 
 /////////////////
@@ -74,24 +78,27 @@ static char ** ldapschema_get_values(LDAP * ld, LDAPMessage * entry, const char 
 /////////////////
 // MARK: - Functions
 
-int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
+int
+ldapschema_fetch(
+         LDAPSchema *                  lsd,
+         LDAP *                        ld )
 {
-   int                  err;
-   int                  x;
-   struct timeval       timeout;
-   LDAPMessage        * res;
-   LDAPMessage        * msg;
-   char              ** dns;
-   char              ** attrs;
-   struct berval     ** vals;
-   void               * ptr;
-   size_t               idx;
-   size_t               subidx;
-   LDAPSchemaAlias    * alias;
-   LDAPSchemaAttributeType     * attr;
-   LDAPSchemaAttributeType     * attrsup;
-   LDAPSchemaObjectclass       * objcls;
-   LDAPSchemaObjectclass       * objclssup;
+   int                           err;
+   int                           x;
+   struct timeval                timeout;
+   LDAPMessage *                 res;
+   LDAPMessage *                 msg;
+   char **                       dns;
+   char **                       attrs;
+   struct berval **              vals;
+   void *                        ptr;
+   size_t                        idx;
+   size_t                        subidx;
+   LDAPSchemaAlias *             alias;
+   LDAPSchemaAttributeType *     attr;
+   LDAPSchemaAttributeType *     attrsup;
+   LDAPSchemaObjectclass *       objcls;
+   LDAPSchemaObjectclass *       objclssup;
    LDAPSchemaMatchingRule *      mtchngrl;
 
    assert(lsd != NULL);
@@ -335,7 +342,11 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
 }
 
 
-char ** ldapschema_get_values(LDAP * ld, LDAPMessage * entry, const char * attr)
+char **
+ldapschema_get_values(
+         LDAP *                        ld,
+         LDAPMessage *                 entry,
+         const char *                  attr )
 {
    size_t               len;
    size_t               size;
