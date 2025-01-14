@@ -76,8 +76,6 @@ ldapschema_schema_errors
 # format functions
 ldapschema_fmt_definition
 # memory functions
-ldap_count_values
-ldap_count_values_len
 ldapschema_curfree
 ldapschema_free
 ldapschema_initialize
