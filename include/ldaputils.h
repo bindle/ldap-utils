@@ -112,8 +112,8 @@ struct ldap_utils_tree_opts
 // store common structs
 struct ldaputils_config_struct
 {
-   LDAP            * ld;           ///< LDAP descriptor
-   const char      * prog_name;    ///< program name
+   LDAP *            ld;           ///< LDAP descriptor
+   const char *      prog_name;    ///< program name
    int               continuous;   // -c continuous operation mode
    int               dryrun;       // -n dry run mode
    int               scope;        // -s LDAP search scope
@@ -123,12 +123,12 @@ struct ldaputils_config_struct
    int               want_pass;    // -W prompt for passowrd
    int               pad0;
    struct berval     passwd;       //    stores password from -y, -w, and -W
-   char           ** attrs;        //    result attributes
-   const char      * sasl_mech;    // -Y sasl mechanism
-   const char      * binddn;       // -D bind DN
-   const char      * filter;       //    search filter
-   const char      * passfile;     // -y password file
-   const char      * sortattr;     // -S sort by attribute
+   char **           attrs;        //    result attributes
+   const char *      sasl_mech;    // -Y sasl mechanism
+   const char *      binddn;       // -D bind DN
+   const char *      filter;       //    search filter
+   const char *      passfile;     // -y password file
+   const char *      sortattr;     // -S sort by attribute
 };
 
 
@@ -146,11 +146,14 @@ LDAPUTILS_BEGIN_C_DECLS
 //---------------------//
 // MARK: password prototypes
 
-// getpass() replacement -- SUSV 2 deprecated getpass()
-char * ldaputils_getpass(const char * prompt);
+_LDAPUTILS_F char *
+ldaputils_getpass(
+         const char *                  prompt );
 
-// retrieves password
-int ldaputils_pass(LDAPUtils * lud);
+
+_LDAPUTILS_F int
+ldaputils_pass(
+         LDAPUtils *                   lud );
 
 
 //-------------------------------//
@@ -158,38 +161,82 @@ int ldaputils_pass(LDAPUtils * lud);
 //-------------------------------//
 // MARK: entries amd values prototypes
 
-// compares two LDAP values for sorting
-int ldaputils_berval_cmp(const struct berval ** ptr1, const struct berval ** ptr2);
+_LDAPUTILS_F int
+ldaputils_berval_cmp(
+         const struct berval **        ptr1,
+         const struct berval **        ptr2 );
 
-// frees list of entries
-void ldaputils_entries_free(LDAPUtilsEntries * entries);
 
-// sorts values
-int ldaputils_entries_sort(LDAPUtilsEntries * entries, int (*compar)(const void *, const void *));
+_LDAPUTILS_F void
+ldaputils_entries_free(
+         LDAPUtilsEntries *            entries );
 
-// compares two LDAP values for sorting
-int ldaputils_entry_cmp(const void * ptr1, const void * ptr2);
 
-// compares two LDAP entry DNs for sorting
-int ldaputils_entry_cmp_dn(const void * ptr1, const void * ptr2);
+_LDAPUTILS_F int
+ldaputils_entries_sort(
+         LDAPUtilsEntries *            entries,
+         int                           (*compar)(const void *, const void *) );
 
-void ldaputils_entry_free(LDAPUtilsEntry * entry);
 
-int ldaputils_count_entries(LDAPUtilsEntries * entries);
-LDAPUtilsEntry * ldaputils_first_entry(LDAPUtilsEntries * entries);
-LDAPUtilsEntry * ldaputils_next_entry(LDAPUtilsEntries * entries);
+_LDAPUTILS_F int
+ldaputils_entry_cmp(
+         const void *                  ptr1,
+         const void *                  ptr2 );
 
-// retrieves LDAP entries from result
-LDAPUtilsEntries * ldaputils_get_entries(LDAP * ld, LDAPMessage * res,
-   const char * sortattr);
 
-char ** ldaputils_get_values(LDAP * ld, LDAPMessage * entry, const char * attr);
+_LDAPUTILS_F int
+ldaputils_entry_cmp_dn(
+         const void *                  ptr1,
+         const void *                  ptr2 );
 
-void ldaputils_value_free(char ** vals);
-void ldaputils_value_free_len(struct berval ** vals);
 
-// sorts values
-int ldaputils_values_sort(struct berval ** vals);
+_LDAPUTILS_F void
+ldaputils_entry_free(
+         LDAPUtilsEntry *              entry );
+
+
+_LDAPUTILS_F int
+ldaputils_count_entries(
+         LDAPUtilsEntries *            entries );
+
+
+_LDAPUTILS_F LDAPUtilsEntry *
+ldaputils_first_entry(
+         LDAPUtilsEntries *            entries );
+
+
+_LDAPUTILS_F LDAPUtilsEntry *
+ldaputils_next_entry(
+         LDAPUtilsEntries *            entries );
+
+
+_LDAPUTILS_F LDAPUtilsEntries *
+ldaputils_get_entries(
+         LDAP *                        ld,
+         LDAPMessage *                 res,
+         const char *                  sortattr );
+
+
+_LDAPUTILS_F char **
+ldaputils_get_values(
+            LDAP *                     ld,
+            LDAPMessage *              entry,
+            const char *               attr );
+
+
+_LDAPUTILS_F void
+ldaputils_value_free(
+            char **                    vals );
+
+
+_LDAPUTILS_F void
+ldaputils_value_free_len(
+            struct berval **           vals );
+
+
+_LDAPUTILS_F int
+ldaputils_values_sort(
+            struct berval **           vals );
 
 
 //----------------------//
@@ -197,8 +244,9 @@ int ldaputils_values_sort(struct berval ** vals);
 //----------------------//
 // MARK: utilities prototypes
 
-// removes newlines and carriage returns
-char * ldaputils_chomp(char * str);
+_LDAPUTILS_F char *
+ldaputils_chomp(
+            char *                     str );
 
 
 //--------------------------//
@@ -206,18 +254,47 @@ char * ldaputils_chomp(char * str);
 //--------------------------//
 // MARK: configuration prototypes
 
-// parses LDAP command line arguments
-int ldaputils_getopt(LDAPUtils * lud, int c, const char * arg);
+_LDAPUTILS_F int
+ldaputils_getopt(
+            LDAPUtils *                lud,
+            int                        c,
+            const char *               arg );
 
-// prints configuration to stdout
-void ldaputils_params(LDAPUtils * lud);
 
-const char *         ldaputils_get_dn(LDAPUtilsEntry * entry);
-const char *         ldaputils_get_rdn(LDAPUtilsEntry * entry);
-const char * const * ldaputils_get_dn_components(LDAPUtilsEntry * entry, size_t * lenp);
-const char *         ldaputils_get_prog_name(LDAPUtils * lud);
-LDAP *               ldaputils_get_ld(LDAPUtils * lud);
-const char * const * ldaputils_get_attribute_list(LDAPUtils * lud);
+_LDAPUTILS_F void
+ldaputils_params(
+            LDAPUtils *                lud );
+
+
+_LDAPUTILS_F const char *
+ldaputils_get_dn(
+            LDAPUtilsEntry *           entry );
+
+
+_LDAPUTILS_F const char *
+ldaputils_get_rdn(
+            LDAPUtilsEntry *           entry );
+
+
+_LDAPUTILS_F const char * const *
+ldaputils_get_dn_components(
+            LDAPUtilsEntry *           entry,
+            size_t *                   lenp );
+
+
+_LDAPUTILS_F const char *
+ldaputils_get_prog_name(
+            LDAPUtils *                lud );
+
+
+_LDAPUTILS_F LDAP *
+ldaputils_get_ld(
+            LDAPUtils *                lud );
+
+
+_LDAPUTILS_F const char * const *
+ldaputils_get_attribute_list(
+            LDAPUtils *                lud );
 
 
 //------------------//
@@ -225,17 +302,24 @@ const char * const * ldaputils_get_attribute_list(LDAPUtils * lud);
 //------------------//
 // MARK: usage prototypes
 
-// prints program usage and exits
-void ldaputils_usage(void);
+_LDAPUTILS_F void
+ldaputils_usage(
+            void );
 
-// displays usage for common options
-void ldaputils_usage_common(const char * short_options);
 
-// displays search usage for search options
-void ldaputils_usage_search(const char * short_options);
+_LDAPUTILS_F void
+ldaputils_usage_common(
+            const char *               short_options );
 
-// displays usage
-void ldaputils_version(const char * prog_name);
+
+_LDAPUTILS_F void
+ldaputils_usage_search(
+            const char *               short_options );
+
+
+_LDAPUTILS_F void
+ldaputils_version(
+            const char *               prog_name );
 
 
 //----------------------------//
@@ -243,17 +327,26 @@ void ldaputils_version(const char * prog_name);
 //----------------------------//
 // MARK: LDAP operations prototypes
 
-// connects and binds to LDAP server
-int ldaputils_bind_s(LDAPUtils * lud);
+_LDAPUTILS_F int
+ldaputils_bind_s(
+            LDAPUtils *                lud );
 
-// connects and binds to LDAP server
-int ldaputils_initialize(LDAPUtils ** lup, const char * prog_name);
 
-// connects and binds to LDAP server
-int ldaputils_search(LDAPUtils * lud, LDAPMessage ** resp);
+_LDAPUTILS_F int
+ldaputils_initialize(
+            LDAPUtils **               lup,
+            const char *               prog_name );
 
-// frees common config
-void ldaputils_unbind(LDAPUtils * lud);
+
+_LDAPUTILS_F int
+ldaputils_search(
+            LDAPUtils *                lud,
+            LDAPMessage **             resp );
+
+
+_LDAPUTILS_F void
+ldaputils_unbind(
+            LDAPUtils *                lud );
 
 
 //----------------------//
@@ -261,20 +354,48 @@ void ldaputils_unbind(LDAPUtils * lud);
 //----------------------//
 // MARK: LDAP tree prototypes
 
-LDAPUtilsTree * ldaputils_get_tree(LDAP * ld, LDAPMessage * res,
-int copy);
+_LDAPUTILS_F LDAPUtilsTree *
+ldaputils_get_tree(
+            LDAP *                     ld,
+            LDAPMessage *              res,
+            int                        copy );
 
-int ldaputils_tree_add_dn(LDAPUtilsTree * tree, const char * dn, LDAPUtilsTree ** nodep);
 
-int ldaputils_tree_add_entry(LDAPUtilsTree * tree, LDAPUtilsEntry * entry, int copy);
+_LDAPUTILS_F int
+ldaputils_tree_add_dn(
+            LDAPUtilsTree *            tree,
+            const char *               dn,
+            LDAPUtilsTree **           nodep );
 
-void ldaputils_tree_free(LDAPUtilsTree * tree);
 
-LDAPUtilsTree * ldaputils_tree_initialize(LDAPUtilsEntries * entries, int copy);
+_LDAPUTILS_F int
+ldaputils_tree_add_entry(
+            LDAPUtilsTree *            tree,
+            LDAPUtilsEntry *           entry,
+            int                        copy );
 
-size_t ldaputils_tree_level_count(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts);
 
-void ldaputils_tree_print(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts);
+_LDAPUTILS_F void
+ldaputils_tree_free(
+            LDAPUtilsTree *            tree );
+
+
+_LDAPUTILS_F LDAPUtilsTree *
+ldaputils_tree_initialize(
+            LDAPUtilsEntries *         entries,
+            int                        copy );
+
+
+_LDAPUTILS_F size_t
+ldaputils_tree_level_count(
+            LDAPUtilsTree *            tree,
+            LDAPUtilsTreeOpts *        opts );
+
+
+_LDAPUTILS_F void
+ldaputils_tree_print(
+            LDAPUtilsTree *            tree,
+            LDAPUtilsTreeOpts *        opts );
 
 
 LDAPUTILS_END_C_DECLS
