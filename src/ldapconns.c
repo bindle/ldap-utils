@@ -68,7 +68,6 @@
 #include <getopt.h>
 #include <assert.h>
 
-#define LDAP_DEPRECATED 1
 #include <ldap.h>
 #include <ldaputils.h>
 #include <ldapschema.h>
@@ -452,7 +451,7 @@ my_monitor_connections(
    while ((msg))
    {
       // skip entry if not a connection
-      if ((vals = ldap_get_values(ld, msg, "monitorConnectionNumber")) == NULL)
+      if ((vals = ldaputils_get_values(ld, msg, "monitorConnectionNumber")) == NULL)
       {
          msg = ldap_next_entry(ld, msg);
          continue;
@@ -473,38 +472,38 @@ my_monitor_connections(
       ldap_value_free(vals);
 
       // process values
-      if ((vals = ldap_get_values(ld, msg, "monitorConnectionProtocol")) != NULL)
+      if ((vals = ldaputils_get_values(ld, msg, "monitorConnectionProtocol")) != NULL)
       {
          rec->rec_proto = (unsigned)strtoull(vals[0], NULL, 10);
          ldap_value_free(vals);
       };
-      if ((vals = ldap_get_values(ld, msg, "monitorConnectionOpsReceived")) != NULL)
+      if ((vals = ldaputils_get_values(ld, msg, "monitorConnectionOpsReceived")) != NULL)
       {
          rec->rec_ops_recv = (unsigned)strtoull(vals[0], NULL, 10);
          ldap_value_free(vals);
       };
-      if ((vals = ldap_get_values(ld, msg, "monitorConnectionOpsExecuting")) != NULL)
+      if ((vals = ldaputils_get_values(ld, msg, "monitorConnectionOpsExecuting")) != NULL)
       {
          rec->rec_ops_exec = (unsigned)strtoull(vals[0], NULL, 10);
          ldap_value_free(vals);
       };
-      if ((vals = ldap_get_values(ld, msg, "monitorConnectionOpsPending")) != NULL)
+      if ((vals = ldaputils_get_values(ld, msg, "monitorConnectionOpsPending")) != NULL)
       {
          rec->rec_ops_pend = (unsigned)strtoull(vals[0], NULL, 10);
          ldap_value_free(vals);
       };
-      if ((vals = ldap_get_values(ld, msg, "monitorConnectionOpsCompleted")) != NULL)
+      if ((vals = ldaputils_get_values(ld, msg, "monitorConnectionOpsCompleted")) != NULL)
       {
          rec->rec_ops_comp = (unsigned)strtoull(vals[0], NULL, 10);
          ldap_value_free(vals);
       };
-      rec->rec_mask     = ldap_get_values(ld, msg, "monitorConnectionMask");
-      rec->rec_authzdn  = ldap_get_values(ld, msg, "monitorConnectionAuthzDN");
-      rec->rec_listener = ldap_get_values(ld, msg, "monitorConnectionListener");
-      rec->rec_peer     = ldap_get_values(ld, msg, "monitorConnectionPeerAddress");
-      rec->rec_local    = ldap_get_values(ld, msg, "monitorConnectionLocalAddress");
-      rec->rec_start    = ldap_get_values(ld, msg, "monitorConnectionStartTime");
-      rec->rec_activity = ldap_get_values(ld, msg, "monitorConnectionActivityTime");
+      rec->rec_mask     = ldaputils_get_values(ld, msg, "monitorConnectionMask");
+      rec->rec_authzdn  = ldaputils_get_values(ld, msg, "monitorConnectionAuthzDN");
+      rec->rec_listener = ldaputils_get_values(ld, msg, "monitorConnectionListener");
+      rec->rec_peer     = ldaputils_get_values(ld, msg, "monitorConnectionPeerAddress");
+      rec->rec_local    = ldaputils_get_values(ld, msg, "monitorConnectionLocalAddress");
+      rec->rec_start    = ldaputils_get_values(ld, msg, "monitorConnectionStartTime");
+      rec->rec_activity = ldaputils_get_values(ld, msg, "monitorConnectionActivityTime");
 
       // retrieves next entry
       msg = ldap_next_entry(ld, msg);
@@ -671,7 +670,7 @@ my_rootdse(
    msg = ldap_first_entry(ld, res);
 
    // retrieve DNs
-   cnf->monitor  = ldap_get_values(ld, msg, "monitorContext");
+   cnf->monitor  = ldaputils_get_values(ld, msg, "monitorContext");
    my_monitor_connections(cnf, cnf->monitor[0]);
 
    // frees response
