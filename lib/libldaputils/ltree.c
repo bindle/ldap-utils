@@ -107,8 +107,6 @@ void ldaputils_tree_level_count_recursive(LDAPUtilsTree * tree, size_t level, si
 
 void ldaputils_tree_print_bullets(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts);
 
-void ldaputils_tree_print_bullets_recursive(LDAPUtilsTree * tree, size_t level);
-
 void ldaputils_tree_print_entry(LDAPUtilsTree * tree, size_t level, LDAPUtilsTreeRecursion * recur, size_t stop);
 
 void ldaputils_tree_print_indent(LDAPUtilsTree * tree, size_t level, LDAPUtilsTreeRecursion * recur);
