@@ -80,7 +80,10 @@
 ///            lexicographically greater than, equal to, or less than the alias
 ///            of `bp`.
 /// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
-_LDAPSCHEMA_I int ldapschema_compar_aliases( const void * ap, const void * bp )
+_LDAPSCHEMA_I int
+ldapschema_compar_aliases(
+         const void *                  ap,
+         const void *                  bp )
 {
    const LDAPSchemaAlias * a = *(const LDAPSchemaAlias * const *)ap;
    const LDAPSchemaAlias * b = *(const LDAPSchemaAlias * const *)bp;
@@ -112,7 +115,10 @@ _LDAPSCHEMA_I int ldapschema_compar_aliases( const void * ap, const void * bp )
 ///            lexicographically greater than, equal to, or less than the
 ///            description of `s2`.
 /// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
-_LDAPSCHEMA_I int ldapschema_compar_attributetypes( const void * ap, const void * bp )
+_LDAPSCHEMA_I int
+ldapschema_compar_attributetypes(
+         const void *                  ap,
+         const void *                  bp )
 {
    const LDAPSchemaAttributeType * a = *(const LDAPSchemaAttributeType * const *)ap;
    const LDAPSchemaAttributeType * b = *(const LDAPSchemaAttributeType * const *)bp;
@@ -150,7 +156,10 @@ _LDAPSCHEMA_I int ldapschema_compar_attributetypes( const void * ap, const void 
 ///            lexicographically greater than, equal to, or less than the OID
 ///            of `m2`.
 /// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
-_LDAPSCHEMA_I int ldapschema_compar_extensions( const void * ap, const void * bp )
+_LDAPSCHEMA_I int
+ldapschema_compar_extensions(
+         const void *                  ap,
+         const void *                  bp )
 {
    const LDAPSchemaExtension * a = *(const LDAPSchemaExtension * const *)ap;
    const LDAPSchemaExtension * b = *(const LDAPSchemaExtension * const *)bp;
@@ -182,7 +191,10 @@ _LDAPSCHEMA_I int ldapschema_compar_extensions( const void * ap, const void * bp
 ///            lexicographically greater than, equal to, or less than the OID
 ///            of `m2`.
 /// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
-_LDAPSCHEMA_I int ldapschema_compar_models( const void * ap, const void * bp )
+_LDAPSCHEMA_I int
+ldapschema_compar_models(
+         const void *                  ap,
+         const void *                  bp )
 {
    const LDAPSchemaModel * a = *(const LDAPSchemaModel * const *)ap;
    const LDAPSchemaModel * b = *(const LDAPSchemaModel * const *)bp;
@@ -214,12 +226,15 @@ _LDAPSCHEMA_I int ldapschema_compar_models( const void * ap, const void * bp )
 ///            lexicographically greater than, equal to, or less than the
 ///            description of `s2`.
 /// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
-_LDAPSCHEMA_I int ldapschema_compar_objectclasses( const void * ap, const void * bp )
+_LDAPSCHEMA_I int
+ldapschema_compar_objectclasses(
+         const void *                  ap,
+         const void *                  bp )
 {
    const LDAPSchemaObjectclass * a = *(const LDAPSchemaObjectclass * const *)ap;
    const LDAPSchemaObjectclass * b = *(const LDAPSchemaObjectclass * const *)bp;
-   const char                  * as;
-   const char                  * bs;
+   const char *                  as;
+   const char *                  bs;
 
    if ( (!(a)) && (!(b)) )
       return(0);
@@ -252,7 +267,10 @@ _LDAPSCHEMA_I int ldapschema_compar_objectclasses( const void * ap, const void *
 ///            lexicographically greater than, equal to, or less than the
 ///            description of `s2`.
 /// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
-_LDAPSCHEMA_I int ldapschema_compar_spec( const void * ap, const void * bp )
+_LDAPSCHEMA_I int
+ldapschema_compar_spec(
+         const void *                  ap,
+         const void *                  bp )
 {
    const LDAPSchemaSpec * a = *(const LDAPSchemaSpec * const *)ap;
    const LDAPSchemaSpec * b = *(const LDAPSchemaSpec * const *)bp;
@@ -284,7 +302,10 @@ _LDAPSCHEMA_I int ldapschema_compar_spec( const void * ap, const void * bp )
 ///            lexicographically greater than, equal to, or less than the
 ///            description of `s2`.
 /// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
-_LDAPSCHEMA_I int ldapschema_compar_syntaxes( const void * ap, const void * bp )
+_LDAPSCHEMA_I int
+ldapschema_compar_syntaxes(
+         const void *                  ap,
+         const void *                  bp )
 {
    const LDAPSchemaSyntax * a = *(const LDAPSchemaSyntax * const *)ap;
    const LDAPSchemaSyntax * b = *(const LDAPSchemaSyntax * const *)bp;
@@ -316,7 +337,10 @@ _LDAPSCHEMA_I int ldapschema_compar_syntaxes( const void * ap, const void * bp )
 ///            lexicographically greater than, equal to, or less than the alias
 ///            of `bp`.
 /// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
-_LDAPSCHEMA_I int ldapschema_compar_values( const void * ap, const void * bp )
+_LDAPSCHEMA_I int
+ldapschema_compar_values(
+         const void *                  ap,
+         const void *                  bp )
 {
    const char * a = *(const char * const *)ap;
    const char * b = *(const char * const *)bp;
