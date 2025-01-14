@@ -93,7 +93,12 @@
 ///
 /// @return    Returns a string representation of the error code.
 /// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
-int ldapschema_fmt_definition( char * restrict str, size_t size, const char * restrict def, size_t width )
+int
+ldapschema_fmt_definition(
+         char * restrict               str,
+         size_t                        size,
+         const char * restrict         def,
+         size_t                        width )
 {
    size_t      defpos;
    size_t      strpos;
