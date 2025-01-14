@@ -56,6 +56,16 @@
 #include "lsort.h"
 
 
+//////////////////
+//              //
+//  Prototypes  //
+//              //
+//////////////////
+#pragma mark - Prototypes
+
+static char ** ldapschema_get_values(LDAP * ld, LDAPMessage * entry, const char * attr);
+
+
 /////////////////
 //             //
 //  Functions  //
@@ -109,7 +119,7 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
       ldap_msgfree(res);
       return(-1);
    };
-   if ((dns = ldaputils_get_values(ld, msg, "subschemaSubentry")) == NULL)
+   if ((dns = ldapschema_get_values(ld, msg, "subschemaSubentry")) == NULL)
    {
       ldap_msgfree(res);
       ldaputils_value_free(dns);
@@ -322,5 +332,43 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
       return(lsd->errcode = LDAPSCHEMA_SCHEMA_ERROR);
    return(LDAP_SUCCESS);
 }
+
+
+char ** ldapschema_get_values(LDAP * ld, LDAPMessage * entry, const char * attr)
+{
+   size_t               len;
+   size_t               size;
+   size_t               pos;
+   struct berval **     bvals;
+   char **              vals;
+
+   if ((bvals = ldap_get_values_len(ld, entry, attr)) == NULL)
+      return(NULL);
+
+   for(len = 0; ((bvals[len])); len++);
+
+   size = (len + 1) * sizeof(char *);
+   if ((vals = malloc(size)) == NULL)
+   {
+      ldaputils_value_free_len(bvals);
+      return(NULL);
+   };
+
+   for(pos = 0; (pos < len); pos++)
+   {
+      bvals[pos+1] = NULL;
+      if ((vals[pos] = malloc(bvals[pos]->bv_len+1)) == NULL)
+      {
+         ldaputils_value_free(vals);
+         ldaputils_value_free_len(bvals);
+         return(NULL);
+      };
+      memcpy(vals[pos], bvals[pos]->bv_val, bvals[pos]->bv_len);
+      vals[pos][bvals[pos]->bv_len] = '\0';
+   };
+
+   return(vals);
+}
+
 
 /* end of source file */
