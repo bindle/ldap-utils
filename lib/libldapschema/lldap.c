@@ -109,7 +109,7 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
       ldap_msgfree(res);
       return(-1);
    };
-   if ((dns = ldap_get_values(ld, msg, "subschemaSubentry")) == NULL)
+   if ((dns = ldaputils_get_values(ld, msg, "subschemaSubentry")) == NULL)
    {
       ldap_msgfree(res);
       ldaputils_value_free(dns);
