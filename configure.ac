@@ -177,6 +177,7 @@ AC_CHECK_HEADERS([signal.h],,          [AC_MSG_ERROR([missing required header])]
 AC_CHECK_HEADERS([stdint.h],,          [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([string.h],,          [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([strings.h],,         [AC_MSG_ERROR([missing required header])])
+AC_CHECK_HEADERS([sys/time.h],,        [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([termios.h],,         [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([unistd.h],,          [AC_MSG_ERROR([missing required header])])
 AC_CHECK_HEADERS([libintl.h])
