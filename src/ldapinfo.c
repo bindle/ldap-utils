@@ -494,7 +494,7 @@ char * my_monitor(MyConfig * cnf, const char * base)
    // retrieves entry
    msg   = ldap_first_entry(ld, res);
 
-   if ((vars = ldap_get_values(ld, msg, "monitoredInfo")) == NULL)
+   if ((vars = ldaputils_get_values(ld, msg, "monitoredInfo")) == NULL)
    {
       ldap_msgfree(res);
       return(NULL);
@@ -562,7 +562,7 @@ int my_monitor_connections(MyConfig * cnf, const char * base)
    msg   = ldap_first_entry(ld, res);
    while ((msg))
    {
-      if ((name = ldap_get_values(ld, msg, "cn")) == NULL)
+      if ((name = ldaputils_get_values(ld, msg, "cn")) == NULL)
       {
          msg = ldap_next_entry(ld, msg);
          continue;
@@ -574,7 +574,7 @@ int my_monitor_connections(MyConfig * cnf, const char * base)
          continue;
       };
 
-      if ((vals = ldap_get_values(ld, msg, "monitorCounter")) == NULL)
+      if ((vals = ldaputils_get_values(ld, msg, "monitorCounter")) == NULL)
       {
          ldap_value_free(name);
          msg = ldap_next_entry(ld, msg);
@@ -650,7 +650,7 @@ int my_monitor_database(MyConfig * cnf, const char * base)
    msg   = ldap_first_entry(ld, res);
    while ((msg))
    {
-      if ((vals = ldap_get_values(ld, msg, "namingContexts")) == NULL)
+      if ((vals = ldaputils_get_values(ld, msg, "namingContexts")) == NULL)
       {
          msg = ldap_next_entry(ld, msg);
          continue;
@@ -664,7 +664,7 @@ int my_monitor_database(MyConfig * cnf, const char * base)
       buff[sizeof(buff)-1] = '\0';
       ldap_value_free(vals);
 
-      if ((vals = ldap_get_values(ld, msg, "monitoredInfo")) != NULL)
+      if ((vals = ldaputils_get_values(ld, msg, "monitoredInfo")) != NULL)
       {
          strncat(buff, " (", sizeof(buff)-strlen(buff)-1);
          strncat(buff, vals[0], sizeof(buff)-strlen(buff)-1);
@@ -672,7 +672,7 @@ int my_monitor_database(MyConfig * cnf, const char * base)
          ldap_value_free(vals);
       };
 
-      if ((vals = ldap_get_values(ld, msg, "monitorOverlay")) != NULL)
+      if ((vals = ldaputils_get_values(ld, msg, "monitorOverlay")) != NULL)
       {
          strncat(buff, " [", sizeof(buff)-strlen(buff)-1);
          for(s = 0; ((vals[s])); s++)
@@ -737,7 +737,7 @@ int my_monitor_listeners(MyConfig * cnf, const char * base)
    msg   = ldap_first_entry(ld, res);
    while ((msg))
    {
-      if ((uris = ldap_get_values(ld, msg, "labeledURI")) == NULL)
+      if ((uris = ldaputils_get_values(ld, msg, "labeledURI")) == NULL)
       {
          msg = ldap_next_entry(ld, msg);
          continue;
@@ -749,7 +749,7 @@ int my_monitor_listeners(MyConfig * cnf, const char * base)
          continue;
       };
 
-      if ((addrs = ldap_get_values(ld, msg, "monitorConnectionLocalAddress")) == NULL)
+      if ((addrs = ldaputils_get_values(ld, msg, "monitorConnectionLocalAddress")) == NULL)
       {
          ldap_value_free(uris);
          msg = ldap_next_entry(ld, msg);
@@ -839,7 +839,7 @@ int my_monitor_operations(MyConfig * cnf, const char * base)
    msg   = ldap_first_entry(ld, res);
    while ((msg))
    {
-      if ((cn = ldap_get_values(ld, msg, "cn")) == NULL)
+      if ((cn = ldaputils_get_values(ld, msg, "cn")) == NULL)
       {
          msg = ldap_next_entry(ld, msg);
          continue;
@@ -851,7 +851,7 @@ int my_monitor_operations(MyConfig * cnf, const char * base)
          continue;
       };
 
-      if ((initiated = ldap_get_values(ld, msg, "monitorOpInitiated")) == NULL)
+      if ((initiated = ldaputils_get_values(ld, msg, "monitorOpInitiated")) == NULL)
       {
          ldap_value_free(cn);
          msg = ldap_next_entry(ld, msg);
@@ -865,7 +865,7 @@ int my_monitor_operations(MyConfig * cnf, const char * base)
          continue;
       };
 
-      if ((completed = ldap_get_values(ld, msg, "monitorOpCompleted")) == NULL)
+      if ((completed = ldaputils_get_values(ld, msg, "monitorOpCompleted")) == NULL)
       {
          ldap_value_free(cn);
          ldap_value_free(initiated);
@@ -964,38 +964,38 @@ int my_rootdse(MyConfig * cnf)
    msg = ldap_first_entry(ld, res);
 
    // retrieve DNs
-   schema   = ldap_get_values(ld, msg, "subschemaSubentry");
-   monitor  = ldap_get_values(ld, msg, "monitorContext");
+   schema   = ldaputils_get_values(ld, msg, "subschemaSubentry");
+   monitor  = ldaputils_get_values(ld, msg, "monitorContext");
    vers     = NULL;
    if ((monitor))
       vers  = my_monitor(cnf, monitor[0]);
 
    // obtain vendor name and version
-   if ((vals = ldap_get_values(ld, msg, "vendorName")) != NULL)
+   if ((vals = ldaputils_get_values(ld, msg, "vendorName")) != NULL)
    {
       my_fields("Vendor name:", vals, 0);
       ldap_value_free(vals);
    }
-   else if ((vals = ldap_get_values(ld, msg, "isGlobalCatalogReady")) != NULL)
+   else if ((vals = ldaputils_get_values(ld, msg, "isGlobalCatalogReady")) != NULL)
    {
       my_field("Vendor name:", "Microsoft Active Directory", 0);
       ldap_value_free(vals);
    }
-   else if ((vals = ldap_get_values(ld, msg, "objectClass")) != NULL)
+   else if ((vals = ldaputils_get_values(ld, msg, "objectClass")) != NULL)
    {
       for(s = 0; ((vals[s])); s++)
          if (!(strcasecmp(vals[s], "OpenLDAProotDSE")))
             my_field("Vendor name:", "OpenLDAP", 0);
       ldap_value_free(vals);
    };
-   if ((vals = ldap_get_values(ld, msg, "vendorVersion")) != NULL)
+   if ((vals = ldaputils_get_values(ld, msg, "vendorVersion")) != NULL)
    {
       my_fields("Vendor version:", vals, 0);
       ldap_value_free(vals);
    }
    else if ((vers))
       my_field("Vendor version:", vers, 0);
-   if ((vals = ldap_get_values(ld, msg, "supportedLDAPVersion")) != NULL)
+   if ((vals = ldaputils_get_values(ld, msg, "supportedLDAPVersion")) != NULL)
    {
       my_fields("LDAP version:", vals, 0);
       ldap_value_free(vals);
@@ -1004,7 +1004,7 @@ int my_rootdse(MyConfig * cnf)
    // DNs
    if ((schema))
       my_fields("Subschema Subentry:", schema, 0);
-   if ((vals = ldap_get_values(ld, msg, "configContext")) != NULL)
+   if ((vals = ldaputils_get_values(ld, msg, "configContext")) != NULL)
    {
       my_fields("Configuration context:", vals, 0);
       ldap_value_free(vals);
@@ -1031,7 +1031,7 @@ int my_rootdse(MyConfig * cnf)
    };
 
    // obtain naming contexts
-   vals = ldap_get_values(ld, msg, "namingContexts");
+   vals = ldaputils_get_values(ld, msg, "namingContexts");
    if ((monitor))
    {
       if ((rc = my_monitor_database(cnf, monitor[0])) == -1)
@@ -1052,7 +1052,7 @@ int my_rootdse(MyConfig * cnf)
       free(vers);
 
    // obtain supported controls
-   if ((vals = ldap_get_values(ld, msg, "supportedControl")) != NULL)
+   if ((vals = ldaputils_get_values(ld, msg, "supportedControl")) != NULL)
    {
       my_fields("Supported controls:", vals, 1);
       printf("\n");
@@ -1060,7 +1060,7 @@ int my_rootdse(MyConfig * cnf)
    };
 
    // obtain supported extension
-   if ((vals = ldap_get_values(ld, msg, "supportedExtension")) != NULL)
+   if ((vals = ldaputils_get_values(ld, msg, "supportedExtension")) != NULL)
    {
       my_fields("Supported extension:", vals, 1);
       printf("\n");
@@ -1068,7 +1068,7 @@ int my_rootdse(MyConfig * cnf)
    };
 
    // obtain supported features
-   if ((vals = ldap_get_values(ld, msg, "supportedFeatures")) != NULL)
+   if ((vals = ldaputils_get_values(ld, msg, "supportedFeatures")) != NULL)
    {
       my_fields("Supported features:", vals, 1);
       printf("\n");
@@ -1076,7 +1076,7 @@ int my_rootdse(MyConfig * cnf)
    };
 
    // obtain supported SASL mechanisms
-   if ((vals = ldap_get_values(ld, msg, "supportedSASLMechanisms")) != NULL)
+   if ((vals = ldaputils_get_values(ld, msg, "supportedSASLMechanisms")) != NULL)
    {
       my_fields("Supported SASL mechanisms:", vals, 0);
       printf("\n");
@@ -1124,7 +1124,7 @@ int my_schema(MyConfig * cnf, const char * base)
    // retrieves entry
    msg   = ldap_first_entry(ld, res);
 
-   if ((vals = ldap_get_values(ld, msg, "ldapSyntaxes")) != NULL)
+   if ((vals = ldaputils_get_values(ld, msg, "ldapSyntaxes")) != NULL)
    {
       for(i = 0; ((vals[i])); i++);
       if (i > 0)
@@ -1135,7 +1135,7 @@ int my_schema(MyConfig * cnf, const char * base)
       ldap_value_free(vals);
    };
 
-   if ((vals = ldap_get_values(ld, msg, "matchingRules")) != NULL)
+   if ((vals = ldaputils_get_values(ld, msg, "matchingRules")) != NULL)
    {
       for(i = 0; ((vals[i])); i++);
       if (i > 0)
@@ -1146,7 +1146,7 @@ int my_schema(MyConfig * cnf, const char * base)
       ldap_value_free(vals);
    };
 
-   if ((vals = ldap_get_values(ld, msg, "matchingRuleUse")) != NULL)
+   if ((vals = ldaputils_get_values(ld, msg, "matchingRuleUse")) != NULL)
    {
       for(i = 0; ((vals[i])); i++);
       if (i > 0)
@@ -1157,7 +1157,7 @@ int my_schema(MyConfig * cnf, const char * base)
       ldap_value_free(vals);
    };
 
-   if ((vals = ldap_get_values(ld, msg, "attributeTypes")) != NULL)
+   if ((vals = ldaputils_get_values(ld, msg, "attributeTypes")) != NULL)
    {
       for(i = 0; ((vals[i])); i++);
       if (i > 0)
@@ -1168,7 +1168,7 @@ int my_schema(MyConfig * cnf, const char * base)
       ldap_value_free(vals);
    };
 
-   if ((vals = ldap_get_values(ld, msg, "objectClasses")) != NULL)
+   if ((vals = ldaputils_get_values(ld, msg, "objectClasses")) != NULL)
    {
       for(i = 0; ((vals[i])); i++);
       if (i > 0)
@@ -1179,7 +1179,7 @@ int my_schema(MyConfig * cnf, const char * base)
       ldap_value_free(vals);
    };
 
-   if ((vals = ldap_get_values(ld, msg, "dITContentRules")) != NULL)
+   if ((vals = ldaputils_get_values(ld, msg, "dITContentRules")) != NULL)
    {
       for(i = 0; ((vals[i])); i++);
       if (i > 0)
@@ -1190,7 +1190,7 @@ int my_schema(MyConfig * cnf, const char * base)
       ldap_value_free(vals);
    };
 
-   if ((vals = ldap_get_values(ld, msg, "dITStructureRules")) != NULL)
+   if ((vals = ldaputils_get_values(ld, msg, "dITStructureRules")) != NULL)
    {
       for(i = 0; ((vals[i])); i++);
       if (i > 0)
@@ -1201,7 +1201,7 @@ int my_schema(MyConfig * cnf, const char * base)
       ldap_value_free(vals);
    };
 
-   if ((vals = ldap_get_values(ld, msg, "nameForms")) != NULL)
+   if ((vals = ldaputils_get_values(ld, msg, "nameForms")) != NULL)
    {
       for(i = 0; ((vals[i])); i++);
       if (i > 0)
