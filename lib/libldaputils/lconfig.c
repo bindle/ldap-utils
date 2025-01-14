@@ -55,10 +55,10 @@
 #include <assert.h>
 
 #ifdef HAVE_TERMIOS_H
-#include <termios.h>
+#   include <termios.h>
 #endif
 #ifdef HAVE_SGTTY_H
-#include <sgtty.h>
+#   include <sgtty.h>
 #endif
 
 #include "lpasswd.h"
@@ -71,13 +71,52 @@
 //////////////////
 // MARK: - Prototypes
 
-void ldaputils_param_print(const char * key, const char * val);
-void ldaputils_param_int(LDAPUtils * lud, const char * key, int ival);
-void ldaputils_param_option_str(LDAPUtils * lud, const char * key, int option);
-void ldaputils_param_option_strlist(LDAPUtils * lud, const char * key, int option);
-void ldaputils_param_option_int(LDAPUtils * lud, const char * key, int option);
-void ldaputils_param_option_time(LDAPUtils * lud, const char * key, int option);
-void ldaputils_param_option_bool(LDAPUtils * lud, const char * key, int option);
+static void
+ldaputils_param_print(
+         const char *                  key,
+         const char *                  val );
+
+
+static void
+ldaputils_param_int(
+         LDAPUtils *                   lud,
+         const char *                  key,
+         int                           ival );
+
+
+static void
+ldaputils_param_option_str(
+         LDAPUtils *                   lud,
+         const char *                  key,
+         int                           option );
+
+
+static void
+ldaputils_param_option_strlist(
+         LDAPUtils *                   lud,
+         const char *                  key,
+         int                           option );
+
+
+static void
+ldaputils_param_option_int(
+         LDAPUtils *                   lud,
+         const char *                  key,
+         int                           option );
+
+
+static void
+ldaputils_param_option_time(
+         LDAPUtils *                   lud,
+         const char *                  key,
+         int                           option );
+
+
+static void
+ldaputils_param_option_bool(
+         LDAPUtils *                   lud,
+         const char *                  key,
+         int                           option );
 
 
 /////////////////
@@ -94,17 +133,21 @@ void ldaputils_param_option_bool(LDAPUtils * lud, const char * key, int option);
 ///
 /// @return    If successfull, returns 0.  If an unknown option, returns the
 ///            option value for processing by the program.
-int ldaputils_getopt(LDAPUtils * lud, int c, const char * arg)
+int
+ldaputils_getopt(
+         LDAPUtils *                   lud,
+         int                           c,
+         const char *                  arg )
 {
-   int     rc;
-   int     valint;
-   char  * endptr;
+   int      rc;
+   int      valint;
+   char *   endptr;
 
-   /* checks argument */
+   // checks argument
    switch(c)
    {
-      case -1:       /* no more arguments */
-      case 0:        /* long options toggles */
+      case -1:       // no more arguments
+      case 0:        // long options toggles
       return(c);
 
       // Common Options
@@ -263,17 +306,18 @@ int ldaputils_getopt(LDAPUtils * lud, int c, const char * arg)
       break;
    };
 
-   /* ends function */
    return(c);
 }
 
 
 /// prints configuration to stdout
 /// @param[in] lud  reference to common configuration struct
-void ldaputils_params(LDAPUtils * lud)
+void
+ldaputils_params(
+         LDAPUtils *                   lud )
 {
-   int          i;
-   const char * str;
+   int            i;
+   const char *   str;
 
    printf("Miscellaneous:\n");
    ldaputils_param_int(lud, "Continuous:",              lud->continuous);
@@ -404,7 +448,10 @@ void ldaputils_params(LDAPUtils * lud)
 /// @param[in] val   value of key
 ///
 /// @see       ldaputils_param_int, ldaputils_param_option_bool
-void ldaputils_param_print(const char * key, const char * val)
+void
+ldaputils_param_print(
+         const char *                  key,
+         const char *                  val )
 {
    if ((val))
       printf("   %-20s %s\n", key, val);
@@ -418,9 +465,13 @@ void ldaputils_param_print(const char * key, const char * val)
 /// @param[in] ival  value of key
 ///
 /// @see       ldaputils_param_print, ldaputils_param_option_bool
-void ldaputils_param_int(LDAPUtils * lud, const char * key, int ival)
+void
+ldaputils_param_int(
+         LDAPUtils *                   lud,
+         const char *                  key,
+         int                           ival )
 {
-   char val[16];
+   char  val[16];
 
    assert(lud != NULL);
 
@@ -438,9 +489,13 @@ void ldaputils_param_int(LDAPUtils * lud, const char * key, int ival)
 /// @param[in] option   LDAP option
 ///
 /// @see       ldaputils_param_print, ldaputils_param_option_bool
-void ldaputils_param_option_bool(LDAPUtils * lud, const char * key, int option)
+void
+ldaputils_param_option_bool(
+         LDAPUtils *                   lud,
+         const char *                  key,
+         int                           option )
 {
-   int  ival;
+   int   ival;
 
    assert(lud != NULL);
 
@@ -461,10 +516,14 @@ void ldaputils_param_option_bool(LDAPUtils * lud, const char * key, int option)
 /// @param[in] option   LDAP option
 ///
 /// @see       ldaputils_param_print, ldaputils_param_option_bool
-void ldaputils_param_option_int(LDAPUtils * lud, const char * key, int option)
+void
+ldaputils_param_option_int(
+         LDAPUtils *                   lud,
+         const char *                  key,
+         int                           option )
 {
-   int  ival;
-   char val[16];
+   int   ival;
+   char  val[16];
 
    assert(lud != NULL);
 
@@ -483,9 +542,13 @@ void ldaputils_param_option_int(LDAPUtils * lud, const char * key, int option)
 /// @param[in] option   LDAP option
 ///
 /// @see       ldaputils_param_print, ldaputils_param_option_bool
-void ldaputils_param_option_str(LDAPUtils * lud, const char * key, int option)
+void
+ldaputils_param_option_str(
+         LDAPUtils *                   lud,
+         const char *                  key,
+         int                           option )
 {
-   char * val;
+   char *   val;
 
    assert(lud != NULL);
 
@@ -507,10 +570,14 @@ void ldaputils_param_option_str(LDAPUtils * lud, const char * key, int option)
 /// @param[in] option   LDAP option
 ///
 /// @see       ldaputils_param_print, ldaputils_param_option_bool
-void ldaputils_param_option_strlist(LDAPUtils * lud, const char * key, int option)
+void
+ldaputils_param_option_strlist(
+         LDAPUtils *                   lud,
+         const char *                  key,
+         int                           option )
 {
-   int     i;
-   char ** list;
+   int      i;
+   char **  list;
 
    assert(lud != NULL);
 
@@ -533,10 +600,14 @@ void ldaputils_param_option_strlist(LDAPUtils * lud, const char * key, int optio
 /// @param[in] option   LDAP option
 ///
 /// @see       ldaputils_param_print, ldaputils_param_option_bool
-void ldaputils_param_option_time(LDAPUtils * lud, const char * key, int option)
+void
+ldaputils_param_option_time(
+         LDAPUtils *                   lud,
+         const char *                  key,
+         int                           option )
 {
-   struct timeval * ival;
-   char             val[64];
+   struct timeval *  ival;
+   char              val[64];
 
    assert(lud != NULL);
 
@@ -549,21 +620,27 @@ void ldaputils_param_option_time(LDAPUtils * lud, const char * key, int option)
 }
 
 
-const char * ldaputils_get_prog_name(LDAPUtils * lud)
+const char *
+ldaputils_get_prog_name(
+         LDAPUtils *                   lud )
 {
    assert(lud != NULL);
    return(lud->prog_name);
 }
 
 
-LDAP * ldaputils_get_ld(LDAPUtils * lud)
+LDAP *
+ldaputils_get_ld(
+         LDAPUtils *                   lud )
 {
    assert(lud != NULL);
    return(lud->ld);
 }
 
 
-const char * const * ldaputils_get_attribute_list(LDAPUtils * lud)
+const char * const *
+ldaputils_get_attribute_list(
+         LDAPUtils *                   lud )
 {
    assert(lud != NULL);
    return((const char * const *)lud->attrs);
@@ -572,13 +649,11 @@ const char * const * ldaputils_get_attribute_list(LDAPUtils * lud)
 
 /// displays usage for common options
 /// @param[in] short_options  list of usage options
-void ldaputils_usage_common(const char * short_options)
+void
+ldaputils_usage_common(
+         const char *                  short_options )
 {
-   unsigned pos;
-   // TRANSLATORS: The following strings provide usage for common command
-   // line arguments. Usage for program specific arguments is provided in
-   // anothoer section. These strings are displayed if the program is
-   // passed `--help' on the command line.
+   unsigned    pos;
    printf("Common options:\n");
    for(pos = 0; pos < strlen(short_options); pos++)
    {
@@ -608,13 +683,11 @@ void ldaputils_usage_common(const char * short_options)
 
 /// displays search usage for search options
 /// @param[in] short_options  list of usage options
-void ldaputils_usage_search(const char * short_options)
+void
+ldaputils_usage_search(
+         const char *                  short_options )
 {
    unsigned pos;
-   // TRANSLATORS: The following strings provide usage for search command
-   // line arguments. Usage for program specific arguments is provided in
-   // anothoer section. These strings are displayed if the program is
-   // passed `--help' on the command line.
    printf("Search options:\n");
    for(pos = 0; pos < strlen(short_options); pos++)
    {
@@ -639,7 +712,9 @@ void ldaputils_usage_search(const char * short_options)
 /// @param[in] prog_name   name of running program
 ///
 /// @see       ldaputils_param_print, ldaputils_param_option_bool
-void ldaputils_version(const char * prog_name)
+void
+ldaputils_version(
+         const char *                  prog_name )
 {
    printf("%s (%s) %s\n", prog_name, PACKAGE_NAME, PACKAGE_VERSION);
    printf("%s\n", PACKAGE_COPYRIGHT);
