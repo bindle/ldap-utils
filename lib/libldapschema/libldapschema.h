@@ -53,7 +53,6 @@
 
 #include <ldap.h>
 #include <ldapschema.h>
-#include <ldaputils.h>
 
 
 ///////////////////
