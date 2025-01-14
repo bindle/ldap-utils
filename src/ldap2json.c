@@ -425,7 +425,7 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
          }
          else
          {
-            if ((vals = ldap_get_values(ld, msg, cnf->lud->attrs[x])) != NULL)
+            if ((vals = ldaputils_get_values(ld, msg, cnf->lud->attrs[x])) != NULL)
             {
                ldap_value_free(vals);
                continue;
@@ -448,7 +448,7 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
       while ((attr))
       {
          // retrieves values
-         if ((vals = ldap_get_values(ld, msg, attr)) == NULL)
+         if ((vals = ldaputils_get_values(ld, msg, attr)) == NULL)
          {
             for(x = 0; ( ((cnf->lud->attrs[x])) && (!(strcasecmp(attr, cnf->lud->attrs[x])))); x++);
             if ((cnf->defvals[x]))
