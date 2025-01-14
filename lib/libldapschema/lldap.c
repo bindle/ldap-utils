@@ -65,7 +65,6 @@
 
 static char ** ldapschema_get_values(LDAP * ld, LDAPMessage * entry, const char * attr);
 
-static void ldapschema_value_free_len(struct berval ** vals);
 
 /////////////////
 //             //
@@ -123,7 +122,7 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
    if ((dns = ldapschema_get_values(ld, msg, "subschemaSubentry")) == NULL)
    {
       ldap_msgfree(res);
-      ldaputils_value_free(dns);
+      ldapschema_value_free(dns);
       return(-1);
    };
    ldap_msgfree(res);
@@ -134,11 +133,11 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
    res               = NULL;
    if ((err = ldap_search_ext_s(ld, dns[0], LDAP_SCOPE_BASE, "(objectclass=*)", attrs, 0, NULL, NULL, &timeout, 0, &res)) != LDAP_SUCCESS)
    {
-      ldaputils_value_free(dns);
+      ldapschema_value_free(dns);
       ldapschema_value_free(attrs);
       return(-1);
    };
-   ldaputils_value_free(dns);
+   ldapschema_value_free(dns);
    ldapschema_value_free(attrs);
    dns   = NULL;
    attrs = NULL;
@@ -360,7 +359,7 @@ char ** ldapschema_get_values(LDAP * ld, LDAPMessage * entry, const char * attr)
       bvals[pos+1] = NULL;
       if ((vals[pos] = malloc(bvals[pos]->bv_len+1)) == NULL)
       {
-         ldaputils_value_free(vals);
+         ldapschema_value_free(vals);
          ldapschema_value_free_len(bvals);
          return(NULL);
       };
@@ -369,20 +368,6 @@ char ** ldapschema_get_values(LDAP * ld, LDAPMessage * entry, const char * attr)
    };
 
    return(vals);
-}
-
-
-void ldapschema_value_free_len(struct berval ** vals)
-{
-   int pos;
-   for(pos = 0; ((vals[pos])); pos++)
-   {
-      if ((vals[pos]->bv_val))
-         ldap_memfree(vals[pos]->bv_val);
-      ldap_memfree(vals[pos]);
-   };
-   ldap_memfree(vals);
-   return;
 }
 
 
