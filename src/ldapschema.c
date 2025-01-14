@@ -114,12 +114,12 @@
 typedef struct my_config MyConfig;
 struct my_config
 {
-   LDAPUtils          * lud;
-   LDAPSchema         * lsd;
-   int                  noextra;
-   int                  action;
-   uint64_t             types;
-   char               ** args;
+   LDAPUtils *    lud;
+   LDAPSchema *   lsd;
+   int            noextra;
+   int            action;
+   uint64_t       types;
+   char **        args;
 };
 
 
@@ -153,19 +153,51 @@ static struct
 // MARK: - Prototypes
 
 // main statement
-int main(int argc, char * argv[]);
+extern int
+main(
+         int                           argc,
+         char *                        argv[] );
+
 
 // parses configuration
-int my_config(int argc, char * argv[], MyConfig ** cnfp);
+static int
+my_config(
+         int                           argc,
+         char *                        argv[],
+         MyConfig **                   cnfp );
 
-int my_list_add(LDAPSchemaModel *** listp, size_t * lenp, LDAPSchemaModel * mod);
-int my_run_details(MyConfig * cnf);
-int my_run_dump(MyConfig * cnf);
-int my_run_lint(MyConfig * cnf);
-int my_run_list(MyConfig * cnf);
+
+static int
+my_list_add(
+         LDAPSchemaModel ***           listp,
+         size_t *                      lenp,
+         LDAPSchemaModel *             mod );
+
+
+static int
+my_run_details(
+         MyConfig *                    cnf );
+
+
+static int
+my_run_dump(
+         MyConfig *                    cnf );
+
+
+static int
+my_run_lint(
+         MyConfig *                    cnf );
+
+
+static int
+my_run_list(
+         MyConfig *                    cnf );
+
 
 // fress resources
-void my_unbind(MyConfig * cnf);
+static void
+my_unbind(
+         MyConfig *                    cnf );
 
 
 /////////////////
@@ -176,7 +208,9 @@ void my_unbind(MyConfig * cnf);
 // MARK: - Functions
 
 /// prints program usage and exits
-void ldaputils_usage(void)
+void
+ldaputils_usage(
+         void )
 {
    size_t idx;
 
@@ -207,10 +241,13 @@ void ldaputils_usage(void)
 /// main statement
 /// @param[in] argc   number of arguments
 /// @param[in] argv   array of arguments
-int main(int argc, char * argv[])
+int
+main(
+         int                           argc,
+         char *                        argv[] )
 {
-   int                    err;
-   MyConfig             * cnf;
+   int         err;
+   MyConfig *  cnf;
 
    cnf = NULL;
 
@@ -256,16 +293,20 @@ int main(int argc, char * argv[])
 /// @param[in] argc   number of arguments
 /// @param[in] argv   array of arguments
 /// @param[in] cnfp   reference to configuration pointer
-int my_config(int argc, char * argv[], MyConfig ** cnfp)
+int
+my_config(
+         int                           argc,
+         char *                        argv[],
+         MyConfig **                   cnfp )
 {
-   int            c;
-   int            err;
-   int            option_index;
-   MyConfig     * cnf;
-   uint64_t       flag;
-   int            i;
-   size_t         idx;
-   size_t         len;
+   int         c;
+   int         err;
+   int         option_index;
+   MyConfig *  cnf;
+   uint64_t    flag;
+   int         i;
+   size_t      idx;
+   size_t      len;
 
    static char   short_options[] = MY_SHORT_OPTIONS "98:76";
    static struct option long_options[] =
@@ -456,10 +497,14 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
 }
 
 
-int my_list_add(LDAPSchemaModel *** listp, size_t * lenp, LDAPSchemaModel * mod)
+int
+my_list_add(
+         LDAPSchemaModel ***           listp,
+         size_t *                      lenp,
+         LDAPSchemaModel *             mod )
 {
-   void *               ptr;
-   size_t               idx;
+   void *      ptr;
+   size_t      idx;
 
    if (!(mod))
       return(0);
@@ -482,17 +527,19 @@ int my_list_add(LDAPSchemaModel *** listp, size_t * lenp, LDAPSchemaModel * mod)
 }
 
 
-int my_run_details(MyConfig * cnf)
+int
+my_run_details(
+         MyConfig *                    cnf )
 {
    size_t                     idx;
    size_t                     list_len;
-   LDAPSchemaModel         ** list;
-   LDAPSchemaSyntax         * syntax;
-   LDAPSchemaAttributeType  * attr;
-   LDAPSchemaAttributeType  * attrsup;
-   LDAPSchemaObjectclass    * objcls;
-   LDAPSchemaObjectclass    * objclssup;
-   LDAPSchemaMatchingRule   * mtchngrl;
+   LDAPSchemaModel **         list;
+   LDAPSchemaSyntax *         syntax;
+   LDAPSchemaAttributeType *  attr;
+   LDAPSchemaAttributeType *  attrsup;
+   LDAPSchemaObjectclass *    objcls;
+   LDAPSchemaObjectclass *    objclssup;
+   LDAPSchemaMatchingRule *   mtchngrl;
 
    list     = NULL;
    list_len = 0;
@@ -619,7 +666,9 @@ int my_run_details(MyConfig * cnf)
 }
 
 
-int my_run_dump(MyConfig * cnf)
+int
+my_run_dump(
+         MyConfig *                    cnf )
 {
    if ((cnf->types & MY_OBJ_SYNTAX) != 0)
       ldapschema_printall(cnf->lsd, LDAPSCHEMA_SYNTAX);
@@ -637,12 +686,13 @@ int my_run_dump(MyConfig * cnf)
 }
 
 
-
-int my_run_lint(MyConfig * cnf)
+int
+my_run_lint(
+         MyConfig *                    cnf )
 {
-   int         err;
-   char     ** errs;
-   size_t      pos;
+   int      err;
+   char **  errs;
+   size_t   pos;
 
    if ((err = ldapschema_errno(cnf->lsd)) == LDAPSCHEMA_SUCCESS)
    {
@@ -666,7 +716,9 @@ int my_run_lint(MyConfig * cnf)
 }
 
 
-int my_run_list(MyConfig * cnf)
+int
+my_run_list(
+         MyConfig *                    cnf )
 {
    size_t                              idx;
    LDAPSchemaCur                       cur;
@@ -796,7 +848,9 @@ int my_run_list(MyConfig * cnf)
 
 
 // fress resources
-void my_unbind(MyConfig * cnf)
+void
+my_unbind(
+         MyConfig *                    cnf )
 {
    assert(cnf != NULL);
 
