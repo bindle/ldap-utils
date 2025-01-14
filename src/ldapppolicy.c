@@ -511,7 +511,7 @@ my_field_array(
       my_field(cnf, name, attr, vals[0]);
       for(pos = 1; ((vals[pos])); pos++)
          my_field(cnf, NULL, attr, vals[0]);
-      ldap_value_free(vals);
+      ldaputils_value_free(vals);
       return;
    }
 
@@ -547,7 +547,7 @@ my_field_interval(
    if ((vals = ldap_get_values(ld, msg, attr)) != NULL)
    {
       snprintf(attrval, sizeof(attrval), "%s", vals[0]);
-      ldap_value_free(vals);
+      ldaputils_value_free(vals);
    } else if ((dflt))
       snprintf(attrval, sizeof(attrval), "%s", dflt);
    else
@@ -624,7 +624,7 @@ my_field_quality(
    if ((vals = ldap_get_values(ld, msg, attr)) != NULL)
    {
       snprintf(attrval, sizeof(attrval), "%s", vals[0]);
-      ldap_value_free(vals);
+      ldaputils_value_free(vals);
    } else if ((dflt))
       snprintf(attrval, sizeof(attrval), "%s", dflt);
    else
@@ -662,7 +662,7 @@ my_field_str(
    if ((vals = ldap_get_values(ld, msg, attr)) != NULL)
    {
       snprintf(attrval, sizeof(attrval), "%s", vals[0]);
-      ldap_value_free(vals);
+      ldaputils_value_free(vals);
    } else if ((dflt))
       snprintf(attrval, sizeof(attrval), "%s", dflt);
    else
@@ -745,7 +745,7 @@ my_naming_contexts(
    {
       if (my_search(cnf, vals[pos], LDAP_SCOPE_SUB, "objectClass=pwdPolicy") == -1)
       {
-         ldap_value_free(vals);
+         ldaputils_value_free(vals);
          ldap_msgfree(res);
          return(-1);
       };
