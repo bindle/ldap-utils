@@ -164,8 +164,6 @@ int ldaputils_pass(LDAPUtils * lud);
 // compares two LDAP values for sorting
 int ldaputils_berval_cmp(const struct berval ** ptr1, const struct berval ** ptr2);
 
-int ldaputils_count_values(char ** vals);
-
 // frees list of entries
 void ldaputils_entries_free(LDAPUtilsEntries * entries);
 

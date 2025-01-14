@@ -254,16 +254,6 @@ int ldaputils_berval_cmp(const struct berval ** ptr1, const struct berval ** ptr
 }
 
 
-int ldaputils_count_values(char ** vals)
-{
-   int count;
-   if (!(vals))
-      return(0);
-   for(count = 0; ((vals[count])); count++);
-   return(count);
-}
-
-
 // initializes list of entries
 int ldaputils_entries_add_entry(LDAPUtilsEntries * entries, LDAPUtilsEntry * entry)
 {
