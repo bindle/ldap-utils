@@ -427,7 +427,7 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
          {
             if ((vals = ldaputils_get_values(ld, msg, cnf->lud->attrs[x])) != NULL)
             {
-               ldap_value_free(vals);
+               ldaputils_value_free(vals);
                continue;
             };
             if (cnf->defvals[x] == NULL)
@@ -441,7 +441,7 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
             printf("\n");
       };
 
-      ldap_value_free(dns);
+      ldaputils_value_free(dns);
       ldap_memfree(dn);
 
       // loop through attributes
@@ -459,7 +459,7 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
          else if (vals[1] == NULL)
          {
             printf("      \"%s\": \"%s\"", attr, vals[0]);
-            ldap_value_free(vals);
+            ldaputils_value_free(vals);
          }
          else
          {
@@ -472,7 +472,7 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
                   printf(" \"%s\"", vals[y]);
             };
             printf(" ]");
-            ldap_value_free(vals);
+            ldaputils_value_free(vals);
          };
          if ((attr = ldap_next_attribute(ld, msg, ber)) == NULL)
             printf("\n");
