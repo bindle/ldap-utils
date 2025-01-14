@@ -469,33 +469,33 @@ my_monitor_connections(
 
       // process monitorConnectionNumber
       rec->rec_num = (unsigned)strtoull(vals[0], NULL, 10);
-      ldap_value_free(vals);
+      ldaputils_value_free(vals);
 
       // process values
       if ((vals = ldaputils_get_values(ld, msg, "monitorConnectionProtocol")) != NULL)
       {
          rec->rec_proto = (unsigned)strtoull(vals[0], NULL, 10);
-         ldap_value_free(vals);
+         ldaputils_value_free(vals);
       };
       if ((vals = ldaputils_get_values(ld, msg, "monitorConnectionOpsReceived")) != NULL)
       {
          rec->rec_ops_recv = (unsigned)strtoull(vals[0], NULL, 10);
-         ldap_value_free(vals);
+         ldaputils_value_free(vals);
       };
       if ((vals = ldaputils_get_values(ld, msg, "monitorConnectionOpsExecuting")) != NULL)
       {
          rec->rec_ops_exec = (unsigned)strtoull(vals[0], NULL, 10);
-         ldap_value_free(vals);
+         ldaputils_value_free(vals);
       };
       if ((vals = ldaputils_get_values(ld, msg, "monitorConnectionOpsPending")) != NULL)
       {
          rec->rec_ops_pend = (unsigned)strtoull(vals[0], NULL, 10);
-         ldap_value_free(vals);
+         ldaputils_value_free(vals);
       };
       if ((vals = ldaputils_get_values(ld, msg, "monitorConnectionOpsCompleted")) != NULL)
       {
          rec->rec_ops_comp = (unsigned)strtoull(vals[0], NULL, 10);
-         ldap_value_free(vals);
+         ldaputils_value_free(vals);
       };
       rec->rec_mask     = ldaputils_get_values(ld, msg, "monitorConnectionMask");
       rec->rec_authzdn  = ldaputils_get_values(ld, msg, "monitorConnectionAuthzDN");
