@@ -62,7 +62,7 @@
 //////////////////
 // MARK: - Prototypes
 
-int
+extern int
 ldapschema_schema_err(
          LDAPSchema *                  lsd,
          LDAPSchemaModel *             mod,
@@ -70,13 +70,15 @@ ldapschema_schema_err(
                                        ... )
          __attribute__((format(printf, 3, 4)) );
 
-int
+
+extern int
 ldapschema_schema_err_kw_dup(
          LDAPSchema *                  lsd,
          LDAPSchemaModel *             mod,
          const char *                  keyword );
 
-int
+
+extern int
 ldapschema_schema_err_kw_unknown(
          LDAPSchema *                  lsd,
          LDAPSchemaModel *             mod,

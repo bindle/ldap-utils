@@ -66,7 +66,9 @@
 ///
 /// @return    Returns a string representation of the error code.
 /// @see       ldapschema_free, ldapschema_initialize, ldapschema_errno
-const char * ldapschema_err2string( int err )
+const char *
+ldapschema_err2string(
+         int                           err )
 {
    switch(err)
    {
@@ -87,7 +89,9 @@ const char * ldapschema_err2string( int err )
 ///
 /// @return    Returns a numeric code of last error
 /// @see       ldapschema_free, ldapschema_initialize, ldapschema_err2string
-int ldapschema_errno( LDAPSchema * lsd )
+int
+ldapschema_errno(
+         LDAPSchema *                  lsd )
 {
    assert(lsd != NULL);
    return(lsd->errcode);
@@ -102,7 +106,12 @@ int ldapschema_errno( LDAPSchema * lsd )
 ///
 /// @return    Returns a numeric code of last error
 /// @see       ldapschema_free, ldapschema_initialize, ldapschema_err2string
-int ldapschema_schema_err(LDAPSchema * lsd, LDAPSchemaModel * mod, const char * fmt, ... )
+int
+ldapschema_schema_err(
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             mod,
+         const char *                  fmt,
+         ... )
 {
    char           buff[512];
    va_list        args;
@@ -154,23 +163,31 @@ int ldapschema_schema_err(LDAPSchema * lsd, LDAPSchemaModel * mod, const char * 
 }
 
 
-int ldapschema_schema_err_kw_dup(LDAPSchema * lsd, LDAPSchemaModel * mod,
-   const char * keyword )
+int
+ldapschema_schema_err_kw_dup(
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             mod,
+         const char *                  keyword )
 {
    assert(lsd != NULL);
    return(ldapschema_schema_err(lsd, mod, "definition contains duplicate keyword '%s'", keyword));
 }
 
 
-int ldapschema_schema_err_kw_unknown(LDAPSchema * lsd, LDAPSchemaModel * mod,
-   const char * keyword )
+int
+ldapschema_schema_err_kw_unknown(
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             mod,
+         const char *                  keyword )
 {
    assert(lsd != NULL);
    return(ldapschema_schema_err(lsd, mod, "definition contains unknown keyword '%s'", keyword));
 }
 
 
-char ** ldapschema_schema_errors(LDAPSchema * lsd )
+char **
+ldapschema_schema_errors(
+         LDAPSchema *                  lsd )
 {
    int                  len;
    size_t               x;
