@@ -109,10 +109,10 @@
 typedef struct my_config MyConfig;
 struct my_config
 {
-   LDAPUtils          * lud;
-   int                  type;
-   int                  pad0;
-   LDAPDN               dn;
+   LDAPUtils *    lud;
+   int            type;
+   int            pad0;
+   LDAPDN         dn;
 };
 
 
@@ -124,13 +124,24 @@ struct my_config
 // MARK: - Prototypes
 
 // main statement
-int main(int argc, char * argv[]);
+extern int
+main(
+         int                           argc,
+         char *                        argv[] );
+
 
 // parses configuration
-int my_config(int argc, char * argv[], MyConfig ** cnfp);
+static int
+my_config(
+         int                           argc,
+         char *                        argv[],
+         MyConfig **                   cnfp );
+
 
 // fress resources
-void my_unbind(MyConfig * cnf);
+static void
+my_unbind(
+         MyConfig *                    cnf );
 
 
 /////////////////
@@ -141,7 +152,9 @@ void my_unbind(MyConfig * cnf);
 // MARK: - Functions
 
 /// prints program usage and exits
-void ldaputils_usage(void)
+void
+ldaputils_usage(
+         void )
 {
    printf("Usage: %s [options] dn\n", PROGRAM_NAME);
    ldaputils_usage_common(MY_SHORT_OPTIONS);
@@ -159,14 +172,17 @@ void ldaputils_usage(void)
 /// main statement
 /// @param[in] argc   number of arguments
 /// @param[in] argv   array of arguments
-int main(int argc, char * argv[])
+int
+main(
+         int                           argc,
+         char *                        argv[] )
 {
-   int                    err;
-   int                    i;
-   int                    len;
-   char                 * str;
-   char                ** edn;
-   MyConfig             * cnf;
+   int         err;
+   int         i;
+   int         len;
+   char *      str;
+   char **     edn;
+   MyConfig *  cnf;
 
    cnf = NULL;
 
@@ -234,7 +250,11 @@ int main(int argc, char * argv[])
 /// @param[in] argc   number of arguments
 /// @param[in] argv   array of arguments
 /// @param[in] cnfp   reference to configuration pointer
-int my_config(int argc, char * argv[], MyConfig ** cnfp)
+int
+my_config(
+         int                           argc,
+         char *                        argv[],
+         MyConfig **                   cnfp )
 {
    int        c;
    int        err;
@@ -366,7 +386,9 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
 
 
 // fress resources
-void my_unbind(MyConfig * cnf)
+void
+my_unbind(
+         MyConfig *                    cnf )
 {
    assert(cnf != NULL);
 
