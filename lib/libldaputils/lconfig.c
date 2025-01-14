@@ -40,9 +40,7 @@
 //  Headers  //
 //           //
 ///////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Headers
-#endif
+// MARK: - Headers
 
 #include <errno.h>
 #include <stdio.h>
@@ -71,9 +69,7 @@
 //  Prototypes  //
 //              //
 //////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Prototypes
-#endif
+// MARK: - Prototypes
 
 // prints string to stdout
 const char * ldaputils_config_print_str(const char * str);
@@ -91,9 +87,7 @@ void ldaputils_param_option_bool(LDAPUtils * lud, const char * key, int option);
 //  Functions  //
 //             //
 /////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Functions
-#endif
+// MARK: - Functions
 
 /// parses LDAP command line arguments
 /// @param[in]  lud           reference to LDAP utiles descriptor

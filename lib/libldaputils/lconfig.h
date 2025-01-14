@@ -34,7 +34,6 @@
  */
 #ifndef _LIB_LIBLDAPUTILS_LCONFIG_H
 #define _LIB_LIBLDAPUTILS_LCONFIG_H 1
-#undef __LDAPUTILS_PMARK
 
 
 ///////////////
@@ -42,9 +41,7 @@
 //  Headers  //
 //           //
 ///////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Headers
-#endif
+// MARK: - Headers
 
 #include "libldaputils.h"
 
@@ -54,9 +51,7 @@
 //  Definitions  //
 //               //
 ///////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Definitions
-#endif
+// MARK: - Definitions
 
 
 /////////////////
@@ -64,9 +59,7 @@
 //  Datatypes  //
 //             //
 /////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Datatypes
-#endif
+// MARK: - Datatypes
 
 
 //////////////////
@@ -74,8 +67,7 @@
 //  Prototypes  //
 //              //
 //////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Prototypes
-#endif
+// MARK: - Prototypes
+
 
 #endif /* end of header file */

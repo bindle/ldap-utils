@@ -34,7 +34,6 @@
  */
 #ifndef _LIB_LIBLDAPUTILS_LENTRY_H
 #define _LIB_LIBLDAPUTILS_LENTRY_H 1
-#undef __LDAPUTILS_PMARK
 
 
 ///////////////
@@ -42,9 +41,7 @@
 //  Headers  //
 //           //
 ///////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Headers
-#endif
+// MARK: - Headers
 
 #include "libldaputils.h"
 #include "lconfig.h"
@@ -55,9 +52,7 @@
 //  Definitions  //
 //               //
 ///////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Definitions
-#endif
+// MARK: - Definitions
 
 
 //////////////////
@@ -65,9 +60,7 @@
 //  Prototypes  //
 //              //
 //////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Prototypes
-#endif
+// MARK: - Prototypes
 
 LDAPUtilsEntry * ldaputils_entry_copy(LDAPUtilsEntry * entry);
 int ldaputils_entry_add_attribute(LDAPUtilsEntry * entry, const char * name, struct berval ** vals);

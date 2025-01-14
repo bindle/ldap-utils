@@ -40,9 +40,7 @@
 //  Headers  //
 //           //
 ///////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Headers
-#endif
+// MARK: - Headers
 
 #include <errno.h>
 #include <stdio.h>
@@ -61,9 +59,7 @@
 //  Definitions  //
 //               //
 ///////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Definitions
-#endif
+// MARK: - Definitions
 
 #define LDAPUTILS_TREE_SPACE 0
 #define LDAPUTILS_TREE_DATA 1
@@ -73,9 +69,7 @@
 //  Datatypes  //
 //             //
 /////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Datatypes
-#endif
+// MARK: - Datatypes
 
 struct ldap_utils_tree
 {
@@ -101,9 +95,7 @@ struct ldap_utils_tree_recur
 //  Prototypes  //
 //              //
 //////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Prototypes
-#endif
+// MARK: - Prototypes
 
 int ldaputils_tree_add_dn_components(LDAPUtilsTree * tree, char ** components, size_t components_len, LDAPUtilsTree ** nodep);
 
@@ -130,9 +122,7 @@ void ldaputils_tree_print_recursive(LDAPUtilsTree * tree, size_t level, LDAPUtil
 //  Functions  //
 //             //
 /////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Functions
-#endif
+// MARK: - Functions
 
 
 /// retrieves LDAP entries from result

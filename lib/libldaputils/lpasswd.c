@@ -40,9 +40,7 @@
 //  Headers  //
 //           //
 ///////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Headers
-#endif
+// MARK: - Headers
 
 #include <errno.h>
 #include <stdio.h>
@@ -69,9 +67,7 @@
 //  Functions  //
 //             //
 /////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Functions
-#endif
+// MARK: - Functions
 
 /// getpass() replacement -- SUSV 2 deprecated getpass()
 /// @param[in] prompt   prompt to display to end user

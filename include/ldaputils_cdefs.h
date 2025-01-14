@@ -44,6 +44,7 @@
 //  Headers  //
 //           //
 ///////////////
+// MARK: - Headers
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -66,6 +67,7 @@
 //  Macros  //
 //          //
 //////////////
+// MARK: - Macros
 
 // Exports function type
 #undef LDAPUTILS_C_DECLS

@@ -34,7 +34,6 @@
  */
 #ifndef _LIB_LIBLDAPUTILS_LIBLDAPUTILS_H
 #define _LIB_LIBLDAPUTILS_LIBLDAPUTILS_H 1
-#undef __LDAPUTILS_PMARK
 
 
 ///////////////
@@ -42,9 +41,7 @@
 //  Headers  //
 //           //
 ///////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Functions
-#endif
+// MARK: - Functions
 
 #include <ldaputils_compat.h>
 
@@ -61,9 +58,7 @@
 //  Definitions  //
 //               //
 ///////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Definitions
-#endif
+// MARK: - Definitions
 
 
 /////////////////
@@ -71,9 +66,7 @@
 //  Datatypes  //
 //             //
 /////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Datatypes
-#endif
+// MARK: - Datatypes
 
 struct ldap_utils_attribute
 {
@@ -108,9 +101,7 @@ struct ldap_utils_entries
 //  Prototypes  //
 //              //
 //////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Prototypes
-#endif
+// MARK: - Prototypes
 
 
 #endif /* end of header file */

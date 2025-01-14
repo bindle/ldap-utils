@@ -40,9 +40,7 @@
 //  Headers  //
 //           //
 ///////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Headers
-#endif
+// MARK: - Headers
 
 #include <errno.h>
 #include <stdio.h>
@@ -61,9 +59,7 @@
 //  Prototypes  //
 //              //
 //////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Prototypes
-#endif
+// MARK: - Prototypes
 
 int ldaputils_attribute_add_values(LDAPUtilsAttribute * attr, struct berval ** vals);
 LDAPUtilsAttribute * ldaputils_attribute_copy(LDAPUtilsAttribute * attr);
@@ -82,9 +78,7 @@ struct berval ** ldaputils_values_len_copy(struct berval ** vals);
 //  Functions  //
 //             //
 /////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Functions
-#endif
+// MARK: - Functions
 
 int ldaputils_attribute_add_values(LDAPUtilsAttribute * attr, struct berval ** vals)
 {

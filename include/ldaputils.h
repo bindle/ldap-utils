@@ -34,16 +34,13 @@
  */
 #ifndef __LDAPUTILS_H
 #define __LDAPUTILS_H 1
-#undef  __LDAPUTILS_PMARK
 
 ///////////////
 //           //
 //  Headers  //
 //           //
 ///////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Headers
-#endif
+// MARK: - Headers
 
 #include <ldaputils_cdefs.h>
 
@@ -55,9 +52,7 @@
 //  Definitions  //
 //               //
 ///////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Definitions
-#endif
+// MARK: - Definitions
 
 #ifndef PACKAGE_BUGREPORT
 #define PACKAGE_BUGREPORT ""
@@ -93,9 +88,7 @@
 //  Datatypes  //
 //             //
 /////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Datatypes
-#endif
+// MARK: - Datatypes
 
 typedef struct ldap_utils_attribute    LDAPUtilsAttribute;
 typedef struct ldap_utils_entry        LDAPUtilsEntry;
@@ -144,11 +137,14 @@ struct ldaputils_config_struct
 //  Prototypes  //
 //              //
 //////////////////
+// MARK: - Prototypes
 LDAPUTILS_BEGIN_C_DECLS
 
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Prototypes: Passwords
-#endif
+
+//---------------------//
+// password prototypes //
+//---------------------//
+// MARK: password prototypes
 
 // getpass() replacement -- SUSV 2 deprecated getpass()
 char * ldaputils_getpass(const char * prompt);
@@ -157,9 +153,10 @@ char * ldaputils_getpass(const char * prompt);
 int ldaputils_pass(LDAPUtils * lud);
 
 
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Prototypes: Entries and Values
-#endif
+//-------------------------------//
+// entries amd values prototypes //
+//-------------------------------//
+// MARK: entries amd values prototypes
 
 // compares two LDAP values for sorting
 int ldaputils_berval_cmp(const struct berval ** ptr1, const struct berval ** ptr2);
@@ -195,16 +192,19 @@ void ldaputils_value_free_len(struct berval ** vals);
 int ldaputils_values_sort(struct berval ** vals);
 
 
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Prototypes: Utilities
-#endif
+//----------------------//
+// utilities prototypes //
+//----------------------//
+// MARK: utilities prototypes
 
 // removes newlines and carriage returns
 char * ldaputils_chomp(char * str);
 
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Prototypes: Configuration
-#endif
+
+//--------------------------//
+// configuration prototypes //
+//--------------------------//
+// MARK: configuration prototypes
 
 // parses LDAP command line arguments
 int ldaputils_getopt(LDAPUtils * lud, int c, const char * arg);
@@ -220,9 +220,10 @@ LDAP *               ldaputils_get_ld(LDAPUtils * lud);
 const char * const * ldaputils_get_attribute_list(LDAPUtils * lud);
 
 
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Prototypes: Usage
-#endif
+//------------------//
+// usage prototypes //
+//------------------//
+// MARK: usage prototypes
 
 // prints program usage and exits
 void ldaputils_usage(void);
@@ -236,9 +237,11 @@ void ldaputils_usage_search(const char * short_options);
 // displays usage
 void ldaputils_version(const char * prog_name);
 
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Prototypes: LDAP Operations
-#endif
+
+//----------------------------//
+// LDAP operations prototypes //
+//----------------------------//
+// MARK: LDAP operations prototypes
 
 // connects and binds to LDAP server
 int ldaputils_bind_s(LDAPUtils * lud);
@@ -253,9 +256,10 @@ int ldaputils_search(LDAPUtils * lud, LDAPMessage ** resp);
 void ldaputils_unbind(LDAPUtils * lud);
 
 
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Prototypes: LDAP Tree
-#endif
+//----------------------//
+// LDAP tree prototypes //
+//----------------------//
+// MARK: LDAP tree prototypes
 
 LDAPUtilsTree * ldaputils_get_tree(LDAP * ld, LDAPMessage * res,
 int copy);

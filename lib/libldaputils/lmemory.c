@@ -40,9 +40,7 @@
 //  Headers  //
 //           //
 ///////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Headers
-#endif
+// MARK: - Headers
 
 #include <errno.h>
 #include <stdio.h>
@@ -59,9 +57,7 @@
 //  Functions  //
 //             //
 /////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Functions
-#endif
+// MARK: - Functions
 
 /// removes newlines and carriage returns
 /// @param[in] str   string to manipulate
