@@ -62,86 +62,101 @@
 //////////////////
 // MARK: - Prototypes
 
-int
+extern int
 ldapschema_append(
          LDAPSchema *                  lsd,
          void ***                      listp,
          size_t *                      lenp,
          void *                        obj );
 
-void
+
+extern void
 ldapschema_attributetype_free(
          LDAPSchemaAttributeType *     attr );
 
-LDAPSchemaCur
+
+extern LDAPSchemaCur
 ldapschema_curalloc(
          LDAPSchema *                  lsd );
 
-void
+
+extern void
 ldapschema_ext_free(
          LDAPSchemaExtension *         ext );
 
-LDAPSchemaExtension *
+
+extern LDAPSchemaExtension *
 ldapschema_ext_initialize(
          LDAPSchema *                  lsd,
          const char *                  name );
 
-int
+
+extern int
 ldapschema_insert(
          LDAPSchema *                  lsd,
          void ***                      listp,
          size_t *                      lenp,
          void *                        obj,
-         int (*compar)(const void *, const void *) );
+         int                           (*compar)(const void *, const void *) );
 
-void
+
+extern void
 ldapschema_matchingrule_free(
          LDAPSchemaMatchingRule *      rule);
 
-void
+
+extern void
 ldapschema_model_free(
          LDAPSchemaModel *             model );
 
-LDAPSchemaModel *
+
+extern LDAPSchemaModel *
 ldapschema_model_initialize(
          LDAPSchema *                  lsd,
          const char *                  oid,
          uint32_t                      type,
          const struct berval *         def);
 
-int
+
+extern int
 ldapschema_model_register(
          LDAPSchema *                  lsd,
          LDAPSchemaModel *             mod );
 
-void
+
+extern void
 ldapschema_object_free(
          LDAPSchemaModel *             model );
 
-void
+
+extern void
 ldapschema_objectclass_free(
          LDAPSchemaObjectclass *       objectclass );
 
-void *
+
+extern void *
 ldapschema_oid(
          LDAPSchema *                  lsd,
          const char *                  oid,
          uint32_t                      type );
 
-char *
+extern char *
 ldapschema_stradd(
          char **                       s1,
          const char *                  s2 );
 
-void
+
+extern void
 ldapschema_syntax_free(
          LDAPSchemaSyntax *            syntax );
 
-char **
+
+extern char **
 ldapschema_value_dup(
          char **                       vals );
 
-char **
+
+extern char **
 ldapschema_value_add(
          char **                       vals,
          const char *                  val,

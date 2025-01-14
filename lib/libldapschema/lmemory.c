@@ -61,9 +61,14 @@
 /////////////////
 // MARK: - Functions
 
-int ldapschema_append(LDAPSchema * lsd, void *** listp, size_t * lenp, void * obj)
+int
+ldapschema_append(
+         LDAPSchema *                  lsd,
+         void ***                      listp,
+         size_t *                      lenp,
+         void *                        obj )
 {
-   void        ** list;
+   void **        list;
    size_t         size;
 
    assert(lsd    != NULL);
@@ -84,7 +89,9 @@ int ldapschema_append(LDAPSchema * lsd, void *** listp, size_t * lenp, void * ob
 }
 
 
-void ldapschema_attributetype_free( LDAPSchemaAttributeType  * attr )
+void
+ldapschema_attributetype_free(
+         LDAPSchemaAttributeType  *    attr )
 {
    assert(attr != NULL);
 
@@ -99,7 +106,9 @@ void ldapschema_attributetype_free( LDAPSchemaAttributeType  * attr )
 ///
 /// @return    returns number of values in array
 /// @see       ldapschema_initialize
-int ldapschema_count_values( char ** vals )
+int
+ldapschema_count_values(
+         char **                       vals )
 {
    int len;
    assert(vals != NULL);
@@ -113,7 +122,9 @@ int ldapschema_count_values( char ** vals )
 ///
 /// @return    returns number of values in array
 /// @see       ldapschema_initialize
-int ldapschema_count_values_len( struct berval ** vals )
+int
+ldapschema_count_values_len(
+         struct berval **              vals )
 {
    int len;
    assert(vals != NULL);
@@ -122,7 +133,9 @@ int ldapschema_count_values_len( struct berval ** vals )
 }
 
 
-void ldapschema_curfree(LDAPSchemaCur cur)
+void
+ldapschema_curfree(
+         LDAPSchemaCur                 cur )
 {
    assert(cur != NULL);
    free(cur);
@@ -130,7 +143,9 @@ void ldapschema_curfree(LDAPSchemaCur cur)
 }
 
 
-LDAPSchemaCur ldapschema_curalloc(LDAPSchema * lsd)
+LDAPSchemaCur
+ldapschema_curalloc(
+         LDAPSchema *                  lsd )
 {
    LDAPSchemaCur cur;
    if ((cur = malloc(sizeof(struct ldapschema_cursor))) == NULL)
@@ -143,7 +158,9 @@ LDAPSchemaCur ldapschema_curalloc(LDAPSchema * lsd)
 }
 
 
-void ldapschema_ext_free(LDAPSchemaExtension * ext)
+void
+ldapschema_ext_free(
+         LDAPSchemaExtension *         ext )
 {
    if (!(ext))
       return;
@@ -160,9 +177,12 @@ void ldapschema_ext_free(LDAPSchemaExtension * ext)
 }
 
 
-LDAPSchemaExtension * ldapschema_ext_initialize(LDAPSchema * lsd, const char * name)
+LDAPSchemaExtension *
+ldapschema_ext_initialize(
+         LDAPSchema *                  lsd,
+         const char *                  name )
 {
-   LDAPSchemaExtension   * ext;
+   LDAPSchemaExtension *   ext;
 
    assert(lsd  != NULL);
    assert(name != NULL);
@@ -197,9 +217,11 @@ LDAPSchemaExtension * ldapschema_ext_initialize(LDAPSchema * lsd, const char * n
 /// @param[in]  lsd    Reference to allocated ldap_schema struct
 ///
 /// @see       ldapschema_initialize
-void ldapschema_free(LDAPSchema * lsd)
+void
+ldapschema_free(
+         LDAPSchema *                  lsd )
 {
-   int i;
+   int      i;
    size_t   pos;
 
    assert(lsd != NULL);
@@ -306,7 +328,9 @@ void ldapschema_free(LDAPSchema * lsd)
 /// @return    Upon successful completetion, this function returns 0,
 ///            otherwise an error code is returned.
 /// @see       ldapschema_free
-int ldapschema_initialize(LDAPSchema ** lsdp)
+int
+ldapschema_initialize(
+         LDAPSchema **                 lsdp )
 {
    LDAPSchema * lsd;
 
@@ -335,9 +359,15 @@ int ldapschema_initialize(LDAPSchema ** lsdp)
 /// @return    If successfull, returns 0.  If duplicate, returns -1. Otherwise
 ///            errcode is set and the value is return;
 /// @see       ldapschema_append
-int ldapschema_insert(LDAPSchema * lsd, void *** listp, size_t * lenp, void * obj, int (*compar)(const void *, const void *))
+int
+ldapschema_insert(
+         LDAPSchema *                  lsd,
+         void ***                      listp,
+         size_t *                      lenp,
+         void *                        obj,
+         int                           (*compar)(const void *, const void *) )
 {
-   void        ** list;
+   void **        list;
    size_t         size;
    size_t         low;
    size_t         mid;
@@ -408,7 +438,9 @@ int ldapschema_insert(LDAPSchema * lsd, void *** listp, size_t * lenp, void * ob
 }
 
 
-void ldapschema_matchingrule_free(LDAPSchemaMatchingRule * rule)
+void
+ldapschema_matchingrule_free(
+         LDAPSchemaMatchingRule *      rule )
 {
    assert(rule != NULL);
 
@@ -422,7 +454,9 @@ void ldapschema_matchingrule_free(LDAPSchemaMatchingRule * rule)
 }
 
 
-void ldapschema_memfree(void * p)
+void
+ldapschema_memfree(
+         void *                        p )
 {
    if (!(p))
       return;
@@ -431,7 +465,9 @@ void ldapschema_memfree(void * p)
 }
 
 
-void ldapschema_memvfree(void ** v)
+void
+ldapschema_memvfree(
+         void **                       v )
 {
    size_t idx;
    if (!(v))
@@ -443,7 +479,9 @@ void ldapschema_memvfree(void ** v)
 }
 
 
-void ldapschema_model_free(LDAPSchemaModel * model)
+void
+ldapschema_model_free(
+         LDAPSchemaModel *              model )
 {
    assert(model != NULL);
    ldapschema_object_free(model);
@@ -452,8 +490,12 @@ void ldapschema_model_free(LDAPSchemaModel * model)
 }
 
 
-LDAPSchemaModel * ldapschema_model_initialize(LDAPSchema * lsd,
-   const char * oid, uint32_t type, const struct berval * def)
+LDAPSchemaModel *
+ldapschema_model_initialize(
+         LDAPSchema *                  lsd,
+         const char *                  oid,
+         uint32_t                      type,
+         const struct berval *         def )
 {
    size_t               size;
    LDAPSchemaModel *    mod;
@@ -518,7 +560,10 @@ LDAPSchemaModel * ldapschema_model_initialize(LDAPSchema * lsd,
 }
 
 
-int ldapschema_model_register(LDAPSchema * lsd, LDAPSchemaModel * mod)
+int
+ldapschema_model_register(
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             mod )
 {
    int                     err;
    size_t                  names_len;
@@ -641,7 +686,9 @@ int ldapschema_model_register(LDAPSchema * lsd, LDAPSchemaModel * mod)
 }
 
 
-void ldapschema_object_free(LDAPSchemaModel * obj)
+void
+ldapschema_object_free(
+         LDAPSchemaModel *             obj )
 {
    size_t idx;
 
@@ -680,7 +727,9 @@ void ldapschema_object_free(LDAPSchemaModel * obj)
 }
 
 
-void ldapschema_objectclass_free(LDAPSchemaObjectclass * objectclass)
+void
+ldapschema_objectclass_free(
+         LDAPSchemaObjectclass *       objectclass )
 {
    assert(objectclass != NULL);
 
@@ -708,7 +757,11 @@ void ldapschema_objectclass_free(LDAPSchemaObjectclass * objectclass)
 }
 
 
-void * ldapschema_oid(LDAPSchema * lsd, const char * oid, uint32_t type)
+void *
+ldapschema_oid(
+         LDAPSchema *                  lsd,
+         const char *                  oid,
+         uint32_t                      type )
 {
    size_t                  low;
    size_t                  mid;
@@ -770,7 +823,10 @@ void * ldapschema_oid(LDAPSchema * lsd, const char * oid, uint32_t type)
 }
 
 
-char * ldapschema_stradd(char ** s1p, const char * s2)
+char *
+ldapschema_stradd(
+         char **                       s1p,
+         const char *                  s2 )
 {
    char *   s1;
    size_t   l1;
@@ -794,7 +850,9 @@ char * ldapschema_stradd(char ** s1p, const char * s2)
 }
 
 
-void ldapschema_syntax_free(LDAPSchemaSyntax * syntax)
+void
+ldapschema_syntax_free(
+         LDAPSchemaSyntax *            syntax )
 {
    assert(syntax != NULL);
 
@@ -813,12 +871,16 @@ void ldapschema_syntax_free(LDAPSchemaSyntax * syntax)
 }
 
 
-char ** ldapschema_value_add( char ** vals, const char * val, int * countp)
+char **
+ldapschema_value_add(
+         char **                       vals,
+         const char *                  val,
+         int *                         countp )
 {
    int      count;
    size_t   len;
-   void   * ptr;
-   char   * str;
+   void *   ptr;
+   char *   str;
 
    assert(vals != NULL);
    assert(val  != NULL);
@@ -856,11 +918,14 @@ char ** ldapschema_value_add( char ** vals, const char * val, int * countp)
    return(vals);
 }
 
-char ** ldapschema_value_dup(char ** vals)
+
+char **
+ldapschema_value_dup(
+         char **                       vals )
 {
    size_t      len;
    size_t      idx;
-   char     ** dups;
+   char **     dups;
 
    assert(vals != NULL);
 
@@ -887,7 +952,9 @@ char ** ldapschema_value_dup(char ** vals)
 /// @param[in]    vals        array of values to be freed
 ///
 /// @see       ldapschema_free
-void ldapschema_value_free( char ** vals )
+void
+ldapschema_value_free(
+         char **                       vals )
 {
    int len;
    if (!(vals))
@@ -903,7 +970,9 @@ void ldapschema_value_free( char ** vals )
 /// @param[in]    vals        array of values to be freed
 ///
 /// @see       ldapschema_free
-void ldapschema_value_free_len( struct berval ** vals )
+void
+ldapschema_value_free_len(
+         struct berval **              vals )
 {
    int len;
    if (!(vals))
