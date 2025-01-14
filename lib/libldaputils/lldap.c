@@ -64,11 +64,13 @@
 ///
 /// @return    Returns the error code from the OpenLDAP library
 /// @see       ldaputils_search, ldaputils_initialize
-int ldaputils_bind_s(LDAPUtils * lud)
+int
+ldaputils_bind_s(
+         LDAPUtils *                   lud )
 {
-   int          err;
-   LDAP       * ld;
-   BerValue   * servercredp;
+   int         err;
+   LDAP *      ld;
+   BerValue *  servercredp;
 
    ld          = lud->ld;
    servercredp = NULL;
@@ -93,12 +95,15 @@ int ldaputils_bind_s(LDAPUtils * lud)
 ///
 /// @return    Returns the error code from the OpenLDAP library
 /// @see       ldaputils_search, ldaputils_initialize
-int ldaputils_search(LDAPUtils * lud, LDAPMessage ** resp)
+int
+ldaputils_search(
+         LDAPUtils *                   lud,
+         LDAPMessage **                resp )
 {
-   int    rc;
-   int    err;
-   int    msgid;
-   LDAP * ld;
+   int      rc;
+   int      err;
+   int      msgid;
+   LDAP *   ld;
 
    ld  = lud->ld;
 
