@@ -54,7 +54,7 @@
 //  Headers  //
 //           //
 ///////////////
-#pragma mark - Headers
+// MARK: - Headers
 
 #include <ldaputils_compat.h>
 
@@ -82,7 +82,7 @@
 //  Definitions  //
 //               //
 ///////////////////
-#pragma mark - Definitions
+// MARK: - Definitions
 
 #ifndef PROGRAM_NAME
 #define PROGRAM_NAME "ldapconns"
@@ -96,7 +96,7 @@
 //  Datatypes  //
 //             //
 /////////////////
-#pragma mark - Datatypes
+// MARK: - Datatypes
 
 typedef struct my_record MyRec;
 struct my_record
@@ -137,7 +137,7 @@ struct my_config
 //  Variables  //
 //             //
 /////////////////
-#pragma mark - Variables
+// MARK: - Variables
 
 static const char * ldapinfo_attrs[] =
 {
@@ -169,7 +169,7 @@ static const char * ldapinfo_attrs[] =
 //  Prototypes  //
 //              //
 //////////////////
-#pragma mark - Prototypes
+// MARK: - Prototypes
 
 // main statement
 extern int
@@ -216,7 +216,7 @@ my_unbind(
 //  Functions  //
 //             //
 /////////////////
-#pragma mark - Functions
+// MARK: - Functions
 
 void
 ldaputils_usage(
