@@ -72,87 +72,99 @@
 //////////////////
 // MARK: - Prototypes
 
-void
+static void
 ldapschema_print_data_class(
          LDAPSchema *                  lsd,
          size_t                        classid );
 
-void
+
+static void
 ldapschema_print_definition(
          LDAPSchema *                  lsd,
          LDAPSchemaModel *             model );
 
-void
+
+static void
 ldapschema_print_extensions(
          LDAPSchema *                  lsd,
          LDAPSchemaModel *             model );
 
-void
+
+static void
 ldapschema_print_flags(
          LDAPSchema *                  lsd,
          LDAPSchemaModel *             model );
 
-void
+
+static void
 ldapschema_print_issues(
          LDAPSchema *                  lsd,
          LDAPSchemaModel *             model );
 
-void
+
+static void
 ldapschema_print_line(
          const char *                  field,
          const char *                  input );
 
-void
+
+static void
 ldapschema_print_list(
          const char *                  field,
          char **                       vals );
 
-void
+
+static void
 ldapschema_print_list_models(
          LDAPSchema *                  lsd,
          const char *                  name,
          LDAPSchemaModel   **          list,
          size_t                        list_len );
 
-void
+
+static void
 ldapschema_print_unsigned(
          const char *                  field,
          uintmax_t                     u );
 
-const char *
-ldapschema_print_get_dataclass(
-         size_t                        classid );
 
-void
+static void
 ldapschema_print_obj_attributetype(
          LDAPSchema *                  lsd,
          LDAPSchemaAttributeType *     attr );
 
-void
+
+static void
 ldapschema_print_obj_matchingrule(
          LDAPSchema *                  lsd,
          LDAPSchemaMatchingRule *      mtchngrl );
 
-void
+
+static void
 ldapschema_print_obj_model(
          LDAPSchema *                  lsd,
          LDAPSchemaModel *             model );
-void
+
+
+static void
 ldapschema_print_obj_objectclass(
          LDAPSchema *                  lsd,
          LDAPSchemaObjectclass *       objcls );
 
-void
+
+static void
 ldapschema_print_obj_syntax(
          LDAPSchema *                  lsd,
          LDAPSchemaSyntax *            syntax );
 
-void
+
+static void
 ldapschema_print_spec(
          LDAPSchema *                  lsd,
          const LDAPSchemaSpec *        spec );
 
-void
+
+static void
 ldapschema_print_type(
          LDAPSchema *                  lsd,
          LDAPSchemaModel *             model );
@@ -165,7 +177,10 @@ ldapschema_print_type(
 /////////////////
 // MARK: - Functions
 
-void ldapschema_print( LDAPSchema * lsd, LDAPSchemaModel * mod )
+void
+ldapschema_print(
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             mod )
 {
    assert(lsd != NULL);
    assert(mod != NULL);
@@ -203,7 +218,10 @@ void ldapschema_print( LDAPSchema * lsd, LDAPSchemaModel * mod )
 }
 
 
-void ldapschema_printall( LDAPSchema * lsd, int type )
+void
+ldapschema_printall(
+         LDAPSchema *                  lsd,
+         int                           type )
 {
    size_t x;
 
@@ -222,7 +240,10 @@ void ldapschema_printall( LDAPSchema * lsd, int type )
 }
 
 
-void ldapschema_print_data_class(LDAPSchema * lsd, size_t classid )
+void
+ldapschema_print_data_class(
+         LDAPSchema *                  lsd,
+         size_t                        classid )
 {
    const char * data_class;
 
@@ -249,11 +270,14 @@ void ldapschema_print_data_class(LDAPSchema * lsd, size_t classid )
 }
 
 
-void ldapschema_print_definition(LDAPSchema * lsd, LDAPSchemaModel * model)
+void
+ldapschema_print_definition(
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             model )
 {
    char           buff[4096];
-   const char   * def;
-   const char   * name;
+   const char *   def;
+   const char *   name;
 
    assert(lsd   != NULL);
    assert(model != NULL);
@@ -274,13 +298,16 @@ void ldapschema_print_definition(LDAPSchema * lsd, LDAPSchemaModel * model)
 }
 
 
-void ldapschema_print_extensions(LDAPSchema * lsd, LDAPSchemaModel * model)
+void
+ldapschema_print_extensions(
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             model )
 {
    size_t                  x;
    size_t                  y;
    int                     len;
    int                     max;
-   LDAPSchemaExtension   * ext;
+   LDAPSchemaExtension *   ext;
 
    assert(lsd   != NULL);
    assert(model != NULL);
@@ -308,7 +335,10 @@ void ldapschema_print_extensions(LDAPSchema * lsd, LDAPSchemaModel * model)
 }
 
 
-void ldapschema_print_flags(LDAPSchema * lsd, LDAPSchemaModel * model)
+void
+ldapschema_print_flags(
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             model )
 {
    assert(lsd   != NULL);
    assert(model != NULL);
@@ -332,7 +362,10 @@ void ldapschema_print_flags(LDAPSchema * lsd, LDAPSchemaModel * model)
 }
 
 
-void ldapschema_print_issues(LDAPSchema * lsd, LDAPSchemaModel * model)
+void
+ldapschema_print_issues(
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             model )
 {
    size_t idx;
    assert(lsd   != NULL);
@@ -345,10 +378,13 @@ void ldapschema_print_issues(LDAPSchema * lsd, LDAPSchemaModel * model)
 }
 
 
-void ldapschema_print_line(const char * field, const char * str)
+void
+ldapschema_print_line(
+         const char *                  field,
+         const char *                  str )
 {
-   const char         * bol;
-   const char         * eol;
+   const char *   bol;
+   const char *   eol;
 
    if (!(field))
       field = "";
@@ -374,7 +410,10 @@ void ldapschema_print_line(const char * field, const char * str)
 }
 
 
-void ldapschema_print_list(const char * field, char ** vals)
+void
+ldapschema_print_list(
+         const char *                  field,
+         char **                       vals )
 {
    size_t idx;
 
@@ -388,8 +427,12 @@ void ldapschema_print_list(const char * field, char ** vals)
 }
 
 
-void ldapschema_print_list_models(LDAPSchema * lsd,
-   const char * name, LDAPSchemaModel ** list, size_t list_len)
+void
+ldapschema_print_list_models(
+         LDAPSchema *                  lsd,
+         const char *                  name,
+         LDAPSchemaModel **            list,
+         size_t                        list_len )
 {
    size_t            pos;
    const char *      key;
@@ -464,7 +507,10 @@ void ldapschema_print_list_models(LDAPSchema * lsd,
 }
 
 
-void ldapschema_print_obj_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeType * attr )
+void
+ldapschema_print_obj_attributetype(
+         LDAPSchema *                  lsd,
+         LDAPSchemaAttributeType *     attr )
 {
    const char *               str;
    LDAPSchemaAttributeType *  sup;
@@ -537,7 +583,10 @@ void ldapschema_print_obj_attributetype( LDAPSchema * lsd, LDAPSchemaAttributeTy
 }
 
 
-void ldapschema_print_obj_matchingrule(LDAPSchema * lsd, LDAPSchemaMatchingRule * mtchngrl)
+void
+ldapschema_print_obj_matchingrule(
+         LDAPSchema *                  lsd,
+         LDAPSchemaMatchingRule *      mtchngrl )
 {
    char buff[256];
 
@@ -567,7 +616,10 @@ void ldapschema_print_obj_matchingrule(LDAPSchema * lsd, LDAPSchemaMatchingRule 
 }
 
 
-void ldapschema_print_obj_model(LDAPSchema * lsd, LDAPSchemaModel * model)
+void
+ldapschema_print_obj_model(
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             model )
 {
    assert(lsd   != NULL);
    assert(model != NULL);
@@ -583,10 +635,13 @@ void ldapschema_print_obj_model(LDAPSchema * lsd, LDAPSchemaModel * model)
 }
 
 
-void ldapschema_print_obj_objectclass(LDAPSchema * lsd, LDAPSchemaObjectclass * objcls)
+void
+ldapschema_print_obj_objectclass(
+         LDAPSchema *                  lsd,
+         LDAPSchemaObjectclass *       objcls )
 {
-   const char               * str;
-   LDAPSchemaObjectclass    * sup;
+   const char *               str;
+   LDAPSchemaObjectclass *    sup;
 
    assert(lsd    != NULL);
    assert(objcls != NULL);
@@ -624,7 +679,10 @@ void ldapschema_print_obj_objectclass(LDAPSchema * lsd, LDAPSchemaObjectclass * 
 }
 
 
-void ldapschema_print_obj_syntax(LDAPSchema * lsd, LDAPSchemaSyntax * syntax)
+void
+ldapschema_print_obj_syntax(
+         LDAPSchema *                  lsd,
+         LDAPSchemaSyntax *            syntax )
 {
    assert(lsd    != NULL);
    assert(syntax != NULL);
@@ -644,7 +702,10 @@ void ldapschema_print_obj_syntax(LDAPSchema * lsd, LDAPSchemaSyntax * syntax)
 }
 
 
-void ldapschema_print_spec( LDAPSchema * lsd, const LDAPSchemaSpec * spec)
+void
+ldapschema_print_spec(
+         LDAPSchema *                  lsd,
+         const LDAPSchemaSpec *        spec )
 {
    assert(lsd != NULL);
    if (!(spec))
@@ -662,7 +723,10 @@ void ldapschema_print_spec( LDAPSchema * lsd, const LDAPSchemaSpec * spec)
 }
 
 
-void ldapschema_print_type(LDAPSchema * lsd, LDAPSchemaModel * model)
+void
+ldapschema_print_type(
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             model )
 {
    const char * str;
    assert(lsd   != NULL);
@@ -680,7 +744,10 @@ void ldapschema_print_type(LDAPSchema * lsd, LDAPSchemaModel * model)
 }
 
 
-void ldapschema_print_unsigned(const char * field, uintmax_t u)
+void
+ldapschema_print_unsigned(
+         const char *                  field,
+         uintmax_t                     u )
 {
    if (!(u))
       return;
