@@ -55,10 +55,10 @@
 #include <signal.h>
 
 #ifdef HAVE_TERMIOS_H
-#include <termios.h>
+#   include <termios.h>
 #endif
 #ifdef HAVE_SGTTY_H
-#include <sgtty.h>
+#   include <sgtty.h>
 #endif
 
 
@@ -73,16 +73,18 @@
 /// @param[in] prompt   prompt to display to end user
 ///
 /// @return    Returns string containing user entered password.
-char * ldaputils_getpass(const char * prompt)
+char *
+ldaputils_getpass(
+         const char *                  prompt )
 {
    static char    buff[512];
-   FILE         * fs;
+   FILE *         fs;
    int            c;
    size_t         pos;
 #if defined(HAVE_TERMIOS_H) || defined(HAVE_SGTTY_H)
    struct termios old;
    struct termios new;
-   void          (*sig)( int sig );
+   void           (*sig)( int sig );
 #endif
 
    // prompts for password
@@ -130,9 +132,11 @@ char * ldaputils_getpass(const char * prompt)
 /// @param[in] lud   reference to LDAP utilities struct
 ///
 /// @return    Returns LDAP_SUCCESS on success or error code if fails
-int ldaputils_pass(LDAPUtils * lud)
+int
+ldaputils_pass(
+         LDAPUtils *                   lud )
 {
-   char    * str;
+   char *   str;
 
    assert(lud != NULL);
 
@@ -173,12 +177,17 @@ int ldaputils_pass(LDAPUtils * lud)
 /// @param[out] lenp  reference to pointer to store size of memory
 ///
 /// @return    Returns LDAP_SUCCESS on success or 1 on error
-int ldaputils_passfile(LDAPUtils * lud, const char * file, char ** valp, size_t * lenp)
+int
+ldaputils_passfile(
+         LDAPUtils *                   lud,
+         const char *                  file,
+         char **                       valp,
+         size_t *                      lenp )
 {
-   int           fd;
-   ssize_t       len;
-   char        * buff;
-   struct stat   sb;
+   int            fd;
+   ssize_t        len;
+   char *         buff;
+   struct stat    sb;
 
    assert(lud  != NULL);
    assert(file != NULL);

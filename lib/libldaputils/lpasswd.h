@@ -70,7 +70,12 @@
 // MARK: - Prototypes
 
 // retrieves password from file
-int ldaputils_passfile(LDAPUtils * lud, const char * file, char ** valp, size_t * lenp);
+extern int
+ldaputils_passfile(
+         LDAPUtils *                   lud,
+         const char *                  file,
+         char **                       valp,
+         size_t *                      lenp );
 
 
 #endif /* end of header file */
