@@ -423,7 +423,7 @@ my_entry(
 
    // check for objectClass pwdPolicy
    isppolicy   = 0;
-   vals        = ldap_get_values(ld, msg, "objectClass");
+   vals        = ldaputils_get_values(ld, msg, "objectClass");
    for(pos = 0; ((vals[pos])); pos++)
    {
       if (!(strcasecmp(vals[pos], "pwdPolicy")))
@@ -506,7 +506,7 @@ my_field_array(
 
    ld = cnf->lud->ld;
 
-   if ((vals = ldap_get_values(ld, msg, attr)) != NULL)
+   if ((vals = ldaputils_get_values(ld, msg, attr)) != NULL)
    {
       my_field(cnf, name, attr, vals[0]);
       for(pos = 1; ((vals[pos])); pos++)
@@ -544,7 +544,7 @@ my_field_interval(
 
    ld = cnf->lud->ld;
 
-   if ((vals = ldap_get_values(ld, msg, attr)) != NULL)
+   if ((vals = ldaputils_get_values(ld, msg, attr)) != NULL)
    {
       snprintf(attrval, sizeof(attrval), "%s", vals[0]);
       ldaputils_value_free(vals);
@@ -621,7 +621,7 @@ my_field_quality(
 
    ld = cnf->lud->ld;
 
-   if ((vals = ldap_get_values(ld, msg, attr)) != NULL)
+   if ((vals = ldaputils_get_values(ld, msg, attr)) != NULL)
    {
       snprintf(attrval, sizeof(attrval), "%s", vals[0]);
       ldaputils_value_free(vals);
@@ -659,7 +659,7 @@ my_field_str(
 
    ld = cnf->lud->ld;
 
-   if ((vals = ldap_get_values(ld, msg, attr)) != NULL)
+   if ((vals = ldaputils_get_values(ld, msg, attr)) != NULL)
    {
       snprintf(attrval, sizeof(attrval), "%s", vals[0]);
       ldaputils_value_free(vals);
@@ -735,7 +735,7 @@ my_naming_contexts(
       return(-1);
    };
 
-   if ((vals = ldap_get_values(ld, msg, "namingContexts")) == NULL)
+   if ((vals = ldaputils_get_values(ld, msg, "namingContexts")) == NULL)
    {
       ldap_msgfree(res);
       return(-1);
