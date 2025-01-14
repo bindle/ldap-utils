@@ -96,10 +96,18 @@
 // MARK: - Prototypes
 
 // main statement
-int main(int argc, char * argv[]);
+extern int
+main(
+         int                           argc,
+         char *                        argv[] );
+
 
 // parses configuration
-int my_config(int argc, char * argv[], LDAPUtils ** ludp);
+static int
+my_config(
+         int                           argc,
+         char *                        argv[],
+         LDAPUtils **                  ludp );
 
 
 /////////////////
@@ -110,7 +118,9 @@ int my_config(int argc, char * argv[], LDAPUtils ** ludp);
 // MARK: - Functions
 
 /// prints program usage and exits
-void ldaputils_usage(void)
+void
+ldaputils_usage(
+         void )
 {
    printf("Usage: %s [options] [filter [attributes...]]\n", PROGRAM_NAME);
    ldaputils_usage_search(MY_SHORT_OPTIONS);
@@ -123,7 +133,10 @@ void ldaputils_usage(void)
 /// main statement
 /// @param[in] argc   number of arguments
 /// @param[in] argv   array of arguments
-int main(int argc, char * argv[])
+int
+main(
+         int                           argc,
+         char *                        argv[] )
 {
    LDAPUtils * lud;
 
@@ -145,7 +158,11 @@ int main(int argc, char * argv[])
 /// parses configuration
 /// @param[in] argc   number of arguments
 /// @param[in] argv   array of arguments
-int my_config(int argc, char * argv[], LDAPUtils ** ludp)
+int
+my_config(
+         int                           argc,
+         char *                        argv[],
+         LDAPUtils **                  ludp )
 {
    int               c;
    int               err;
