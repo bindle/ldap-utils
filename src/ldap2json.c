@@ -55,7 +55,7 @@
 //  Headers  //
 //           //
 ///////////////
-#pragma mark - Headers
+// MARK: - Headers
 
 #include <ldaputils_compat.h>
 
@@ -84,7 +84,7 @@
 //  Definitions  //
 //               //
 ///////////////////
-#pragma mark - Definitions
+// MARK: - Definitions
 
 #ifndef PROGRAM_NAME
 #define PROGRAM_NAME "ldap2json"
@@ -98,7 +98,7 @@
 //  Datatypes  //
 //             //
 /////////////////
-#pragma mark - Datatypes
+// MARK: - Datatypes
 
 // configuration union
 typedef struct my_config MyConfig;
@@ -118,9 +118,7 @@ struct my_config
 //  Prototypes  //
 //              //
 //////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Prototypes
-#endif
+// MARK: - Prototypes
 
 // main statement
 int main(int argc, char * argv[]);
@@ -139,9 +137,7 @@ void my_unbind(MyConfig * cnf);
 //  Functions  //
 //             //
 /////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Functions
-#endif
+// MARK: - Functions
 
 /// prints program usage and exits
 void ldaputils_usage(void)
