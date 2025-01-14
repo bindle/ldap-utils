@@ -192,6 +192,7 @@ AC_BINDLE_GIT_PACKAGE_VERSION([contrib/bindletools/build-aux/git-package-version
 
 # custom configure options
 AC_BINDLE_ENABLE_WARNINGS([-Wno-padded -Wno-unknown-pragmas], [-Wpadded], [c11])
+AC_LDAP_UTILS_LDAP_DEPRECATED
 AC_LDAP_UTILS_UTILITIES
 AC_LDAP_UTILS_LIBRARIES
 AC_LDAP_UTILS_LIBLDAPSCHEMA
@@ -217,6 +218,7 @@ AC_MSG_NOTICE([   LDAP Utilities ($PACKAGE_VERSION)])
 AC_MSG_NOTICE([ ])
 AC_MSG_NOTICE([   Use Warnings                  $USE_WARNINGS])
 AC_MSG_NOTICE([   Use Strict Warnings           $USE_STRICTWARNINGS])
+AC_MSG_NOTICE([   Use Deprecated LDAP Functions $USE_LDAP_DEPRECATED])
 AC_MSG_NOTICE([ ])
 AC_MSG_NOTICE([   Libraries:])
 AC_MSG_NOTICE([      libldapschema.a            $LDAPUTILS_LIBLDAPSCHEMA_STATUS])

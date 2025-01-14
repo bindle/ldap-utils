@@ -32,6 +32,29 @@
 #   acinclude.m4 - custom m4 macros used by configure.ac
 #
 
+# AC_LDAP_UTILS_LDAP_DEPRECATED
+# ______________________________________________________________________________
+AC_DEFUN_ONCE([AC_LDAP_UTILS_LDAP_DEPRECATED],[dnl
+
+   enableval=""
+   AC_ARG_ENABLE(
+      deprecated,
+      [AS_HELP_STRING([--enable-deprecated], [enable deprecated OpenLDAP functions])],
+      [ EDEPRECATED=$enableval ],
+      [ EDEPRECATED=$enableval ]
+   )
+
+   if test "x${EDEPRECATED}" != "xyes";then
+      EDEPRECATED=no
+   fi
+   USE_LDAP_DEPRECATED=${EDEPRECATED}
+
+   if test "x${EDEPRECATED}" == "xyes";then
+      AC_DEFINE_UNQUOTED(USE_LDAP_DEPRECATED, 1, [enable deprecated OpenLDAP functions])
+   fi
+])dnl
+
+
 # AC_LDAP_UTILS_LDAP2CSV
 # ______________________________________________________________________________
 AC_DEFUN_ONCE([AC_LDAP_UTILS_LDAP2CSV],[dnl
