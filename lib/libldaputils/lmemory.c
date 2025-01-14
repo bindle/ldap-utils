@@ -64,7 +64,9 @@
 ///
 /// @return    Returns a reference to the modified string if successful
 /// @see       ldaputils_initialize
-char * ldaputils_chomp(char * str)
+char *
+ldaputils_chomp(
+         char *                        str )
 {
    char * idx;
 
@@ -81,10 +83,13 @@ char * ldaputils_chomp(char * str)
 
 
 // connects and binds to LDAP server
-int ldaputils_initialize(LDAPUtils ** ludp, const char * prog_name)
+int
+ldaputils_initialize(
+         LDAPUtils **                  ludp,
+         const char *                  prog_name )
 {
    int         err;
-   char      * idx;
+   char *      idx;
    int         i;
    LDAPUtils * lud;
 
@@ -126,7 +131,9 @@ int ldaputils_initialize(LDAPUtils ** ludp, const char * prog_name)
 /// @param[in] lud   reference to LDAP utilities struct
 ///
 /// @see       ldaputils_initialize
-void ldaputils_unbind(LDAPUtils * lud)
+void
+ldaputils_unbind(
+         LDAPUtils *                   lud )
 {
    if (!(lud))
       return;
