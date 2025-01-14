@@ -65,6 +65,7 @@
 
 static char ** ldapschema_get_values(LDAP * ld, LDAPMessage * entry, const char * attr);
 
+static void ldapschema_value_free_len(struct berval ** vals);
 
 /////////////////
 //             //
@@ -155,12 +156,12 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
          if ( ((ptr = ldapschema_parse_syntax(lsd, vals[x])) == NULL) &&
               (lsd->errcode != LDAPSCHEMA_SCHEMA_ERROR) )
          {
-            ldaputils_value_free_len(vals);
+            ldapschema_value_free_len(vals);
             ldap_msgfree(res);
             return(-1);
          };
       };
-      ldaputils_value_free_len(vals);
+      ldapschema_value_free_len(vals);
    };
 
    // process matchingRule
@@ -171,12 +172,12 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
          if ( ((ptr = ldapschema_parse_matchingrule(lsd, vals[x])) == NULL) &&
               (lsd->errcode != LDAPSCHEMA_SCHEMA_ERROR) )
          {
-            ldaputils_value_free_len(vals);
+            ldapschema_value_free_len(vals);
             ldap_msgfree(res);
             return(-1);
          };
       };
-      ldaputils_value_free_len(vals);
+      ldapschema_value_free_len(vals);
 
       // checks attribute
        for(idx = 0; (idx < lsd->oids_len); idx++)
@@ -202,12 +203,12 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
          if ( ((ptr = ldapschema_parse_attributetype(lsd, vals[x])) == NULL) &&
               (lsd->errcode != LDAPSCHEMA_SCHEMA_ERROR) )
          {
-            ldaputils_value_free_len(vals);
+            ldapschema_value_free_len(vals);
             ldap_msgfree(res);
             return(-1);
          };
       };
-      ldaputils_value_free_len(vals);
+      ldapschema_value_free_len(vals);
 
       // maps superior
       for(idx = 0; (idx < lsd->oids_len); idx++)
@@ -272,12 +273,12 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
          if ( ((ptr = ldapschema_parse_objectclass(lsd, vals[x])) == NULL) &&
               (lsd->errcode != LDAPSCHEMA_SCHEMA_ERROR) )
          {
-            ldaputils_value_free_len(vals);
+            ldapschema_value_free_len(vals);
             ldap_msgfree(res);
             return(-1);
          };
       };
-      ldaputils_value_free_len(vals);
+      ldapschema_value_free_len(vals);
 
       // maps superior
       for(idx = 0; (idx < lsd->oids_len); idx++)
@@ -308,7 +309,7 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
             {
                if ((err = ldapschema_objectclass_attribute(lsd, objcls, objclssup->may[subidx], 0, 1)) > 0)
                {
-                  ldaputils_value_free_len(vals);
+                  ldapschema_value_free_len(vals);
                   ldap_msgfree(res);
                   return(lsd->errcode);
                };
@@ -317,7 +318,7 @@ int ldapschema_fetch(LDAPSchema * lsd, LDAP * ld)
             {
                if ((err = ldapschema_objectclass_attribute(lsd, objcls, objclssup->must[subidx], 1, 1)) > 0)
                {
-                  ldaputils_value_free_len(vals);
+                  ldapschema_value_free_len(vals);
                   ldap_msgfree(res);
                   return(lsd->errcode);
                };
@@ -350,7 +351,7 @@ char ** ldapschema_get_values(LDAP * ld, LDAPMessage * entry, const char * attr)
    size = (len + 1) * sizeof(char *);
    if ((vals = malloc(size)) == NULL)
    {
-      ldaputils_value_free_len(bvals);
+      ldapschema_value_free_len(bvals);
       return(NULL);
    };
 
@@ -360,7 +361,7 @@ char ** ldapschema_get_values(LDAP * ld, LDAPMessage * entry, const char * attr)
       if ((vals[pos] = malloc(bvals[pos]->bv_len+1)) == NULL)
       {
          ldaputils_value_free(vals);
-         ldaputils_value_free_len(bvals);
+         ldapschema_value_free_len(bvals);
          return(NULL);
       };
       memcpy(vals[pos], bvals[pos]->bv_val, bvals[pos]->bv_len);
@@ -368,6 +369,20 @@ char ** ldapschema_get_values(LDAP * ld, LDAPMessage * entry, const char * attr)
    };
 
    return(vals);
+}
+
+
+void ldapschema_value_free_len(struct berval ** vals)
+{
+   int pos;
+   for(pos = 0; ((vals[pos])); pos++)
+   {
+      if ((vals[pos]->bv_val))
+         ldap_memfree(vals[pos]->bv_val);
+      ldap_memfree(vals[pos]);
+   };
+   ldap_memfree(vals);
+   return;
 }
 
 
