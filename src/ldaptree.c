@@ -101,10 +101,10 @@
 typedef struct my_config MyConfig;
 struct my_config
 {
-   LDAPUtils          * lud;
+   LDAPUtils *          lud;
    int                  copy_entry;
    int                  pad0;
-   char               * basedn;
+   char *               basedn;
    LDAPUtilsTreeOpts    treeopts;
 };
 
@@ -117,13 +117,24 @@ struct my_config
 // MARK: - Prototypes
 
 // main statement
-int main(int argc, char * argv[]);
+extern int
+main(
+         int                           argc,
+         char *                        argv[] );
+
 
 // parses configuration
-int my_config(int argc, char * argv[], MyConfig ** cnfp);
+static int
+my_config(
+         int                           argc,
+         char *                        argv[],
+         MyConfig **                   cnfp );
+
 
 // fress resources
-void my_unbind(MyConfig * cnf);
+static void
+my_unbind(
+         MyConfig *                    cnf );
 
 
 /////////////////
@@ -134,7 +145,9 @@ void my_unbind(MyConfig * cnf);
 // MARK: - Functions
 
 /// prints program usage and exits
-void ldaputils_usage(void)
+void
+ldaputils_usage(
+         void )
 {
    printf("Usage: %s [options] [filter] [attributes...]\n", PROGRAM_NAME);
    ldaputils_usage_search(MY_SHORT_OPTIONS);
@@ -155,14 +168,17 @@ void ldaputils_usage(void)
 /// main statement
 /// @param[in] argc   number of arguments
 /// @param[in] argv   array of arguments
-int main(int argc, char * argv[])
+int
+main(
+         int                           argc,
+         char *                        argv[] )
 {
-   int                    err;
-   int                    i;
-   char                 * str;
-   MyConfig             * cnf;
-   LDAPMessage          * res;
-   LDAPUtilsTree        * tree;
+   int               err;
+   int               i;
+   char *            str;
+   MyConfig *        cnf;
+   LDAPMessage *     res;
+   LDAPUtilsTree *   tree;
 
    cnf = NULL;
 
@@ -237,7 +253,11 @@ int main(int argc, char * argv[])
 /// @param[in] argc   number of arguments
 /// @param[in] argv   array of arguments
 /// @param[in] cnfp   reference to configuration pointer
-int my_config(int argc, char * argv[], MyConfig ** cnfp)
+int
+my_config(
+         int                           argc,
+         char *                        argv[],
+         MyConfig **                   cnfp )
 {
    int        c;
    int        err;
@@ -415,7 +435,9 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
 
 
 // fress resources
-void my_unbind(MyConfig * cnf)
+void
+my_unbind(
+         MyConfig *                    cnf )
 {
    assert(cnf != NULL);
 
