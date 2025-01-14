@@ -103,8 +103,6 @@ LDAPUtilsTree * ldaputils_tree_child_find(LDAPUtilsTree * tree, const char * rdn
 
 LDAPUtilsTree * ldaputils_tree_child_init(LDAPUtilsTree * tree, const char * rdn);
 
-int ldaputils_tree_cmp(const void * ptr1, const void * ptr2);
-
 void ldaputils_tree_level_count_recursive(LDAPUtilsTree * tree, size_t level, size_t * depthp);
 
 void ldaputils_tree_print_bullets(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts);
@@ -283,41 +281,6 @@ int ldaputils_tree_add_entry(LDAPUtilsTree * tree, LDAPUtilsEntry * entry, int c
       return(LDAP_NO_MEMORY);
 
    return(LDAP_SUCCESS);
-}
-
-
-int ldaputils_tree_cmp(const void * ptr1, const void * ptr2)
-{
-   int                     rc;
-   const LDAPUtilsTree   * a;
-   const LDAPUtilsTree   * b;
-
-   assert(ptr1 != NULL);
-   assert(ptr2 != NULL);
-
-   a = *((const LDAPUtilsTree * const *)ptr1);
-   b = *((const LDAPUtilsTree * const *)ptr2);
-
-   // quick check of the pointers
-   if ( (!(a)) && (!(b)) )
-      return(0);
-   if (!(a))
-      return(-1);
-   if (!(b))
-      return(1);
-
-   // quick check of the pointers
-   if ( (!(a->rdn)) && (!(b->rdn)) )
-      return(ldaputils_entry_cmp_dn(ptr1, ptr2));
-   if (!(a->rdn))
-      return(-1);
-   if (!(b->rdn))
-      return(1);
-
-   // compare of sort value
-   if ((rc = strcasecmp(a->rdn, b->rdn)))
-      return(rc);
-   return(strcmp(a->rdn, b->rdn));
 }
 
 
