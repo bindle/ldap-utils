@@ -140,6 +140,7 @@ CLEANFILES				= \
 					  @PACKAGE_TARNAME@-*.zip
 DISTCHECK_CONFIGURE_FLAGS		= --enable-strictwarnings \
 					  --enable-ldapdebug \
+					  --enable-deprecated \
 					  --enable-ldapschema \
 					  --enable-libldapschema
 
