@@ -61,7 +61,7 @@
 //////////////////
 // MARK: - Prototypes
 
-LDAPSchemaAlias *
+extern LDAPSchemaAlias *
 ldapschema_find_alias(
          LDAPSchema *                  lsd,
          const char *                  alias,

@@ -61,7 +61,7 @@
 //////////////////
 // MARK: - Prototypes
 
-int
+static int
 ldapschema_get_info_model_str(
          char **                       os,
          const char *                  src );
@@ -79,7 +79,9 @@ ldapschema_get_info_model_str(
 //-----------------------//
 // MARK: ldapschema_count_XXXX functions
 
-size_t ldapschema_count_attributetypes(LDAPSchema * lsd)
+size_t
+ldapschema_count_attributetypes(
+         LDAPSchema *                  lsd )
 {
    size_t idx;
    size_t cnt;
@@ -92,7 +94,9 @@ size_t ldapschema_count_attributetypes(LDAPSchema * lsd)
 }
 
 
-size_t ldapschema_count_ldapsyntaxes(LDAPSchema * lsd)
+size_t
+ldapschema_count_ldapsyntaxes(
+         LDAPSchema *                  lsd )
 {
    size_t idx;
    size_t cnt;
@@ -105,7 +109,9 @@ size_t ldapschema_count_ldapsyntaxes(LDAPSchema * lsd)
 }
 
 
-size_t ldapschema_count_matchingrules(LDAPSchema * lsd)
+size_t
+ldapschema_count_matchingrules(
+         LDAPSchema *                  lsd )
 {
    size_t idx;
    size_t cnt;
@@ -118,7 +124,9 @@ size_t ldapschema_count_matchingrules(LDAPSchema * lsd)
 }
 
 
-size_t ldapschema_count_objectclasses(LDAPSchema * lsd)
+size_t
+ldapschema_count_objectclasses(
+         LDAPSchema *                  lsd )
 {
    size_t idx;
    size_t cnt;
@@ -136,8 +144,12 @@ size_t ldapschema_count_objectclasses(LDAPSchema * lsd)
 //----------------------//
 // MARK: ldapschema_find_XXXX functions
 
-LDAPSchemaAlias * ldapschema_find_alias(LDAPSchema * lsd,
-   const char * alias, LDAPSchemaAlias ** list, size_t list_len)
+LDAPSchemaAlias *
+ldapschema_find_alias(
+         LDAPSchema *                  lsd,
+         const char *                  alias,
+         LDAPSchemaAlias **            list,
+         size_t                        list_len )
 {
    size_t         low;
    size_t         mid;
@@ -188,10 +200,12 @@ LDAPSchemaAlias * ldapschema_find_alias(LDAPSchema * lsd,
 ///            attributetype.  NULL is returned if the attributeType does not
 ///            exist.
 /// @see       ldapschema_errno, ldapschema_value_free
-LDAPSchemaAttributeType * ldapschema_find_attributetype(LDAPSchema * lsd,
-   const char * name)
+LDAPSchemaAttributeType *
+ldapschema_find_attributetype(
+         LDAPSchema *                  lsd,
+         const char *                  name )
 {
-   const LDAPSchemaAlias   * alias;
+   const LDAPSchemaAlias * alias;
 
    assert(lsd     != NULL);
    assert(name    != NULL);
@@ -211,10 +225,12 @@ LDAPSchemaAttributeType * ldapschema_find_attributetype(LDAPSchema * lsd,
 ///            attributetype.  NULL is returned if the attributeType does not
 ///            exist.
 /// @see       ldapschema_errno, ldapschema_value_free
-LDAPSchemaSyntax * ldapschema_find_ldapsyntax(LDAPSchema * lsd,
-   const char * name)
+LDAPSchemaSyntax *
+ldapschema_find_ldapsyntax(
+         LDAPSchema *                  lsd,
+         const char *                  name )
 {
-   const LDAPSchemaAlias   * alias;
+   const LDAPSchemaAlias * alias;
 
    assert(lsd     != NULL);
    assert(name    != NULL);
@@ -226,10 +242,12 @@ LDAPSchemaSyntax * ldapschema_find_ldapsyntax(LDAPSchema * lsd,
 }
 
 
-LDAPSchemaMatchingRule * ldapschema_find_matchingrule(LDAPSchema * lsd,
-   const char * name)
+LDAPSchemaMatchingRule *
+ldapschema_find_matchingrule(
+         LDAPSchema *                  lsd,
+         const char *                  name )
 {
-   const LDAPSchemaAlias   * alias;
+   const LDAPSchemaAlias * alias;
 
    assert(lsd     != NULL);
    assert(name    != NULL);
@@ -241,10 +259,12 @@ LDAPSchemaMatchingRule * ldapschema_find_matchingrule(LDAPSchema * lsd,
 }
 
 
-LDAPSchemaObjectclass * ldapschema_find_objectclass(LDAPSchema * lsd,
-   const char * name)
+LDAPSchemaObjectclass *
+ldapschema_find_objectclass(
+         LDAPSchema *                  lsd,
+         const char *                  name )
 {
-   const LDAPSchemaAlias   * alias;
+   const LDAPSchemaAlias * alias;
 
    assert(lsd     != NULL);
    assert(name    != NULL);
@@ -261,8 +281,10 @@ LDAPSchemaObjectclass * ldapschema_find_objectclass(LDAPSchema * lsd,
 //-----------------------//
 // MARK: ldapschema_first_XXXX functions
 
-const LDAPSchemaAttributeType * ldapschema_first_attributetype(LDAPSchema * lsd,
-   LDAPSchemaCur * curp)
+const LDAPSchemaAttributeType *
+ldapschema_first_attributetype(
+         LDAPSchema *                  lsd,
+         LDAPSchemaCur *               curp )
 {
    LDAPSchemaCur cur;
 
@@ -281,8 +303,10 @@ const LDAPSchemaAttributeType * ldapschema_first_attributetype(LDAPSchema * lsd,
 }
 
 
-const LDAPSchemaSyntax * ldapschema_first_ldapsyntax(LDAPSchema * lsd,
-   LDAPSchemaCur * curp)
+const LDAPSchemaSyntax *
+ldapschema_first_ldapsyntax(
+         LDAPSchema *                  lsd,
+         LDAPSchemaCur *               curp )
 {
    LDAPSchemaCur cur;
 
@@ -301,8 +325,10 @@ const LDAPSchemaSyntax * ldapschema_first_ldapsyntax(LDAPSchema * lsd,
 }
 
 
-const LDAPSchemaMatchingRule * ldapschema_first_matchingrule(LDAPSchema * lsd,
-   LDAPSchemaCur * curp)
+const LDAPSchemaMatchingRule *
+ldapschema_first_matchingrule(
+         LDAPSchema *                  lsd,
+         LDAPSchemaCur *               curp )
 {
    LDAPSchemaCur cur;
 
@@ -321,8 +347,10 @@ const LDAPSchemaMatchingRule * ldapschema_first_matchingrule(LDAPSchema * lsd,
 }
 
 
-const LDAPSchemaObjectclass * ldapschema_first_objectclass(LDAPSchema * lsd,
-   LDAPSchemaCur * curp)
+const LDAPSchemaObjectclass *
+ldapschema_first_objectclass(
+         LDAPSchema *                  lsd,
+         LDAPSchemaCur *               curp )
 {
    LDAPSchemaCur cur;
 
@@ -346,11 +374,15 @@ const LDAPSchemaObjectclass * ldapschema_first_objectclass(LDAPSchema * lsd,
 //--------------------------//
 // MARK: ldapschema_get_info_XXXX functions
 
-int ldapschema_get_info_attributetype(LDAPSchema * lsd,
-   const LDAPSchemaAttributeType * attr, int field, void * outvalue)
+int
+ldapschema_get_info_attributetype(
+         LDAPSchema *                  lsd,
+         const LDAPSchemaAttributeType * attr,
+         int                           field,
+         void *                        outvalue )
 {
-   int       * oi;   // output int (flags/types/etc)
-   char    *** oa;   // output char ** (array of strings)
+   int *       oi;   // output int (flags/types/etc)
+   char ***    oa;   // output char ** (array of strings)
 
    assert(lsd        != NULL);
    assert(attr       != NULL);
@@ -385,8 +417,12 @@ int ldapschema_get_info_attributetype(LDAPSchema * lsd,
 }
 
 
-int ldapschema_get_info_ldapsyntax(LDAPSchema * lsd,
-   const LDAPSchemaSyntax * syntax, int field, void * outvalue )
+int
+ldapschema_get_info_ldapsyntax(
+         LDAPSchema *                  lsd,
+         const LDAPSchemaSyntax *      syntax,
+         int                           field,
+         void *                        outvalue )
 {
    assert(lsd        != NULL);
    assert(syntax     != NULL);
@@ -396,10 +432,14 @@ int ldapschema_get_info_ldapsyntax(LDAPSchema * lsd,
 }
 
 
-int ldapschema_get_info_matchingrule(LDAPSchema * lsd,
-   const LDAPSchemaMatchingRule * mtchngrl, int field, void * outvalue )
+int
+ldapschema_get_info_matchingrule(
+         LDAPSchema *                  lsd,
+         const LDAPSchemaMatchingRule * mtchngrl,
+         int                           field,
+         void *                        outvalue )
 {
-   char    *** oa;   // output char ** (array of strings)
+   char ***    oa;   // output char ** (array of strings)
 
    assert(lsd        != NULL);
    assert(mtchngrl   != NULL);
@@ -424,11 +464,15 @@ int ldapschema_get_info_matchingrule(LDAPSchema * lsd,
 }
 
 
-int ldapschema_get_info_model(LDAPSchema * lsd,
-   const LDAPSchemaModel * mod, int field, void * outvalue )
+int
+ldapschema_get_info_model(
+         LDAPSchema *                  lsd,
+         const LDAPSchemaModel *       mod,
+         int                           field,
+         void *                        outvalue )
 {
-   int       * oi;   // output int
-   char     ** os;   // output char * (string)
+   int *       oi;   // output int
+   char **     os;   // output char * (string)
 
    assert(lsd        != NULL);
    assert(mod        != NULL);
@@ -459,7 +503,10 @@ int ldapschema_get_info_model(LDAPSchema * lsd,
 }
 
 
-int ldapschema_get_info_model_str(char ** os, const char * src)
+int
+ldapschema_get_info_model_str(
+         char **                       os,
+         const char *                  src )
 {
    assert(os != NULL);
    if (!(src))
@@ -473,11 +520,15 @@ int ldapschema_get_info_model_str(char ** os, const char * src)
 }
 
 
-int ldapschema_get_info_objectclass(LDAPSchema * lsd,
-   const LDAPSchemaObjectclass * objcls, int field, void * outvalue )
+int
+ldapschema_get_info_objectclass(
+         LDAPSchema *                  lsd,
+         const LDAPSchemaObjectclass * objcls,
+         int                           field,
+         void *                        outvalue )
 {
-   int       * oi;   // output int (flags/types/etc)
-   char    *** oa;   // output char ** (array of strings)
+   int *       oi;   // output int (flags/types/etc)
+   char ***    oa;   // output char ** (array of strings)
 
    assert(lsd        != NULL);
    assert(objcls     != NULL);
@@ -513,29 +564,36 @@ int ldapschema_get_info_objectclass(LDAPSchema * lsd,
 //----------------------//
 // MARK: ldapschema_model_XXXX functions
 
-const LDAPSchemaModel * ldapschema_model_attributetype(
-   const LDAPSchemaAttributeType * attr )
+const LDAPSchemaModel *
+ldapschema_model_attributetype(
+         const LDAPSchemaAttributeType * attr )
 {
    assert(attr != NULL);
    return(&attr->model);
 }
 
-const LDAPSchemaModel * ldapschema_model_ldapsyntax(
-   const LDAPSchemaSyntax * syntax )
+
+const LDAPSchemaModel *
+ldapschema_model_ldapsyntax(
+         const LDAPSchemaSyntax *      syntax )
 {
    assert(syntax != NULL);
    return(&syntax->model);
 }
 
-const LDAPSchemaModel * ldapschema_model_matchingrule(
-   const LDAPSchemaMatchingRule * matchingrule )
+
+const LDAPSchemaModel *
+ldapschema_model_matchingrule(
+         const LDAPSchemaMatchingRule * matchingrule )
 {
    assert(matchingrule != NULL);
    return(&matchingrule->model);
 }
 
-const LDAPSchemaModel * ldapschema_model_objectclass(
-   const LDAPSchemaObjectclass * objcls )
+
+const LDAPSchemaModel *
+ldapschema_model_objectclass(
+         const LDAPSchemaObjectclass * objcls )
 {
    assert(objcls != NULL);
    return(&objcls->model);
@@ -547,8 +605,10 @@ const LDAPSchemaModel * ldapschema_model_objectclass(
 //----------------------//
 // MARK: ldapschema_next_XXXX functions
 
-const LDAPSchemaAttributeType * ldapschema_next_attributetype(LDAPSchema * lsd,
-   LDAPSchemaCur cur)
+const LDAPSchemaAttributeType *
+ldapschema_next_attributetype(
+         LDAPSchema *                  lsd,
+         LDAPSchemaCur                 cur )
 {
    assert(lsd != NULL);
    assert(cur != NULL);
@@ -561,8 +621,10 @@ const LDAPSchemaAttributeType * ldapschema_next_attributetype(LDAPSchema * lsd,
 }
 
 
-const LDAPSchemaSyntax * ldapschema_next_ldapsyntax(LDAPSchema * lsd,
-   LDAPSchemaCur cur)
+const LDAPSchemaSyntax *
+ldapschema_next_ldapsyntax(
+         LDAPSchema *                  lsd,
+         LDAPSchemaCur                 cur )
 {
    assert(lsd != NULL);
    assert(cur != NULL);
@@ -575,8 +637,10 @@ const LDAPSchemaSyntax * ldapschema_next_ldapsyntax(LDAPSchema * lsd,
 }
 
 
-const LDAPSchemaMatchingRule * ldapschema_next_matchingrule(LDAPSchema * lsd,
-   LDAPSchemaCur cur)
+const LDAPSchemaMatchingRule *
+ldapschema_next_matchingrule(
+         LDAPSchema *                  lsd,
+         LDAPSchemaCur                 cur )
 {
    assert(lsd != NULL);
    assert(cur != NULL);
@@ -589,8 +653,10 @@ const LDAPSchemaMatchingRule * ldapschema_next_matchingrule(LDAPSchema * lsd,
 }
 
 
-const LDAPSchemaObjectclass * ldapschema_next_objectclass(LDAPSchema * lsd,
-   LDAPSchemaCur cur)
+const LDAPSchemaObjectclass *
+ldapschema_next_objectclass(
+         LDAPSchema *                  lsd,
+         LDAPSchemaCur                 cur )
 {
    assert(lsd != NULL);
    assert(cur != NULL);
