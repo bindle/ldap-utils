@@ -191,58 +191,120 @@ MyConfig cfg =
 // MARK: - Prototypes
 
 // main statement
-int main(int argc, char * argv[]);
+extern int
+main(
+         int                           argc,
+         char *                        argv[] );
+
 
 // tests filename string for specified extension
-int my_fs_filename_ext(const char * nam, const char * ext);
+static int
+my_fs_filename_ext(
+         const char *                  nam,
+         const char *                  ext );
+
 
 // process individual OID spec file
-int my_fs_parsefile(const char * file);
+static int
+my_fs_parsefile(
+         const char *                  file );
 
 // prunes string from path names
-const char * my_fs_prunepath(const char * path);
+static const char *
+my_fs_prunepath(
+         const char *                  path );
+
 
 // process path for OID spec files
-int my_fs_scanpath(const char * path);
+static int
+my_fs_scanpath(
+         const char *                  path );
+
 
 // free memory from OID specification
-void my_oidspec_free(OIDSpec * oidspec);
+static void
+my_oidspec_free(
+         OIDSpec *                     oidspec );
+
 
 // free array of strings
-void my_oidspec_free_strs(char ** strs);
+static void
+my_oidspec_free_strs(
+         char **                       strs );
+
 
 // allocate memory for OID specifications and initialize values
-OIDSpec * my_oidspec_alloc(void);
+static OIDSpec *
+my_oidspec_alloc(
+         void );
+
 
 // save list of OID specifications
-int my_save(int argc, char **argv);
+static int
+my_save(
+         int                           argc,
+         char **                       argv );
+
 
 // save list of OID specifications as C header file
-int my_save_header(FILE * fs);
+static int
+my_save_header(
+         FILE *                        fs );
+
 
 // save list of OID spec files as Makefile include
-int my_save_makefile(FILE * fs);
+static int
+my_save_makefile(
+         FILE *                        fs );
+
 
 // save list of OID specifications as C source file
-int my_save_source(FILE * fs);
+static int
+my_save_source(
+         FILE *                        fs );
+
 
 // save individual OID specification
-int my_save_source_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx);
+static int
+my_save_source_oidspec(
+         FILE *                        fs,
+         OIDSpec *                     oidspec,
+         size_t                        idx );
+
 
 // save OID specification field as bit flags
-int my_save_source_oidspec_flgs(FILE * fs, const char * fld, char ** vals);
+static int
+my_save_source_oidspec_flgs(
+         FILE *                        fs,
+         const char *                  fld,
+         char **                       vals );
+
 
 // save OID specification field as const strings
-int my_save_source_oidspec_strs(FILE * fs, const char * fld, char ** vals);
+static int
+my_save_source_oidspec_strs(
+         FILE *                        fs,
+         const char *                  fld,
+         char **                       vals );
+
 
 // prints program usage and exits
-void my_usage(void);
+static void
+my_usage(
+         void );
+
 
 // displays version information
-void my_version(void);
+static void
+my_version(
+         void );
+
 
 // compares two OID specifications for sort order
-int oidspec_cmp( const void * p1, const void * p2 );
+static int
+oidspec_cmp(
+         const void *                  p1,
+         const void *                  p2 );
 
 
 /////////////////
@@ -255,13 +317,16 @@ int oidspec_cmp( const void * p1, const void * p2 );
 /// main statement
 /// @param[in] argc   number of arguments
 /// @param[in] argv   array of arguments
-int main(int argc, char * argv[])
+int
+main(
+         int                           argc,
+         char *                        argv[] )
 {
    int            c;
    int            err;
    int            opt_index;
    size_t         pos;
-   void         * ptr;
+   void *         ptr;
 
    static char          short_options[]   = "C:hHMnN:o:p:sST:vV";
    static struct option long_options[]    =
@@ -408,7 +473,6 @@ int main(int argc, char * argv[])
       optind++;
    };
 
-
    // prints result
    if ((err = my_save(argc, argv)) != 0)
       return(1);
@@ -426,7 +490,10 @@ int main(int argc, char * argv[])
 /// tests filename string for specified extension
 /// @param[in] nam     file name
 /// @param[in] ext     file extension
-int my_fs_filename_ext(const char * nam, const char * ext)
+int
+my_fs_filename_ext(
+         const char *                  nam,
+         const char *                  ext )
 {
    size_t namlen = strlen(nam);
    size_t extlen = strlen(ext);
@@ -438,11 +505,13 @@ int my_fs_filename_ext(const char * nam, const char * ext)
 
 /// process individual OID spec file
 /// @param[in] file   OID specification file to process
-int my_fs_parsefile(const char * file)
+int
+my_fs_parsefile(
+         const char *                  file )
 {
    size_t   size;
-   void   * ptr;
-   FILE   * fs;
+   void *   ptr;
+   FILE *   fs;
    int      err;
 
    // append file to file list
@@ -485,7 +554,9 @@ int my_fs_parsefile(const char * file)
 
 /// prunes string from path names
 /// @param[in] path   file system path to process for OID specification files
-const char * my_fs_prunepath(const char * path)
+const char *
+my_fs_prunepath(
+         const char *                  path )
 {
    size_t len;
 
@@ -502,13 +573,15 @@ const char * my_fs_prunepath(const char * path)
 
 /// process path for spec files
 /// @param[in] path   file system path to process for OID specification files
-int my_fs_scanpath(const char * path)
+int
+my_fs_scanpath(
+         const char *                  path )
 {
-   DIR                * dir;
-   struct dirent      * dp;
-   struct stat          sb;
-   int                  err;
-   char                 filename[512];
+   DIR *             dir;
+   struct dirent *   dp;
+   struct stat       sb;
+   int               err;
+   char              filename[512];
 
    // check type of file
    if ((err = stat(path, &sb)) == -1)
@@ -573,7 +646,9 @@ int my_fs_scanpath(const char * path)
 
 
 /// allocate memory for OID specifications and initialize values
-OIDSpec * my_oidspec_alloc(void)
+OIDSpec *
+my_oidspec_alloc(
+         void  )
 {
    OIDSpec * oidspec;
 
@@ -590,7 +665,9 @@ OIDSpec * my_oidspec_alloc(void)
 
 /// free memory from OID specification
 /// @param[in] oidspec    reference to OID specification memory
-void my_oidspec_free(OIDSpec * oidspec)
+void
+my_oidspec_free(
+         OIDSpec *                     oidspec )
 {
    if (!(oidspec))
       return;
@@ -624,7 +701,9 @@ void my_oidspec_free(OIDSpec * oidspec)
 
 /// free array of strings
 /// @param[in] strs    reference to array of strings
-void my_oidspec_free_strs(char ** strs)
+void
+my_oidspec_free_strs(
+         char **                       strs )
 {
    size_t pos;
    if (!(strs))
@@ -639,14 +718,17 @@ void my_oidspec_free_strs(char ** strs)
 /// save list of OID specifications as C source file
 /// @param[in] argc   number of arguments
 /// @param[in] argv   array of arguments
-int my_save(int argc, char **argv)
+int
+my_save(
+         int                           argc,
+         char **                       argv )
 {
-   FILE         * fs;
+   FILE *         fs;
    size_t         pos;
-   const char   * comment;
+   const char *   comment;
    char           buff[256];
    time_t         timer;
-   struct tm    * tm_info;
+   struct tm *    tm_info;
 
    if ((cfg.dryrun))
       return(0);
@@ -683,17 +765,17 @@ int my_save(int argc, char **argv)
 
    switch(cfg.format)
    {
-         case OidSpecFormatHeader:
-         my_save_header(fs);
-         break;
+      case OidSpecFormatHeader:
+      my_save_header(fs);
+      break;
 
-         case OidSpecFormatMakefile:
-         my_save_makefile(fs);
-         break;
+      case OidSpecFormatMakefile:
+      my_save_makefile(fs);
+      break;
 
-         default:
-         my_save_source(fs);
-         break;
+      default:
+      my_save_source(fs);
+      break;
    };
 
    // closes file
@@ -706,7 +788,9 @@ int my_save(int argc, char **argv)
 
 /// save list of OID specifications as C header file
 /// @param[in] fs     FILE stream of output file
-int my_save_header(FILE * fs)
+int
+my_save_header(
+         FILE *                        fs )
 {
    size_t         pos;
 
@@ -730,7 +814,9 @@ int my_save_header(FILE * fs)
 
 /// save list of OID spec files as Makefile include
 /// @param[in] fs     FILE stream of output file
-int my_save_makefile(FILE * fs)
+int
+my_save_makefile(
+         FILE *                        fs)
 {
    size_t         pos;
 
@@ -746,7 +832,9 @@ int my_save_makefile(FILE * fs)
 
 /// save list of OID specifications as C source file
 /// @param[in] fs     FILE stream of output file
-int my_save_source(FILE * fs)
+int
+my_save_source(
+         FILE *                        fs)
 {
    size_t         pos;
 
@@ -786,7 +874,11 @@ int my_save_source(FILE * fs)
 /// @param[in] fs         FILE stream of output file
 /// @param[in] oidspec    OID specification to save
 /// @param[in] idx        index or ID of OID specification
-int my_save_source_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx)
+int
+my_save_source_oidspec(
+         FILE *                        fs,
+         OIDSpec *                     oidspec,
+         size_t                        idx )
 {
    size_t pos;
 
@@ -834,7 +926,11 @@ int my_save_source_oidspec(FILE * fs, OIDSpec * oidspec, size_t idx)
 /// @param[in] fs     FILE stream of output file
 /// @param[in] fld    name of field
 /// @param[in] vals   array of values
-int my_save_source_oidspec_flgs(FILE * fs, const char * fld, char ** vals)
+int
+my_save_source_oidspec_flgs(
+         FILE *                        fs,
+         const char *                  fld,
+         char **                       vals )
 {
    size_t pos;
 
@@ -861,7 +957,11 @@ int my_save_source_oidspec_flgs(FILE * fs, const char * fld, char ** vals)
 /// @param[in] fs     FILE stream of output file
 /// @param[in] fld    name of field
 /// @param[in] vals   array of values
-int my_save_source_oidspec_strs(FILE * fs, const char * fld, char ** vals)
+int
+my_save_source_oidspec_strs(
+         FILE *                        fs,
+         const char *                  fld,
+         char **                       vals )
 {
    size_t pos;
 
@@ -885,7 +985,9 @@ int my_save_source_oidspec_strs(FILE * fs, const char * fld, char ** vals)
 
 
 /// prints program usage and exits
-void my_usage(void)
+void
+my_usage(
+         void )
 {
    printf("Usage: %s --source [OPTIONS] [path ...]\n", PROGRAM_NAME);
    printf("       %s --header [OPTIONS] [path ...]\n", PROGRAM_NAME);
@@ -911,7 +1013,9 @@ void my_usage(void)
 
 
 /// displays version information
-void my_version(void)
+void
+my_version(
+         void )
 {
    printf("%s (%s) %s\n", PROGRAM_NAME, PACKAGE_NAME, PACKAGE_VERSION);
 #ifdef PACKAGE_COPYRIGHT
@@ -923,7 +1027,9 @@ void my_version(void)
 
 /// append string to array of queued strings
 /// @param[in] str     C string to append to queue
-int my_yyappend(const char * str)
+int
+my_yyappend(
+         const char *                  str )
 {
    size_t      len;
    void      * ptr;
@@ -965,7 +1071,9 @@ int my_yyappend(const char * str)
 
 /// commits queued strings to field
 /// @param[in] type    Yacc token of field
-int my_yycommit(enum yytokentype type)
+int
+my_yycommit(
+         enum yytokentype              type )
 {
    const char      * name;
    char          *** vals;
@@ -1013,10 +1121,12 @@ int my_yycommit(enum yytokentype type)
 
 
 /// validates OID spec and appends to list of OID specs
-int my_yyoidspec(void)
+int
+my_yyoidspec(
+         void )
 {
    size_t         pos;
-   void         * ptr;
+   void *         ptr;
 
    // checks current OID spec
    if (!(cur_oidspec->oid))
@@ -1141,7 +1251,10 @@ int my_yyoidspec(void)
 /// appends string to array of queued strings then commits queue to field
 /// @param[in] type    Yacc token of field
 /// @param[in] str     C string to append to queue
-int my_yysubmit(enum yytokentype type, const char * str)
+int
+my_yysubmit(
+         enum yytokentype              type,
+         const char *                  str )
 {
    my_yyappend(str);
    return(my_yycommit(type));
@@ -1151,7 +1264,10 @@ int my_yysubmit(enum yytokentype type, const char * str)
 /// compares two OID specifications for sort order
 /// @param[in] p1   reference to first OID specification
 /// @param[in] p2   reference to second OID specification
-int oidspec_cmp( const void * p1, const void * p2 )
+int
+oidspec_cmp(
+         const void *                  p1,
+         const void *                  p2 )
 {
    const OIDSpec * const * o1 = p1;
    const OIDSpec * const * o2 = p2;
@@ -1159,7 +1275,9 @@ int oidspec_cmp( const void * p1, const void * p2 )
 }
 
 
-void yyerror (char *s)
+void
+yyerror(
+         char *                        s )
 {
    fprintf(stderr, "%s: %s: %i: %s\n", PROGRAM_NAME, cur_filename, yylineno, s);
    return;

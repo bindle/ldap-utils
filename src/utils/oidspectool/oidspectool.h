@@ -87,9 +87,9 @@
 /////////////////
 // MARK: - Variables
 
-extern int          yylineno;
-extern char       * yytext;
-extern const char * my_filename;
+extern int           yylineno;
+extern char *        yytext;
+extern const char *  my_filename;
 
 
 //////////////////
@@ -100,21 +100,41 @@ extern const char * my_filename;
 // MARK: - Prototypes
 
 // append string to array of queued strings
-int my_yyappend(const char * str);
+extern int my_yyappend(
+         const char *                  str );
+
 
 // commits queued strings to field
-int my_yycommit(enum yytokentype type);
+extern int
+my_yycommit(
+         enum yytokentype              type );
+
 
 // validates OID spec and appends to list of OID specs
-int my_yyoidspec(void);
+extern int
+my_yyoidspec(
+         void );
 
 // appends string to array of queued strings then commits queue to field
-int my_yysubmit(enum yytokentype type, const char * str);
+extern int
+my_yysubmit(
+         enum yytokentype              type,
+         const char *                  str );
 
 
-int yyparse (void);
-void yyrestart (FILE *input_file);
-void yyerror(char *s);
+extern int
+yyparse(
+         void );
+
+
+extern void
+yyrestart(
+         FILE *                        input_file );
+
+
+extern void
+yyerror(
+         char *                        s );
 
 
 #endif /* end of header */
