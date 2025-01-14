@@ -80,7 +80,7 @@ ldaputils_cmp_berval
 ldaputils_cmp_entry
 ldaputils_free_entries
 ldaputils_get_entries
-ldaputils_get_vals
+ldaputils_get_values
 ldaputils_initialize
 ldaputils_initialize_conn
 ldaputils_search

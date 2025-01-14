@@ -186,6 +186,8 @@ LDAPUtilsEntry * ldaputils_next_entry(LDAPUtilsEntries * entries);
 LDAPUtilsEntries * ldaputils_get_entries(LDAP * ld, LDAPMessage * res,
    const char * sortattr);
 
+char ** ldaputils_get_values(LDAP * ld, LDAPMessage * entry, const char * attr);
+
 void ldaputils_value_free(char ** vals);
 void ldaputils_value_free_len(struct berval ** vals);
 
