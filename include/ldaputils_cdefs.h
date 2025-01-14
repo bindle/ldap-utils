@@ -34,7 +34,7 @@
  */
 #ifndef __LDAPUTILS_CDEFS_H
 #define __LDAPUTILS_CDEFS_H 1
-#undef  __LDAPUTILS_PMARK
+
 #ifndef __LDAPUTILS_H
 #error "do not include ldaputils_cdefs.h directly, include libreotp.h."
 #endif
