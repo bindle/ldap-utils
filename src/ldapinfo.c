@@ -251,7 +251,9 @@ my_unbind(
 // MARK: - Functions
 
 /// prints program usage and exits
-void ldaputils_usage(void)
+void
+ldaputils_usage(
+         void )
 {
    printf("Usage: %s [options]\n", PROGRAM_NAME);
    ldaputils_usage_common(MY_SHORT_OPTIONS);
@@ -263,10 +265,13 @@ void ldaputils_usage(void)
 /// main statement
 /// @param[in] argc   number of arguments
 /// @param[in] argv   array of arguments
-int main(int argc, char * argv[])
+int
+main(
+         int                           argc,
+         char *                        argv[] )
 {
-   int                    err;
-   MyConfig             * cnf;
+   int         err;
+   MyConfig *  cnf;
 
    cnf = NULL;
 
@@ -297,7 +302,10 @@ int main(int argc, char * argv[])
 }
 
 
-int my_cmp_strings(const void * ap, const void * bp)
+int
+my_cmp_strings(
+         const void *                  ap,
+         const void *                  bp )
 {
    const char * a = *(const char * const *)ap;
    const char * b = *(const char * const *)bp;
@@ -309,14 +317,18 @@ int my_cmp_strings(const void * ap, const void * bp)
 /// @param[in] argc   number of arguments
 /// @param[in] argv   array of arguments
 /// @param[in] cnfp   reference to configuration pointer
-int my_config(int argc, char * argv[], MyConfig ** cnfp)
+int
+my_config(
+         int                           argc,
+         char *                        argv[],
+         MyConfig **                   cnfp )
 {
    int         c;
    size_t      s;
    size_t      len;
    int         err;
    int         option_index;
-   MyConfig  * cnf;
+   MyConfig *  cnf;
 
    static char   short_options[] = MY_SHORT_OPTIONS;
    static struct option long_options[] =
@@ -429,10 +441,14 @@ int my_config(int argc, char * argv[], MyConfig ** cnfp)
 }
 
 
-void my_field(const char * name, const char * val, int isoid)
+void
+my_field(
+         const char *                  name,
+         const char *                  val,
+         int                           isoid )
 {
-   const LDAPSchemaSpec  * spec;
-   char                  * desc;
+   const LDAPSchemaSpec *  spec;
+   char *                  desc;
 
    desc = NULL;
    if ((isoid))
@@ -450,7 +466,11 @@ void my_field(const char * name, const char * val, int isoid)
 }
 
 
-void my_fields(const char * name, char ** vals, int isoid)
+void
+my_fields(
+         const char *                  name,
+         char **                       vals,
+         int                           isoid )
 {
    size_t x;
    size_t vals_len;
@@ -463,17 +483,20 @@ void my_fields(const char * name, char ** vals, int isoid)
 }
 
 
-char * my_monitor(MyConfig * cnf, const char * base)
+char *
+my_monitor(
+         MyConfig *                    cnf,
+         const char *                  base )
 {
    int               rc;
    int               err;
    int               msgid;
-   char            * str;
-   char            * vers;
-   char           ** vars;
-   LDAP            * ld;
-   LDAPMessage     * res;
-   LDAPMessage     * msg;
+   char *            str;
+   char *            vers;
+   char **           vars;
+   LDAP *            ld;
+   LDAPMessage *     res;
+   LDAPMessage *     msg;
    struct timeval    timeout;
 
    ld  = cnf->lud->ld;
@@ -525,19 +548,22 @@ char * my_monitor(MyConfig * cnf, const char * base)
 }
 
 
-int my_monitor_connections(MyConfig * cnf, const char * base)
+int
+my_monitor_connections(
+         MyConfig *                    cnf,
+         const char *                  base )
 {
    int               rc;
    int               err;
    int               msgid;
    int               count;
-   char           ** name;
-   char           ** vals;
+   char **           name;
+   char **           vals;
    char              buff[256];
    char              dn[256];
-   LDAP            * ld;
-   LDAPMessage     * res;
-   LDAPMessage     * msg;
+   LDAP *            ld;
+   LDAPMessage *     res;
+   LDAPMessage *     msg;
    struct timeval    timeout;
 
    ld  = cnf->lud->ld;
@@ -613,19 +639,22 @@ int my_monitor_connections(MyConfig * cnf, const char * base)
 }
 
 
-int my_monitor_database(MyConfig * cnf, const char * base)
+int
+my_monitor_database(
+         MyConfig *                    cnf,
+         const char *                  base )
 {
    int               rc;
    int               err;
    int               msgid;
    int               count;
    size_t            s;
-   char           ** vals;
+   char **           vals;
    char              dn[256];
    char              buff[256];
-   LDAP            * ld;
-   LDAPMessage     * res;
-   LDAPMessage     * msg;
+   LDAP *            ld;
+   LDAPMessage *     res;
+   LDAPMessage *     msg;
    struct timeval    timeout;
 
    ld  = cnf->lud->ld;
@@ -698,21 +727,24 @@ int my_monitor_database(MyConfig * cnf, const char * base)
 }
 
 
-int my_monitor_listeners(MyConfig * cnf, const char * base)
+int
+my_monitor_listeners(
+         MyConfig *                    cnf,
+         const char *                  base )
 {
    int               rc;
    int               err;
    int               msgid;
    int               count;
-   char            * uri;
-   char           ** uris;
-   char            * addr;
-   char           ** addrs;
+   char *            uri;
+   char **           uris;
+   char *            addr;
+   char **           addrs;
    char              dn[256];
    char              buff[256];
-   LDAP            * ld;
-   LDAPMessage     * res;
-   LDAPMessage     * msg;
+   LDAP *            ld;
+   LDAPMessage *     res;
+   LDAPMessage *     msg;
    struct timeval    timeout;
 
    ld  = cnf->lud->ld;
@@ -801,20 +833,23 @@ int my_monitor_listeners(MyConfig * cnf, const char * base)
 }
 
 
-int my_monitor_operations(MyConfig * cnf, const char * base)
+int
+my_monitor_operations(
+         MyConfig *                    cnf,
+         const char *                  base )
 {
    int               rc;
    int               err;
    int               msgid;
    int               count;
-   char           ** cn;
-   char           ** initiated;
-   char           ** completed;
+   char **           cn;
+   char **           initiated;
+   char **           completed;
    char              dn[256];
    char              buff[256];
-   LDAP            * ld;
-   LDAPMessage     * res;
-   LDAPMessage     * msg;
+   LDAP *            ld;
+   LDAPMessage *     res;
+   LDAPMessage *     msg;
    struct timeval    timeout;
 
    ld  = cnf->lud->ld;
@@ -906,20 +941,22 @@ int my_monitor_operations(MyConfig * cnf, const char * base)
 
 
 // parses RootDSE
-int my_rootdse(MyConfig * cnf)
+int
+my_rootdse(
+         MyConfig *                    cnf )
 {
    int               rc;
    int               err;
    int               msgid;
    size_t            s;
-   char            * vers;
-   char           ** monitor;
-   char           ** schema;
-   char           ** vals;
-   char            * errmsg;
-   LDAP            * ld;
-   LDAPMessage     * res;
-   LDAPMessage     * msg;
+   char *            vers;
+   char **           monitor;
+   char **           schema;
+   char **           vals;
+   char *            errmsg;
+   LDAP *            ld;
+   LDAPMessage *     res;
+   LDAPMessage *     msg;
    struct timeval    timeout;
 
    ld  = cnf->lud->ld;
@@ -1093,17 +1130,20 @@ int my_rootdse(MyConfig * cnf)
 }
 
 
-int my_schema(MyConfig * cnf, const char * base)
+int
+my_schema(
+         MyConfig *                    cnf,
+         const char *                  base )
 {
    int               rc;
    int               err;
    int               msgid;
    int               i;
-   char           ** vals;
+   char **           vals;
    char              buff[256];
-   LDAP            * ld;
-   LDAPMessage     * res;
-   LDAPMessage     * msg;
+   LDAP *            ld;
+   LDAPMessage *     res;
+   LDAPMessage *     msg;
    struct timeval    timeout;
 
    ld  = cnf->lud->ld;
@@ -1222,7 +1262,9 @@ int my_schema(MyConfig * cnf, const char * base)
 
 
 // fress resources
-void my_unbind(MyConfig * cnf)
+void
+my_unbind(
+         MyConfig *                    cnf )
 {
    assert(cnf != NULL);
 
