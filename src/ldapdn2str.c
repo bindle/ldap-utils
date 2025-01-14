@@ -207,7 +207,7 @@ int main(int argc, char * argv[])
       ldap_dn2str(cnf->dn, &str, LDAP_DN_FORMAT_LDAPV3);
       edn = ldap_explode_dn(str, 0);
       printf("%s\n", edn[0]);
-      ldap_value_free(edn);
+      ldaputils_value_free(edn);
       ldap_memfree(str);
       break;
 
@@ -219,7 +219,7 @@ int main(int argc, char * argv[])
       for(i = len-1; i > 0; i--)
          printf(",%s", edn[i-1]);
       printf("\n");
-      ldap_value_free(edn);
+      ldaputils_value_free(edn);
       ldap_memfree(str);
       break;
 
