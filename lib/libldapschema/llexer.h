@@ -61,7 +61,7 @@
 //////////////////
 // MARK: - Prototypes
 
-int
+extern int
 ldapschema_definition_split(
          LDAPSchema *                  lsd,
          LDAPSchemaModel *             mod,
@@ -69,20 +69,23 @@ ldapschema_definition_split(
          size_t                        strlen,
          char ***                      argvp );
 
-int
+
+extern int
 ldapschema_definition_split_len(
          LDAPSchema *                  lsd,
          LDAPSchemaModel *             mod,
          const struct berval *         def,
          char ***                      argvp );
 
-int
+
+extern int
 ldapschema_line_split(
          LDAPSchema *                  lsd,
          const char *                  str,
          char ***                      argvp );
 
-int
+
+extern int
 ldapschema_objectclass_attribute(
          LDAPSchema *                  lsd,
          LDAPSchemaObjectclass *       objcls,
@@ -90,29 +93,34 @@ ldapschema_objectclass_attribute(
          int                           must,
          int                           inherited );
 
-LDAPSchemaAttributeType *
+
+extern LDAPSchemaAttributeType *
 ldapschema_parse_attributetype(
          LDAPSchema *                  lsd,
          const struct berval *         def );
 
-int
+
+extern int
 ldapschema_parse_ext(
          LDAPSchema *                  lsd,
          LDAPSchemaModel *             model,
          const char *                  key,
          const char *                  valstr );
 
-LDAPSchemaMatchingRule *
+
+extern LDAPSchemaMatchingRule *
 ldapschema_parse_matchingrule(
          LDAPSchema *                  lsd,
          const struct berval *         def );
 
-LDAPSchemaObjectclass *
+
+extern LDAPSchemaObjectclass *
 ldapschema_parse_objectclass(
          LDAPSchema *                  lsd,
          const struct berval *         def );
 
-LDAPSchemaSyntax *
+
+extern LDAPSchemaSyntax *
 ldapschema_parse_syntax(
          LDAPSchema *                  lsd,
          const struct berval *         def );

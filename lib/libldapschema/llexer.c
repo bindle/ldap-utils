@@ -117,13 +117,13 @@
 //////////////////
 // MARK: - Prototypes
 
-int
+static int
 ldapschema_parse_objectclass_attrs(
-      LDAPSchema                  * lsd,
-      const char                  * field,
-      LDAPSchemaObjectclass       * objcls,
-      const char                  * liststr,
-      int                           must );
+         LDAPSchema *                  lsd,
+         const char *                  field,
+         LDAPSchemaObjectclass *       objcls,
+         const char *                  liststr,
+         int                           must );
 
 
 /////////////////
@@ -145,11 +145,16 @@ ldapschema_parse_objectclass_attrs(
 ///            is encounted, returns -1.  The error code can be retrieved
 ///            using ldapschema_errno().
 /// @see       ldapschema_errno, ldapschema_value_free
-int ldapschema_definition_split(LDAPSchema * lsd, LDAPSchemaModel * mod,
-   const char * str, size_t strlen, char *** argvp)
+int
+ldapschema_definition_split(
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             mod,
+         const char *                  str,
+         size_t                        strlen,
+         char ***                      argvp )
 {
-   char        ** argv;
-   char         * line;
+   char **        argv;
+   char *         line;
    char           encap;   // encapsulating character for segments
    int            argc;    // argument counts
    size_t         bol;     // beginning of line index
@@ -159,7 +164,7 @@ int ldapschema_definition_split(LDAPSchema * lsd, LDAPSchemaModel * mod,
    //size_t         len;
    size_t         pos;
    size_t         margin;
-   void         * ptr;
+   void *         ptr;
 
    assert(lsd     != NULL);
    assert(str     != NULL);
@@ -299,7 +304,12 @@ int ldapschema_definition_split(LDAPSchema * lsd, LDAPSchemaModel * mod,
 ///            is encounted, returns -1.  The error code can be retrieved
 ///            using ldapschema_errno().
 /// @see       ldapschema_errno, ldapschema_value_free
-int ldapschema_definition_split_len(LDAPSchema * lsd, LDAPSchemaModel * mod, const struct berval * def, char *** argvp )
+int
+ldapschema_definition_split_len(
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             mod,
+         const struct berval *         def,
+         char ***                      argvp )
 {
    assert(lsd   != NULL);
    assert(def   != NULL);
@@ -308,7 +318,11 @@ int ldapschema_definition_split_len(LDAPSchema * lsd, LDAPSchemaModel * mod, con
 }
 
 
-int ldapschema_line_split(LDAPSchema * lsd, const char * str, char *** argvp)
+int
+ldapschema_line_split(
+         LDAPSchema *                  lsd,
+         const char *                  str,
+         char ***                      argvp )
 {
    char *         line;
    char *         bol;
@@ -360,15 +374,19 @@ int ldapschema_line_split(LDAPSchema * lsd, const char * str, char *** argvp)
 }
 
 
-int ldapschema_objectclass_attribute(LDAPSchema * lsd,
-   LDAPSchemaObjectclass * objcls, LDAPSchemaAttributeType * attr,
-   int must, int inherited)
+int
+ldapschema_objectclass_attribute(
+         LDAPSchema *                  lsd,
+         LDAPSchemaObjectclass *       objcls,
+         LDAPSchemaAttributeType *     attr,
+         int                           must,
+         int                           inherited )
 {
    int                              err;
-   LDAPSchemaAttributeType      *** objcls_listp;
-   size_t                         * objcls_lenp;
-   LDAPSchemaObjectclass        *** attr_listp;
-   size_t                         * attr_lenp;
+   LDAPSchemaAttributeType ***      objcls_listp;
+   size_t *                         objcls_lenp;
+   LDAPSchemaObjectclass ***        attr_listp;
+   size_t *                         attr_lenp;
 
    assert(lsd != NULL);
    assert(objcls != NULL);
@@ -425,7 +443,10 @@ int ldapschema_objectclass_attribute(LDAPSchema * lsd,
 ///            an error was encountered.  Use ldapschema_errno() to obtain
 ///            the error.
 /// @see       ldapschema_errno, ldapschema_attributetype_free
-LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const struct berval * def)
+LDAPSchemaAttributeType *
+ldapschema_parse_attributetype(
+         LDAPSchema *                  lsd,
+         const struct berval *         def )
 {
    //
    //  RFC 4512                      LDAP Models                      June 2006
@@ -524,14 +545,14 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
    //     character of the Directory String syntax may be encoded in more than
    //     one octet since UTF-8 [RFC3629] is a variable-length encoding.
    //
-   char                       ** argv;
-   //int                           i;
-   int64_t                       pos;
-   int                           argc;
-   int                           err;
-   char                        * stridx;
-   LDAPSchemaAttributeType     * attr;
-   LDAPSchemaAlias             * alias;
+   char **                    argv;
+   //int                        i;
+   int64_t                    pos;
+   int                        argc;
+   int                        err;
+   char *                     stridx;
+   LDAPSchemaAttributeType *  attr;
+   LDAPSchemaAlias *          alias;
 
    // parses definition
    argv = NULL;
@@ -797,10 +818,15 @@ LDAPSchemaAttributeType * ldapschema_parse_attributetype(LDAPSchema * lsd, const
 ///            ldapschema_ext_free(). If an error is encounted, returns -1.
 ///            The error code can be retrieved using ldapschema_errno().
 /// @see       ldapschema_initialize
-int ldapschema_parse_ext(LDAPSchema * lsd, LDAPSchemaModel * mod, const char * key, const char * valstr)
+int
+ldapschema_parse_ext(
+         LDAPSchema *                  lsd,
+         LDAPSchemaModel *             mod,
+         const char *                  key,
+         const char *                  valstr )
 {
    int                        err;
-   LDAPSchemaExtension      * ext;
+   LDAPSchemaExtension *      ext;
 
    assert(lsd    != NULL);
    assert(mod    != NULL);
@@ -858,7 +884,10 @@ int ldapschema_parse_ext(LDAPSchema * lsd, LDAPSchemaModel * mod, const char * k
 ///            an error was encountered.  Use ldapschema_errno() to obtain
 ///            the error.
 /// @see       ldapschema_errno, ldapschema_syntax_free
-LDAPSchemaMatchingRule * ldapschema_parse_matchingrule(LDAPSchema * lsd, const struct berval * def)
+LDAPSchemaMatchingRule *
+ldapschema_parse_matchingrule(
+         LDAPSchema *                  lsd,
+         const struct berval *         def )
 {
    //
    // RFC 4512                      LDAP Models                      June 2006
@@ -1044,7 +1073,10 @@ LDAPSchemaMatchingRule * ldapschema_parse_matchingrule(LDAPSchema * lsd, const s
 ///            an error was encountered.  Use ldapschema_errno() to obtain
 ///            the error.
 /// @see       ldapschema_errno, ldapschema_objectclass_free
-LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const struct berval * def)
+LDAPSchemaObjectclass *
+ldapschema_parse_objectclass(
+         LDAPSchema *                  lsd,
+         const struct berval *         def )
 {
    //
    // RFC 4512                      LDAP Models                      June 2006
@@ -1079,11 +1111,11 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
    //          types, respectively; and
    //      <extensions> describe extensions.
    //
-   char                             ** argv;
-   int64_t                             pos;
-   int                                 argc;
-   int                                 err;
-   LDAPSchemaObjectclass             * objcls;
+   char **                    argv;
+   int64_t                    pos;
+   int                        argc;
+   int                        err;
+   LDAPSchemaObjectclass *    objcls;
 
    // parses definition
    argv = NULL;
@@ -1278,15 +1310,19 @@ LDAPSchemaObjectclass * ldapschema_parse_objectclass(LDAPSchema * lsd, const str
 }
 
 
-int ldapschema_parse_objectclass_attrs(LDAPSchema * lsd, const char * field,
-   LDAPSchemaObjectclass * objcls, const char * liststr,
-   int must)
+int
+ldapschema_parse_objectclass_attrs(
+         LDAPSchema *                  lsd,
+         const char *                  field,
+         LDAPSchemaObjectclass *       objcls,
+         const char *                  liststr,
+         int                           must )
 {
    int                     err;
-   char                 ** attrnames;
+   char **                 attrnames;
    size_t                  attrnames_len;
    size_t                  idx;
-   LDAPSchemaAlias       * alias;
+   LDAPSchemaAlias *       alias;
 
    assert(lsd     != NULL);
    assert(objcls  != NULL);
@@ -1359,7 +1395,10 @@ int ldapschema_parse_objectclass_attrs(LDAPSchema * lsd, const char * field,
 ///            an error was encountered.  Use ldapschema_errno() to obtain
 ///            the error.
 /// @see       ldapschema_errno, ldapschema_syntax_free
-LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval * def)
+LDAPSchemaSyntax *
+ldapschema_parse_syntax(
+         LDAPSchema *                  lsd,
+         const struct berval *         def )
 {
    //
    //  RFC 4512                      LDAP Models                      June 2006
@@ -1386,11 +1425,11 @@ LDAPSchemaSyntax * ldapschema_parse_syntax(LDAPSchema * lsd, const struct berval
    //       DESC <qdstring> is a short descriptive string; and
    //       <extensions> describe extensions.
    //
-   char                 ** argv;
-   int64_t                 pos;
-   int                     argc;
-   int                     err;
-   LDAPSchemaSyntax      * syntax;
+   char **              argv;
+   int64_t              pos;
+   int                  argc;
+   int                  err;
+   LDAPSchemaSyntax *   syntax;
 
    // parses definition
    argv = NULL;
