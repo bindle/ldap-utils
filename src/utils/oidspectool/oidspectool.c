@@ -70,7 +70,7 @@
 //  Headers  //
 //           //
 ///////////////
-#pragma mark - Headers
+// MARK: - Headers
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -89,7 +89,7 @@
 //  Definitions  //
 //               //
 ///////////////////
-#pragma mark - Definitions
+// MARK: - Definitions
 
 
 /////////////////
@@ -97,7 +97,7 @@
 //  Datatypes  //
 //             //
 /////////////////
-#pragma mark - Datatypes
+// MARK: - Datatypes
 
 enum my_format
 {
@@ -158,7 +158,7 @@ typedef struct my_oidspec OIDSpec;
 //  Variables  //
 //             //
 /////////////////
-#pragma mark - Variables
+// MARK: - Variables
 
 char           ** string_queue      = NULL;
 const char      * cur_filename      = NULL;
@@ -188,7 +188,7 @@ MyConfig cfg =
 //  Prototypes  //
 //              //
 //////////////////
-#pragma mark - Prototypes
+// MARK: - Prototypes
 
 // main statement
 int main(int argc, char * argv[]);
@@ -250,7 +250,7 @@ int oidspec_cmp( const void * p1, const void * p2 );
 //  Functions  //
 //             //
 /////////////////
-#pragma mark - Functions
+// MARK: - Functions
 
 /// main statement
 /// @param[in] argc   number of arguments
