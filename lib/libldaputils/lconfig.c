@@ -71,8 +71,6 @@
 //////////////////
 // MARK: - Prototypes
 
-// prints string to stdout
-const char * ldaputils_config_print_str(const char * str);
 void ldaputils_param_print(const char * key, const char * val);
 void ldaputils_param_int(LDAPUtils * lud, const char * key, int ival);
 void ldaputils_param_option_str(LDAPUtils * lud, const char * key, int option);

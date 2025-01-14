@@ -68,7 +68,6 @@
 ldaputils_chomp
 ldaputils_cmdargs
 ldaputils_config_print
-ldaputils_config_print_str
 ldaputils_getpass
 ldaputils_passfile
 ldaputils_usage
