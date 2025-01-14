@@ -2,12 +2,16 @@
 LDAP Utilities
 ==============
 
-Copyright (C) 2012, 2019, 2023 David M. Syzdek <david@syzdek.net>
+Copyright (C) 2012, 2019, 2023, 2025 David M. Syzdek <david@syzdek.net>
 
 0.7
 ---
   - project: updating to use POSIX C source 200112L (syzdek)
   - project: updating to use C dialect c11 (syzdek)
+  - project: removing use of LDAP_DEPRECATED by default configuration (syzdek)
+  - project: cleaning up white space and coding style (syzdek)
+  - project: fixing compiler warnings on Alpine Linux (syzdek)
+  - project: fixing compiler warnings on Rocky Linux (syzdek)
   - ldapppolicy: adding utility (syzdek)
 
 0.6
