@@ -72,7 +72,9 @@
 #include <getopt.h>
 #include <assert.h>
 
-#define LDAP_DEPRECATED 1
+#ifdef USE_LDAP_DEPRECATED
+#   define LDAP_DEPRECATED 1
+#endif
 #include <ldap.h>
 #include <ldaputils.h>
 
@@ -359,8 +361,10 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
    ld      = ldaputils_get_ld(cnf->lud);
 
    // sorts entries
+#ifdef USE_LDAP_DEPRECATED
    if ((cnf->lud->sortattr))
       ldap_sort_entries(ld, &res, cnf->lud->sortattr, strcasecmp);
+#endif
 
    // print header
    printf("[\n");
