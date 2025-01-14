@@ -55,9 +55,7 @@
 //  Headers  //
 //           //
 ///////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Headers
-#endif
+// MARK: - Headers
 
 #include <ldaputils_compat.h>
 
@@ -83,9 +81,7 @@
 //  Definitions  //
 //               //
 ///////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Definitions
-#endif
+// MARK: - Definitions
 
 #ifndef PROGRAM_NAME
 #define PROGRAM_NAME "ldapdn2str"
@@ -99,9 +95,7 @@
 //  Datatypes  //
 //             //
 /////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Datatypes
-#endif
+// MARK: - Datatypes
 
 #define MY_FORMAT_DN     0x01
 #define MY_FORMAT_RDN    0x02
@@ -127,9 +121,7 @@ struct my_config
 //  Prototypes  //
 //              //
 //////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Prototypes
-#endif
+// MARK: - Prototypes
 
 // main statement
 int main(int argc, char * argv[]);
@@ -146,9 +138,7 @@ void my_unbind(MyConfig * cnf);
 //  Functions  //
 //             //
 /////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Functions
-#endif
+// MARK: - Functions
 
 /// prints program usage and exits
 void ldaputils_usage(void)
