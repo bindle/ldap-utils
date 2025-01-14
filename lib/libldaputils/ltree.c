@@ -73,20 +73,20 @@
 
 struct ldap_utils_tree
 {
-   char              * rdn;
-   LDAPUtilsEntry    * entry;
-   LDAPUtilsTree     * parent;
-   size_t              children_len;
-   LDAPUtilsTree    ** children;
+   char *               rdn;
+   LDAPUtilsEntry *     entry;
+   LDAPUtilsTree *      parent;
+   size_t               children_len;
+   LDAPUtilsTree **     children;
 };
 
 typedef struct ldap_utils_tree_recur LDAPUtilsTreeRecursion;
 
 struct ldap_utils_tree_recur
 {
-   char                * map;
-   size_t                lastline;   // last line contained data
-   LDAPUtilsTreeOpts   * opts;
+   char *               map;
+   size_t               lastline;   // last line contained data
+   LDAPUtilsTreeOpts *  opts;
 };
 
 
@@ -97,19 +97,55 @@ struct ldap_utils_tree_recur
 //////////////////
 // MARK: - Prototypes
 
-int ldaputils_tree_add_dn_components(LDAPUtilsTree * tree, char ** components, size_t components_len, LDAPUtilsTree ** nodep);
+static int
+ldaputils_tree_add_dn_components(
+         LDAPUtilsTree *               tree,
+         char **                       components,
+         size_t                        components_len,
+         LDAPUtilsTree **              nodep );
 
-LDAPUtilsTree * ldaputils_tree_child_find(LDAPUtilsTree * tree, const char * rdn, size_t * prevp);
 
-LDAPUtilsTree * ldaputils_tree_child_init(LDAPUtilsTree * tree, const char * rdn);
+static LDAPUtilsTree *
+ldaputils_tree_child_find(
+         LDAPUtilsTree *               tree,
+         const char *                  rdn,
+         size_t *                      prevp );
 
-void ldaputils_tree_level_count_recursive(LDAPUtilsTree * tree, size_t level, size_t * depthp);
 
-void ldaputils_tree_print_entry(LDAPUtilsTree * tree, size_t level, LDAPUtilsTreeRecursion * recur, size_t stop);
+static LDAPUtilsTree *
+ldaputils_tree_child_init(
+         LDAPUtilsTree *               tree,
+         const char *                  rdn );
 
-void ldaputils_tree_print_indent(LDAPUtilsTree * tree, size_t level, LDAPUtilsTreeRecursion * recur);
 
-void ldaputils_tree_print_recursive(LDAPUtilsTree * tree, size_t level, LDAPUtilsTreeRecursion * recur);
+static void
+ldaputils_tree_level_count_recursive(
+         LDAPUtilsTree *               tree,
+         size_t                        level,
+         size_t *                      depthp );
+
+
+static void
+ldaputils_tree_print_entry(
+         LDAPUtilsTree *               tree,
+         size_t                        level,
+         LDAPUtilsTreeRecursion *      recur,
+         size_t                        stop );
+
+
+static void
+ldaputils_tree_print_indent(
+         LDAPUtilsTree *               tree,
+         size_t                        level,
+         LDAPUtilsTreeRecursion *      recur );
+
+
+static void
+ldaputils_tree_print_recursive(
+         LDAPUtilsTree *               tree,
+         size_t                        level,
+         LDAPUtilsTreeRecursion *      recur );
+
 
 /////////////////
 //             //
@@ -118,22 +154,24 @@ void ldaputils_tree_print_recursive(LDAPUtilsTree * tree, size_t level, LDAPUtil
 /////////////////
 // MARK: - Functions
 
-
 /// retrieves LDAP entries from result
 /// @param[in] ld      refernce to LDAP socket data
 /// @param[in] res     refernce to LDAP result message
-LDAPUtilsTree * ldaputils_get_tree(LDAP * ld, LDAPMessage * res,
-   int copy)
+LDAPUtilsTree *
+ldaputils_get_tree(
+         LDAP *                        ld,
+         LDAPMessage *                 res,
+         int                           copy )
 {
-   int                   err;
-   char                * name;
-   char                * str;
-   BerElement          * ber;
-   LDAPMessage         * msg;
-   struct berval      ** vals;
-   LDAPUtilsEntry      * entry;
-   LDAPUtilsTree       * tree;
-   LDAPUtilsTree       * node;
+   int                  err;
+   char *               name;
+   char *               str;
+   BerElement *         ber;
+   LDAPMessage *        msg;
+   struct berval **     vals;
+   LDAPUtilsEntry *     entry;
+   LDAPUtilsTree *      tree;
+   LDAPUtilsTree *      node;
 
    assert(ld  != NULL);
    assert(res != NULL);
@@ -196,13 +234,17 @@ LDAPUtilsTree * ldaputils_get_tree(LDAP * ld, LDAPMessage * res,
 }
 
 
-int ldaputils_tree_add_dn(LDAPUtilsTree * tree, const char * dn, LDAPUtilsTree ** nodep)
+int
+ldaputils_tree_add_dn(
+         LDAPUtilsTree *               tree,
+         const char *                  dn,
+         LDAPUtilsTree **              nodep )
 {
-   char           ** components;
-   size_t            components_len;
-   size_t            u;
-   char            * str;
-   int               err;
+   char **        components;
+   size_t         components_len;
+   size_t         u;
+   char *         str;
+   int            err;
 
    assert(tree  != NULL);
    assert(dn    != NULL);
@@ -231,10 +273,15 @@ int ldaputils_tree_add_dn(LDAPUtilsTree * tree, const char * dn, LDAPUtilsTree *
 }
 
 
-int ldaputils_tree_add_dn_components(LDAPUtilsTree * tree, char ** components, size_t components_len, LDAPUtilsTree ** nodep)
+int
+ldaputils_tree_add_dn_components(
+         LDAPUtilsTree *               tree,
+         char **                       components,
+         size_t                        components_len,
+         LDAPUtilsTree **              nodep )
 {
    size_t            cur_comp;
-   LDAPUtilsTree   * child;
+   LDAPUtilsTree *   child;
 
    // loop through DN components
    for (cur_comp = 0; cur_comp < components_len; cur_comp++)
@@ -258,10 +305,14 @@ int ldaputils_tree_add_dn_components(LDAPUtilsTree * tree, char ** components, s
 }
 
 
-int ldaputils_tree_add_entry(LDAPUtilsTree * tree, LDAPUtilsEntry * entry, int copy)
+int
+ldaputils_tree_add_entry(
+         LDAPUtilsTree *               tree,
+         LDAPUtilsEntry *              entry,
+         int                           copy )
 {
-   LDAPUtilsTree * child;
-   int             err;
+   LDAPUtilsTree *   child;
+   int               err;
 
    assert(tree  != NULL);
    assert(entry != NULL);
@@ -280,12 +331,16 @@ int ldaputils_tree_add_entry(LDAPUtilsTree * tree, LDAPUtilsEntry * entry, int c
 }
 
 
-LDAPUtilsTree * ldaputils_tree_child_find(LDAPUtilsTree * tree, const char * rdn, size_t * idxp)
+LDAPUtilsTree *
+ldaputils_tree_child_find(
+         LDAPUtilsTree *               tree,
+         const char *                  rdn,
+         size_t *                      idxp )
 {
-   size_t          low;
-   size_t          mid;
-   size_t          high;
-   int             res;
+   size_t         low;
+   size_t         mid;
+   size_t         high;
+   int            res;
 
    assert(tree != NULL);
    assert(rdn  != NULL);
@@ -342,13 +397,16 @@ LDAPUtilsTree * ldaputils_tree_child_find(LDAPUtilsTree * tree, const char * rdn
 }
 
 
-LDAPUtilsTree * ldaputils_tree_child_init(LDAPUtilsTree * tree, const char * rdn)
+LDAPUtilsTree *
+ldaputils_tree_child_init(
+         LDAPUtilsTree *               tree,
+         const char *                  rdn )
 {
-   LDAPUtilsTree * child;
-   size_t          size;
-   size_t          idx;
-   size_t          u;
-   void          * ptr;
+   LDAPUtilsTree *   child;
+   size_t            size;
+   size_t            idx;
+   size_t            u;
+   void *            ptr;
 
    assert(tree  != NULL);
    assert(rdn   != NULL);
@@ -390,10 +448,12 @@ LDAPUtilsTree * ldaputils_tree_child_init(LDAPUtilsTree * tree, const char * rdn
 }
 
 
-void ldaputils_tree_free(LDAPUtilsTree * tree)
+void
+ldaputils_tree_free(
+         LDAPUtilsTree *               tree )
 {
-   LDAPUtilsTree * child;
-   LDAPUtilsTree * parent;
+   LDAPUtilsTree *   child;
+   LDAPUtilsTree *   parent;
 
    assert(tree != NULL);
 
@@ -438,9 +498,12 @@ void ldaputils_tree_free(LDAPUtilsTree * tree)
 }
 
 
-LDAPUtilsTree * ldaputils_tree_initialize(LDAPUtilsEntries * entries, int copy)
+LDAPUtilsTree *
+ldaputils_tree_initialize(
+         LDAPUtilsEntries *            entries,
+         int                           copy )
 {
-   LDAPUtilsTree   * tree;
+   LDAPUtilsTree *   tree;
    size_t            x;
    int               err;
 
@@ -471,7 +534,11 @@ LDAPUtilsTree * ldaputils_tree_initialize(LDAPUtilsEntries * entries, int copy)
    return(tree);
 }
 
-size_t ldaputils_tree_level_count(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts)
+
+size_t
+ldaputils_tree_level_count(
+         LDAPUtilsTree *               tree,
+         LDAPUtilsTreeOpts *           opts )
 {
    size_t          x;
    LDAPUtilsTree * child;
@@ -494,7 +561,11 @@ size_t ldaputils_tree_level_count(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts
 }
 
 
-void ldaputils_tree_level_count_recursive(LDAPUtilsTree * tree, size_t level, size_t * depthp)
+void
+ldaputils_tree_level_count_recursive(
+         LDAPUtilsTree *               tree,
+         size_t                        level,
+         size_t *                      depthp )
 {
    size_t x;
 
@@ -513,14 +584,17 @@ void ldaputils_tree_level_count_recursive(LDAPUtilsTree * tree, size_t level, si
 }
 
 
-void ldaputils_tree_print(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts)
+void
+ldaputils_tree_print(
+         LDAPUtilsTree *               tree,
+         LDAPUtilsTreeOpts *           opts )
 {
-   size_t                    x;
-   size_t                    depth;
-   LDAPUtilsTree           * child;
-   char                      dn[512];
-   char                      tmp[512];
-   LDAPUtilsTreeRecursion    recur;
+   size_t                     x;
+   size_t                     depth;
+   LDAPUtilsTree *            child;
+   char                       dn[512];
+   char                       tmp[512];
+   LDAPUtilsTreeRecursion     recur;
 
    assert(tree != NULL);
    assert(opts != NULL);
@@ -570,13 +644,18 @@ void ldaputils_tree_print(LDAPUtilsTree * tree, LDAPUtilsTreeOpts * opts)
 }
 
 
-void ldaputils_tree_print_entry(LDAPUtilsTree * tree, size_t level, LDAPUtilsTreeRecursion * recur, size_t stop)
+void
+ldaputils_tree_print_entry(
+         LDAPUtilsTree *               tree,
+         size_t                        level,
+         LDAPUtilsTreeRecursion *      recur,
+         size_t                        stop )
 {
-   size_t           have_children;
-   size_t           z;
-   LDAPUtilsEntry * entry;
-   size_t           attr;
-   size_t           val;
+   size_t            have_children;
+   size_t            z;
+   LDAPUtilsEntry *  entry;
+   size_t            attr;
+   size_t            val;
 
    assert(tree  != NULL);
    assert(recur != NULL);
@@ -651,7 +730,11 @@ void ldaputils_tree_print_entry(LDAPUtilsTree * tree, size_t level, LDAPUtilsTre
 }
 
 
-void ldaputils_tree_print_indent(LDAPUtilsTree * tree, size_t level, LDAPUtilsTreeRecursion * recur)
+void
+ldaputils_tree_print_indent(
+         LDAPUtilsTree *               tree,
+         size_t                        level,
+         LDAPUtilsTreeRecursion *      recur )
 {
    size_t y;
 
@@ -675,7 +758,11 @@ void ldaputils_tree_print_indent(LDAPUtilsTree * tree, size_t level, LDAPUtilsTr
 }
 
 
-void ldaputils_tree_print_recursive(LDAPUtilsTree * tree, size_t level, LDAPUtilsTreeRecursion * recur)
+void
+ldaputils_tree_print_recursive(
+         LDAPUtilsTree *               tree,
+         size_t                        level,
+         LDAPUtilsTreeRecursion *      recur )
 {
    size_t x;
    size_t y;
