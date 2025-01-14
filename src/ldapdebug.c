@@ -48,7 +48,6 @@
  *     libtool --mode=clean rm -f ldapdebug.lo ldapdebug
  */
 #define _LDAP_UTILS_SRC_LDAPDEBUG 1
-#undef __LDAPUTILS_PMARK
 
 
 ///////////////
@@ -56,9 +55,7 @@
 //  Headers  //
 //           //
 ///////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Headers
-#endif
+// MARK: - Headers
 
 #include <ldaputils_compat.h>
 
@@ -82,9 +79,7 @@
 //  Definitions  //
 //               //
 ///////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Definitions
-#endif
+// MARK: - Definitions
 
 #ifndef PROGRAM_NAME
 #define PROGRAM_NAME "ldapdebug"
@@ -98,9 +93,7 @@
 //  Prototypes  //
 //              //
 //////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Prototypes
-#endif
+// MARK: - Prototypes
 
 // main statement
 int main(int argc, char * argv[]);
@@ -114,9 +107,7 @@ int my_config(int argc, char * argv[], LDAPUtils ** ludp);
 //  Functions  //
 //             //
 /////////////////
-#ifdef __LDAPUTILS_PMARK
-#pragma mark - Functions
-#endif
+// MARK: - Functions
 
 /// prints program usage and exits
 void ldaputils_usage(void)
