@@ -345,6 +345,7 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
 {
    int               x;
    int               y;
+   int               len;
    char            * dnstr;
    char            * dn;
    char           ** dns;
@@ -472,7 +473,8 @@ int my_results(MyConfig * cnf, LDAPMessage * res)
          else
          {
             printf("      \"%s\": [", attr);
-            for(y = 0; (y < ldaputils_count_values(vals)); y++)
+            for(len = 0; ((vals[len])); len++);
+            for(y = 0; (y < len); y++)
             {
                if (y > 0)
                   printf(", \"%s\"", vals[y]);
