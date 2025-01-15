@@ -675,9 +675,16 @@ my_rootdse(
 
    // retrieve DNs
    cnf->monitor  = ldaputils_get_values(ld, msg, "monitorContext");
+   if (!(cnf->monitor))
+   {
+      ldap_msgfree(msg);
+      ldap_msgfree(res);
+      return(0);
+   };
    my_monitor_connections(cnf, cnf->monitor[0]);
 
    // frees response
+   ldap_msgfree(msg);
    ldap_msgfree(res);
 
    return(0);
