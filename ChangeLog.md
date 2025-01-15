@@ -6,6 +6,7 @@ Copyright (C) 2012, 2019, 2023, 2025 David M. Syzdek <david@syzdek.net>
 
 0.7
 ---
+  Released 2025/01/15
   - project: updating to use POSIX C source 200112L (syzdek)
   - project: updating to use C dialect c11 (syzdek)
   - project: removing use of LDAP_DEPRECATED by default configuration (syzdek)
