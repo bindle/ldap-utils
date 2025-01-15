@@ -442,7 +442,7 @@ my_entry(
 
    // print dn
    dn = ldap_get_dn(ld, msg);
-   printf("%s: %s\n", (((isppolicy)) ? "ppolicy" : "dn"), dn);
+   printf("%s: %s\n", (((isppolicy)) ? "ppolicy" : "entry"), dn);
    if ((isppolicy))
    {
       my_field_str(        cnf, msg, "pwdAttribute",              "Password Attribute",         NULL);
