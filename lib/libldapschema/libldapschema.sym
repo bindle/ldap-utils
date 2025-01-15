@@ -75,7 +75,11 @@ ldapschema_errno
 ldapschema_schema_errors
 # format functions
 ldapschema_fmt_definition
+# LDAP functions
+ldapschema_fetch
 # memory functions
+ldapschema_count_values
+ldapschema_count_values_len
 ldapschema_curfree
 ldapschema_free
 ldapschema_initialize
@@ -88,16 +92,15 @@ ldapschema_spec_abnf
 ldapschema_spec_field
 ldapschema_spec_list
 ldapschema_spec_search
-ldapschema_type_name
 # output functions
 ldapschema_print
 ldapschema_printall
+ldapschema_type_name
 # query functions
-ldapschema_count_attributetype
-ldapschema_count_ldapsyntax
-ldapschema_count_matchingrule
-ldapschema_count_objectclass
-ldapschema_fetch
+ldapschema_count_attributetypes
+ldapschema_count_ldapsyntaxes
+ldapschema_count_matchingrules
+ldapschema_count_objectclasses
 ldapschema_find_attributetype
 ldapschema_find_ldapsyntax
 ldapschema_find_matchingrule
