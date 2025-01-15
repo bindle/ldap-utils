@@ -142,10 +142,10 @@ CLEANFILES				= \
 
 
 # macros for lib/libldapschema.la
-if LDAPUTILS_LIBLDAPSCHEMA
+if LDAPUTILS_LIBLDAPSCHEMA_BUILD
    noinst_LTLIBRARIES			+= lib/libldapschema.la
 endif
-if LDAPUTILS_LTLIBLDAPSCHEMA
+if LDAPUTILS_LIBLDAPSCHEMA_INSTALL
    lib_LTLIBRARIES			+= lib/libldapschema.la
    include_HEADERS			+= include/ldapschema.h
 endif
@@ -176,7 +176,7 @@ lib_libldapschema_la_SOURCES		= $(noinst_HEADERS) \
 					  lib/libldapschema/lspecdata.h \
 					  lib/libldapschema/lsort.c \
 					  lib/libldapschema/lsort.h
-if LDAPUTILS_LTLIBLDAPSCHEMA
+if LDAPUTILS_LIBLDAPSCHEMA_INSTALL
    lib_libldapschema_la_LDFLAGS		+= -version-info $(LIB_VERSION_INFO)
 endif
 
