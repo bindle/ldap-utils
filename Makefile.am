@@ -58,6 +58,7 @@ AM_CPPFLAGS				= -O2 \
 ACLOCAL_AMFLAGS				= -I m4 -W all -W error
 AM_MAKEINFOFLAGS                        = --no-split
 AM_DISTCHECK_CONFIGURE_FLAGS		= --enable-strictwarnings \
+					  --enable-deprecated \
 					  --enable-libldapschema \
 					  --enable-ldapschema \
 					  --enable-ldapdebug \
@@ -139,11 +140,6 @@ CLEANFILES				= \
 					  @PACKAGE_TARNAME@-*.tar.* \
 					  @PACKAGE_TARNAME@-*.txz \
 					  @PACKAGE_TARNAME@-*.zip
-DISTCHECK_CONFIGURE_FLAGS		= --enable-strictwarnings \
-					  --enable-ldapdebug \
-					  --enable-deprecated \
-					  --enable-ldapschema \
-					  --enable-libldapschema
 
 
 # macros for lib/libldapschema.la
