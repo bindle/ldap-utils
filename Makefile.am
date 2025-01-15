@@ -44,7 +44,6 @@ V					= 0
 
 
 # Global flags
-AM_LIBS					=
 AM_LDFLAGS				=
 AM_CFLAGS				= -O2 $(CFLAGS_WARNINGS)
 AM_CXXFLAGS				= -O2 @AM_CXXFLAGS@
@@ -143,13 +142,18 @@ CLEANFILES				= \
 
 
 # macros for lib/libldapschema.la
+if LDAPUTILS_LIBLDAPSCHEMA
+   noinst_LTLIBRARIES			+= lib/libldapschema.la
+endif
+if LDAPUTILS_LTLIBLDAPSCHEMA
+   lib_LTLIBRARIES			+= lib/libldapschema.la
+   include_HEADERS			+= include/ldapschema.h
+endif
 lib_libldapschema_la_DEPENDENCIES	= Makefile lib/libldapschema/libldapschema.sym
 lib_libldapschema_la_CPPFLAGS		= $(AM_CPPFLAGS) -I$(srcdir)/lib/libldapschema
-lib_libldapschema_la_CFLAGS		= $(AM_CFLAGS)
 lib_libldapschema_la_LDFLAGS		= -rpath'$(libdir)' \
 					  $(AM_LDFLAGS) \
 					  -export-symbols $(srcdir)/lib/libldapschema/libldapschema.sym
-lib_libldapschema_la_LIBADD		= $(AM_LIBS)
 lib_libldapschema_la_SOURCES		= $(noinst_HEADERS) \
 					  lib/libldapschema/libldapschema.h \
 					  lib/libldapschema/lerror.c \
@@ -172,12 +176,7 @@ lib_libldapschema_la_SOURCES		= $(noinst_HEADERS) \
 					  lib/libldapschema/lspecdata.h \
 					  lib/libldapschema/lsort.c \
 					  lib/libldapschema/lsort.h
-if LDAPUTILS_LIBLDAPSCHEMA
-   noinst_LTLIBRARIES			+= lib/libldapschema.la
-endif
 if LDAPUTILS_LTLIBLDAPSCHEMA
-   lib_LTLIBRARIES			+= lib/libldapschema.la
-   include_HEADERS			+= include/ldapschema.h
    lib_libldapschema_la_LDFLAGS		+= -version-info $(LIB_VERSION_INFO)
 endif
 
@@ -187,8 +186,6 @@ if LDAPUTILS_LIBLDAPUTILS
    noinst_LIBRARIES			+= lib/libldaputils.a
 endif
 lib_libldaputils_a_DEPENDENCIES		= Makefile lib/libldaputils/libldaputils.sym
-lib_libldaputils_a_CFLAGS		= $(AM_CFLAGS)
-lib_libldaputils_a_LIBADD		= $(AM_LIBS)
 lib_libldaputils_a_SOURCES		= $(noinst_HEADERS) \
 					  lib/libldaputils/libldaputils.h \
 					  lib/libldaputils/lconfig.c \
@@ -212,9 +209,7 @@ if LDAPUTILS_LDAP2CSV
 endif
 src_ldap2csv_DEPENDENCIES		= Makefile lib/libldaputils.a lib/libldapschema.la
 src_ldap2csv_CPPFLAGS			= -DPROGRAM_NAME="\"ldap2csv\"" $(AM_CPPFLAGS)
-src_ldap2csv_CFLAGS			= $(AM_CFLAGS)
-src_ldap2csv_LDFLAGS			= $(AM_LDFLAGS)
-src_ldap2csv_LDADD			= $(AM_LDADD) -lldap -llber lib/libldapschema.la lib/libldaputils.a
+src_ldap2csv_LDADD			= $(AM_LDADD) lib/libldapschema.la lib/libldaputils.a
 src_ldap2csv_SOURCES			= src/ldap2csv.c
 
 
@@ -225,9 +220,7 @@ if LDAPUTILS_LDAP2JSON
 endif
 src_ldap2json_DEPENDENCIES		= Makefile lib/libldaputils.a
 src_ldap2json_CPPFLAGS			= -DPROGRAM_NAME="\"ldap2json\"" $(AM_CPPFLAGS)
-src_ldap2json_CFLAGS			= $(AM_CFLAGS)
-src_ldap2json_LDFLAGS			= $(AM_LDFLAGS)
-src_ldap2json_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
+src_ldap2json_LDADD			= $(AM_LDADD) lib/libldaputils.a
 src_ldap2json_SOURCES			= src/ldap2json.c
 
 
@@ -238,9 +231,7 @@ if LDAPUTILS_LDAPDEBUG
 endif
 src_ldapdebug_DEPENDENCIES		= Makefile lib/libldaputils.a
 src_ldapdebug_CPPFLAGS			= -DPROGRAM_NAME="\"ldapdebug\"" $(AM_CPPFLAGS)
-src_ldapdebug_CFLAGS			= $(AM_CFLAGS)
-src_ldapdebug_LDFLAGS			= $(AM_LDFLAGS)
-src_ldapdebug_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
+src_ldapdebug_LDADD			= $(AM_LDADD) lib/libldaputils.a
 src_ldapdebug_SOURCES			= src/ldapdebug.c
 
 
@@ -250,9 +241,7 @@ if LDAPUTILS_LDAPDN2STR
 endif
 src_ldapdn2str_DEPENDENCIES		= Makefile lib/libldaputils.a
 src_ldapdn2str_CPPFLAGS			= -DPROGRAM_NAME="\"ldapdn2str\"" $(AM_CPPFLAGS)
-src_ldapdn2str_CFLAGS			= $(AM_CFLAGS)
-src_ldapdn2str_LDFLAGS			= $(AM_LDFLAGS)
-src_ldapdn2str_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
+src_ldapdn2str_LDADD			= $(AM_LDADD) lib/libldaputils.a
 src_ldapdn2str_SOURCES			= src/ldapdn2str.c
 
 
@@ -262,9 +251,7 @@ if LDAPUTILS_LDAPCONNS
 endif
 src_ldapconns_DEPENDENCIES		= Makefile lib/libldaputils.a lib/libldapschema.la
 src_ldapconns_CPPFLAGS			= -DPROGRAM_NAME="\"ldapconns\"" $(AM_CPPFLAGS)
-src_ldapconns_CFLAGS			= $(AM_CFLAGS)
-src_ldapconns_LDFLAGS			= $(AM_LDFLAGS)
-src_ldapconns_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a lib/libldapschema.la
+src_ldapconns_LDADD			= $(AM_LDADD) lib/libldaputils.a lib/libldapschema.la
 src_ldapconns_SOURCES			= src/ldapconns.c
 
 
@@ -275,9 +262,7 @@ if LDAPUTILS_LDAPINFO
 endif
 src_ldapinfo_DEPENDENCIES		= Makefile lib/libldaputils.a lib/libldapschema.la
 src_ldapinfo_CPPFLAGS			= -DPROGRAM_NAME="\"ldapinfo\"" $(AM_CPPFLAGS)
-src_ldapinfo_CFLAGS			= $(AM_CFLAGS)
-src_ldapinfo_LDFLAGS			= $(AM_LDFLAGS)
-src_ldapinfo_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a lib/libldapschema.la
+src_ldapinfo_LDADD			= $(AM_LDADD) lib/libldaputils.a lib/libldapschema.la
 src_ldapinfo_SOURCES			= src/ldapinfo.c
 
 
@@ -286,10 +271,8 @@ if LDAPUTILS_LDAPPPOLICY
    bin_PROGRAMS                         += src/ldapppolicy
 endif
 src_ldapppolicy_DEPENDENCIES		= Makefile lib/libldaputils.a
-src_ldapppolicy_CPPFLAGS			= -DPROGRAM_NAME="\"ldapppolicy\"" $(AM_CPPFLAGS)
-src_ldapppolicy_CFLAGS			= $(AM_CFLAGS)
-src_ldapppolicy_LDFLAGS			= $(AM_LDFLAGS)
-src_ldapppolicy_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
+src_ldapppolicy_CPPFLAGS		= -DPROGRAM_NAME="\"ldapppolicy\"" $(AM_CPPFLAGS)
+src_ldapppolicy_LDADD			= $(AM_LDADD) lib/libldaputils.a
 src_ldapppolicy_SOURCES			= src/ldapppolicy.c
 
 
@@ -299,9 +282,7 @@ if LDAPUTILS_LDAPSCHEMA
 endif
 src_ldapschema_DEPENDENCIES		= Makefile lib/libldapschema.la lib/libldaputils.a
 src_ldapschema_CPPFLAGS			= -DPROGRAM_NAME="\"ldapschema\"" $(AM_CPPFLAGS)
-src_ldapschema_CFLAGS			= $(AM_CFLAGS)
-src_ldapschema_LDFLAGS			= $(AM_LDFLAGS)
-src_ldapschema_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a lib/libldapschema.la
+src_ldapschema_LDADD			= $(AM_LDADD) lib/libldaputils.a lib/libldapschema.la
 src_ldapschema_SOURCES			= src/ldapschema.c
 
 
@@ -312,9 +293,7 @@ if LDAPUTILS_LDAPTREE
 endif
 src_ldaptree_DEPENDENCIES		= Makefile lib/libldaputils.a
 src_ldaptree_CPPFLAGS			= -DPROGRAM_NAME="\"ldaptree\"" $(AM_CPPFLAGS)
-src_ldaptree_CFLAGS			= $(AM_CFLAGS)
-src_ldaptree_LDFLAGS			= $(AM_LDFLAGS)
-src_ldaptree_LDADD			= $(AM_LDADD) -lldap -llber lib/libldaputils.a
+src_ldaptree_LDADD			= $(AM_LDADD) lib/libldaputils.a
 src_ldaptree_SOURCES			= src/ldaptree.c
 
 
