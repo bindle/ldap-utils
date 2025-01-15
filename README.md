@@ -45,6 +45,7 @@ Contents
      - ldapdebug
      - ldapdn2str
      - ldapinfo
+     - ldapppolicy
      - ldapschema
      - ldaptree
    * Source Code
@@ -358,6 +359,80 @@ The following example uses a priviledged bind DN to obtain server stats:
                                    OTP
                                    PLAIN
                                    SCRAM-SHA-1
+
+
+ldapppolicy
+-----------
+
+ldapppolicy is a utility which searches an LDAP server for entries containing
+the object class `pwdPolicy`.  The utility then displays the attributes from
+the IETF Password Policy proposal for LDAP in human readable format.
+
+The following is an example of displaying the password policies found within
+the directory:
+
+      $ ldapppolicy
+      ppolicy: dc=foo,dc=org
+         Password Attribute:       userPassword
+         Password Minimum Age:     30s
+         Password Maximum Age:     12w 1d
+         Password Minimum Length:  16
+         Password Syntax Checks:   enabled, fail on errors
+         Passwords In History:     40
+         Password Expire Warning:  1w
+         Expired Grace Binds:      0
+         Lockout After Failures:   TRUE
+         Lockout Duration:         30m
+         Lockout Max Failures:     10
+         Lockout Failure Interval: 20m
+         Password Must Change:     FALSE
+         Password Check Module:    bofh-pwdCheckModules.so
+
+      ppolicy: cn=none,ou=PPolicies,dc=foo,dc=org
+         Password Attribute:       userPassword
+         Password Minimum Age:     0s
+         Password Minimum Length:  1
+         Password Syntax Checks:   disabled
+         Passwords In History:     1
+         Password Expire Warning:  0s
+         Expired Grace Binds:      0
+         Lockout After Failures:   FALSE
+         Lockout Max Failures:     0
+         Password Must Change:     FALSE
+         Allow User Change:        TRUE
+
+      ppolicy: cn=allow-pwhash,ou=PPolicies,dc=foo,dc=org
+         Password Attribute:       userPassword
+         Password Minimum Age:     30s
+         Password Maximum Age:     12w 1d
+         Password Minimum Length:  16
+         Password Syntax Checks:   enabled, ignore errors
+         Passwords In History:     40
+         Password Expire Warning:  1w
+         Expired Grace Binds:      0
+         Lockout After Failures:   TRUE
+         Lockout Duration:         30m
+         Lockout Max Failures:     10
+         Lockout Failure Interval: 20m
+         Password Must Change:     FALSE
+         Password Check Module:    bofh-pwdCheckModules.so
+
+The following example looks up a specific password policy DN and displays the
+LDAP attribute names instead of descriptions:
+
+      $ ldapppolicy -A cn=none,ou=PPolicies,dc=acsalaska,dc=net
+      ppolicy: cn=none,ou=PPolicies,dc=acsalaska,dc=net
+         pwdAttribute:             userPassword
+         pwdMinAge:                0s
+         pwdMinLength:             1
+         pwdCheckQuality:          disabled
+         pwdInHistory:             1
+         pwdExpireWarning:         0s
+         pwdGraceAuthnLimit:       0
+         pwdLockout:               FALSE
+         pwdMaxFailure:            0
+         pwdMustChange:            FALSE
+         pwdAllowUserChange:       TRUE
 
 
 ldapschema
