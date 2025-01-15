@@ -41,6 +41,7 @@ Contents
    * Utilities
      - ldap2csv
      - ldap2json
+     - ldapconns
      - ldapdebug
      - ldapdn2str
      - ldapinfo
@@ -199,6 +200,30 @@ Example of the same search using `ldapsearch`:
       sn: Syzdek
       mail: david@syzdek.net
       title: Slackware Linux Administrator
+
+
+ldapconns
+---------
+
+ldapconns is a utility which reads the OpenLDAP monitoring context and
+displays connections to the slapd process.
+
+Example usage:
+
+      $ ldapconns -W -x -D uid=jdoe,ou=People,dc=foo,dc=org
+      Listener   Proto  Mask  Ops R/E/P/C    Local        Peer                Start            Last Activity    AuthzDN
+      ldap:///   3      r     13/0/0/13      0.0.0.0:389  192.168.82.16:33114   20241205095502Z  20250107184230Z  uid=ssh-bastion,ou=People,dc=foo,dc=org
+      ldap:///   3      rx    3/1/0/2        0.0.0.0:389  192.168.82.212:59724  20241211103315Z  20241211103315Z  uid=vpn-server,ou=People,dc=foo,dc=org
+      ldap:///   3      r     82/0/0/82      0.0.0.0:389  192.168.82.32:34866   20241121205959Z  20250114232619Z  uid=imap-server,ou=People,dc=foo,dc=org
+      ldap:///   3      r     483/0/0/483    0.0.0.0:389  192.168.82.10:53406   20241120171009Z  20250115004400Z  uid=smtp-server,ou=People,dc=foo,dc=org
+      ldap:///   3      r     4/0/0/4        0.0.0.0:389  192.168.82.55:54382   20241121111605Z  20241121111610Z  uid=billing-system,ou=People,dc=foo,dc=org
+      ldap:///   3      rx    3/1/0/2        0.0.0.0:389  192.168.82.196:48850  20250108200553Z  20250108200553Z  uid=vpn-server,ou=People,dc=foo,dc=org
+      ldap:///   3      rx    3/1/0/2        0.0.0.0:389  192.168.82.55:45860   20241121111546Z  20241121111546Z  uid=billing-system,ou=People,dc=foo,dc=org
+      ldap:///   3      r     4/0/0/4        0.0.0.0:389  192.168.82.202:42762  20250115104717Z  20250115104717Z
+      ldap:///   3      r     4/0/0/4        0.0.0.0:389  192.168.82.201:50946  20250115104717Z  20250115104717Z
+      ldap:///   3      rx    3/1/0/2        0.0.0.0:389  192.168.82.10:39272   20241120101747Z  20241120101747Z  uid=smtp-server,ou=People,dc=foo,dc=org
+      ldap:///   3      rx    3/1/0/2        0.0.0.0:389  192.168.82.33:36210   20241120101737Z  20241120101737Z  uid=pop-server,ou=People,dc=foo,dc=org
+      ldap:///   3      r     7977/0/0/7977  0.0.0.0:389  192.168.82.161:34790  20241120101727Z  20250115031802Z  uid=jdoe,ou=People,dc=foo,dc=org
 
 
 ldapdebug
