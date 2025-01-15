@@ -74,7 +74,6 @@
 
 #include <ldap.h>
 #include <ldaputils.h>
-#include <ldapschema.h>
 
 
 ///////////////////
