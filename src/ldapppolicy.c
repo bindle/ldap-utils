@@ -104,6 +104,7 @@ struct my_config
 {
    int               res_count;
    int               attr_name;
+   int               scope;
    LDAPUtils *       lud;
    const char *      filter;
    const char *      prog_name;
@@ -252,7 +253,7 @@ void
 ldaputils_usage(
          void )
 {
-   printf("Usage: %s [options] [dn]\n", PROGRAM_NAME);
+   printf("Usage: %s [options] [dn [filter]]\n", PROGRAM_NAME);
    ldaputils_usage_common(MY_SHORT_OPTIONS);
    printf("Display Options:\n");
    printf("  -A                        show attribute names instead of descriptions\n");
@@ -288,7 +289,7 @@ main(
 
    rc = 0;
    if ((cnf->base))
-      rc = my_search(cnf, cnf->base, LDAP_SCOPE_BASE, "objectClass=*");
+      rc = my_search(cnf, cnf->base, cnf->scope, cnf->filter);
    else
       rc = my_naming_contexts(cnf);
 
@@ -386,7 +387,7 @@ my_config(
    cnf->prog_name = ldaputils_get_prog_name(cnf->lud);
 
    // checks for required arguments
-   if (argc > (optind+1))
+   if (argc > (optind+2))
    {
       fprintf(stderr, "%s: unknown arguments\n", cnf->prog_name);
       fprintf(stderr, "Try `%s --help' for more information.\n", cnf->prog_name);
@@ -394,9 +395,13 @@ my_config(
       return(1);
    };
 
-   // saves filter
-   if (argc == (optind+1))
+   // saves search base and filter
+   if (argc > optind)
       cnf->base = argv[optind];
+   if (argc > (optind+1))
+      cnf->filter = argv[optind+1];
+   cnf->scope  = ((cnf->filter)) ? LDAP_SCOPE_SUB : LDAP_SCOPE_BASE;
+   cnf->filter = ((cnf->filter)) ? cnf->filter    : "(objectClass=*)";
 
    // reads password
    if ((err = ldaputils_pass(cnf->lud)) != 0)
