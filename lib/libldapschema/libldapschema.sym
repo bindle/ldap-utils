@@ -97,6 +97,7 @@ ldapschema_count_attributetype
 ldapschema_count_ldapsyntax
 ldapschema_count_matchingrule
 ldapschema_count_objectclass
+ldapschema_fetch
 ldapschema_find_attributetype
 ldapschema_find_ldapsyntax
 ldapschema_find_matchingrule
