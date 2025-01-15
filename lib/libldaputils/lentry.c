@@ -825,10 +825,10 @@ ldaputils_get_values(
       ldaputils_value_free_len(bvals);
       return(NULL);
    };
+   memset(vals, 0, size);
 
    for(pos = 0; (pos < len); pos++)
    {
-      bvals[pos+1] = NULL;
       if ((vals[pos] = malloc(bvals[pos]->bv_len+1)) == NULL)
       {
          ldaputils_value_free(vals);
@@ -838,6 +838,8 @@ ldaputils_get_values(
       memcpy(vals[pos], bvals[pos]->bv_val, bvals[pos]->bv_len);
       vals[pos][bvals[pos]->bv_len] = '\0';
    };
+
+   ldaputils_value_free_len(bvals);
 
    return(vals);
 }
