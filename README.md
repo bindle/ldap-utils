@@ -536,6 +536,23 @@ Bulleted list example:
                 - mail: david@syzdek.net
 
 
+Building Package
+================
+
+To build the package using a release source tarball, run the following:
+
+      tar -xvf ldap-utils-x.y.z.tar.xz
+      mkdir -p ldap-utils-x.y.z/build
+      cd ldap-utils-x.y.z/build
+      ../configure
+      make all
+      make install
+
+For more information on building and installing using configure, please
+read the INSTALL file and run `configure --help` for configureation
+options.
+
+      
 Source Code
 ===========
 
@@ -554,31 +571,6 @@ Git URLs:
 Release Archives:
 
    * https://github.com/bindle/ldap-utils/releases
-
-
-Compiling Source from Release Archive
--------------------------------------
-
-Download source from Github.
-
-Preparing Source:
-
-      $ tar -xvf ldap-utils-x.x.x.tar.xz
-      $ mkdir -p ldap-utils-x.x.x/build
-      $ cd ldap-utils-x.x.x/build
-
-Compiling Source:
-
-      $ ../configure
-      $ make all && make install
-
-For more information on building and installing using configure, please
-read the INSTALL file and run `configure --help` for configureation
-options.
-
-
-Compiling Source from Git
--------------------------
 
 Downloading Source:
 
