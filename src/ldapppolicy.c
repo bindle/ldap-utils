@@ -87,7 +87,7 @@
 #define PROGRAM_NAME "ldapppolicy"
 #endif
 
-#define MY_SHORT_OPTIONS LDAPUTILS_OPTIONS_COMMON LDAPUTILS_OPTIONS_SEARCH "o:"
+#define MY_SHORT_OPTIONS LDAPUTILS_OPTIONS_COMMON "A"
 
 
 /////////////////
@@ -315,7 +315,7 @@ my_config(
    int         option_index;
    MyConfig *  cnf;
 
-   static char   short_options[] = MY_SHORT_OPTIONS "A";
+   static char   short_options[] = MY_SHORT_OPTIONS;
    static struct option long_options[] =
    {
       {"help",          no_argument, 0, 'h'},
