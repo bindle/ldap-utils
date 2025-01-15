@@ -84,7 +84,7 @@
 // MARK: - Definitions
 
 #ifndef PROGRAM_NAME
-#define PROGRAM_NAME "ldapinfo"
+#define PROGRAM_NAME "ldapppolicy"
 #endif
 
 #define MY_SHORT_OPTIONS LDAPUTILS_OPTIONS_COMMON LDAPUTILS_OPTIONS_SEARCH "o:"
