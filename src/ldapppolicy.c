@@ -722,12 +722,19 @@ my_naming_contexts(
 
    // parses result
    errmsg = NULL;
-   rc = ldap_parse_result(ld, res, &err, NULL, &errmsg, NULL, NULL, 0);
-   if (err != LDAP_SUCCESS)
+   if ((rc = ldap_parse_result(ld, res, &err, NULL, &errmsg, NULL, NULL, 0)) != LDAP_SUCCESS)
    {
-      fprintf(stderr, "%s: ldap_parse_result(): %s\n", cnf->prog_name, errmsg);
       fprintf(stderr, "%s: ldap_parse_result(): %s\n", cnf->prog_name, ldap_err2string(rc));
-      ldap_memfree(errmsg);
+      ldap_msgfree(res);
+      return(-1);
+   };   if (err != LDAP_SUCCESS)
+   {
+      fprintf(stderr, "%s: %s\n", cnf->prog_name, ldap_err2string(err));
+      if ((errmsg))
+      {
+         fprintf(stderr, "%s: %s\n", cnf->prog_name, errmsg);
+         ldap_memfree(errmsg);
+      };
       ldap_msgfree(res);
       return(-1);
    };
@@ -807,12 +814,20 @@ my_search(
 
    // parses result
    errmsg = NULL;
-   rc = ldap_parse_result(ld, res, &err, NULL, &errmsg, NULL, NULL, 0);
+   if ((rc = ldap_parse_result(ld, res, &err, NULL, &errmsg, NULL, NULL, 0)) != LDAP_SUCCESS)
+   {
+      fprintf(stderr, "%s: ldap_parse_result(): %s\n", cnf->prog_name, ldap_err2string(rc));
+      ldap_msgfree(res);
+      return(-1);
+   };
    if (err != LDAP_SUCCESS)
    {
-      fprintf(stderr, "%s: ldap_parse_result(): %s\n", cnf->prog_name, errmsg);
-      fprintf(stderr, "%s: ldap_parse_result(): %s\n", cnf->prog_name, ldap_err2string(rc));
-      ldap_memfree(errmsg);
+      fprintf(stderr, "%s: %s: %s\n", cnf->prog_name, base, ldap_err2string(err));
+      if ((errmsg))
+      {
+         fprintf(stderr, "%s: %s: %s\n", cnf->prog_name, base, errmsg);
+         ldap_memfree(errmsg);
+      };
       ldap_msgfree(res);
       return(-1);
    };
