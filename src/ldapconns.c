@@ -515,7 +515,7 @@ my_monitor_connections(
 
    str            = ops;
    len_listener   = (int)strlen("Listener");
-   len_proto      = (int)strlen(" ");
+   len_proto      = (int)strlen("Proto");
    len_mask       = (int)strlen("Mask");
    len_local      = (int)strlen("Local");
    len_peer       = (int)strlen("Peer");
@@ -553,9 +553,9 @@ my_monitor_connections(
       len_ops_comp   = my_field_len(len_ops_comp,  NULL, cnf->recs[pos]->rec_ops_comp);
    };
 
-   printf("%-*s  %-*s %-*s %-*s %-*s %-*s %-*s %-*s %s\n",
+   printf("%-*s  %-*s  %-*s  %-*s  %-*s  %-*s  %-*s  %-*s  %s\n",
       len_listener,  "Listener",
-      len_proto,     " ",
+      len_proto,     "Proto",
       len_mask,      "Mask",
       len_ops,       "Ops R/E/P/C",
       len_local,     "Local",
@@ -579,7 +579,7 @@ my_monitor_connections(
          cnf->recs[pos]->rec_ops_pend,
          cnf->recs[pos]->rec_ops_comp
       );
-      printf("%-*s v%-*i %-*s %-*s %-*s %-*s %-*s %-*s %s\n",
+      printf("%-*s  %-*i  %-*s  %-*s  %-*s  %-*s  %-*s  %-*s  %s\n",
          len_listener,  cnf->recs[pos]->rec_listener[0],
          len_proto,     cnf->recs[pos]->rec_proto,
          len_mask,      cnf->recs[pos]->rec_mask[0],
